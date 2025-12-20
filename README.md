@@ -537,7 +537,3 @@ go test -v ./...
 ```bash
 go build -o sbomlyze .
 ```
-
-## License
-
-Apache-2.0 license
