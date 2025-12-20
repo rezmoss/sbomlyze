@@ -17,15 +17,9 @@ builds:
       - linux
     goarch:
       - amd64
-      - arm
       - arm64
       - "386"
-    goarm:
-      - "6"
-      - "7"
     ignore:
-      - goos: windows
-        goarch: arm
       - goos: windows
         goarch: arm64
     ldflags:
@@ -35,20 +29,20 @@ builds:
       - -X main.date={{.Date}}
       - -X main.buildSource=binaryRelease
 
-  - id: snap
+  - id: binary-arm
     goos:
       - linux
     goarch:
-      - amd64
       - arm
-      - arm64
-      - "386"
+    goarm:
+      - "6"
+      - "7"
     ldflags:
       - -s -w
       - -X main.version={{.Version}}
       - -X main.commit={{.Commit}}
       - -X main.date={{.Date}}
-      - -X main.buildSource=snap
+      - -X main.buildSource=binaryRelease
 
 archives:
   - id: default
@@ -61,9 +55,23 @@ archives:
       {{- if eq .Arch "amd64" }}x86_64
       {{- else if eq .Arch "386" }}i386
       {{- else }}{{ .Arch }}{{ end }}
+    formats:
+      - tar.gz
     format_overrides:
       - goos: windows
-        format: zip
+        formats:
+          - zip
+
+  - id: arm
+    builds:
+      - binary-arm
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- .Version }}_
+      {{- title .Os }}_
+      {{- .Arch }}v{{ .Arm }}
+    formats:
+      - tar.gz
 
 checksum:
   name_template: "checksums.txt"
@@ -95,24 +103,11 @@ release:
 #       owner: rezmoss
 #       name: homebrew-sbomlyze
 #       token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
-    
 #     directory: Formula
 #     homepage: "https://github.com/rezmoss/sbomlyze"
 #     description: "A fast, reliable SBOM diff and analysis tool"
 #     license: "MIT"
-    
 #     test: |
 #       system "#{bin}/sbomlyze", "--help"
-    
 #     install: |
 #       bin.install "sbomlyze"
-
-# Optional: Docker images
-# dockers:
-#   - image_templates:
-#       - "ghcr.io/rezmoss/sbomlyze:{{ .Version }}"
-#       - "ghcr.io/rezmoss/sbomlyze:latest"
-#     dockerfile: Dockerfile
-#     build_flag_templates:
-#       - "--label=org.opencontainers.image.title={{ .ProjectName }}"
-#       - "--label=org.opencontainers.image.version={{ .Version }}"
