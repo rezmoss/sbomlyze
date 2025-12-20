@@ -23,6 +23,7 @@ type CLIOptions struct {
 	JSONOutput bool
 	PolicyFile string
 	Strict     bool
+	Format     string // text, json, sarif, junit, markdown, patch
 }
 
 // DefaultParseOptions returns tolerant parsing options
@@ -111,13 +112,15 @@ func normalizeComponents(comps []Component) []Component {
 // parseArgs parses command line arguments into CLIOptions
 func parseArgs(args []string) CLIOptions {
 	opts := CLIOptions{
-		Strict: false, // default is tolerant
+		Strict: false,  // default is tolerant
+		Format: "text", // default is text
 	}
 
 	for i := 1; i < len(args); i++ {
 		switch args[i] {
 		case "--json":
 			opts.JSONOutput = true
+			opts.Format = "json"
 		case "--strict":
 			opts.Strict = true
 		case "--tolerant":
@@ -125,6 +128,14 @@ func parseArgs(args []string) CLIOptions {
 		case "--policy":
 			if i+1 < len(args) {
 				opts.PolicyFile = args[i+1]
+				i++
+			}
+		case "--format", "-f":
+			if i+1 < len(args) {
+				opts.Format = args[i+1]
+				if opts.Format == "json" {
+					opts.JSONOutput = true
+				}
 				i++
 			}
 		default:
