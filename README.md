@@ -7,10 +7,10 @@ A fast, reliable SBOM diff and analysis tool. Compare Software Bill of Materials
 - **Multi-format support**: Syft, CycloneDX, SPDX (JSON)
 - **Strong identity matching**: PURL → CPE → BOM-ref → namespace/name precedence
 - **Drift detection**: Classify changes as version, integrity, or metadata drift
+- **Dependency graph diff**: Track transitive dependencies and supply-chain depth
 - **Statistics mode**: Analyze single SBOMs for license, dependency, and integrity metrics
 - **Policy engine**: Enforce rules in CI pipelines
 - **Duplicate detection**: Find multiple versions of the same package
-- **Dependency graph diff**: Track dependency relationship changes
 - **Tolerant parsing**: Continue on errors with structured warnings
 
 ## Installation
@@ -57,6 +57,8 @@ Options:
   --policy      Policy file for CI checks
   --strict      Fail immediately on parse errors
   --tolerant    Continue on parse errors with warnings (default)
+  --version     Show version information
+  --help        Show help message
 ```
 
 ## Commands
@@ -132,6 +134,95 @@ Output:
 
 << Removed dependencies:
   pkg:apk/alpine/libcurl: -[so:libnghttp3.so.9]
+
+🔗 New transitive dependencies (3):
+  + pkg:npm/lodash (depth 2)
+    via: [pkg:npm/my-app pkg:npm/express pkg:npm/lodash]
+  + pkg:npm/underscore (depth 3)
+    via: [pkg:npm/my-app pkg:npm/express pkg:npm/lodash pkg:npm/underscore]
+
+📊 New deps by depth:
+  Depth 2:              1
+  Depth 3+ (risky):     2 ⚠️
+```
+
+## Dependency Graph Diff
+
+sbomlyze goes beyond simple component list diffs to analyze the full dependency graph, detecting supply-chain risks introduced through transitive dependencies.
+
+### Features
+
+| Feature | Description |
+|---------|-------------|
+| **Edge diff** | Added/removed direct dependencies (A depends on B) |
+| **Transitive reachability** | New indirect dependencies that appear through the graph |
+| **Path tracking** | Shows exactly how each new transitive dep is reached |
+| **Depth tracking** | How many hops away each new dep is from your code |
+| **Risk summary** | Depth 3+ deps flagged as higher risk |
+
+### Why Depth Matters
+
+Dependencies introduced deeper in the graph are:
+- Harder to audit and review
+- Often pulled in without explicit approval  
+- Common vectors for supply chain attacks (e.g., event-stream incident)
+
+The depth summary helps prioritize review:
+
+| Depth | Risk Level | Description |
+|-------|------------|-------------|
+| **1** | Low | Direct dependencies (you chose these) |
+| **2** | Medium | Dependencies of your dependencies |
+| **3+** | High ⚠️ | Deep transitive deps - review carefully |
+
+### Example: Detecting Deep Transitive Dependencies
+
+```bash
+# Before: app -> express (simple, 1 dep)
+# After:  app -> express -> lodash -> underscore -> deep-lib (chain of 4)
+
+sbomlyze before.json after.json
+```
+
+Output:
+```
+🔗 New transitive dependencies (3):
+  + lodash (depth 2)
+    via: [app express lodash]
+  + underscore (depth 3)
+    via: [app express lodash underscore]
+  + deep-lib (depth 4)
+    via: [app express lodash underscore deep-lib]
+
+📊 New deps by depth:
+  Depth 2:              1
+  Depth 3+ (risky):     2 ⚠️
+```
+
+### JSON Output for Dependency Graph
+
+```json
+{
+  "dependencies": {
+    "added_deps": {
+      "pkg:npm/express": ["pkg:npm/lodash", "pkg:npm/body-parser"]
+    },
+    "removed_deps": {},
+    "transitive_new": [
+      {
+        "target": "pkg:npm/underscore",
+        "via": ["pkg:npm/my-app", "pkg:npm/express", "pkg:npm/lodash", "pkg:npm/underscore"],
+        "depth": 3
+      }
+    ],
+    "transitive_lost": [],
+    "depth_summary": {
+      "depth_1": 0,
+      "depth_2": 2,
+      "depth_3_plus": 2
+    }
+  }
+}
 ```
 
 ## Drift Detection
@@ -162,34 +253,44 @@ Integrity drift occurs when a component's hash changes but its version stays the
 
 **Recommendation**: Always investigate integrity drift. It may be benign, but it's a key signal for supply chain security.
 
-### JSON Output
+### JSON Output for Drift
 
-The drift information is included in JSON output:
+The drift summary is inside the `diff` object:
 
 ```json
 {
   "diff": {
     "changed": [
       {
-        "id": "pkg:npm/lodash",
-        "name": "lodash",
+        "id": "pkg:npm/suspicious-pkg",
+        "name": "suspicious-pkg",
+        "changes": ["hash[SHA-256]: abc123 -> def456"],
         "drift": {
           "type": "integrity",
           "hash_changes": {
             "changed": {
-              "SHA256": {"before": "abc123", "after": "def456"}
+              "SHA-256": {"before": "abc123", "after": "def456"}
             }
           }
         }
       }
-    ]
-  },
-  "drift_summary": {
-    "version_drift": 55,
-    "integrity_drift": 1,
-    "metadata_drift": 2
+    ],
+    "drift_summary": {
+      "version_drift": 55,
+      "integrity_drift": 1,
+      "metadata_drift": 2
+    }
   }
 }
+```
+
+**Extracting drift summary:**
+```bash
+# Get drift summary
+sbomlyze before.json after.json --json | jq '.diff.drift_summary'
+
+# Check for integrity drift in CI
+sbomlyze before.json after.json --json | jq -e '.diff.drift_summary.integrity_drift > 0'
 ```
 
 ## Options
@@ -220,24 +321,6 @@ sbomlyze before.json after.json --json
     "with_dependencies": 65,
     "duplicate_count": 0
   },
-  "warnings": []
-}
-```
-
-**Diff JSON structure:**
-```json
-{
-  "diff": {
-    "added": [...],
-    "removed": [...],
-    "changed": [...],
-    "duplicates": {...},
-    "dependencies": {
-      "added_deps": {...},
-      "removed_deps": {...}
-    }
-  },
-  "violations": [],
   "warnings": []
 }
 ```
@@ -338,7 +421,7 @@ All formats must be JSON. XML support is not currently available.
 
 ### Cross-Format Comparison
 
-sbomlyze can compare SBOMs in different formats. The identity matching system ensures components are correctly matched even when formats use different identifier schemes:
+sbomlyze can compare SBOMs in different formats:
 
 ```bash
 # Compare Syft output with CycloneDX
@@ -348,13 +431,9 @@ sbomlyze syft-output.json cyclonedx-output.json
 sbomlyze spdx-output.json syft-output.json
 ```
 
-## Normalization
+## Component Identity Matching
 
-sbomlyze applies normalization to ensure reliable comparisons:
-
-### Component Identity Matching
-
-Components are matched using a precedence-based identity system. This prevents false diffs when tools rename fields, reorder entries, or use different identifier formats.
+Components are matched using a precedence-based identity system:
 
 | Priority | Identifier | Example | Description |
 |----------|------------|---------|-------------|
@@ -363,45 +442,6 @@ Components are matched using a precedence-based identity system. This prevents f
 | 3 | BOM-ref / SPDXID | `ref:component-123` | CycloneDX bom-ref or SPDX identifier |
 | 4 | Namespace + Name | `com.example/mypackage` | Group/namespace with name |
 | 5 | Name | `simple-package` | Fallback to name only |
-
-This allows accurate matching even when:
-- Different SBOM tools generate different identifiers
-- Components are renamed but have the same PURL
-- Cross-format comparisons (Syft vs CycloneDX vs SPDX)
-
-### PURL Normalization
-
-Package URLs are normalized by stripping version, qualifiers, and subpath:
-
-```
-Input:  pkg:apk/alpine/nginx@1.29.4-r1?arch=aarch64&distro=alpine-3.23.2
-Output: pkg:apk/alpine/nginx
-```
-
-This allows detecting version changes rather than showing as added+removed.
-
-### CPE Normalization
-
-CPE strings are normalized to vendor:product only:
-
-```
-Input:  cpe:2.3:a:apache:log4j:2.14.1:*:*:*:*:*:*:*
-Output: cpe:apache:log4j
-```
-
-Both CPE 2.2 and CPE 2.3 formats are supported.
-
-### String Normalization
-
-- Component names: trimmed and lowercased
-- Versions: trimmed (case preserved)
-- Licenses: trimmed, `NOASSERTION`/`NONE`/`UNKNOWN` filtered out
-
-### Order Independence
-
-- License arrays compared after sorting
-- Component lists compared by ID map lookup
-- Results sorted alphabetically
 
 ## CI/CD Integration
 
@@ -443,6 +483,25 @@ sbom-diff:
     when: always
 ```
 
+### Integrity Drift Alert
+
+```bash
+# Alert on any integrity drift (CI example)
+if sbomlyze baseline.json current.json --json | jq -e '.diff.drift_summary.integrity_drift > 0' > /dev/null; then
+  echo "⚠️  INTEGRITY DRIFT DETECTED - Investigate immediately!"
+  exit 1
+fi
+```
+
+### Deep Dependency Alert
+
+```bash
+# Alert on new deep transitive dependencies
+if sbomlyze baseline.json current.json --json | jq -e '.diff.dependencies.depth_summary.depth_3_plus > 0' > /dev/null; then
+  echo "⚠️  New deep transitive dependencies detected - Review required!"
+fi
+```
+
 ## Exit Codes
 
 | Code | Meaning |
@@ -461,18 +520,6 @@ syft nginx:1.26-alpine -o json > nginx-126.json
 
 # Compare
 sbomlyze nginx-125.json nginx-126.json
-```
-
-### Cross-Format Comparison
-
-```bash
-# Generate different formats
-syft image:tag -o json > syft.json
-syft image:tag -o cyclonedx-json > cdx.json
-syft image:tag -o spdx-json > spdx.json
-
-# sbomlyze handles all formats
-sbomlyze syft.json cdx.json
 ```
 
 ### License Audit
@@ -504,36 +551,38 @@ EOF
 sbomlyze baseline.json current.json --policy no-drift.json
 ```
 
-### Integrity Monitoring
-
-```bash
-# Compare SBOMs and check for integrity drift
-sbomlyze baseline.json current.json --json | jq '.drift_summary'
-
-# Output:
-# {
-#   "version_drift": 55,
-#   "integrity_drift": 1,
-#   "metadata_drift": 2
-# }
-
-# Alert on any integrity drift (CI example)
-if sbomlyze baseline.json current.json --json | jq -e '.drift_summary.integrity_drift > 0' > /dev/null; then
-  echo "⚠️  INTEGRITY DRIFT DETECTED - Investigate immediately!"
-  exit 1
-fi
-```
-
 ## Development
 
 ### Run Tests
 
 ```bash
+make test
+# or
 go test -v ./...
+```
+
+### Lint
+
+```bash
+make lint
+# or
+golangci-lint run ./...
 ```
 
 ### Build
 
 ```bash
+make build
+# or
 go build -o sbomlyze .
 ```
+
+### Make Commands
+
+```bash
+make all     # Run test, lint, and build
+make test    # Run all tests
+make lint    # Run golangci-lint
+make build   # Build with goreleaser (snapshot)
+```
+

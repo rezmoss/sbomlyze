@@ -679,6 +679,40 @@ func printTextDiff(result DiffResult) {
 				fmt.Printf("  %s: -%v\n", comp, deps)
 			}
 		}
+
+		// Transitive dependency changes
+		if len(result.Dependencies.TransitiveNew) > 0 {
+			fmt.Printf("\n🔗 New transitive dependencies (%d):\n", len(result.Dependencies.TransitiveNew))
+			for _, td := range result.Dependencies.TransitiveNew {
+				fmt.Printf("  + %s (depth %d)\n", td.Target, td.Depth)
+				if len(td.Via) > 0 {
+					fmt.Printf("    via: %v\n", td.Via)
+				}
+			}
+		}
+		if len(result.Dependencies.TransitiveLost) > 0 {
+			fmt.Printf("\n🔓 Removed transitive dependencies (%d):\n", len(result.Dependencies.TransitiveLost))
+			for _, td := range result.Dependencies.TransitiveLost {
+				fmt.Printf("  - %s (depth %d)\n", td.Target, td.Depth)
+			}
+		}
+
+		// Depth summary
+		if result.Dependencies.DepthSummary != nil {
+			ds := result.Dependencies.DepthSummary
+			if ds.Depth1 > 0 || ds.Depth2 > 0 || ds.Depth3Plus > 0 {
+				fmt.Printf("\n📊 New deps by depth:\n")
+				if ds.Depth1 > 0 {
+					fmt.Printf("  Depth 1 (direct):     %d\n", ds.Depth1)
+				}
+				if ds.Depth2 > 0 {
+					fmt.Printf("  Depth 2:              %d\n", ds.Depth2)
+				}
+				if ds.Depth3Plus > 0 {
+					fmt.Printf("  Depth 3+ (risky):     %d ⚠️\n", ds.Depth3Plus)
+				}
+			}
+		}
 	}
 
 	fmt.Println()
