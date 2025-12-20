@@ -25,6 +25,7 @@ type Component struct {
 	BOMRef       string            `json:"bom-ref,omitempty"`
 	SPDXID       string            `json:"spdxid,omitempty"`
 	Namespace    string            `json:"namespace,omitempty"`
+	Supplier     string            `json:"supplier,omitempty"`
 }
 
 type DiffResult struct {
@@ -162,16 +163,37 @@ func main() {
 	} else {
 		printTextDiff(result)
 		if len(violations) > 0 {
-			fmt.Printf("\n!! Policy Violations (%d):\n", len(violations))
+			// Separate errors and warnings
+			var errors, warnings []PolicyViolation
 			for _, v := range violations {
-				fmt.Printf("  [%s] %s\n", v.Rule, v.Message)
+				if v.Severity == SeverityWarning {
+					warnings = append(warnings, v)
+				} else {
+					errors = append(errors, v)
+				}
+			}
+
+			if len(errors) > 0 {
+				fmt.Printf("\n❌ Policy Errors (%d):\n", len(errors))
+				for _, v := range errors {
+					fmt.Printf("  [%s] %s\n", v.Rule, v.Message)
+				}
+			}
+			if len(warnings) > 0 {
+				fmt.Printf("\n⚠️  Policy Warnings (%d):\n", len(warnings))
+				for _, v := range warnings {
+					fmt.Printf("  [%s] %s\n", v.Rule, v.Message)
+				}
 			}
 			fmt.Println()
 		}
 		printWarnings(parseOpts.Warnings)
 	}
 
-	if len(result.Added) > 0 || len(result.Removed) > 0 || len(result.Changed) > 0 || len(violations) > 0 {
+	// Exit with error if there are differences OR policy errors (not warnings)
+	hasDiff := len(result.Added) > 0 || len(result.Removed) > 0 || len(result.Changed) > 0
+	hasPolicyErrors := HasErrors(violations)
+	if hasDiff || hasPolicyErrors {
 		os.Exit(1)
 	}
 }
@@ -374,6 +396,10 @@ func parseCycloneDX(data []byte) ([]Component, error) {
 			for _, h := range *c.Hashes {
 				comp.Hashes[string(h.Algorithm)] = h.Value
 			}
+		}
+		// Extract supplier info
+		if c.Supplier != nil && c.Supplier.Name != "" {
+			comp.Supplier = c.Supplier.Name
 		}
 		// Compute ID using identity matcher
 		comp.ID = computeComponentID(comp)

@@ -1,0 +1,6 @@
+{
+  "deny_integrity_drift": true,
+  "max_depth": 4,
+  "warn_supplier_change": true,
+  "warn_new_transitive": true
+}

@@ -585,4 +585,3 @@ make test    # Run all tests
 make lint    # Run golangci-lint
 make build   # Build with goreleaser (snapshot)
 ```
-
