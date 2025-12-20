@@ -81,13 +81,3 @@ func normalizeCPE(cpe string) string {
 
 	return ""
 }
-
-// assignComponentIDs assigns IDs to all components using the identity matcher
-func assignComponentIDs(comps []Component) []Component {
-	result := make([]Component, len(comps))
-	for i, c := range comps {
-		c.ID = computeComponentID(c)
-		result[i] = c
-	}
-	return result
-}

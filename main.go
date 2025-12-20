@@ -95,7 +95,10 @@ func main() {
 			}
 			enc := json.NewEncoder(os.Stdout)
 			enc.SetIndent("", "  ")
-			enc.Encode(output)
+			if err := enc.Encode(output); err != nil {
+				fmt.Fprintf(os.Stderr, "Error encoding JSON: %v\n", err)
+				os.Exit(1)
+			}
 		} else {
 			printStats(stats)
 			printWarnings(parseOpts.Warnings)
@@ -152,7 +155,10 @@ func main() {
 		}
 		enc := json.NewEncoder(os.Stdout)
 		enc.SetIndent("", "  ")
-		enc.Encode(output)
+		if err := enc.Encode(output); err != nil {
+			fmt.Fprintf(os.Stderr, "Error encoding JSON: %v\n", err)
+			os.Exit(1)
+		}
 	} else {
 		printTextDiff(result)
 		if len(violations) > 0 {
@@ -381,7 +387,7 @@ func parseSPDX(path string) ([]Component, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer f.Close()
+	defer func() { _ = f.Close() }()
 
 	doc, err := spdxjson.Read(f)
 	if err != nil {
