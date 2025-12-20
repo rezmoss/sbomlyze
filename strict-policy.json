@@ -1,0 +1,8 @@
+{
+  "max_added": 1,
+  "max_removed": 3,
+  "max_changed": 10,
+  "deny_licenses": ["GPL-2.0-only"],
+  "require_licenses": false,
+  "deny_duplicates": false
+}
