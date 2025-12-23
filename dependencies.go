@@ -168,9 +168,19 @@ func diffReachability(before, after map[string][]string, beforeReach, afterReach
 	var newDeps, lostDeps []TransitiveDep
 	seen := make(map[string]bool)
 
-	// Find new transitive deps (in after but not in before)
-	for node, afterSet := range afterReach {
-		beforeSet := beforeReach[node]
+	// Find root nodes (nodes that are not dependencies of any other node)
+	roots := findRoots(after)
+	if len(roots) == 0 {
+		// Fallback: use all nodes as potential roots
+		for node := range after {
+			roots = append(roots, node)
+		}
+	}
+
+	// Find new transitive deps - only check from root nodes for correct depth
+	for _, root := range roots {
+		afterSet := afterReach[root]
+		beforeSet := beforeReach[root]
 		if beforeSet == nil {
 			beforeSet = make(map[string]bool)
 		}
@@ -178,7 +188,7 @@ func diffReachability(before, after map[string][]string, beforeReach, afterReach
 		for dep := range afterSet {
 			if !beforeSet[dep] && !seen[dep] {
 				// This is a new transitive dependency
-				path, depth := bfsWithPath(after, node, dep)
+				path, depth := bfsWithPath(after, root, dep)
 				if depth > 1 { // Only report truly transitive (not direct)
 					newDeps = append(newDeps, TransitiveDep{
 						Target: dep,
@@ -191,18 +201,27 @@ func diffReachability(before, after map[string][]string, beforeReach, afterReach
 		}
 	}
 
+	// Find roots for before graph
+	beforeRoots := findRoots(before)
+	if len(beforeRoots) == 0 {
+		for node := range before {
+			beforeRoots = append(beforeRoots, node)
+		}
+	}
+
 	seen = make(map[string]bool)
 
-	// Find lost transitive deps (in before but not in after)
-	for node, beforeSet := range beforeReach {
-		afterSet := afterReach[node]
+	// Find lost transitive deps
+	for _, root := range beforeRoots {
+		beforeSet := beforeReach[root]
+		afterSet := afterReach[root]
 		if afterSet == nil {
 			afterSet = make(map[string]bool)
 		}
 
 		for dep := range beforeSet {
 			if !afterSet[dep] && !seen[dep] {
-				path, depth := bfsWithPath(before, node, dep)
+				path, depth := bfsWithPath(before, root, dep)
 				if depth > 1 {
 					lostDeps = append(lostDeps, TransitiveDep{
 						Target: dep,
@@ -220,6 +239,27 @@ func diffReachability(before, after map[string][]string, beforeReach, afterReach
 	sort.Slice(lostDeps, func(i, j int) bool { return lostDeps[i].Target < lostDeps[j].Target })
 
 	return newDeps, lostDeps
+}
+
+// findRoots finds nodes that are not dependencies of any other node
+func findRoots(graph map[string][]string) []string {
+	// Build set of all nodes that are dependencies
+	isDep := make(map[string]bool)
+	for _, deps := range graph {
+		for _, dep := range deps {
+			isDep[dep] = true
+		}
+	}
+
+	// Roots are nodes that exist in graph but are not dependencies
+	var roots []string
+	for node := range graph {
+		if !isDep[node] {
+			roots = append(roots, node)
+		}
+	}
+	sort.Strings(roots)
+	return roots
 }
 
 // computeDepthSummary summarizes new deps by depth
