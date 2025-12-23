@@ -2,6 +2,7 @@
 
 [![GitHub Release][release-img]][release]
 [![Go Report Card][go-report-img]][go-report]
+[![License: Apache-2.0][license-img]][license]
 
 A fast, reliable SBOM diff and analysis tool. Compare Software Bill of Materials across versions, detect changes, and enforce policies in CI/CD pipelines.
 
@@ -594,3 +595,5 @@ make build   # Build with goreleaser (snapshot)
 [release-img]: https://img.shields.io/github/v/release/rezmoss/sbomlyze
 [go-report]: https://goreportcard.com/report/github.com/rezmoss/sbomlyze
 [go-report-img]: https://goreportcard.com/badge/github.com/rezmoss/sbomlyze
+[license]: https://github.com/rezmoss/sbomlyze/blob/main/LICENSE
+[license-img]: https://img.shields.io/badge/License-Apache%202.0-blue.svg
