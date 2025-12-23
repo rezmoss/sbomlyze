@@ -19,11 +19,12 @@ type ParseOptions struct {
 
 // CLIOptions holds all command line options
 type CLIOptions struct {
-	Files      []string
-	JSONOutput bool
-	PolicyFile string
-	Strict     bool
-	Format     string // text, json, sarif, junit, markdown, patch
+	Files       []string
+	JSONOutput  bool
+	PolicyFile  string
+	Strict      bool
+	Format      string // text, json, sarif, junit, markdown, patch
+	Interactive bool   // Interactive TUI mode
 }
 
 // DefaultParseOptions returns tolerant parsing options
@@ -82,6 +83,8 @@ func normalizeComponent(c Component) Component {
 		BOMRef:       strings.TrimSpace(c.BOMRef),
 		SPDXID:       strings.TrimSpace(c.SPDXID),
 		Namespace:    strings.TrimSpace(c.Namespace),
+		Supplier:     strings.TrimSpace(c.Supplier),
+		RawJSON:      c.RawJSON, // Preserve original SBOM JSON
 	}
 
 	// Normalize and filter licenses
@@ -138,6 +141,8 @@ func parseArgs(args []string) CLIOptions {
 				}
 				i++
 			}
+		case "--interactive", "-i":
+			opts.Interactive = true
 		default:
 			if !strings.HasPrefix(args[i], "-") {
 				opts.Files = append(opts.Files, args[i])

@@ -27,6 +27,7 @@ type Component struct {
 	SPDXID       string            `json:"spdxid,omitempty"`
 	Namespace    string            `json:"namespace,omitempty"`
 	Supplier     string            `json:"supplier,omitempty"`
+	RawJSON      json.RawMessage   `json:"-"` // Original JSON from SBOM, excluded from output
 }
 
 type DiffResult struct {
@@ -74,7 +75,7 @@ func main() {
 
 	parseOpts := ParseOptions{Strict: opts.Strict}
 
-	// Single file mode - stats
+	// Single file mode - stats or interactive
 	if len(opts.Files) == 1 {
 		comps, err := parseFileWithOptions(opts.Files[0], &parseOpts)
 		if err != nil {
@@ -86,6 +87,15 @@ func main() {
 		comps = normalizeComponents(comps)
 
 		stats := computeStats(comps)
+
+		// Interactive mode
+		if opts.Interactive {
+			if err := RunInteractive(comps, stats); err != nil {
+				fmt.Fprintf(os.Stderr, "Error running interactive mode: %v\n", err)
+				os.Exit(1)
+			}
+			return
+		}
 
 		if opts.JSONOutput {
 			output := struct {
@@ -242,8 +252,10 @@ func printUsage() {
 	fmt.Fprintf(os.Stderr, "Usage: sbomlyze <sbom1> [sbom2] [options]\n\n")
 	fmt.Fprintf(os.Stderr, "Modes:\n")
 	fmt.Fprintf(os.Stderr, "  Single file:  sbomlyze <sbom> [--json]        - Show statistics\n")
+	fmt.Fprintf(os.Stderr, "  Interactive:  sbomlyze <sbom> -i              - Interactive explorer\n")
 	fmt.Fprintf(os.Stderr, "  Two files:    sbomlyze <sbom1> <sbom2> [...]  - Show diff\n\n")
 	fmt.Fprintf(os.Stderr, "Options:\n")
+	fmt.Fprintf(os.Stderr, "  -i, --interactive   Interactive TUI explorer\n")
 	fmt.Fprintf(os.Stderr, "  --json              Output in JSON format (shortcut for --format json)\n")
 	fmt.Fprintf(os.Stderr, "  --format <format>   Output format: text, json, sarif, junit, markdown, patch\n")
 	fmt.Fprintf(os.Stderr, "  --policy <file>     Policy file for CI checks\n")
@@ -258,8 +270,19 @@ func printUsage() {
 	fmt.Fprintf(os.Stderr, "  junit     JUnit XML for CI test results\n")
 	fmt.Fprintf(os.Stderr, "  markdown  Markdown for PR comments\n")
 	fmt.Fprintf(os.Stderr, "  patch     JSON Patch (RFC 6902) for automation\n\n")
+	fmt.Fprintf(os.Stderr, "Interactive Mode Keys:\n")
+	fmt.Fprintf(os.Stderr, "  ↑/↓, j/k    Navigate components\n")
+	fmt.Fprintf(os.Stderr, "  Enter       View component details\n")
+	fmt.Fprintf(os.Stderr, "  j           View raw SBOM JSON (all original fields)\n")
+	fmt.Fprintf(os.Stderr, "  d           Back to detail view (in JSON view)\n")
+	fmt.Fprintf(os.Stderr, "  /           Search by name, PURL, license\n")
+	fmt.Fprintf(os.Stderr, "  t           Filter by package type\n")
+	fmt.Fprintf(os.Stderr, "  c           Clear all filters\n")
+	fmt.Fprintf(os.Stderr, "  Esc         Go back\n")
+	fmt.Fprintf(os.Stderr, "  q           Quit\n\n")
 	fmt.Fprintf(os.Stderr, "Examples:\n")
 	fmt.Fprintf(os.Stderr, "  sbomlyze image.json                        # Show SBOM statistics\n")
+	fmt.Fprintf(os.Stderr, "  sbomlyze image.json -i                     # Interactive explorer\n")
 	fmt.Fprintf(os.Stderr, "  sbomlyze before.json after.json            # Compare two SBOMs\n")
 	fmt.Fprintf(os.Stderr, "  sbomlyze a.json b.json --policy p.json     # Apply policy checks\n")
 	fmt.Fprintf(os.Stderr, "  sbomlyze a.json b.json --format sarif      # SARIF for GitHub\n")
@@ -362,8 +385,18 @@ func isSPDX(data []byte) bool {
 }
 
 func parseSyft(data []byte) ([]Component, error) {
-	var doc struct {
-		Artifacts []struct {
+	// First, get raw artifacts to preserve original JSON
+	var rawDoc struct {
+		Artifacts []json.RawMessage `json:"artifacts"`
+	}
+	if err := json.Unmarshal(data, &rawDoc); err != nil {
+		return nil, err
+	}
+
+	var comps []Component
+	for _, rawArtifact := range rawDoc.Artifacts {
+		// Parse the artifact for our normalized fields
+		var a struct {
 			Name     string `json:"name"`
 			Version  string `json:"version"`
 			PURL     string `json:"purl"`
@@ -376,20 +409,18 @@ func parseSyft(data []byte) ([]Component, error) {
 			Metadata struct {
 				PullDependencies []string `json:"pullDependencies"`
 			} `json:"metadata"`
-		} `json:"artifacts"`
-	}
-	if err := json.Unmarshal(data, &doc); err != nil {
-		return nil, err
-	}
+		}
+		if err := json.Unmarshal(rawArtifact, &a); err != nil {
+			continue // Skip malformed artifacts
+		}
 
-	var comps []Component
-	for _, a := range doc.Artifacts {
 		comp := Component{
 			Name:         a.Name,
 			Version:      a.Version,
 			PURL:         a.PURL,
 			Hashes:       make(map[string]string),
 			Dependencies: a.Metadata.PullDependencies,
+			RawJSON:      rawArtifact, // Preserve the original JSON
 		}
 		for _, lic := range a.Licenses {
 			if lic.Value != "" {
@@ -409,6 +440,12 @@ func parseSyft(data []byte) ([]Component, error) {
 }
 
 func parseCycloneDX(data []byte) ([]Component, error) {
+	// First, get raw components to preserve original JSON
+	var rawDoc struct {
+		Components []json.RawMessage `json:"components"`
+	}
+	_ = json.Unmarshal(data, &rawDoc) // Ignore error, rawDoc.Components may be nil
+
 	var bom cdx.BOM
 	if err := json.Unmarshal(data, &bom); err != nil {
 		return nil, err
@@ -419,7 +456,7 @@ func parseCycloneDX(data []byte) ([]Component, error) {
 		return comps, nil
 	}
 
-	for _, c := range *bom.Components {
+	for i, c := range *bom.Components {
 		comp := Component{
 			Name:      c.Name,
 			Version:   c.Version,
@@ -449,6 +486,10 @@ func parseCycloneDX(data []byte) ([]Component, error) {
 		if c.Supplier != nil && c.Supplier.Name != "" {
 			comp.Supplier = c.Supplier.Name
 		}
+		// Preserve raw JSON if available
+		if i < len(rawDoc.Components) {
+			comp.RawJSON = rawDoc.Components[i]
+		}
 		// Compute ID using identity matcher
 		comp.ID = computeComponentID(comp)
 		comps = append(comps, comp)
@@ -457,6 +498,18 @@ func parseCycloneDX(data []byte) ([]Component, error) {
 }
 
 func parseSPDX(path string) ([]Component, error) {
+	// First read raw data to extract raw package JSON
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+
+	// Extract raw packages
+	var rawDoc struct {
+		Packages []json.RawMessage `json:"packages"`
+	}
+	_ = json.Unmarshal(data, &rawDoc) // Ignore error, may not have packages array
+
 	f, err := os.Open(path)
 	if err != nil {
 		return nil, err
@@ -469,7 +522,7 @@ func parseSPDX(path string) ([]Component, error) {
 	}
 
 	var comps []Component
-	for _, pkg := range doc.Packages {
+	for i, pkg := range doc.Packages {
 		comp := Component{
 			Name:    pkg.PackageName,
 			Version: pkg.PackageVersion,
@@ -490,6 +543,10 @@ func parseSPDX(path string) ([]Component, error) {
 		}
 		for _, cs := range pkg.PackageChecksums {
 			comp.Hashes[string(cs.Algorithm)] = cs.Value
+		}
+		// Preserve raw JSON if available
+		if i < len(rawDoc.Packages) {
+			comp.RawJSON = rawDoc.Packages[i]
 		}
 		// Compute ID using identity matcher
 		comp.ID = computeComponentID(comp)
