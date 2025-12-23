@@ -1,5 +1,7 @@
 # sbomlyze
 
+[![GitHub Release][release-img]][release]
+
 A fast, reliable SBOM diff and analysis tool. Compare Software Bill of Materials across versions, detect changes, and enforce policies in CI/CD pipelines.
 
 ## Features
