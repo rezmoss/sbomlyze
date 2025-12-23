@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"encoding/xml"
 	"fmt"
 	"strings"
@@ -545,29 +544,4 @@ func hashMapEqual(a, b map[string]string) bool {
 		}
 	}
 	return true
-}
-
-// =============================================================================
-// Output Helpers
-// =============================================================================
-
-func outputSARIF(result DiffResult, violations []PolicyViolation, sbomFile string) error {
-	sarif := generateSARIF(result, violations, sbomFile)
-	enc := json.NewEncoder(nil) // Will be set in main
-	enc.SetIndent("", "  ")
-	return enc.Encode(sarif)
-}
-
-func outputJUnit(result DiffResult, violations []PolicyViolation) ([]byte, error) {
-	junit := generateJUnit(result, violations)
-	return xml.MarshalIndent(junit, "", "  ")
-}
-
-func outputMarkdown(result DiffResult, violations []PolicyViolation) string {
-	return generateMarkdown(result, violations)
-}
-
-func outputJSONPatch(result DiffResult) ([]byte, error) {
-	patch := generateJSONPatch(result)
-	return json.MarshalIndent(patch, "", "  ")
 }

@@ -34,9 +34,6 @@ var (
 			Foreground(lipgloss.Color("#FAFAFA")).
 			Background(lipgloss.Color("#7D56F4"))
 
-	normalStyle = lipgloss.NewStyle().
-			Foreground(lipgloss.Color("#DDDDDD"))
-
 	detailKeyStyle = lipgloss.NewStyle().
 			Foreground(lipgloss.Color("#7D56F4")).
 			Bold(true)
@@ -320,13 +317,13 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.viewport.SetContent(m.renderComponentJSON(m.selectedComp))
 				m.viewport.GotoTop()
 			case msg.String() == "up", msg.String() == "k":
-				m.viewport.LineUp(1)
+				m.viewport.ScrollUp(1)
 			case msg.String() == "down", msg.String() == "j":
-				m.viewport.LineDown(1)
+				m.viewport.ScrollDown(1)
 			case msg.String() == "pgup", msg.String() == "pageup", msg.String() == "ctrl+u":
-				m.viewport.HalfViewUp()
+				m.viewport.HalfPageUp()
 			case msg.String() == "pgdown", msg.String() == "pagedown", msg.String() == "ctrl+d":
-				m.viewport.HalfViewDown()
+				m.viewport.HalfPageDown()
 			}
 
 		case jsonView:
@@ -341,13 +338,13 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.viewport.SetContent(m.renderComponentDetail(m.selectedComp))
 				m.viewport.GotoTop()
 			case msg.String() == "up", msg.String() == "k":
-				m.viewport.LineUp(1)
+				m.viewport.ScrollUp(1)
 			case msg.String() == "down", msg.String() == "j":
-				m.viewport.LineDown(1)
+				m.viewport.ScrollDown(1)
 			case msg.String() == "pgup", msg.String() == "pageup", msg.String() == "ctrl+u":
-				m.viewport.HalfViewUp()
+				m.viewport.HalfPageUp()
 			case msg.String() == "pgdown", msg.String() == "pagedown", msg.String() == "ctrl+d":
-				m.viewport.HalfViewDown()
+				m.viewport.HalfPageDown()
 			case msg.String() == "home", msg.String() == "g":
 				m.viewport.GotoTop()
 			case msg.String() == "end", msg.String() == "G":
