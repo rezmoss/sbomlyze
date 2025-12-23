@@ -590,3 +590,5 @@ make build   # Build with goreleaser (snapshot)
 
 
 [release]: https://github.com/aquasecurity/trivy/releases
+[release-img]: https://img.shields.io/github/v/release/user/repo
+
