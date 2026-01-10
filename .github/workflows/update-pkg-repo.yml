@@ -1,0 +1,240 @@
+name: Update Package Repository
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to add (e.g., 0.2.0)'
+        required: true
+
+permissions:
+  contents: write
+  pages: write
+
+jobs:
+  update-repo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          fetch-depth: 0
+
+      - name: Get version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "release" ]; then
+            VERSION="${{ github.event.release.tag_name }}"
+          else
+            VERSION="v${{ github.event.inputs.version }}"
+          fi
+          VERSION="${VERSION#v}"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Processing version: $VERSION"
+
+      - name: Install tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y dpkg-dev rpm createrepo-c
+
+      - name: Download release assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          echo "Downloading packages for version $VERSION..."
+
+          mkdir -p downloads
+          cd downloads
+
+          # Download all .deb, .rpm, .apk files
+          gh release download "v$VERSION" \
+            --repo ${{ github.repository }} \
+            --pattern "*.deb" \
+            --pattern "*.rpm" \
+            --pattern "*.apk" || true
+
+          ls -la
+
+      - name: Update APT repository (Debian/Ubuntu)
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+
+          # Create directory structure
+          mkdir -p deb/pool/main
+          mkdir -p deb/dists/stable/main/binary-amd64
+          mkdir -p deb/dists/stable/main/binary-arm64
+          mkdir -p deb/dists/stable/main/binary-i386
+
+          # Copy new packages
+          cp downloads/*.deb deb/pool/main/ 2>/dev/null || true
+
+          # Generate Packages files for each architecture
+          cd deb
+
+          for arch in amd64 arm64 i386; do
+            # Map i386 to 386 for package naming
+            if [ "$arch" = "i386" ]; then
+              pattern="386"
+            elif [ "$arch" = "amd64" ]; then
+              pattern="amd64"
+            else
+              pattern="$arch"
+            fi
+
+            dpkg-scanpackages --arch $arch pool/main > dists/stable/main/binary-$arch/Packages 2>/dev/null || true
+            gzip -9 -k -f dists/stable/main/binary-$arch/Packages
+          done
+
+          # Generate Release file
+          cd dists/stable
+          cat > Release << EOF
+          Origin: sbomlyze
+          Label: sbomlyze
+          Suite: stable
+          Codename: stable
+          Architectures: amd64 arm64 i386
+          Components: main
+          Description: sbomlyze package repository
+          Date: $(date -Ru)
+          EOF
+
+          # Add checksums
+          {
+            echo "MD5Sum:"
+            find main -type f | while read file; do
+              echo " $(md5sum "$file" | cut -d' ' -f1) $(wc -c < "$file") $file"
+            done
+            echo "SHA256:"
+            find main -type f | while read file; do
+              echo " $(sha256sum "$file" | cut -d' ' -f1) $(wc -c < "$file") $file"
+            done
+          } >> Release
+
+          cd ../../..
+          echo "APT repository updated"
+
+      - name: Update YUM/DNF repository (RHEL/Fedora)
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+
+          # Create directory structure
+          mkdir -p rpm/packages
+
+          # Copy new packages
+          cp downloads/*.rpm rpm/packages/ 2>/dev/null || true
+
+          # Generate repository metadata
+          cd rpm
+          createrepo_c packages/
+          cd ..
+
+          echo "YUM repository updated"
+
+      - name: Update APK repository (Alpine)
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+
+          # Create directory structure for each architecture
+          mkdir -p apk/packages/x86_64
+          mkdir -p apk/packages/aarch64
+          mkdir -p apk/packages/x86
+
+          # Copy packages to appropriate directories
+          for f in downloads/*_amd64.apk downloads/*_x86_64.apk; do
+            [ -f "$f" ] && cp "$f" apk/packages/x86_64/ 2>/dev/null || true
+          done
+          for f in downloads/*_arm64.apk downloads/*_aarch64.apk; do
+            [ -f "$f" ] && cp "$f" apk/packages/aarch64/ 2>/dev/null || true
+          done
+          for f in downloads/*_386.apk downloads/*_x86.apk; do
+            [ -f "$f" ] && cp "$f" apk/packages/x86/ 2>/dev/null || true
+          done
+
+          # Generate APKINDEX for each architecture
+          # Note: Proper signing requires a key, using unsigned for now
+          for arch in x86_64 aarch64 x86; do
+            if [ -n "$(ls -A apk/packages/$arch/*.apk 2>/dev/null)" ]; then
+              cd apk/packages/$arch
+              # Create simple index (unsigned)
+              tar -czf APKINDEX.tar.gz *.apk 2>/dev/null || true
+              cd ../../..
+            fi
+          done
+
+          echo "APK repository updated"
+
+      - name: Create index page
+        run: |
+          cat > index.html << 'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>sbomlyze Package Repository</title>
+            <style>
+              body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+              h1 { color: #333; }
+              h2 { color: #666; margin-top: 30px; }
+              pre { background: #f5f5f5; padding: 15px; border-radius: 5px; overflow-x: auto; }
+              code { background: #f0f0f0; padding: 2px 6px; border-radius: 3px; }
+              .note { background: #fff3cd; padding: 10px; border-radius: 5px; margin: 10px 0; }
+            </style>
+          </head>
+          <body>
+            <h1>sbomlyze Package Repository</h1>
+            <p>A fast, reliable SBOM diff and analysis tool.</p>
+
+            <h2>Debian / Ubuntu (apt)</h2>
+            <pre>
+          # Add repository
+          echo "deb [trusted=yes] https://rezmoss.github.io/sbomlyze/deb stable main" | sudo tee /etc/apt/sources.list.d/sbomlyze.list
+
+          # Install
+          sudo apt update
+          sudo apt install sbomlyze</pre>
+
+            <h2>RHEL / Fedora / CentOS (dnf/yum)</h2>
+            <pre>
+          # Add repository
+          sudo tee /etc/yum.repos.d/sbomlyze.repo << REPO
+          [sbomlyze]
+          name=sbomlyze
+          baseurl=https://rezmoss.github.io/sbomlyze/rpm/packages
+          enabled=1
+          gpgcheck=0
+          REPO
+
+          # Install
+          sudo dnf install sbomlyze</pre>
+
+            <h2>Alpine (apk)</h2>
+            <pre>
+          # Download and install directly
+          wget https://github.com/rezmoss/sbomlyze/releases/latest/download/sbomlyze_VERSION_linux_amd64.apk
+          sudo apk add --allow-untrusted sbomlyze_VERSION_linux_amd64.apk</pre>
+            <p class="note">Note: Alpine repository requires signed packages. Use direct download for now.</p>
+
+            <h2>Other Installation Methods</h2>
+            <pre>
+          # Install script (recommended)
+          curl -sSfL https://raw.githubusercontent.com/rezmoss/sbomlyze/main/install.sh | sh
+
+          # Go install
+          go install github.com/rezmoss/sbomlyze/cmd/sbomlyze@latest</pre>
+
+            <p>See <a href="https://github.com/rezmoss/sbomlyze">GitHub repository</a> for more information.</p>
+          </body>
+          </html>
+          EOF
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add -A
+          git diff --staged --quiet || git commit -m "Update package repository for v${{ steps.version.outputs.version }}"
+          git push

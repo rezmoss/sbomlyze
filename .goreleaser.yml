@@ -48,14 +48,13 @@ builds:
 
 archives:
   - id: default
-    builds:
-      - binary
     name_template: >-
       {{ .ProjectName }}_
       {{- .Version }}_
       {{- title .Os }}_
       {{- if eq .Arch "amd64" }}x86_64
       {{- else if eq .Arch "386" }}i386
+      {{- else if .Arm }}{{ .Arch }}v{{ .Arm }}
       {{- else }}{{ .Arch }}{{ end }}
     formats:
       - tar.gz
@@ -64,19 +63,30 @@ archives:
         formats:
           - zip
 
-  - id: arm
-    builds:
-      - binary-arm
-    name_template: >-
-      {{ .ProjectName }}_
-      {{- .Version }}_
-      {{- title .Os }}_
-      {{- .Arch }}v{{ .Arm }}
-    formats:
-      - tar.gz
-
 checksum:
   name_template: "checksums.txt"
+
+# Linux packages (.deb, .rpm, .apk)
+nfpms:
+  - id: packages
+    package_name: sbomlyze
+    vendor: rezmoss
+    homepage: https://github.com/rezmoss/sbomlyze
+    maintainer: rezmoss <rezmoss@users.noreply.github.com>
+    description: A fast, reliable SBOM diff and analysis tool
+    license: Apache-2.0
+    formats:
+      - deb
+      - rpm
+      - apk
+    bindir: /usr/bin
+    section: utils
+    priority: optional
+    contents:
+      - src: ./LICENSE
+        dst: /usr/share/licenses/sbomlyze/LICENSE
+      - src: ./README.md
+        dst: /usr/share/doc/sbomlyze/README.md
 
 snapshot:
   version_template: "{{ .Tag }}-next"
