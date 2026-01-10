@@ -1,0 +1,48 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.4",
+  "version": 1,
+  "components": [
+    {
+      "type": "library",
+      "name": "lodash",
+      "version": "4.17.20",
+      "purl": "pkg:npm/lodash@4.17.20",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "DIFFERENT_HASH_SAME_VERSION"
+        }
+      ],
+      "bom-ref": "lodash@4.17.20"
+    },
+    {
+      "type": "library",
+      "name": "express",
+      "version": "4.18.0",
+      "purl": "pkg:npm/express@4.18.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "bom-ref": "express@4.18.0"
+    },
+    {
+      "type": "library",
+      "name": "old-package",
+      "version": "1.0.0",
+      "purl": "pkg:npm/old-package@1.0.0",
+      "bom-ref": "old-package@1.0.0"
+    }
+  ]
+}

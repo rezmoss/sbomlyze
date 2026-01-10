@@ -11,6 +11,7 @@ before:
 
 builds:
   - id: binary
+    main: ./cmd/sbomlyze
     goos:
       - windows
       - darwin
@@ -24,12 +25,13 @@ builds:
         goarch: arm64
     ldflags:
       - -s -w
-      - -X main.version={{.Version}}
-      - -X main.commit={{.Commit}}
-      - -X main.date={{.Date}}
-      - -X main.buildSource=binaryRelease
+      - -X github.com/rezmoss/sbomlyze/internal/version.Version={{.Version}}
+      - -X github.com/rezmoss/sbomlyze/internal/version.Commit={{.Commit}}
+      - -X github.com/rezmoss/sbomlyze/internal/version.Date={{.Date}}
+      - -X github.com/rezmoss/sbomlyze/internal/version.BuildSource=binaryRelease
 
   - id: binary-arm
+    main: ./cmd/sbomlyze
     goos:
       - linux
     goarch:
@@ -39,10 +41,10 @@ builds:
       - "7"
     ldflags:
       - -s -w
-      - -X main.version={{.Version}}
-      - -X main.commit={{.Commit}}
-      - -X main.date={{.Date}}
-      - -X main.buildSource=binaryRelease
+      - -X github.com/rezmoss/sbomlyze/internal/version.Version={{.Version}}
+      - -X github.com/rezmoss/sbomlyze/internal/version.Commit={{.Commit}}
+      - -X github.com/rezmoss/sbomlyze/internal/version.Date={{.Date}}
+      - -X github.com/rezmoss/sbomlyze/internal/version.BuildSource=binaryRelease
 
 archives:
   - id: default

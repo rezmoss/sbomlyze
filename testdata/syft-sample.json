@@ -1,0 +1,65 @@
+{
+  "artifacts": [
+    {
+      "id": "abc123",
+      "name": "busybox",
+      "version": "1.36.1-r15",
+      "type": "apk",
+      "foundBy": "apkdb-cataloger",
+      "purl": "pkg:apk/alpine/busybox@1.36.1-r15?arch=x86_64",
+      "licenses": [
+        {
+          "value": "GPL-2.0-only",
+          "spdxExpression": "GPL-2.0-only"
+        }
+      ],
+      "cpes": [
+        {
+          "cpe": "cpe:2.3:a:busybox:busybox:1.36.1-r15:*:*:*:*:*:*:*"
+        }
+      ],
+      "metadata": {
+        "pullDependencies": ["musl", "libc-utils"]
+      }
+    },
+    {
+      "id": "def456",
+      "name": "musl",
+      "version": "1.2.4-r2",
+      "type": "apk",
+      "foundBy": "apkdb-cataloger",
+      "purl": "pkg:apk/alpine/musl@1.2.4-r2?arch=x86_64",
+      "licenses": [
+        {
+          "value": "MIT",
+          "spdxExpression": "MIT"
+        }
+      ],
+      "cpes": [
+        {
+          "cpe": "cpe:2.3:a:musl:musl:1.2.4-r2:*:*:*:*:*:*:*"
+        }
+      ]
+    },
+    {
+      "id": "ghi789",
+      "name": "alpine-baselayout",
+      "version": "3.4.3-r1",
+      "type": "apk",
+      "foundBy": "apkdb-cataloger",
+      "purl": "pkg:apk/alpine/alpine-baselayout@3.4.3-r1?arch=x86_64",
+      "licenses": [
+        {
+          "value": "GPL-2.0-only",
+          "spdxExpression": "GPL-2.0-only"
+        }
+      ]
+    }
+  ],
+  "source": {
+    "type": "image",
+    "target": {
+      "userInput": "alpine:latest"
+    }
+  }
+}

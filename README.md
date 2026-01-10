@@ -20,7 +20,7 @@ A fast, reliable SBOM diff and analysis tool. Compare Software Bill of Materials
 ## Installation
 
 ```bash
-go install github.com/rezmoss/sbomlyze@latest
+go install github.com/rezmoss/sbomlyze/cmd/sbomlyze@latest
 ```
 
 Or build from source:
@@ -28,7 +28,7 @@ Or build from source:
 ```bash
 git clone https://github.com/rezmoss/sbomlyze.git
 cd sbomlyze
-go build -o sbomlyze .
+go build -o sbomlyze ./cmd/sbomlyze
 ```
 
 ## Quick Start
@@ -576,18 +576,20 @@ golangci-lint run ./...
 ### Build
 
 ```bash
-make build
+make build-quick
 # or
-go build -o sbomlyze .
+go build -o sbomlyze ./cmd/sbomlyze
 ```
 
 ### Make Commands
 
 ```bash
-make all     # Run test, lint, and build
-make test    # Run all tests
-make lint    # Run golangci-lint
-make build   # Build with goreleaser (snapshot)
+make all         # Run test, lint, and build
+make test        # Run all tests
+make lint        # Run golangci-lint
+make build       # Build with goreleaser (snapshot)
+make build-quick # Quick build for development
+make clean       # Remove build artifacts
 ```
 
 

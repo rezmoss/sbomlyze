@@ -1,0 +1,5 @@
+{
+  "deny_licenses": ["Apache-2.0"],
+  "require_licenses": true,
+  "deny_duplicates": true
+}
