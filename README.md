@@ -77,6 +77,12 @@ wget https://github.com/rezmoss/sbomlyze/releases/latest/download/sbomlyze_VERSI
 sudo apk add --allow-untrusted sbomlyze_*_linux_amd64.apk
 ```
 
+### Homebrew (macOS/Linux)
+
+```bash
+brew install rezmoss/sbomlyze/sbomlyze
+```
+
 ### Go Install
 
 ```bash

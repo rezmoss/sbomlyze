@@ -110,16 +110,16 @@ release:
   prerelease: auto
   name_template: "{{.ProjectName}} v{{.Version}}"
 
-# brews:
-#   - repository:
-#       owner: rezmoss
-#       name: homebrew-sbomlyze
-#       token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
-#     directory: Formula
-#     homepage: "https://github.com/rezmoss/sbomlyze"
-#     description: "A fast, reliable SBOM diff and analysis tool"
-#     license: "MIT"
-#     test: |
-#       system "#{bin}/sbomlyze", "--help"
-#     install: |
-#       bin.install "sbomlyze"
+brews:
+  - repository:
+      owner: rezmoss
+      name: homebrew-sbomlyze
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+    directory: Formula
+    homepage: "https://github.com/rezmoss/sbomlyze"
+    description: "A fast, reliable SBOM diff and analysis tool"
+    license: "Apache-2.0"
+    test: |
+      system "#{bin}/sbomlyze", "--version"
+    install: |
+      bin.install "sbomlyze"
