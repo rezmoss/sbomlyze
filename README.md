@@ -19,17 +19,46 @@ A fast, reliable SBOM diff and analysis tool. Compare Software Bill of Materials
 
 ## Installation
 
-### From Go
+### Installer Script (Recommended)
+
+The installer script downloads the correct binary for your OS/architecture:
+
+```bash
+# Install to ./bin
+curl -sSfL https://raw.githubusercontent.com/rezmoss/sbomlyze/main/install.sh | sh
+
+# Install to /usr/local/bin (requires sudo)
+curl -sSfL https://raw.githubusercontent.com/rezmoss/sbomlyze/main/install.sh | sudo sh -s -- -b /usr/local/bin
+
+# Install specific version
+curl -sSfL https://raw.githubusercontent.com/rezmoss/sbomlyze/main/install.sh | sh -s -- -v 0.2.0
+```
+
+**Installer options:**
+
+| Option | Description |
+|--------|-------------|
+| `-b <dir>` | Installation directory (default: `./bin`) |
+| `-d` | Enable debug output |
+| `-v <ver>` | Install specific version (default: latest) |
+
+### Go Install
 
 ```bash
 go install github.com/rezmoss/sbomlyze/cmd/sbomlyze@latest
+```
+
+### Homebrew (macOS/Linux)
+
+```bash
+brew install rezmoss/tap/sbomlyze
 ```
 
 ### From Binary Release
 
 Download the latest binary from [GitHub Releases](https://github.com/rezmoss/sbomlyze/releases).
 
-**macOS users:** After downloading, remove the quarantine flag:
+**macOS users:** Remove the quarantine flag after downloading:
 
 ```bash
 xattr -d com.apple.quarantine ./sbomlyze
