@@ -42,16 +42,45 @@ curl -sSfL https://raw.githubusercontent.com/rezmoss/sbomlyze/main/install.sh | 
 | `-d` | Enable debug output |
 | `-v <ver>` | Install specific version (default: latest) |
 
+### Debian / Ubuntu (apt)
+
+```bash
+# Add repository
+echo "deb [trusted=yes] https://rezmoss.github.io/sbomlyze/deb stable main" | sudo tee /etc/apt/sources.list.d/sbomlyze.list
+
+# Install
+sudo apt update
+sudo apt install sbomlyze
+```
+
+### RHEL / Fedora / CentOS (dnf/yum)
+
+```bash
+# Add repository
+sudo tee /etc/yum.repos.d/sbomlyze.repo << 'EOF'
+[sbomlyze]
+name=sbomlyze
+baseurl=https://rezmoss.github.io/sbomlyze/rpm/packages
+enabled=1
+gpgcheck=0
+EOF
+
+# Install
+sudo dnf install sbomlyze   # or: sudo yum install sbomlyze
+```
+
+### Alpine (apk)
+
+```bash
+# Download and install
+wget https://github.com/rezmoss/sbomlyze/releases/latest/download/sbomlyze_VERSION_linux_amd64.apk
+sudo apk add --allow-untrusted sbomlyze_*_linux_amd64.apk
+```
+
 ### Go Install
 
 ```bash
 go install github.com/rezmoss/sbomlyze/cmd/sbomlyze@latest
-```
-
-### Homebrew (macOS/Linux)
-
-```bash
-brew install rezmoss/tap/sbomlyze
 ```
 
 ### From Binary Release
