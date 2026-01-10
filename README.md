@@ -19,11 +19,24 @@ A fast, reliable SBOM diff and analysis tool. Compare Software Bill of Materials
 
 ## Installation
 
+### From Go
+
 ```bash
 go install github.com/rezmoss/sbomlyze/cmd/sbomlyze@latest
 ```
 
-Or build from source:
+### From Binary Release
+
+Download the latest binary from [GitHub Releases](https://github.com/rezmoss/sbomlyze/releases).
+
+**macOS users:** After downloading, remove the quarantine flag:
+
+```bash
+xattr -d com.apple.quarantine ./sbomlyze
+chmod +x ./sbomlyze
+```
+
+### Build from Source
 
 ```bash
 git clone https://github.com/rezmoss/sbomlyze.git
