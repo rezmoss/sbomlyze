@@ -27,7 +27,7 @@ sudo apt install sbomlyze</pre>
   <h2>RHEL / Fedora / CentOS (dnf/yum)</h2>
   <pre>
 # Add repository
-sudo tee /etc/yum.repos.d/sbomlyze.repo &lt;&lt; 'REPO'
+sudo tee /etc/yum.repos.d/sbomlyze.repo << REPO
 [sbomlyze]
 name=sbomlyze
 baseurl=https://rezmoss.github.io/sbomlyze/rpm/packages
