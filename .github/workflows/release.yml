@@ -41,6 +41,33 @@ jobs:
         with:
           go-version: "1.23"
 
+      - name: Get version info
+        id: version
+        run: |
+          # Extract version from tag (remove 'v' prefix)
+          VERSION=${GITHUB_REF_NAME#v}
+          COMMIT=$(git rev-parse --short HEAD)
+          DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "commit=$COMMIT" >> $GITHUB_OUTPUT
+          echo "date=$DATE" >> $GITHUB_OUTPUT
+          echo "Version: $VERSION, Commit: $COMMIT, Date: $DATE"
+
+      - name: Update version.go
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          COMMIT="${{ steps.version.outputs.commit }}"
+          DATE="${{ steps.version.outputs.date }}"
+
+          # Update version.go with release values
+          sed -i "s/Version     = \"dev\"/Version     = \"$VERSION\"/" internal/version/version.go
+          sed -i "s/Commit      = \"none\"/Commit      = \"$COMMIT\"/" internal/version/version.go
+          sed -i "s/Date        = \"unknown\"/Date        = \"$DATE\"/" internal/version/version.go
+          sed -i "s/BuildSource = \"source\"/BuildSource = \"release\"/" internal/version/version.go
+
+          echo "Updated version.go:"
+          cat internal/version/version.go
+
       - name: Vendor dependencies
         run: go mod vendor
 
