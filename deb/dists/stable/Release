@@ -5,24 +5,24 @@ Codename: stable
 Architectures: amd64 arm64 i386
 Components: main
 Description: sbomlyze package repository
-Date: Sat, 10 Jan 2026 14:40:09 +0000
+Date: Thu, 22 Jan 2026 21:37:47 +0000
 MD5Sum:
  d41d8cd98f00b204e9800998ecf8427e 0 main/binary-i386/.gitkeep
  d41d8cd98f00b204e9800998ecf8427e 0 main/binary-i386/Packages
- 25adb00d3a7392334bf62dc89e7eef12 29 main/binary-i386/Packages.gz
+ 44f7de4f37c4e245982c2c263aded156 29 main/binary-i386/Packages.gz
  d41d8cd98f00b204e9800998ecf8427e 0 main/binary-amd64/.gitkeep
  d41d8cd98f00b204e9800998ecf8427e 0 main/binary-amd64/Packages
- 25adb00d3a7392334bf62dc89e7eef12 29 main/binary-amd64/Packages.gz
+ d51c01433f9bc68c9ab3adf8e98bf50e 29 main/binary-amd64/Packages.gz
  d41d8cd98f00b204e9800998ecf8427e 0 main/binary-arm64/.gitkeep
  d41d8cd98f00b204e9800998ecf8427e 0 main/binary-arm64/Packages
- 25adb00d3a7392334bf62dc89e7eef12 29 main/binary-arm64/Packages.gz
+ 44f7de4f37c4e245982c2c263aded156 29 main/binary-arm64/Packages.gz
 SHA256:
  e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 0 main/binary-i386/.gitkeep
  e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 0 main/binary-i386/Packages
- 6a55b1ef9d541c9c49ce5e9be95414e3cb1b2bf3b515d3d639de0d9a65b80075 29 main/binary-i386/Packages.gz
+ 8fbcf9c6ca1ba50fc311dd7fb98979606cc7b8f98e7519200630f6e0465db303 29 main/binary-i386/Packages.gz
  e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 0 main/binary-amd64/.gitkeep
  e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 0 main/binary-amd64/Packages
- 6a55b1ef9d541c9c49ce5e9be95414e3cb1b2bf3b515d3d639de0d9a65b80075 29 main/binary-amd64/Packages.gz
+ 6ad23af504309abd95c68ce190014264e18a49265cceeb36b9d5a8e8bb1484d9 29 main/binary-amd64/Packages.gz
  e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 0 main/binary-arm64/.gitkeep
  e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 0 main/binary-arm64/Packages
- 6a55b1ef9d541c9c49ce5e9be95414e3cb1b2bf3b515d3d639de0d9a65b80075 29 main/binary-arm64/Packages.gz
+ 8fbcf9c6ca1ba50fc311dd7fb98979606cc7b8f98e7519200630f6e0465db303 29 main/binary-arm64/Packages.gz
