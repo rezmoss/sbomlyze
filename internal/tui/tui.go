@@ -1,7 +1,9 @@
 package tui
 
 import (
+	"encoding/json"
 	"fmt"
+	"os"
 	"sort"
 	"strings"
 
@@ -10,6 +12,7 @@ import (
 	"github.com/charmbracelet/bubbles/textinput"
 	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
 	"github.com/rezmoss/sbomlyze/internal/analysis"
 	"github.com/rezmoss/sbomlyze/internal/sbom"
 )
@@ -24,6 +27,7 @@ const (
 	searchView
 	filterView
 	helpView
+	exportView
 )
 
 // ComponentItem represents a list item
@@ -82,8 +86,10 @@ type Model struct {
 	searchQuery   string
 	filterType    string
 	stats         analysis.Stats
+	sbomInfo      sbom.SBOMInfo
 	ready         bool
 	quitting      bool
+	exportMsg     string // Message to show after export (success/error)
 }
 
 // Key bindings
@@ -144,7 +150,7 @@ var keys = keyMap{
 }
 
 // NewModel creates a new interactive model
-func NewModel(comps []sbom.Component, stats analysis.Stats) Model {
+func NewModel(comps []sbom.Component, stats analysis.Stats, info sbom.SBOMInfo) Model {
 	// Sort components by name
 	sorted := make([]sbom.Component, len(comps))
 	copy(sorted, comps)
@@ -158,21 +164,58 @@ func NewModel(comps []sbom.Component, stats analysis.Stats) Model {
 		items[i] = ComponentItem{component: c, index: i}
 	}
 
-	// Create list
+	// Create custom delegate with better styling
 	delegate := list.NewDefaultDelegate()
-	delegate.Styles.SelectedTitle = selectedStyle
-	delegate.Styles.SelectedDesc = selectedStyle
+
+	// Style the delegate for selected items
+	delegate.Styles.SelectedTitle = lipgloss.NewStyle().
+		Foreground(lipgloss.Color("#F5F5F5")).
+		Background(lipgloss.Color("#7C3AED")).
+		Bold(true).
+		Padding(0, 1)
+
+	delegate.Styles.SelectedDesc = lipgloss.NewStyle().
+		Foreground(lipgloss.Color("#A5B4FC")).
+		Background(lipgloss.Color("#7C3AED")).
+		Padding(0, 1)
+
+	delegate.Styles.NormalTitle = lipgloss.NewStyle().
+		Foreground(lipgloss.Color("#CDD6F4")).
+		Padding(0, 1)
+
+	delegate.Styles.NormalDesc = lipgloss.NewStyle().
+		Foreground(lipgloss.Color("#6C7086")).
+		Padding(0, 1)
+
+	delegate.Styles.DimmedTitle = lipgloss.NewStyle().
+		Foreground(lipgloss.Color("#6C7086")).
+		Padding(0, 1)
+
+	delegate.Styles.DimmedDesc = lipgloss.NewStyle().
+		Foreground(lipgloss.Color("#45475A")).
+		Padding(0, 1)
 
 	l := list.New(items, delegate, 0, 0)
-	l.Title = "📦 SBOM Explorer"
-	l.SetShowStatusBar(true)
+	l.Title = ""
+	l.SetShowStatusBar(false)
 	l.SetFilteringEnabled(true)
-	l.Styles.Title = titleStyle
+	l.SetShowHelp(false)
+	l.SetShowTitle(false)
 
-	// Create text input for search
+	// Style the list
+	l.Styles.NoItems = lipgloss.NewStyle().
+		Foreground(lipgloss.Color("#6C7086")).
+		Padding(1, 2)
+
+	// Create text input for search with better styling
 	ti := textinput.New()
-	ti.Placeholder = "Search components..."
+	ti.Placeholder = "Type to search..."
 	ti.CharLimit = 100
+	ti.Width = 40
+	ti.PromptStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#7C3AED"))
+	ti.TextStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#CDD6F4"))
+	ti.PlaceholderStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#6C7086"))
+	ti.Cursor.Style = lipgloss.NewStyle().Foreground(lipgloss.Color("#06B6D4"))
 
 	// Create viewport for details
 	vp := viewport.New(0, 0)
@@ -185,6 +228,7 @@ func NewModel(comps []sbom.Component, stats analysis.Stats) Model {
 		textInput:     ti,
 		mode:          listView,
 		stats:         stats,
+		sbomInfo:      info,
 	}
 }
 
@@ -200,9 +244,18 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		m.width = msg.Width
 		m.height = msg.Height
-		m.list.SetSize(msg.Width, msg.Height-4)
-		m.viewport.Width = msg.Width
-		m.viewport.Height = msg.Height - 6
+
+		// Account for header (1-2 lines) and footer (1 line)
+		headerHeight := 1
+		if m.searchQuery != "" || m.filterType != "" {
+			headerHeight = 2 // Extra line for filter status
+		}
+		footerHeight := 1
+		contentHeight := msg.Height - headerHeight - footerHeight - 1
+
+		m.list.SetSize(msg.Width, contentHeight)
+		m.viewport.Width = msg.Width - 2
+		m.viewport.Height = contentHeight - 3 // Account for title bar in detail view
 		m.ready = true
 		return m, nil
 
@@ -227,7 +280,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			case key.Matches(msg, keys.Search):
 				m.mode = searchView
 				m.textInput.SetValue("")
-				m.textInput.Placeholder = "Search by name, PURL, license..."
+				m.textInput.Placeholder = "Search all fields..."
 				m.textInput.Focus()
 				return m, textinput.Blink
 			case key.Matches(msg, keys.Filter):
@@ -250,10 +303,12 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			switch {
 			case key.Matches(msg, keys.Back):
 				m.mode = listView
+				return m, nil
 			case key.Matches(msg, keys.JSON):
 				m.mode = jsonView
 				m.viewport.SetContent(m.renderComponentJSON(m.selectedComp))
 				m.viewport.GotoTop()
+				return m, nil
 			case msg.String() == "up", msg.String() == "k":
 				m.viewport.ScrollUp(1)
 			case msg.String() == "down", msg.String() == "j":
@@ -263,18 +318,34 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			case msg.String() == "pgdown", msg.String() == "pagedown", msg.String() == "ctrl+d":
 				m.viewport.HalfPageDown()
 			}
+			return m, nil
 
 		case jsonView:
 			switch {
 			case key.Matches(msg, keys.Back):
 				m.mode = detailView
+				m.exportMsg = "" // Clear any export message
 				m.viewport.SetContent(m.renderComponentDetail(m.selectedComp))
 				m.viewport.GotoTop()
+				return m, nil
 			case msg.String() == "d":
 				// Toggle back to detail view
 				m.mode = detailView
+				m.exportMsg = "" // Clear any export message
 				m.viewport.SetContent(m.renderComponentDetail(m.selectedComp))
 				m.viewport.GotoTop()
+				return m, nil
+			case key.Matches(msg, keys.Enter):
+				// Export JSON to file
+				m.mode = exportView
+				m.exportMsg = ""
+				// Suggest filename based on component name
+				suggestedName := strings.ReplaceAll(m.selectedComp.Name, "/", "_")
+				suggestedName = strings.ReplaceAll(suggestedName, ":", "_")
+				m.textInput.SetValue(suggestedName)
+				m.textInput.Placeholder = "Enter filename..."
+				m.textInput.Focus()
+				return m, textinput.Blink
 			case msg.String() == "up", msg.String() == "k":
 				m.viewport.ScrollUp(1)
 			case msg.String() == "down", msg.String() == "j":
@@ -288,6 +359,37 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			case msg.String() == "end", msg.String() == "G":
 				m.viewport.GotoBottom()
 			}
+			return m, nil
+
+		case exportView:
+			switch msg.String() {
+			case "enter":
+				filename := m.textInput.Value()
+				if filename != "" {
+					// Add .json extension if not present
+					if !strings.HasSuffix(strings.ToLower(filename), ".json") {
+						filename += ".json"
+					}
+					// Export the JSON
+					err := m.exportJSON(filename)
+					if err != nil {
+						m.exportMsg = "Error: " + err.Error()
+					} else {
+						m.exportMsg = "Exported to " + filename
+					}
+				}
+				m.mode = jsonView
+				m.textInput.Blur()
+				return m, nil
+			case "esc":
+				m.mode = jsonView
+				m.textInput.Blur()
+				return m, nil
+			default:
+				m.textInput, cmd = m.textInput.Update(msg)
+				cmds = append(cmds, cmd)
+			}
+			return m, tea.Batch(cmds...)
 
 		case searchView, filterView:
 			switch msg.String() {
@@ -312,7 +414,9 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case helpView:
 			if key.Matches(msg, keys.Back) || msg.String() == "?" {
 				m.mode = listView
+				return m, nil
 			}
+			return m, nil
 		}
 	}
 
@@ -332,7 +436,7 @@ func (m *Model) applyFilters() {
 		// Apply search filter
 		if m.searchQuery != "" {
 			query := strings.ToLower(m.searchQuery)
-			searchable := strings.ToLower(c.Name + " " + c.PURL + " " + strings.Join(c.Licenses, " "))
+			searchable := strings.ToLower(c.Name + " " + c.PURL + " " + strings.Join(c.Licenses, " ") + " " + string(c.RawJSON))
 			if !strings.Contains(searchable, query) {
 				continue
 			}
@@ -370,10 +474,35 @@ func extractPkgType(purl string) string {
 	return ""
 }
 
+// exportJSON exports the selected component's JSON to a file
+func (m *Model) exportJSON(filename string) error {
+	var jsonBytes []byte
+	var err error
+
+	// Use raw JSON if available (preserves all original fields)
+	if len(m.selectedComp.RawJSON) > 0 {
+		var raw interface{}
+		if err = json.Unmarshal(m.selectedComp.RawJSON, &raw); err == nil {
+			jsonBytes, err = json.MarshalIndent(raw, "", "  ")
+		}
+	}
+
+	// Fallback to normalized component if no raw JSON
+	if len(jsonBytes) == 0 || err != nil {
+		jsonBytes, err = json.MarshalIndent(m.selectedComp, "", "  ")
+		if err != nil {
+			return err
+		}
+	}
+
+	// Write to file
+	return os.WriteFile(filename, jsonBytes, 0644)
+}
+
 // Run starts the interactive TUI
-func Run(comps []sbom.Component, stats analysis.Stats) error {
+func Run(comps []sbom.Component, stats analysis.Stats, info sbom.SBOMInfo) error {
 	p := tea.NewProgram(
-		NewModel(comps, stats),
+		NewModel(comps, stats, info),
 		tea.WithAltScreen(),
 	)
 

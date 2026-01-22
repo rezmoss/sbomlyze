@@ -6,6 +6,14 @@ import (
 	"github.com/rezmoss/sbomlyze/internal/identity"
 )
 
+// SBOMInfo holds metadata about the SBOM source (OS, distro, source type)
+type SBOMInfo struct {
+	OSName     string `json:"os_name,omitempty"`
+	OSVersion  string `json:"os_version,omitempty"`
+	SourceType string `json:"source_type,omitempty"` // e.g., "image", "directory", "file"
+	SourceName string `json:"source_name,omitempty"` // e.g., "alpine:latest", "/path/to/dir"
+}
+
 // Component represents a normalized component from any SBOM format
 type Component struct {
 	ID           string            `json:"id"`
