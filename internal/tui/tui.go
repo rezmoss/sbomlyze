@@ -82,6 +82,7 @@ type Model struct {
 	searchQuery   string
 	filterType    string
 	stats         analysis.Stats
+	sbomInfo      sbom.SBOMInfo
 	ready         bool
 	quitting      bool
 }
@@ -144,7 +145,7 @@ var keys = keyMap{
 }
 
 // NewModel creates a new interactive model
-func NewModel(comps []sbom.Component, stats analysis.Stats) Model {
+func NewModel(comps []sbom.Component, stats analysis.Stats, info sbom.SBOMInfo) Model {
 	// Sort components by name
 	sorted := make([]sbom.Component, len(comps))
 	copy(sorted, comps)
@@ -185,6 +186,7 @@ func NewModel(comps []sbom.Component, stats analysis.Stats) Model {
 		textInput:     ti,
 		mode:          listView,
 		stats:         stats,
+		sbomInfo:      info,
 	}
 }
 
@@ -250,10 +252,12 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			switch {
 			case key.Matches(msg, keys.Back):
 				m.mode = listView
+				return m, nil
 			case key.Matches(msg, keys.JSON):
 				m.mode = jsonView
 				m.viewport.SetContent(m.renderComponentJSON(m.selectedComp))
 				m.viewport.GotoTop()
+				return m, nil
 			case msg.String() == "up", msg.String() == "k":
 				m.viewport.ScrollUp(1)
 			case msg.String() == "down", msg.String() == "j":
@@ -263,6 +267,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			case msg.String() == "pgdown", msg.String() == "pagedown", msg.String() == "ctrl+d":
 				m.viewport.HalfPageDown()
 			}
+			return m, nil
 
 		case jsonView:
 			switch {
@@ -270,11 +275,13 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.mode = detailView
 				m.viewport.SetContent(m.renderComponentDetail(m.selectedComp))
 				m.viewport.GotoTop()
+				return m, nil
 			case msg.String() == "d":
 				// Toggle back to detail view
 				m.mode = detailView
 				m.viewport.SetContent(m.renderComponentDetail(m.selectedComp))
 				m.viewport.GotoTop()
+				return m, nil
 			case msg.String() == "up", msg.String() == "k":
 				m.viewport.ScrollUp(1)
 			case msg.String() == "down", msg.String() == "j":
@@ -288,6 +295,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			case msg.String() == "end", msg.String() == "G":
 				m.viewport.GotoBottom()
 			}
+			return m, nil
 
 		case searchView, filterView:
 			switch msg.String() {
@@ -312,7 +320,9 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case helpView:
 			if key.Matches(msg, keys.Back) || msg.String() == "?" {
 				m.mode = listView
+				return m, nil
 			}
+			return m, nil
 		}
 	}
 
@@ -371,9 +381,9 @@ func extractPkgType(purl string) string {
 }
 
 // Run starts the interactive TUI
-func Run(comps []sbom.Component, stats analysis.Stats) error {
+func Run(comps []sbom.Component, stats analysis.Stats, info sbom.SBOMInfo) error {
 	p := tea.NewProgram(
-		NewModel(comps, stats),
+		NewModel(comps, stats, info),
 		tea.WithAltScreen(),
 	)
 

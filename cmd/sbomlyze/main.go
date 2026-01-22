@@ -44,7 +44,16 @@ func main() {
 
 	// Single file mode - stats or interactive
 	if len(opts.Files) == 1 {
-		comps, err := parseFileWithOptions(opts.Files[0], &parseOpts)
+		// For interactive mode, we need SBOM info as well
+		var comps []sbom.Component
+		var sbomInfo sbom.SBOMInfo
+		var err error
+
+		if opts.Interactive {
+			comps, sbomInfo, err = parseFileWithOptionsAndInfo(opts.Files[0], &parseOpts)
+		} else {
+			comps, err = parseFileWithOptions(opts.Files[0], &parseOpts)
+		}
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error parsing %s: %v\n", opts.Files[0], err)
 			os.Exit(1)
@@ -57,7 +66,7 @@ func main() {
 
 		// Interactive mode
 		if opts.Interactive {
-			if err := tui.Run(comps, stats); err != nil {
+			if err := tui.Run(comps, stats, sbomInfo); err != nil {
 				fmt.Fprintf(os.Stderr, "Error running interactive mode: %v\n", err)
 				os.Exit(1)
 			}
@@ -201,4 +210,17 @@ func parseFileWithOptions(path string, opts *cli.ParseOptions) ([]sbom.Component
 		return []sbom.Component{}, nil
 	}
 	return comps, nil
+}
+
+func parseFileWithOptionsAndInfo(path string, opts *cli.ParseOptions) ([]sbom.Component, sbom.SBOMInfo, error) {
+	comps, info, err := sbom.ParseFileWithInfo(path)
+	if err != nil {
+		if opts.Strict {
+			return nil, sbom.SBOMInfo{}, err
+		}
+		// In tolerant mode, add warning and return empty
+		opts.AddWarning(path, err.Error(), "")
+		return []sbom.Component{}, sbom.SBOMInfo{}, nil
+	}
+	return comps, info, nil
 }

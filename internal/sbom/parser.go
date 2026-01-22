@@ -8,21 +8,28 @@ import (
 
 // ParseFile reads an SBOM file and returns normalized components
 func ParseFile(path string) ([]Component, error) {
+	comps, _, err := ParseFileWithInfo(path)
+	return comps, err
+}
+
+// ParseFileWithInfo reads an SBOM file and returns normalized components along with SBOM metadata
+func ParseFileWithInfo(path string) ([]Component, SBOMInfo, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
-		return nil, err
+		return nil, SBOMInfo{}, err
 	}
 
 	if IsCycloneDX(data) {
-		return ParseCycloneDX(data)
+		return ParseCycloneDXWithInfo(data)
 	}
 	if IsSPDX(data) {
-		return ParseSPDX(path)
+		comps, err := ParseSPDX(path)
+		return comps, SBOMInfo{}, err // SPDX doesn't typically have OS info
 	}
 	if IsSyft(data) {
-		return ParseSyft(data)
+		return ParseSyftWithInfo(data)
 	}
-	return nil, fmt.Errorf("unknown SBOM format")
+	return nil, SBOMInfo{}, fmt.Errorf("unknown SBOM format")
 }
 
 // IsSyft returns true if data looks like Syft JSON format

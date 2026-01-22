@@ -8,16 +8,45 @@ import (
 
 // ParseSyft parses Syft format SBOM data
 func ParseSyft(data []byte) ([]Component, error) {
-	// First, get raw artifacts to preserve original JSON
-	var rawDoc struct {
+	comps, _, err := ParseSyftWithInfo(data)
+	return comps, err
+}
+
+// ParseSyftWithInfo parses Syft format SBOM data and extracts source/distro info
+func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
+	// Parse document structure including source and distro info
+	var doc struct {
 		Artifacts []json.RawMessage `json:"artifacts"`
+		Source    struct {
+			Type   string `json:"type"`
+			Target struct {
+				UserInput string `json:"userInput"`
+			} `json:"target"`
+		} `json:"source"`
+		Distro struct {
+			Name    string `json:"name"`
+			Version string `json:"version"`
+			ID      string `json:"id"`
+		} `json:"distro"`
 	}
-	if err := json.Unmarshal(data, &rawDoc); err != nil {
-		return nil, err
+	if err := json.Unmarshal(data, &doc); err != nil {
+		return nil, SBOMInfo{}, err
+	}
+
+	// Extract SBOM info
+	info := SBOMInfo{
+		SourceType: doc.Source.Type,
+		SourceName: doc.Source.Target.UserInput,
+		OSName:     doc.Distro.Name,
+		OSVersion:  doc.Distro.Version,
+	}
+	// If distro name is empty but ID is set, use ID
+	if info.OSName == "" && doc.Distro.ID != "" {
+		info.OSName = doc.Distro.ID
 	}
 
 	var comps []Component
-	for _, rawArtifact := range rawDoc.Artifacts {
+	for _, rawArtifact := range doc.Artifacts {
 		// Parse the artifact for our normalized fields
 		var a struct {
 			Name     string `json:"name"`
@@ -59,5 +88,5 @@ func ParseSyft(data []byte) ([]Component, error) {
 		comp.ID = identity.ComputeID(comp.ToIdentity())
 		comps = append(comps, comp)
 	}
-	return comps, nil
+	return comps, info, nil
 }

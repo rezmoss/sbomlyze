@@ -122,11 +122,61 @@ func (m Model) renderListView() string {
 
 	help := helpStyle.Render(" / search • t filter type • enter details • c clear • ? help • q quit")
 
+	// Build OS info line if available
+	osInfo := m.renderOSInfo()
+
+	if osInfo != "" {
+		return fmt.Sprintf("%s\n%s\n%s\n%s",
+			status.String(),
+			m.list.View(),
+			osInfo,
+			help,
+		)
+	}
+
 	return fmt.Sprintf("%s\n%s\n%s",
 		status.String(),
 		m.list.View(),
 		help,
 	)
+}
+
+// renderOSInfo renders the OS/source info line if available
+func (m Model) renderOSInfo() string {
+	var parts []string
+
+	// OS name and version
+	if m.sbomInfo.OSName != "" {
+		osStr := m.sbomInfo.OSName
+		if m.sbomInfo.OSVersion != "" {
+			osStr += " " + m.sbomInfo.OSVersion
+		}
+		parts = append(parts, fmt.Sprintf("🐧 %s", osStr))
+	}
+
+	// Source type and name
+	if m.sbomInfo.SourceType != "" || m.sbomInfo.SourceName != "" {
+		var sourceStr string
+		if m.sbomInfo.SourceType != "" {
+			sourceStr = m.sbomInfo.SourceType
+		}
+		if m.sbomInfo.SourceName != "" {
+			if sourceStr != "" {
+				sourceStr += ": " + m.sbomInfo.SourceName
+			} else {
+				sourceStr = m.sbomInfo.SourceName
+			}
+		}
+		if sourceStr != "" {
+			parts = append(parts, fmt.Sprintf("📂 %s", sourceStr))
+		}
+	}
+
+	if len(parts) == 0 {
+		return ""
+	}
+
+	return dimStyle.Render(strings.Join(parts, "  •  "))
 }
 
 func (m Model) renderDetailView() string {
