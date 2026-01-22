@@ -14,35 +14,59 @@ func ParseSyft(data []byte) ([]Component, error) {
 
 // ParseSyftWithInfo parses Syft format SBOM data and extracts source/distro info
 func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
-	// Parse document structure including source and distro info
+	// Parse document structure - use RawMessage for optional fields to prevent parse failures
 	var doc struct {
 		Artifacts []json.RawMessage `json:"artifacts"`
-		Source    struct {
-			Type   string `json:"type"`
-			Target struct {
-				UserInput string `json:"userInput"`
-			} `json:"target"`
-		} `json:"source"`
-		Distro struct {
-			Name    string `json:"name"`
-			Version string `json:"version"`
-			ID      string `json:"id"`
-		} `json:"distro"`
+		Source    json.RawMessage   `json:"source"` // RawMessage to handle missing/malformed
+		Distro    json.RawMessage   `json:"distro"` // RawMessage to handle object or array
 	}
 	if err := json.Unmarshal(data, &doc); err != nil {
 		return nil, SBOMInfo{}, err
 	}
 
-	// Extract SBOM info
-	info := SBOMInfo{
-		SourceType: doc.Source.Type,
-		SourceName: doc.Source.Target.UserInput,
-		OSName:     doc.Distro.Name,
-		OSVersion:  doc.Distro.Version,
+	var info SBOMInfo
+
+	// Parse source flexibly - ignore errors, just use empty values
+	if len(doc.Source) > 0 {
+		var sourceInfo struct {
+			Type   string `json:"type"`
+			Target struct {
+				UserInput string `json:"userInput"`
+			} `json:"target"`
+		}
+		if err := json.Unmarshal(doc.Source, &sourceInfo); err == nil {
+			info.SourceType = sourceInfo.Type
+			info.SourceName = sourceInfo.Target.UserInput
+		}
+		// If parsing fails, continue with empty source info
 	}
-	// If distro name is empty but ID is set, use ID
-	if info.OSName == "" && doc.Distro.ID != "" {
-		info.OSName = doc.Distro.ID
+
+	// Parse distro flexibly - can be object or array, ignore errors
+	if len(doc.Distro) > 0 {
+		var distroInfo struct {
+			Name    string `json:"name"`
+			Version string `json:"version"`
+			ID      string `json:"id"`
+		}
+		// Try parsing as object first
+		if err := json.Unmarshal(doc.Distro, &distroInfo); err != nil {
+			// Try parsing as array and take first element
+			var distroArray []struct {
+				Name    string `json:"name"`
+				Version string `json:"version"`
+				ID      string `json:"id"`
+			}
+			if err := json.Unmarshal(doc.Distro, &distroArray); err == nil && len(distroArray) > 0 {
+				distroInfo = distroArray[0]
+			}
+			// If both fail, continue with empty distro info
+		}
+		info.OSName = distroInfo.Name
+		info.OSVersion = distroInfo.Version
+		// If distro name is empty but ID is set, use ID
+		if info.OSName == "" && distroInfo.ID != "" {
+			info.OSName = distroInfo.ID
+		}
 	}
 
 	var comps []Component
