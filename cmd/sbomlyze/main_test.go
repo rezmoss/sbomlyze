@@ -35,7 +35,7 @@ func TestMain(m *testing.M) {
 	code := m.Run()
 
 	// Cleanup
-	os.Remove(binaryPath)
+	_ = os.Remove(binaryPath)
 
 	os.Exit(code)
 }

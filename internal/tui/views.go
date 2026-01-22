@@ -457,7 +457,7 @@ func (m Model) renderHelp() string {
 
 	sb.WriteString(detailKeyStyle.Render("Search & Filter"))
 	sb.WriteString("\n")
-	sb.WriteString("  /           Search by name, PURL, license\n")
+	sb.WriteString("  /           Search all fields (deep search)\n")
 	sb.WriteString("  t           Filter by package type (npm, apk, golang...)\n")
 	sb.WriteString("  c           Clear all filters\n")
 	sb.WriteString("\n")

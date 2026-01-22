@@ -164,7 +164,7 @@ func NewModel(comps []sbom.Component, stats analysis.Stats) Model {
 	delegate.Styles.SelectedDesc = selectedStyle
 
 	l := list.New(items, delegate, 0, 0)
-	l.Title = "📦 SBOM Explorer"
+	l.Title = "📦 SBOMlyze Explorer"
 	l.SetShowStatusBar(true)
 	l.SetFilteringEnabled(true)
 	l.Styles.Title = titleStyle
@@ -227,7 +227,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			case key.Matches(msg, keys.Search):
 				m.mode = searchView
 				m.textInput.SetValue("")
-				m.textInput.Placeholder = "Search by name, PURL, license..."
+				m.textInput.Placeholder = "Search all fields..."
 				m.textInput.Focus()
 				return m, textinput.Blink
 			case key.Matches(msg, keys.Filter):
@@ -332,7 +332,7 @@ func (m *Model) applyFilters() {
 		// Apply search filter
 		if m.searchQuery != "" {
 			query := strings.ToLower(m.searchQuery)
-			searchable := strings.ToLower(c.Name + " " + c.PURL + " " + strings.Join(c.Licenses, " "))
+			searchable := strings.ToLower(c.Name + " " + c.PURL + " " + strings.Join(c.Licenses, " ") + " " + string(c.RawJSON))
 			if !strings.Contains(searchable, query) {
 				continue
 			}
