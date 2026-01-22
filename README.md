@@ -1,12 +1,15 @@
 # sbomlyze
 
+A fast, reliable SBOM diff and analysis tool. Compare Software Bill of Materials across versions, detect changes, and enforce policies in CI/CD pipelines.
+
 [![GitHub Release][release-img]][release]
 [![Go Report Card][go-report-img]][go-report]
 [![License: Apache-2.0][license-img]][license]
 [![Go version][gover-img]][gover]
 
+![demo](https://github.com/user-attachments/assets/b21996fc-41e8-4d79-9ca2-e4291f8dd2f5)
 
-A fast, reliable SBOM diff and analysis tool. Compare Software Bill of Materials across versions, detect changes, and enforce policies in CI/CD pipelines.
+
 
 ## Features
 
