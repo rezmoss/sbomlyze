@@ -4,7 +4,7 @@
 [![Go Report Card][go-report-img]][go-report]
 [![License: Apache-2.0][license-img]][license]
 [![Go version][gover-img]][gover]
-<a href="https://github.com/rezmoss/sbomlyze" target="_blank"><img alt="GitHub go.mod Go version" src="https://img.shields.io/github/go-mod/go-version/rezmoss/sbomlyze.svg"></a>
+
 
 A fast, reliable SBOM diff and analysis tool. Compare Software Bill of Materials across versions, detect changes, and enforce policies in CI/CD pipelines.
 
