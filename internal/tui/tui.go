@@ -10,6 +10,7 @@ import (
 	"github.com/charmbracelet/bubbles/textinput"
 	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
 	"github.com/rezmoss/sbomlyze/internal/analysis"
 	"github.com/rezmoss/sbomlyze/internal/sbom"
 )
@@ -159,21 +160,58 @@ func NewModel(comps []sbom.Component, stats analysis.Stats, info sbom.SBOMInfo) 
 		items[i] = ComponentItem{component: c, index: i}
 	}
 
-	// Create list
+	// Create custom delegate with better styling
 	delegate := list.NewDefaultDelegate()
-	delegate.Styles.SelectedTitle = selectedStyle
-	delegate.Styles.SelectedDesc = selectedStyle
+
+	// Style the delegate for selected items
+	delegate.Styles.SelectedTitle = lipgloss.NewStyle().
+		Foreground(lipgloss.Color("#F5F5F5")).
+		Background(lipgloss.Color("#7C3AED")).
+		Bold(true).
+		Padding(0, 1)
+
+	delegate.Styles.SelectedDesc = lipgloss.NewStyle().
+		Foreground(lipgloss.Color("#A5B4FC")).
+		Background(lipgloss.Color("#7C3AED")).
+		Padding(0, 1)
+
+	delegate.Styles.NormalTitle = lipgloss.NewStyle().
+		Foreground(lipgloss.Color("#CDD6F4")).
+		Padding(0, 1)
+
+	delegate.Styles.NormalDesc = lipgloss.NewStyle().
+		Foreground(lipgloss.Color("#6C7086")).
+		Padding(0, 1)
+
+	delegate.Styles.DimmedTitle = lipgloss.NewStyle().
+		Foreground(lipgloss.Color("#6C7086")).
+		Padding(0, 1)
+
+	delegate.Styles.DimmedDesc = lipgloss.NewStyle().
+		Foreground(lipgloss.Color("#45475A")).
+		Padding(0, 1)
 
 	l := list.New(items, delegate, 0, 0)
-	l.Title = "📦 SBOMlyze Explorer"
-	l.SetShowStatusBar(true)
+	l.Title = ""
+	l.SetShowStatusBar(false)
 	l.SetFilteringEnabled(true)
-	l.Styles.Title = titleStyle
+	l.SetShowHelp(false)
+	l.SetShowTitle(false)
 
-	// Create text input for search
+	// Style the list
+	l.Styles.NoItems = lipgloss.NewStyle().
+		Foreground(lipgloss.Color("#6C7086")).
+		Padding(1, 2)
+
+	// Create text input for search with better styling
 	ti := textinput.New()
-	ti.Placeholder = "Search components..."
+	ti.Placeholder = "Type to search..."
 	ti.CharLimit = 100
+	ti.Width = 40
+	ti.PromptStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#7C3AED"))
+	ti.TextStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#CDD6F4"))
+	ti.PlaceholderStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#6C7086"))
+	ti.Cursor.Style = lipgloss.NewStyle().Foreground(lipgloss.Color("#06B6D4"))
 
 	// Create viewport for details
 	vp := viewport.New(0, 0)
@@ -202,9 +240,18 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		m.width = msg.Width
 		m.height = msg.Height
-		m.list.SetSize(msg.Width, msg.Height-4)
-		m.viewport.Width = msg.Width
-		m.viewport.Height = msg.Height - 6
+
+		// Account for header (1-2 lines) and footer (1 line)
+		headerHeight := 1
+		if m.searchQuery != "" || m.filterType != "" {
+			headerHeight = 2 // Extra line for filter status
+		}
+		footerHeight := 1
+		contentHeight := msg.Height - headerHeight - footerHeight - 1
+
+		m.list.SetSize(msg.Width, contentHeight)
+		m.viewport.Width = msg.Width - 2
+		m.viewport.Height = contentHeight - 3 // Account for title bar in detail view
 		m.ready = true
 		return m, nil
 
