@@ -212,6 +212,8 @@ func (m Model) renderHeader() string {
 		modeText = "FILTER"
 	case helpView:
 		modeText = "HELP"
+	case exportView:
+		modeText = "EXPORT"
 	}
 	mode := lipgloss.NewStyle().
 		Foreground(accentColor).
@@ -318,10 +320,11 @@ func (m Model) renderFooter() string {
 		keys = []string{
 			footerKeyStyle.Render("j/k") + footerDescStyle.Render(" scroll"),
 			footerKeyStyle.Render("g/G") + footerDescStyle.Render(" top/bottom"),
+			footerKeyStyle.Render("enter") + footerDescStyle.Render(" export"),
 			footerKeyStyle.Render("d") + footerDescStyle.Render(" details"),
 			footerKeyStyle.Render("esc") + footerDescStyle.Render(" back"),
 		}
-	case searchView, filterView:
+	case searchView, filterView, exportView:
 		keys = []string{
 			footerKeyStyle.Render("enter") + footerDescStyle.Render(" confirm"),
 			footerKeyStyle.Render("esc") + footerDescStyle.Render(" cancel"),
@@ -353,6 +356,8 @@ func (m Model) renderContent() string {
 		return m.renderSearchView()
 	case helpView:
 		return m.renderHelpView()
+	case exportView:
+		return m.renderExportView()
 	}
 	return ""
 }
@@ -387,11 +392,31 @@ func (m Model) renderJSONView() string {
 		Bold(true).
 		Render(fmt.Sprintf(" Raw JSON: %s ", m.selectedComp.Name))
 
-	content := lipgloss.JoinVertical(lipgloss.Left,
-		titleBar,
-		"",
-		m.viewport.View(),
-	)
+	// Show export message if present
+	var exportMsgLine string
+	if m.exportMsg != "" {
+		if strings.HasPrefix(m.exportMsg, "Error:") {
+			exportMsgLine = errorTagStyle.Render(m.exportMsg)
+		} else {
+			exportMsgLine = successTagStyle.Render(m.exportMsg)
+		}
+	}
+
+	var content string
+	if exportMsgLine != "" {
+		content = lipgloss.JoinVertical(lipgloss.Left,
+			titleBar,
+			exportMsgLine,
+			"",
+			m.viewport.View(),
+		)
+	} else {
+		content = lipgloss.JoinVertical(lipgloss.Left,
+			titleBar,
+			"",
+			m.viewport.View(),
+		)
+	}
 
 	return content
 }
@@ -432,6 +457,30 @@ func (m Model) renderSearchView() string {
 
 func (m Model) renderHelpView() string {
 	return m.viewport.View()
+}
+
+func (m Model) renderExportView() string {
+	titleStyle := lipgloss.NewStyle().
+		Foreground(secondaryColor).
+		Bold(true)
+
+	hint := dimStyle.Render("Enter filename to export JSON (extension added automatically)")
+
+	content := lipgloss.JoinVertical(lipgloss.Left,
+		"",
+		titleStyle.Render(" Export JSON "),
+		"",
+		m.textInput.View(),
+		"",
+		hint,
+	)
+
+	// Center the export box
+	return lipgloss.Place(
+		m.width, m.height-4,
+		lipgloss.Center, lipgloss.Center,
+		modalStyle.Render(content),
+	)
 }
 
 func (m Model) renderComponentDetail(c sbom.Component) string {
