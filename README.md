@@ -4,6 +4,7 @@ A fast, reliable SBOM diff and analysis tool. Compare Software Bill of Materials
 
 [![GitHub Release][release-img]][release]
 [![Go Report Card][go-report-img]][go-report]
+[![Go Doc][go-doc-img]][go-doc]
 [![License: Apache-2.0][license-img]][license]
 [![Go version][gover-img]][gover]
 [![Downloads][download-img]][download]
@@ -695,3 +696,5 @@ make clean       # Remove build artifacts
 [gover-img]: https://img.shields.io/github/go-mod/go-version/rezmoss/sbomlyze.svg
 [download]: https://github.com/rezmoss/sbomlyze/releases
 [download-img]: https://img.shields.io/github/downloads/rezmoss/sbomlyze/total
+[go-doc]: https://pkg.go.dev/github.com/rezmoss/sbomlyze
+[go-doc-img]: https://pkg.go.dev/badge/github.com/rezmoss/sbomlyze.svg
