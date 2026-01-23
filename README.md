@@ -378,6 +378,14 @@ sbomlyze before.json after.json --json | jq '.diff.drift_summary'
 # Check for integrity drift in CI
 sbomlyze before.json after.json --json | jq -e '.diff.drift_summary.integrity_drift > 0'
 ```
+## SBOMlyze SBOM Explorer
+
+```bash
+sbomlyze sbom.json -i
+```
+
+![interactive-sbom](https://github.com/user-attachments/assets/f45d8f79-ee90-4fa0-8370-05c6667509d3)
+
 
 ## Options
 
