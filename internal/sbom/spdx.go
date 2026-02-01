@@ -15,13 +15,13 @@ func ParseSPDXFromBytes(data []byte) ([]Component, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer os.Remove(tmpFile.Name())
-	defer tmpFile.Close()
+	defer func() { _ = os.Remove(tmpFile.Name()) }()
+	defer func() { _ = tmpFile.Close() }()
 
 	if _, err := tmpFile.Write(data); err != nil {
 		return nil, err
 	}
-	tmpFile.Close()
+	_ = tmpFile.Close()
 
 	return ParseSPDX(tmpFile.Name())
 }

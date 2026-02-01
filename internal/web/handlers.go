@@ -53,7 +53,7 @@ func handleUpload(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to get file: "+err.Error(), http.StatusBadRequest)
 		return
 	}
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 
 	data, err := io.ReadAll(file)
 	if err != nil {
@@ -102,7 +102,7 @@ func handleUpload(w http.ResponseWriter, r *http.Request) {
 	state.mu.Unlock()
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]interface{}{
+	_ = json.NewEncoder(w).Encode(map[string]interface{}{
 		"success":    true,
 		"components": len(comps),
 		"info":       info,
@@ -120,7 +120,7 @@ func handleGetTree(w http.ResponseWriter, r *http.Request) {
 
 	if len(state.Components) == 0 {
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode([]TreeNode{})
+		_ = json.NewEncoder(w).Encode([]TreeNode{})
 		return
 	}
 
@@ -151,7 +151,7 @@ func handleGetTree(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(treeNodes)
+	_ = json.NewEncoder(w).Encode(treeNodes)
 }
 
 func buildTreeNode(comp sbom.Component, depGraph map[string][]string, compMap map[string]sbom.Component, depth int) TreeNode {
@@ -208,7 +208,7 @@ func handleGetStats(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(response)
+	_ = json.NewEncoder(w).Encode(response)
 }
 
 func handleGetComponent(w http.ResponseWriter, r *http.Request) {
@@ -243,7 +243,7 @@ func handleGetComponent(w http.ResponseWriter, r *http.Request) {
 				RawJSON:      c.RawJSON,
 			}
 			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(detail)
+			_ = json.NewEncoder(w).Encode(detail)
 			return
 		}
 	}
@@ -295,7 +295,7 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(results)
+	_ = json.NewEncoder(w).Encode(results)
 }
 
 func containsLicense(licenses []string, query string) bool {
