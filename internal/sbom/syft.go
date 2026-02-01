@@ -76,6 +76,9 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 			Name     string `json:"name"`
 			Version  string `json:"version"`
 			PURL     string `json:"purl"`
+			Type     string `json:"type"`
+			Language string `json:"language"`
+			FoundBy  string `json:"foundBy"`
 			Licenses []struct {
 				Value string `json:"value"`
 			} `json:"licenses"`
@@ -94,6 +97,9 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 			Name:         a.Name,
 			Version:      a.Version,
 			PURL:         a.PURL,
+			Type:         a.Type,
+			Language:     a.Language,
+			FoundBy:      a.FoundBy,
 			Hashes:       make(map[string]string),
 			Dependencies: a.Metadata.PullDependencies,
 			RawJSON:      rawArtifact, // Preserve the original JSON

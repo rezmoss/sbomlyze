@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sbomlyze - SBOM Explorer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>sbomlyze</h1>
+            <p class="subtitle">SBOM Explorer</p>
+        </header>
+
+        <div id="drop-zone" class="drop-zone">
+            <div class="drop-content">
+                <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17,8 12,3 7,8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+                <p>Drag & drop an SBOM file here</p>
+                <p class="hint">or click to select (CycloneDX, SPDX, Syft JSON)</p>
+                <input type="file" id="file-input" accept=".json" hidden>
+            </div>
+        </div>
+
+        <div id="main-content" class="main-content hidden">
+            <div class="toolbar">
+                <div class="search-box">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="search-input" placeholder="Search all fields (name, license, purl, metadata...)">
+                </div>
+                <button id="upload-new" class="btn btn-secondary">Upload New</button>
+            </div>
+
+            <div class="content-grid">
+                <div class="panel tree-panel">
+                    <h2>Components</h2>
+                    <div id="tree-container" class="tree-container"></div>
+                </div>
+
+                <div class="panel detail-panel">
+                    <h2>Details</h2>
+                    <div id="detail-container" class="detail-container">
+                        <p class="placeholder">Select a component to view details</p>
+                    </div>
+                </div>
+
+                <div class="panel stats-panel">
+                    <h2>Statistics</h2>
+                    <div id="stats-container" class="stats-container"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -182,7 +182,7 @@ func diffReachability(before, after map[string][]string, beforeReach, afterReach
 	seen := make(map[string]bool)
 
 	// Find root nodes (nodes that are not dependencies of any other node)
-	roots := findRoots(after)
+	roots := FindRoots(after)
 	if len(roots) == 0 {
 		// Fallback: use all nodes as potential roots
 		for node := range after {
@@ -215,7 +215,7 @@ func diffReachability(before, after map[string][]string, beforeReach, afterReach
 	}
 
 	// Find roots for before graph
-	beforeRoots := findRoots(before)
+	beforeRoots := FindRoots(before)
 	if len(beforeRoots) == 0 {
 		for node := range before {
 			beforeRoots = append(beforeRoots, node)
@@ -254,8 +254,8 @@ func diffReachability(before, after map[string][]string, beforeReach, afterReach
 	return newDeps, lostDeps
 }
 
-// findRoots finds nodes that are not dependencies of any other node
-func findRoots(graph map[string][]string) []string {
+// FindRoots finds nodes that are not dependencies of any other node
+func FindRoots(graph map[string][]string) []string {
 	// Build set of all nodes that are dependencies
 	isDep := make(map[string]bool)
 	for _, deps := range graph {

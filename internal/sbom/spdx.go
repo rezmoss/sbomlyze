@@ -9,6 +9,23 @@ import (
 	"github.com/spdx/tools-golang/spdx"
 )
 
+// ParseSPDXFromBytes parses SPDX from byte data (writes temp file internally)
+func ParseSPDXFromBytes(data []byte) ([]Component, error) {
+	tmpFile, err := os.CreateTemp("", "sbom-*.json")
+	if err != nil {
+		return nil, err
+	}
+	defer os.Remove(tmpFile.Name())
+	defer tmpFile.Close()
+
+	if _, err := tmpFile.Write(data); err != nil {
+		return nil, err
+	}
+	tmpFile.Close()
+
+	return ParseSPDX(tmpFile.Name())
+}
+
 // ParseSPDX parses SPDX format SBOM file
 func ParseSPDX(path string) ([]Component, error) {
 	// First read raw data to extract raw package JSON
