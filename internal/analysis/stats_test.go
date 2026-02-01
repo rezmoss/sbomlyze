@@ -118,6 +118,125 @@ func TestComputeStats(t *testing.T) {
 			t.Errorf("expected 0 components, got %d", stats.TotalComponents)
 		}
 	})
+
+	t.Run("counts by language", func(t *testing.T) {
+		comps := []sbom.Component{
+			{ID: "a", Name: "a", Language: "go"},
+			{ID: "b", Name: "b", Language: "go"},
+			{ID: "c", Name: "c", Language: "python"},
+			{ID: "d", Name: "d"}, // no language
+		}
+
+		stats := ComputeStats(comps)
+
+		if stats.ByLanguage["go"] != 2 {
+			t.Errorf("expected 2 go, got %d", stats.ByLanguage["go"])
+		}
+		if stats.ByLanguage["python"] != 1 {
+			t.Errorf("expected 1 python, got %d", stats.ByLanguage["python"])
+		}
+	})
+
+	t.Run("counts by scanner/foundBy", func(t *testing.T) {
+		comps := []sbom.Component{
+			{ID: "a", Name: "a", FoundBy: "go-module-cataloger"},
+			{ID: "b", Name: "b", FoundBy: "go-module-cataloger"},
+			{ID: "c", Name: "c", FoundBy: "python-cataloger"},
+			{ID: "d", Name: "d"}, // no foundBy
+		}
+
+		stats := ComputeStats(comps)
+
+		if stats.ByFoundBy["go-module-cataloger"] != 2 {
+			t.Errorf("expected 2 go-module-cataloger, got %d", stats.ByFoundBy["go-module-cataloger"])
+		}
+		if stats.ByFoundBy["python-cataloger"] != 1 {
+			t.Errorf("expected 1 python-cataloger, got %d", stats.ByFoundBy["python-cataloger"])
+		}
+	})
+
+	t.Run("counts CPEs", func(t *testing.T) {
+		comps := []sbom.Component{
+			{ID: "a", Name: "a", CPEs: []string{"cpe:2.3:a:vendor:product:1.0:*:*:*:*:*:*:*"}},
+			{ID: "b", Name: "b", CPEs: []string{}},
+			{ID: "c", Name: "c"},
+		}
+
+		stats := ComputeStats(comps)
+
+		if stats.WithCPEs != 1 {
+			t.Errorf("expected 1 with CPEs, got %d", stats.WithCPEs)
+		}
+		if stats.WithoutCPEs != 2 {
+			t.Errorf("expected 2 without CPEs, got %d", stats.WithoutCPEs)
+		}
+	})
+
+	t.Run("counts PURLs", func(t *testing.T) {
+		comps := []sbom.Component{
+			{ID: "a", Name: "a", PURL: "pkg:npm/a@1.0.0"},
+			{ID: "b", Name: "b", PURL: "pkg:npm/b@1.0.0"},
+			{ID: "c", Name: "c"},
+		}
+
+		stats := ComputeStats(comps)
+
+		if stats.WithPURL != 2 {
+			t.Errorf("expected 2 with PURL, got %d", stats.WithPURL)
+		}
+		if stats.WithoutPURL != 1 {
+			t.Errorf("expected 1 without PURL, got %d", stats.WithoutPURL)
+		}
+	})
+
+	t.Run("categorizes licenses", func(t *testing.T) {
+		comps := []sbom.Component{
+			{ID: "a", Name: "a", Licenses: []string{"GPL-3.0"}},
+			{ID: "b", Name: "b", Licenses: []string{"MIT"}},
+			{ID: "c", Name: "c", Licenses: []string{"Apache-2.0"}},
+			{ID: "d", Name: "d", Licenses: []string{"public-domain"}},
+			{ID: "e", Name: "e", Licenses: []string{"Unknown-License"}},
+			{ID: "f", Name: "f"}, // no license
+		}
+
+		stats := ComputeStats(comps)
+
+		if stats.LicenseCategories == nil {
+			t.Fatal("expected license categories to be set")
+		}
+		if stats.LicenseCategories.Copyleft != 1 {
+			t.Errorf("expected 1 copyleft, got %d", stats.LicenseCategories.Copyleft)
+		}
+		if stats.LicenseCategories.Permissive != 2 {
+			t.Errorf("expected 2 permissive, got %d", stats.LicenseCategories.Permissive)
+		}
+		if stats.LicenseCategories.PublicDomain != 1 {
+			t.Errorf("expected 1 public domain, got %d", stats.LicenseCategories.PublicDomain)
+		}
+		// Unknown-License + no license = 2 unknown
+		if stats.LicenseCategories.Unknown != 2 {
+			t.Errorf("expected 2 unknown, got %d", stats.LicenseCategories.Unknown)
+		}
+	})
+
+	t.Run("handles missing optional fields gracefully", func(t *testing.T) {
+		comps := []sbom.Component{
+			{ID: "a", Name: "a"}, // minimal component
+		}
+
+		stats := ComputeStats(comps)
+
+		// Should not panic and should have sensible defaults
+		if stats.TotalComponents != 1 {
+			t.Errorf("expected 1 component, got %d", stats.TotalComponents)
+		}
+		if stats.ByLanguage != nil {
+			t.Errorf("expected nil ByLanguage for no language data, got %v", stats.ByLanguage)
+		}
+		if stats.ByFoundBy != nil {
+			t.Errorf("expected nil ByFoundBy for no foundBy data, got %v", stats.ByFoundBy)
+		}
+	})
 }
 
 func TestExtractPURLType(t *testing.T) {
@@ -139,6 +258,52 @@ func TestExtractPURLType(t *testing.T) {
 			result := ExtractPURLType(tt.purl)
 			if result != tt.expected {
 				t.Errorf("ExtractPURLType(%q) = %q, want %q", tt.purl, result, tt.expected)
+			}
+		})
+	}
+}
+
+func TestCategorizeLicense(t *testing.T) {
+	tests := []struct {
+		license  string
+		expected string
+	}{
+		// Copyleft licenses
+		{"GPL-2.0", "copyleft"},
+		{"GPL-3.0", "copyleft"},
+		{"LGPL-2.1", "copyleft"},
+		{"AGPL-3.0", "copyleft"},
+		{"MPL-2.0", "copyleft"},
+		{"EPL-1.0", "copyleft"},
+		{"gpl-2.0", "copyleft"}, // case insensitive
+
+		// Permissive licenses
+		{"MIT", "permissive"},
+		{"BSD-3-Clause", "permissive"},
+		{"BSD-2-Clause", "permissive"},
+		{"Apache-2.0", "permissive"},
+		{"ISC", "permissive"},
+		{"Zlib", "permissive"},
+		{"Expat", "permissive"},
+		{"mit", "permissive"}, // case insensitive
+
+		// Public domain
+		{"public-domain", "public_domain"},
+		{"Public Domain", "public_domain"},
+		{"PUBLICDOMAIN", "public_domain"},
+
+		// Unknown
+		{"Unknown", "unknown"},
+		{"Proprietary", "unknown"},
+		{"", "unknown"},
+		{"Some-Custom-License", "unknown"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.license, func(t *testing.T) {
+			result := CategorizeLicense(tt.license)
+			if result != tt.expected {
+				t.Errorf("CategorizeLicense(%q) = %q, want %q", tt.license, result, tt.expected)
 			}
 		})
 	}

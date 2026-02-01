@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"strconv"
 	"strings"
 )
 
@@ -25,6 +26,8 @@ type Options struct {
 	Strict      bool
 	Format      string // text, json, sarif, junit, markdown, patch
 	Interactive bool   // Interactive TUI mode
+	WebServer   bool   // Web server mode
+	WebPort     int    // Web server port (default 8080)
 }
 
 // DefaultParseOptions returns tolerant parsing options
@@ -75,6 +78,14 @@ func ParseArgs(args []string) Options {
 			}
 		case "--interactive", "-i":
 			opts.Interactive = true
+		case "-web", "--web":
+			opts.WebServer = true
+		case "--port":
+			if i+1 < len(args) {
+				port, _ := strconv.Atoi(args[i+1])
+				opts.WebPort = port
+				i++
+			}
 		default:
 			if !strings.HasPrefix(args[i], "-") {
 				opts.Files = append(opts.Files, args[i])

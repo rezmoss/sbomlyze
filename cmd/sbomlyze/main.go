@@ -13,6 +13,7 @@ import (
 	"github.com/rezmoss/sbomlyze/internal/sbom"
 	"github.com/rezmoss/sbomlyze/internal/tui"
 	"github.com/rezmoss/sbomlyze/internal/version"
+	"github.com/rezmoss/sbomlyze/internal/web"
 )
 
 func main() {
@@ -34,6 +35,20 @@ func main() {
 	}
 
 	opts := cli.ParseArgs(os.Args)
+
+	// Web server mode
+	if opts.WebServer {
+		port := opts.WebPort
+		if port == 0 {
+			port = 8080
+		}
+		fmt.Printf("Starting sbomlyze web server at http://localhost:%d\n", port)
+		if err := web.Serve(port); err != nil {
+			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			os.Exit(1)
+		}
+		return
+	}
 
 	if len(opts.Files) == 0 {
 		fmt.Fprintf(os.Stderr, "Error: no input files specified\n")

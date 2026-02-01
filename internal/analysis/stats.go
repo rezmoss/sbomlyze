@@ -20,28 +20,74 @@ type Stats struct {
 	WithDependencies  int              `json:"with_dependencies"`
 	DuplicateCount    int              `json:"duplicate_count"`
 	Duplicates        []DuplicateGroup `json:"duplicates,omitempty"`
+
+	// Extended statistics
+	ByLanguage        map[string]int   `json:"by_language,omitempty"`
+	ByFoundBy         map[string]int   `json:"by_found_by,omitempty"`
+	LicenseCategories *LicenseCategory `json:"license_categories,omitempty"`
+	WithCPEs          int              `json:"with_cpes"`
+	WithoutCPEs       int              `json:"without_cpes"`
+	WithPURL          int              `json:"with_purl"`
+	WithoutPURL       int              `json:"without_purl"`
+}
+
+// LicenseCategory groups licenses by type
+type LicenseCategory struct {
+	Copyleft    int `json:"copyleft"`    // GPL, LGPL, AGPL, etc.
+	Permissive  int `json:"permissive"`  // MIT, BSD, Apache, etc.
+	PublicDomain int `json:"public_domain"`
+	Unknown     int `json:"unknown"`
 }
 
 // ComputeStats calculates statistics for a list of components
 func ComputeStats(comps []sbom.Component) Stats {
 	stats := Stats{
-		ByType:    make(map[string]int),
-		ByLicense: make(map[string]int),
+		ByType:     make(map[string]int),
+		ByLicense:  make(map[string]int),
+		ByLanguage: make(map[string]int),
+		ByFoundBy:  make(map[string]int),
 	}
 
 	stats.TotalComponents = len(comps)
+	licenseCategories := &LicenseCategory{}
 
 	for _, c := range comps {
-		// Count by type
-		ptype := ExtractPURLType(c.ID)
+		// Count by type (from PURL, fallback to ID)
+		ptype := ExtractPURLType(c.PURL)
+		if ptype == "unknown" && c.PURL == "" {
+			ptype = ExtractPURLType(c.ID)
+		}
 		stats.ByType[ptype]++
 
-		// Count licenses
+		// Count by language
+		if c.Language != "" {
+			stats.ByLanguage[c.Language]++
+		}
+
+		// Count by scanner/foundBy
+		if c.FoundBy != "" {
+			stats.ByFoundBy[c.FoundBy]++
+		}
+
+		// Count licenses and categorize
 		if len(c.Licenses) == 0 {
 			stats.WithoutLicense++
+			licenseCategories.Unknown++
 		} else {
 			for _, lic := range c.Licenses {
 				stats.ByLicense[lic]++
+			}
+			// Categorize by first license
+			category := CategorizeLicense(c.Licenses[0])
+			switch category {
+			case "copyleft":
+				licenseCategories.Copyleft++
+			case "permissive":
+				licenseCategories.Permissive++
+			case "public_domain":
+				licenseCategories.PublicDomain++
+			default:
+				licenseCategories.Unknown++
 			}
 		}
 
@@ -52,11 +98,38 @@ func ComputeStats(comps []sbom.Component) Stats {
 			stats.WithoutHashes++
 		}
 
+		// Count CPEs
+		if len(c.CPEs) > 0 {
+			stats.WithCPEs++
+		} else {
+			stats.WithoutCPEs++
+		}
+
+		// Count PURLs
+		if c.PURL != "" {
+			stats.WithPURL++
+		} else {
+			stats.WithoutPURL++
+		}
+
 		// Count dependencies
 		if len(c.Dependencies) > 0 {
 			stats.WithDependencies++
 			stats.TotalDependencies += len(c.Dependencies)
 		}
+	}
+
+	// Only include license categories if we have data
+	if stats.TotalComponents > 0 {
+		stats.LicenseCategories = licenseCategories
+	}
+
+	// Clean up empty maps
+	if len(stats.ByLanguage) == 0 {
+		stats.ByLanguage = nil
+	}
+	if len(stats.ByFoundBy) == 0 {
+		stats.ByFoundBy = nil
 	}
 
 	// Detect duplicates
@@ -67,6 +140,34 @@ func ComputeStats(comps []sbom.Component) Stats {
 	}
 
 	return stats
+}
+
+// CategorizeLicense categorizes a license into copyleft, permissive, public_domain, or unknown
+func CategorizeLicense(license string) string {
+	lic := strings.ToUpper(license)
+
+	// Copyleft licenses
+	copyleftPrefixes := []string{"GPL", "LGPL", "AGPL", "MPL", "EPL", "CPL", "CDDL", "EUPL"}
+	for _, prefix := range copyleftPrefixes {
+		if strings.Contains(lic, prefix) {
+			return "copyleft"
+		}
+	}
+
+	// Permissive licenses
+	permissivePrefixes := []string{"MIT", "BSD", "APACHE", "ISC", "ZLIB", "UNLICENSE", "WTFPL", "CC0", "EXPAT", "X11"}
+	for _, prefix := range permissivePrefixes {
+		if strings.Contains(lic, prefix) {
+			return "permissive"
+		}
+	}
+
+	// Public domain
+	if strings.Contains(lic, "PUBLIC-DOMAIN") || strings.Contains(lic, "PUBLIC DOMAIN") || strings.Contains(lic, "PUBLICDOMAIN") {
+		return "public_domain"
+	}
+
+	return "unknown"
 }
 
 // ExtractPURLType extracts the package type from a PURL

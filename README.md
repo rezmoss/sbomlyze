@@ -21,6 +21,8 @@ A fast, reliable SBOM diff and analysis tool. Compare Software Bill of Materials
 - **Drift detection**: Classify changes as version, integrity, or metadata drift
 - **Dependency graph diff**: Track transitive dependencies and supply-chain depth
 - **Statistics mode**: Analyze single SBOMs for license, dependency, and integrity metrics
+- **Interactive TUI mode**: Explore SBOMs with keyboard navigation and search
+- **Web UI mode**: Browser-based SBOM explorer with drag-and-drop upload
 - **Policy engine**: Enforce rules in CI pipelines
 - **Duplicate detection**: Find multiple versions of the same package
 - **Tolerant parsing**: Continue on errors with structured warnings
@@ -125,6 +127,12 @@ sbomlyze image.json
 # Compare two SBOMs
 sbomlyze before.json after.json
 
+# Interactive TUI explorer
+sbomlyze image.json -i
+
+# Web UI (opens browser)
+sbomlyze -web
+
 # JSON output for CI integration
 sbomlyze before.json after.json --json
 
@@ -140,8 +148,13 @@ sbomlyze <sbom1> [sbom2] [options]
 Modes:
   Single file:  sbomlyze <sbom>              Show statistics
   Two files:    sbomlyze <sbom1> <sbom2>     Show diff
+  Interactive:  sbomlyze <sbom> -i           TUI explorer
+  Web server:   sbomlyze -web                Browser-based explorer
 
 Options:
+  -i            Interactive TUI mode
+  -web          Start web server (default: http://localhost:8080)
+  --port        Web server port (use with -web)
   --json        Output in JSON format
   --policy      Policy file for CI checks
   --strict      Fail immediately on parse errors
@@ -381,7 +394,7 @@ sbomlyze before.json after.json --json | jq '.diff.drift_summary'
 # Check for integrity drift in CI
 sbomlyze before.json after.json --json | jq -e '.diff.drift_summary.integrity_drift > 0'
 ```
-## SBOMlyze SBOM Explorer
+## SBOMlyze SBOM Explorer (TUI)
 
 ```bash
 sbomlyze sbom.json -i
@@ -389,8 +402,88 @@ sbomlyze sbom.json -i
 
 ![interactive-sbom](https://github.com/user-attachments/assets/f45d8f79-ee90-4fa0-8370-05c6667509d3)
 
+## Web UI Mode
+
+Start a browser-based SBOM explorer with drag-and-drop file upload:
+
+```bash
+# Start web server on default port 8080
+sbomlyze -web
+
+# Start on custom port
+sbomlyze -web --port 3000
+```
+
+Then open http://localhost:8080 in your browser.
+
+### Web UI Features
+
+| Feature | Description |
+|---------|-------------|
+| **Drag & Drop Upload** | Drop any SBOM file (Syft, CycloneDX, SPDX) onto the page |
+| **Dependency Tree** | Interactive tree view with expand/collapse navigation |
+| **Component Details** | View licenses, hashes, dependencies, supplier info |
+| **Raw JSON View** | Syntax-highlighted JSON for each component |
+| **Deep Search** | Search across all fields including raw JSON data |
+| **Statistics Dashboard** | Coverage metrics, license categories, language distribution |
+
+### Statistics Displayed
+
+The web UI shows comprehensive statistics including:
+
+- **Component counts** by package type (npm, apk, pypi, etc.)
+- **License distribution** with category breakdown (copyleft, permissive, public domain)
+- **Coverage metrics** with visual progress bars:
+  - PURL coverage (package URL presence)
+  - CPE coverage (vulnerability scanning readiness)
+  - License coverage
+  - Hash/integrity coverage
+- **Language breakdown** (for Syft-generated SBOMs)
+- **Relationship statistics** (contains, dependency-of, evident-by)
+- **Duplicate detection** warnings
+
+### Use Cases
+
+**Security Review**
+- Upload an SBOM and explore the full dependency tree
+- Check CPE coverage to ensure vulnerability scanning works
+- Review components without licenses or hashes
+
+**Compliance Audit**
+- Search for specific licenses across all components
+- View license category distribution (copyleft vs permissive)
+- Export raw JSON for documentation
+
+**Development Debugging**
+- Explore what packages are included in your image
+- Check transitive dependencies
+- Verify package metadata is correct
 
 ## Options
+
+### `-i` (Interactive Mode)
+
+Launch the terminal-based TUI explorer for navigating SBOMs with keyboard controls.
+
+```bash
+sbomlyze image.json -i
+```
+
+Features: tree navigation, component details, search, license/hash inspection.
+
+### `-web` (Web Server Mode)
+
+Start a web server for browser-based SBOM exploration.
+
+```bash
+# Default port 8080
+sbomlyze -web
+
+# Custom port
+sbomlyze -web --port 3000
+```
+
+The web UI provides drag-and-drop upload, interactive tree view, deep search, and statistics dashboard.
 
 ### `--json`
 
@@ -646,6 +739,27 @@ cat > no-drift.json << EOF
 EOF
 
 sbomlyze baseline.json current.json --policy no-drift.json
+```
+
+### Explore SBOM in Browser
+
+```bash
+# Generate SBOM and explore in web UI
+syft alpine:latest -o json > alpine.json
+
+# Start web server
+sbomlyze -web
+
+# Then open http://localhost:8080 and drag-drop alpine.json
+```
+
+### Interactive Terminal Exploration
+
+```bash
+# Explore with keyboard navigation
+sbomlyze alpine.json -i
+
+# Navigate with arrow keys, search with '/', view details with Enter
 ```
 
 ## Development

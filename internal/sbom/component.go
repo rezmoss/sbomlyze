@@ -28,7 +28,10 @@ type Component struct {
 	SPDXID       string            `json:"spdxid,omitempty"`
 	Namespace    string            `json:"namespace,omitempty"`
 	Supplier     string            `json:"supplier,omitempty"`
-	RawJSON      json.RawMessage   `json:"-"` // Original JSON from SBOM, excluded from output
+	Language     string            `json:"language,omitempty"`  // Programming language (go, python, java, etc.)
+	FoundBy      string            `json:"foundBy,omitempty"`   // Scanner/cataloger that found this component
+	Type         string            `json:"type,omitempty"`      // Package type from SBOM (e.g., library, application)
+	RawJSON      json.RawMessage   `json:"-"`                   // Original JSON from SBOM, excluded from output
 }
 
 // ToIdentity converts a Component to a ComponentIdentity for ID computation
