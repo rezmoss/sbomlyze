@@ -416,6 +416,10 @@ sbomlyze -web --port 3000
 
 Then open http://localhost:8080 in your browser.
 
+<img width="1497" height="1266" alt="Screenshot 2026-02-06 at 17 08 13" src="https://github.com/user-attachments/assets/117f807c-b01e-4678-ba99-6348f9ada0d1" />
+
+
+
 ### Web UI Features
 
 | Feature | Description |
