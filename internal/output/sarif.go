@@ -152,6 +152,50 @@ func GenerateSARIF(result analysis.DiffResult, violations []policy.Violation, sb
 		}
 	}
 
+	// Add new component results
+	for _, added := range result.Added {
+		results = append(results, SARIFResult{
+			RuleID:  "new-component",
+			Level:   "note",
+			Message: SARIFMessage{Text: fmt.Sprintf("New component added: %s %s", added.Name, added.Version)},
+			Locations: []SARIFLocation{{
+				PhysicalLocation: SARIFPhysicalLocation{
+					ArtifactLocation: SARIFArtifactLocation{URI: sbomFile},
+				},
+			}},
+		})
+	}
+
+	// Add removed component results
+	for _, removed := range result.Removed {
+		results = append(results, SARIFResult{
+			RuleID:  "removed-component",
+			Level:   "note",
+			Message: SARIFMessage{Text: fmt.Sprintf("Component removed: %s %s", removed.Name, removed.Version)},
+			Locations: []SARIFLocation{{
+				PhysicalLocation: SARIFPhysicalLocation{
+					ArtifactLocation: SARIFArtifactLocation{URI: sbomFile},
+				},
+			}},
+		})
+	}
+
+	// Add version change results
+	for _, changed := range result.Changed {
+		if changed.Before.Version != changed.After.Version {
+			results = append(results, SARIFResult{
+				RuleID:  "version-change",
+				Level:   "note",
+				Message: SARIFMessage{Text: fmt.Sprintf("Component %s version changed: %s -> %s", changed.Name, changed.Before.Version, changed.After.Version)},
+				Locations: []SARIFLocation{{
+					PhysicalLocation: SARIFPhysicalLocation{
+						ArtifactLocation: SARIFArtifactLocation{URI: sbomFile},
+					},
+				}},
+			})
+		}
+	}
+
 	// Add policy violations
 	for _, v := range violations {
 		level := "error"

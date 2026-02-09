@@ -268,19 +268,18 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 
 	var results []ComponentDetail
 	for _, c := range state.Components {
-		// Build searchable string from all fields (like TUI mode)
+		// Build searchable string from core fields.
 		searchable := strings.ToLower(
 			c.Name + " " +
 				c.Version + " " +
 				c.PURL + " " +
 				c.ID + " " +
 				c.Supplier + " " +
-				strings.Join(c.Licenses, " ") +
 				strings.Join(c.CPEs, " ") +
 				string(c.RawJSON),
 		)
 
-		if strings.Contains(searchable, query) {
+		if strings.Contains(searchable, query) || containsLicense(c.Licenses, query) {
 			results = append(results, ComponentDetail{
 				ID:       c.ID,
 				Name:     c.Name,

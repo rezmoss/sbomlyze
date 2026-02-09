@@ -574,17 +574,17 @@ func (m Model) renderComponentDetail(c sbom.Component) string {
 	}
 
 	// Dependencies Section
-	sb.WriteString("\n")
-	sb.WriteString(sectionTitleStyle.Render(fmt.Sprintf("DEPENDENCIES (%d)", len(c.Dependencies))))
-	sb.WriteString("\n")
-	if len(c.Dependencies) > 0 {
-		for _, dep := range c.Dependencies {
-			sb.WriteString("  ")
-			sb.WriteString(lipgloss.NewStyle().Foreground(secondaryColor).Render(""))
-			sb.WriteString(" ")
-			sb.WriteString(valueStyle.Render(dep))
-			sb.WriteString("\n")
-		}
+		sb.WriteString("\n")
+		sb.WriteString(sectionTitleStyle.Render(fmt.Sprintf("DEPENDENCIES (%d)", len(c.Dependencies))))
+		sb.WriteString("\n")
+		if len(c.Dependencies) > 0 {
+			for _, dep := range c.Dependencies {
+				sb.WriteString("  ")
+				sb.WriteString(lipgloss.NewStyle().Foreground(secondaryColor).Render("•"))
+				sb.WriteString(" ")
+				sb.WriteString(valueStyle.Render(dep))
+				sb.WriteString("\n")
+			}
 	} else {
 		sb.WriteString("  ")
 		sb.WriteString(dimStyle.Render("No dependencies listed"))
