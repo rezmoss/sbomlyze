@@ -3,7 +3,6 @@
 A fast, reliable SBOM diff and analysis tool. Compare Software Bill of Materials across versions, detect changes, and enforce policies in CI/CD pipelines.
 
 [![CI][ci-img]][ci]
-[![Coverage][codecov-img]][codecov]
 [![GitHub Release][release-img]][release]
 [![Go Report Card][go-report-img]][go-report]
 [![Go Doc][go-doc-img]][go-doc]
@@ -820,8 +819,6 @@ make clean       # Remove build artifacts
 
 [ci]: https://github.com/rezmoss/sbomlyze/actions/workflows/ci.yml
 [ci-img]: https://github.com/rezmoss/sbomlyze/actions/workflows/ci.yml/badge.svg
-[codecov]: https://codecov.io/gh/rezmoss/sbomlyze
-[codecov-img]: https://codecov.io/gh/rezmoss/sbomlyze/branch/main/graph/badge.svg
 [release]: https://github.com/rezmoss/sbomlyze/releases
 [release-img]: https://img.shields.io/github/v/release/rezmoss/sbomlyze
 [go-report]: https://goreportcard.com/report/github.com/rezmoss/sbomlyze
