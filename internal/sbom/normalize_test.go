@@ -2,30 +2,6 @@ package sbom
 
 import "testing"
 
-func TestNormalizeString(t *testing.T) {
-	tests := []struct {
-		name     string
-		input    string
-		expected string
-	}{
-		{"trims whitespace", "  hello  ", "hello"},
-		{"lowercases", "HELLO", "hello"},
-		{"trims and lowercases", "  HELLO WORLD  ", "hello world"},
-		{"empty string", "", ""},
-		{"already normalized", "hello", "hello"},
-		{"tabs and newlines", "\t\nhello\t\n", "hello"},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			result := normalizeString(tt.input)
-			if result != tt.expected {
-				t.Errorf("normalizeString(%q) = %q, want %q", tt.input, result, tt.expected)
-			}
-		})
-	}
-}
-
 func TestNormalizeLicense(t *testing.T) {
 	tests := []struct {
 		name     string
@@ -95,3 +71,39 @@ func TestNormalizeComponent(t *testing.T) {
 		}
 	})
 }
+
+func TestNormalizeComponents_BatchNormalization(t *testing.T) {
+	comps := []Component{
+		{Name: "  PackageA  ", Licenses: []string{"NOASSERTION", "MIT"}},
+		{Name: "  PackageB  ", Licenses: []string{"Apache-2.0"}},
+		{Name: "  PackageC  ", Licenses: []string{"none", "unknown"}},
+	}
+	result := NormalizeComponents(comps)
+	if len(result) != 3 {
+		t.Fatalf("expected 3 components, got %d", len(result))
+	}
+	if result[0].Name != "packagea" {
+		t.Errorf("expected 'packagea', got %q", result[0].Name)
+	}
+	if len(result[0].Licenses) != 1 || result[0].Licenses[0] != "MIT" {
+		t.Errorf("expected [MIT] after filtering, got %v", result[0].Licenses)
+	}
+	if len(result[2].Licenses) != 0 {
+		t.Errorf("expected empty licenses after filtering none/unknown, got %v", result[2].Licenses)
+	}
+}
+
+func TestNormalizeComponent_IDRecomputed(t *testing.T) {
+	comp := Component{
+		Name: "test",
+		PURL: "pkg:npm/test@1.0.0",
+	}
+	normalized := NormalizeComponent(comp)
+	if normalized.ID == "" {
+		t.Error("expected ID to be recomputed when empty")
+	}
+	if normalized.ID != "pkg:npm/test" {
+		t.Errorf("expected ID=pkg:npm/test, got %s", normalized.ID)
+	}
+}
+

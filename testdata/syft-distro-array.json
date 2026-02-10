@@ -1,0 +1,6 @@
+{
+  "artifacts": [],
+  "distro": [
+    {"name": "Alpine Linux", "version": "3.19.0", "id": "alpine"}
+  ]
+}

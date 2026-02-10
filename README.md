@@ -2,6 +2,8 @@
 
 A fast, reliable SBOM diff and analysis tool. Compare Software Bill of Materials across versions, detect changes, and enforce policies in CI/CD pipelines.
 
+[![CI][ci-img]][ci]
+[![Coverage][codecov-img]][codecov]
 [![GitHub Release][release-img]][release]
 [![Go Report Card][go-report-img]][go-report]
 [![Go Doc][go-doc-img]][go-doc]
@@ -566,7 +568,11 @@ Create policies to enforce rules in CI/CD pipelines. sbomlyze exits with code 1 
   "max_changed": 100,
   "deny_licenses": ["GPL-3.0", "AGPL-3.0"],
   "require_licenses": true,
-  "deny_duplicates": true
+  "deny_duplicates": true,
+  "deny_integrity_drift": true,
+  "max_depth": 3,
+  "warn_supplier_change": true,
+  "warn_new_transitive": true
 }
 ```
 
@@ -580,6 +586,10 @@ Create policies to enforce rules in CI/CD pipelines. sbomlyze exits with code 1 
 | `deny_licenses` | []string | List of forbidden license identifiers |
 | `require_licenses` | bool | Require all added components to have licenses |
 | `deny_duplicates` | bool | Fail if duplicate packages exist in result |
+| `deny_integrity_drift` | bool | Fail if component hash changed without version change (supply chain risk) |
+| `max_depth` | int | Fail if new transitive dependencies at depth >= N (0 = unlimited) |
+| `warn_supplier_change` | bool | Warn (not fail) if component supplier/author changed |
+| `warn_new_transitive` | bool | Warn (not fail) on any new transitive dependencies |
 
 ### Example: Strict Policy
 
@@ -590,7 +600,11 @@ Create policies to enforce rules in CI/CD pipelines. sbomlyze exits with code 1 
   "max_changed": 20,
   "deny_licenses": ["GPL-3.0", "AGPL-3.0", "SSPL-1.0"],
   "require_licenses": true,
-  "deny_duplicates": true
+  "deny_duplicates": true,
+  "deny_integrity_drift": true,
+  "max_depth": 3,
+  "warn_supplier_change": true,
+  "warn_new_transitive": true
 }
 ```
 
@@ -607,9 +621,9 @@ Create policies to enforce rules in CI/CD pipelines. sbomlyze exits with code 1 
 
 | Format | File Detection | Identifiers Extracted |
 |--------|----------------|----------------------|
-| Syft (native) | Contains `"artifacts"` | PURL, CPE, name |
-| CycloneDX | Contains `"bomFormat"` | PURL, CPE, BOM-ref, group (namespace) |
-| SPDX | Contains `"spdxVersion"` | PURL, CPE, SPDXID |
+| Syft (native) | JSON key `"artifacts"` + one of `"source"`, `"distro"`, `"descriptor"` | PURL, CPE, name |
+| CycloneDX | JSON key `"bomFormat"` = `"CycloneDX"`, or `"$schema"` containing `cyclonedx` | PURL, CPE, BOM-ref, group (namespace) |
+| SPDX | JSON key `"spdxVersion"` starting with `"SPDX-"` | PURL, CPE, SPDXID |
 
 All formats must be JSON. XML support is not currently available.
 
@@ -804,6 +818,10 @@ make clean       # Remove build artifacts
 ```
 
 
+[ci]: https://github.com/rezmoss/sbomlyze/actions/workflows/ci.yml
+[ci-img]: https://github.com/rezmoss/sbomlyze/actions/workflows/ci.yml/badge.svg
+[codecov]: https://codecov.io/gh/rezmoss/sbomlyze
+[codecov-img]: https://codecov.io/gh/rezmoss/sbomlyze/branch/main/graph/badge.svg
 [release]: https://github.com/rezmoss/sbomlyze/releases
 [release-img]: https://img.shields.io/github/v/release/rezmoss/sbomlyze
 [go-report]: https://goreportcard.com/report/github.com/rezmoss/sbomlyze

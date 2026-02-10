@@ -1,0 +1,32 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.4",
+  "components": [
+    {
+      "type": "library",
+      "name": "multi-license-pkg",
+      "version": "1.0.0",
+      "bom-ref": "multi-license",
+      "licenses": [
+        {"license": {"id": "MIT"}},
+        {"license": {"id": "Apache-2.0"}},
+        {"expression": "MIT OR Apache-2.0"}
+      ]
+    },
+    {
+      "type": "library",
+      "name": "no-id-license-pkg",
+      "version": "1.0.0",
+      "bom-ref": "no-id-license",
+      "licenses": [
+        {"license": {"name": "Some Custom License"}}
+      ]
+    },
+    {
+      "type": "library",
+      "name": "no-license-pkg",
+      "version": "1.0.0",
+      "bom-ref": "no-license"
+    }
+  ]
+}

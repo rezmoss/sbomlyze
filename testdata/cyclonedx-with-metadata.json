@@ -1,0 +1,39 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.4",
+  "metadata": {
+    "component": {
+      "type": "operating-system",
+      "name": "alpine",
+      "version": "3.19.0"
+    },
+    "properties": [
+      {"name": "syft:distro:name", "value": "Alpine Linux"},
+      {"name": "syft:distro:version", "value": "3.19.0"},
+      {"name": "syft:image:tag", "value": "alpine:3.19"}
+    ]
+  },
+  "components": [
+    {
+      "type": "library",
+      "name": "mylib",
+      "version": "1.0.0",
+      "group": "com.example",
+      "bom-ref": "mylib@1.0.0",
+      "purl": "pkg:maven/com.example/mylib@1.0.0",
+      "supplier": {
+        "name": "Example Corp"
+      },
+      "licenses": [
+        {"license": {"id": "MIT"}}
+      ]
+    },
+    {
+      "type": "library",
+      "name": "otherlib",
+      "version": "2.0.0",
+      "bom-ref": "otherlib@2.0.0",
+      "purl": "pkg:npm/otherlib@2.0.0"
+    }
+  ]
+}

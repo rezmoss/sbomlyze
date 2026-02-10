@@ -1,0 +1,4 @@
+{
+  "warn_supplier_change": true,
+  "warn_new_transitive": true
+}

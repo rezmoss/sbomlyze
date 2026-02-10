@@ -1,0 +1,17 @@
+{
+  "artifacts": [
+    {
+      "name": "good-pkg-1",
+      "version": "1.0.0",
+      "type": "npm",
+      "purl": "pkg:npm/good-pkg-1@1.0.0"
+    },
+    "this is a malformed string artifact",
+    {
+      "name": "good-pkg-2",
+      "version": "2.0.0",
+      "type": "npm",
+      "purl": "pkg:npm/good-pkg-2@2.0.0"
+    }
+  ]
+}

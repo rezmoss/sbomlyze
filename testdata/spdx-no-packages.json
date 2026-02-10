@@ -1,0 +1,8 @@
+{
+  "spdxVersion": "SPDX-2.3",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "name": "test-empty",
+  "dataLicense": "CC0-1.0",
+  "documentNamespace": "https://example.com/test-empty",
+  "packages": []
+}

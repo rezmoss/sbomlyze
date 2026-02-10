@@ -1,0 +1,13 @@
+{
+  "artifacts": [
+    {
+      "name": "test-pkg",
+      "version": "1.0.0",
+      "type": "npm"
+    }
+  ],
+  "descriptor": {
+    "name": "syft",
+    "version": "0.0.0-test"
+  }
+}

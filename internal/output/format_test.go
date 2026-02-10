@@ -313,46 +313,183 @@ func TestGenerateJSONPatch(t *testing.T) {
 	})
 }
 
-func TestStringSliceEqual(t *testing.T) {
-	t.Run("equal slices", func(t *testing.T) {
-		a := []string{"a", "b", "c"}
-		b := []string{"a", "b", "c"}
-		if !stringSliceEqual(a, b) {
-			t.Error("expected slices to be equal")
-		}
-	})
-
-	t.Run("different length", func(t *testing.T) {
-		a := []string{"a", "b"}
-		b := []string{"a", "b", "c"}
-		if stringSliceEqual(a, b) {
-			t.Error("expected slices to be unequal")
-		}
-	})
-
-	t.Run("different content", func(t *testing.T) {
-		a := []string{"a", "b", "c"}
-		b := []string{"a", "x", "c"}
-		if stringSliceEqual(a, b) {
-			t.Error("expected slices to be unequal")
-		}
-	})
+func TestGenerateMarkdown_EmptyDiff(t *testing.T) {
+	md := GenerateMarkdown(analysis.DiffResult{}, nil)
+	if !strings.Contains(md, "| Added | 0 |") {
+		t.Error("expected '| Added | 0 |' in empty diff markdown")
+	}
 }
 
-func TestHashMapEqual(t *testing.T) {
-	t.Run("equal maps", func(t *testing.T) {
-		a := map[string]string{"SHA256": "abc"}
-		b := map[string]string{"SHA256": "abc"}
-		if !hashMapEqual(a, b) {
-			t.Error("expected maps to be equal")
-		}
-	})
+func TestGenerateMarkdown_IntegrityDriftStatus(t *testing.T) {
+	result := analysis.DiffResult{
+		DriftSummary: &analysis.DriftSummary{IntegrityDrift: 2},
+	}
+	md := GenerateMarkdown(result, nil)
+	if !strings.Contains(md, "Review Required") {
+		t.Error("expected 'Review Required' for integrity drift")
+	}
+}
 
-	t.Run("different values", func(t *testing.T) {
-		a := map[string]string{"SHA256": "abc"}
-		b := map[string]string{"SHA256": "xyz"}
-		if hashMapEqual(a, b) {
-			t.Error("expected maps to be unequal")
+func TestGenerateMarkdown_DepthSummary(t *testing.T) {
+	result := analysis.DiffResult{
+		Dependencies: &analysis.DependencyDiff{
+			DepthSummary: &analysis.DepthSummary{Depth1: 1, Depth2: 2, Depth3Plus: 1},
+		},
+	}
+	md := GenerateMarkdown(result, nil)
+	if !strings.Contains(md, "Depth") {
+		t.Error("expected depth table in markdown")
+	}
+}
+
+func TestGenerateMarkdown_DriftTypes(t *testing.T) {
+	result := analysis.DiffResult{
+		Changed: []analysis.ChangedComponent{
+			{Name: "a", Before: sbom.Component{Version: "1"}, After: sbom.Component{Version: "2"}, Drift: &analysis.DriftInfo{Type: analysis.DriftTypeVersion}},
+			{Name: "b", Before: sbom.Component{Version: "1"}, After: sbom.Component{Version: "1"}, Drift: &analysis.DriftInfo{Type: analysis.DriftTypeIntegrity}},
+			{Name: "c", Before: sbom.Component{Version: "1"}, After: sbom.Component{Version: "1"}, Drift: &analysis.DriftInfo{Type: analysis.DriftTypeMetadata}},
+		},
+	}
+	md := GenerateMarkdown(result, nil)
+	if !strings.Contains(md, "Version") {
+		t.Error("expected Version drift type")
+	}
+	if !strings.Contains(md, "Integrity") {
+		t.Error("expected Integrity drift type")
+	}
+	if !strings.Contains(md, "Metadata") {
+		t.Error("expected Metadata drift type")
+	}
+}
+
+func TestGenerateSARIF_EmptyDiff(t *testing.T) {
+	sarif := GenerateSARIF(analysis.DiffResult{}, nil, "test.json")
+	if len(sarif.Runs[0].Results) != 0 {
+		t.Errorf("expected 0 results for empty diff, got %d", len(sarif.Runs[0].Results))
+	}
+	if len(sarif.Runs[0].Tool.Driver.Rules) == 0 {
+		t.Error("expected rules to be present even for empty diff")
+	}
+}
+
+func TestGenerateSARIF_PolicyViolationSeverity(t *testing.T) {
+	violations := []policy.Violation{
+		{Rule: "error-rule", Message: "err", Severity: policy.SeverityError},
+		{Rule: "warn-rule", Message: "warn", Severity: policy.SeverityWarning},
+	}
+	sarif := GenerateSARIF(analysis.DiffResult{}, violations, "test.json")
+	for _, r := range sarif.Runs[0].Results {
+		if r.RuleID == "policy-violation" && strings.Contains(r.Message.Text, "error-rule") {
+			if r.Level != "error" {
+				t.Errorf("expected error level for error violation, got %s", r.Level)
+			}
 		}
-	})
+		if r.RuleID == "policy-violation" && strings.Contains(r.Message.Text, "warn-rule") {
+			if r.Level != "warning" {
+				t.Errorf("expected warning level for warning violation, got %s", r.Level)
+			}
+		}
+	}
+}
+
+func TestGenerateSARIF_RemovedComponents(t *testing.T) {
+	result := analysis.DiffResult{
+		Removed: []sbom.Component{{Name: "old-lib", Version: "1.0"}},
+	}
+	sarif := GenerateSARIF(result, nil, "test.json")
+	found := false
+	for _, r := range sarif.Runs[0].Results {
+		if r.RuleID == "removed-component" {
+			found = true
+		}
+	}
+	if !found {
+		t.Error("expected removed-component result")
+	}
+}
+
+func TestGenerateSARIF_VersionChange(t *testing.T) {
+	result := analysis.DiffResult{
+		Changed: []analysis.ChangedComponent{
+			{Name: "lib", Before: sbom.Component{Version: "1.0"}, After: sbom.Component{Version: "2.0"}},
+		},
+	}
+	sarif := GenerateSARIF(result, nil, "test.json")
+	found := false
+	for _, r := range sarif.Runs[0].Results {
+		if r.RuleID == "version-change" {
+			found = true
+		}
+	}
+	if !found {
+		t.Error("expected version-change result")
+	}
+}
+
+func TestGenerateJUnit_NoViolations(t *testing.T) {
+	junit := GenerateJUnit(analysis.DiffResult{}, nil)
+	if junit.Failures != 0 {
+		t.Errorf("expected 0 failures, got %d", junit.Failures)
+	}
+}
+
+func TestGenerateJUnit_PolicyWarningNotFailure(t *testing.T) {
+	violations := []policy.Violation{
+		{Rule: "warn-rule", Message: "warning", Severity: policy.SeverityWarning},
+	}
+	junit := GenerateJUnit(analysis.DiffResult{}, violations)
+	if junit.Failures != 0 {
+		t.Errorf("expected 0 failures for warning-only violations, got %d", junit.Failures)
+	}
+}
+
+func TestGenerateJSONPatch_EmptyDiff(t *testing.T) {
+	ops := GenerateJSONPatch(analysis.DiffResult{})
+	if len(ops) != 0 {
+		t.Errorf("expected 0 ops for empty diff, got %d", len(ops))
+	}
+}
+
+func TestGenerateJSONPatch_LicenseChange(t *testing.T) {
+	result := analysis.DiffResult{
+		Changed: []analysis.ChangedComponent{
+			{
+				ID:     "pkg:npm/test",
+				Before: sbom.Component{Licenses: []string{"MIT"}},
+				After:  sbom.Component{Licenses: []string{"Apache-2.0"}},
+			},
+		},
+	}
+	ops := GenerateJSONPatch(result)
+	found := false
+	for _, op := range ops {
+		if op.Op == "replace" && strings.Contains(op.Path, "licenses") {
+			found = true
+		}
+	}
+	if !found {
+		t.Error("expected replace op for licenses")
+	}
+}
+
+func TestGenerateJSONPatch_HashChange(t *testing.T) {
+	result := analysis.DiffResult{
+		Changed: []analysis.ChangedComponent{
+			{
+				ID:     "pkg:npm/test",
+				Before: sbom.Component{Hashes: map[string]string{"SHA256": "abc"}},
+				After:  sbom.Component{Hashes: map[string]string{"SHA256": "xyz"}},
+			},
+		},
+	}
+	ops := GenerateJSONPatch(result)
+	found := false
+	for _, op := range ops {
+		if op.Op == "replace" && strings.Contains(op.Path, "hashes") {
+			found = true
+		}
+	}
+	if !found {
+		t.Error("expected replace op for hashes")
+	}
 }
