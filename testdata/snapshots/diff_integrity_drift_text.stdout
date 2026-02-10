@@ -1,0 +1,8 @@
+
+📊 Drift Summary:
+  ⚠️  Integrity drift: 1 components (hash changed without version change!)
+
+~ Changed (1):
+  ~ lodash ⚠️  [INTEGRITY]
+      hash[SHA-256]: abc123def456 -> DIFFERENT_HASH_SAME_VERSION
+

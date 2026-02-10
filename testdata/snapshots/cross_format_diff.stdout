@@ -1,0 +1,61 @@
+{
+  "diff": {
+    "added": [
+      {
+        "id": "pkg:npm/axios",
+        "name": "axios",
+        "version": "1.6.0",
+        "purl": "pkg:npm/axios@1.6.0",
+        "licenses": [
+          "MIT"
+        ],
+        "hashes": {
+          "SHA256": "abc123"
+        },
+        "spdxid": "Package-axios"
+      },
+      {
+        "id": "pkg:npm/react",
+        "name": "react",
+        "version": "18.2.0",
+        "purl": "pkg:npm/react@18.2.0",
+        "licenses": [
+          "MIT"
+        ],
+        "spdxid": "Package-react"
+      }
+    ],
+    "removed": [
+      {
+        "id": "pkg:npm/express",
+        "name": "express",
+        "version": "4.18.0",
+        "purl": "pkg:npm/express@4.18.0",
+        "licenses": [
+          "MIT"
+        ],
+        "bom-ref": "express@4.18.0"
+      },
+      {
+        "id": "pkg:npm/lodash",
+        "name": "lodash",
+        "version": "4.17.20",
+        "purl": "pkg:npm/lodash@4.17.20",
+        "licenses": [
+          "MIT"
+        ],
+        "hashes": {
+          "SHA-256": "abc123def456"
+        },
+        "bom-ref": "lodash@4.17.20"
+      },
+      {
+        "id": "pkg:npm/old-package",
+        "name": "old-package",
+        "version": "1.0.0",
+        "purl": "pkg:npm/old-package@1.0.0",
+        "bom-ref": "old-package@1.0.0"
+      }
+    ]
+  }
+}

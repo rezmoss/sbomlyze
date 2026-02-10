@@ -1,4 +1,4 @@
-.PHONY: all test lint build build-quick clean
+.PHONY: all test lint build build-quick clean snapshot-test update-snapshot
 
 all: test lint build
 
@@ -17,6 +17,12 @@ build:
 build-quick:
 	go build -o sbomlyze ./cmd/sbomlyze
 	@echo "Built ./sbomlyze"
+
+snapshot-test:
+	go test -v -run TestSnapshot ./cmd/sbomlyze/
+
+update-snapshot:
+	go test -v -run TestSnapshot ./cmd/sbomlyze/ -update
 
 clean:
 	rm -rf dist/ sbomlyze

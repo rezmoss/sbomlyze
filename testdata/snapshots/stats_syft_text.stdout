@@ -1,0 +1,25 @@
+
+📦 SBOM Statistics
+==================
+
+Total Components: 3
+
+By Package Type:
+  apk          3
+
+Licenses:
+  With license:    3
+  Without license: 0
+
+  Top Licenses:
+    GPL-2.0-only                   2
+    MIT                            1
+
+Integrity:
+  With hashes:    0
+  Without hashes: 3
+
+Dependencies:
+  Components with deps: 1
+  Total dep relations:  2
+

@@ -1,0 +1,55 @@
+{
+  "diff": {
+    "changed": [
+      {
+        "id": "pkg:npm/lodash",
+        "name": "lodash",
+        "before": {
+          "id": "pkg:npm/lodash",
+          "name": "lodash",
+          "version": "4.17.20",
+          "purl": "pkg:npm/lodash@4.17.20",
+          "licenses": [
+            "MIT"
+          ],
+          "hashes": {
+            "SHA-256": "abc123def456"
+          },
+          "bom-ref": "lodash@4.17.20"
+        },
+        "after": {
+          "id": "pkg:npm/lodash",
+          "name": "lodash",
+          "version": "4.17.20",
+          "purl": "pkg:npm/lodash@4.17.20",
+          "licenses": [
+            "MIT"
+          ],
+          "hashes": {
+            "SHA-256": "DIFFERENT_HASH_SAME_VERSION"
+          },
+          "bom-ref": "lodash@4.17.20"
+        },
+        "changes": [
+          "hash[SHA-256]: abc123def456 -\u003e DIFFERENT_HASH_SAME_VERSION"
+        ],
+        "drift": {
+          "type": "integrity",
+          "hash_changes": {
+            "changed": {
+              "SHA-256": {
+                "before": "abc123def456",
+                "after": "DIFFERENT_HASH_SAME_VERSION"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "drift_summary": {
+      "version_drift": 0,
+      "integrity_drift": 1,
+      "metadata_drift": 0
+    }
+  }
+}

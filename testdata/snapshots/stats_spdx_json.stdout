@@ -1,0 +1,27 @@
+{
+  "stats": {
+    "total_components": 2,
+    "by_type": {
+      "npm": 2
+    },
+    "by_license": {
+      "MIT": 2
+    },
+    "without_license": 0,
+    "with_hashes": 1,
+    "without_hashes": 1,
+    "total_dependencies": 0,
+    "with_dependencies": 0,
+    "duplicate_count": 0,
+    "license_categories": {
+      "copyleft": 0,
+      "permissive": 2,
+      "public_domain": 0,
+      "unknown": 0
+    },
+    "with_cpes": 0,
+    "without_cpes": 2,
+    "with_purl": 2,
+    "without_purl": 0
+  }
+}
