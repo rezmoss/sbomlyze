@@ -1,0 +1,52 @@
+sbomlyze - A fast, reliable SBOM diff and analysis tool
+
+Usage: sbomlyze <sbom1> [sbom2] [options]
+
+Modes:
+  Single file:  sbomlyze <sbom> [--json]        - Show statistics
+  Interactive:  sbomlyze <sbom> -i              - Interactive explorer
+  Web server:   sbomlyze -web [--port 8080]     - Web UI explorer
+  Two files:    sbomlyze <sbom1> <sbom2> [...]  - Show diff
+
+Options:
+  -i, --interactive   Interactive TUI explorer
+  -web, --web         Start web UI server
+  --port <port>       Web server port (default 8080)
+  --json              Output in JSON format (shortcut for --format json)
+  --format <format>   Output format: text, json, sarif, junit, markdown, patch
+  --policy <file>     Policy file for CI checks
+  --strict            Fail on parse warnings
+  --tolerant          Continue on parse warnings (default)
+  --version, -v       Show version information
+  --help, -h          Show this help message
+
+Output Formats:
+  text      Human-readable text (default)
+  json      JSON for programmatic consumption
+  sarif     SARIF for GitHub Code Scanning
+  junit     JUnit XML for CI test results
+  markdown  Markdown for PR comments
+  patch     JSON Patch (RFC 6902) for automation
+
+Interactive Mode Keys:
+  ↑/↓, j/k    Navigate components
+  Enter       View component details
+  j           View raw SBOM JSON (all original fields)
+  d           Back to detail view (in JSON view)
+  /           Search by name, PURL, license
+  t           Filter by package type
+  c           Clear all filters
+  Esc         Go back
+  q           Quit
+
+Examples:
+  sbomlyze image.json                        # Show SBOM statistics
+  sbomlyze image.json -i                     # Interactive explorer
+  sbomlyze -web                              # Start web UI at localhost:8080
+  sbomlyze -web --port 3000                  # Start web UI at localhost:3000
+  sbomlyze before.json after.json            # Compare two SBOMs
+  sbomlyze a.json b.json --policy p.json     # Apply policy checks
+  sbomlyze a.json b.json --format sarif      # SARIF for GitHub
+  sbomlyze a.json b.json --format markdown   # Markdown for PR
+
+Documentation: https://github.com/rezmoss/sbomlyze

@@ -1,0 +1,32 @@
+[
+  {
+    "op": "add",
+    "path": "/components/0",
+    "value": {
+      "id": "pkg:npm/new-package",
+      "name": "new-package",
+      "version": "2.0.0",
+      "purl": "pkg:npm/new-package@2.0.0",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "bom-ref": "new-package@2.0.0"
+    }
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/old-package"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/lodash/version",
+    "value": "4.17.21"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/lodash/hashes",
+    "value": {
+      "SHA-256": "newsha256hash"
+    }
+  }
+]

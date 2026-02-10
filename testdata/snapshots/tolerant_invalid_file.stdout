@@ -1,0 +1,22 @@
+
+📦 SBOM Statistics
+==================
+
+Total Components: 0
+
+Licenses:
+  With license:    0
+  Without license: 0
+
+Integrity:
+  With hashes:    0
+  Without hashes: 0
+
+Dependencies:
+  Components with deps: 0
+  Total dep relations:  0
+
+
+⚠️  Parse Warnings (1):
+  [TESTDATA/invalid.json] unknown SBOM format
+

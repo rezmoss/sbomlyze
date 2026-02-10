@@ -1,0 +1,24 @@
+
+📦 SBOM Statistics
+==================
+
+Total Components: 2
+
+By Package Type:
+  npm          2
+
+Licenses:
+  With license:    2
+  Without license: 0
+
+  Top Licenses:
+    MIT                            2
+
+Integrity:
+  With hashes:    1
+  Without hashes: 1
+
+Dependencies:
+  Components with deps: 0
+  Total dep relations:  0
+

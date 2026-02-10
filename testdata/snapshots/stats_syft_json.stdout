@@ -1,0 +1,28 @@
+{
+  "stats": {
+    "total_components": 3,
+    "by_type": {
+      "apk": 3
+    },
+    "by_license": {
+      "GPL-2.0-only": 2,
+      "MIT": 1
+    },
+    "without_license": 0,
+    "with_hashes": 0,
+    "without_hashes": 3,
+    "total_dependencies": 2,
+    "with_dependencies": 1,
+    "duplicate_count": 0,
+    "license_categories": {
+      "copyleft": 2,
+      "permissive": 1,
+      "public_domain": 0,
+      "unknown": 0
+    },
+    "with_cpes": 2,
+    "without_cpes": 1,
+    "with_purl": 3,
+    "without_purl": 0
+  }
+}

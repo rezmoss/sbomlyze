@@ -1,0 +1,79 @@
+{
+  "diff": {
+    "added": [
+      {
+        "id": "pkg:npm/new-package",
+        "name": "new-package",
+        "version": "2.0.0",
+        "purl": "pkg:npm/new-package@2.0.0",
+        "licenses": [
+          "Apache-2.0"
+        ],
+        "bom-ref": "new-package@2.0.0"
+      }
+    ],
+    "removed": [
+      {
+        "id": "pkg:npm/old-package",
+        "name": "old-package",
+        "version": "1.0.0",
+        "purl": "pkg:npm/old-package@1.0.0",
+        "bom-ref": "old-package@1.0.0"
+      }
+    ],
+    "changed": [
+      {
+        "id": "pkg:npm/lodash",
+        "name": "lodash",
+        "before": {
+          "id": "pkg:npm/lodash",
+          "name": "lodash",
+          "version": "4.17.20",
+          "purl": "pkg:npm/lodash@4.17.20",
+          "licenses": [
+            "MIT"
+          ],
+          "hashes": {
+            "SHA-256": "abc123def456"
+          },
+          "bom-ref": "lodash@4.17.20"
+        },
+        "after": {
+          "id": "pkg:npm/lodash",
+          "name": "lodash",
+          "version": "4.17.21",
+          "purl": "pkg:npm/lodash@4.17.21",
+          "licenses": [
+            "MIT"
+          ],
+          "hashes": {
+            "SHA-256": "newsha256hash"
+          },
+          "bom-ref": "lodash@4.17.21"
+        },
+        "changes": [
+          "version: 4.17.20 -\u003e 4.17.21",
+          "hash[SHA-256]: abc123def456 -\u003e newsha256hash"
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "SHA-256": {
+                "before": "abc123def456",
+                "after": "newsha256hash"
+              }
+            }
+          },
+          "version_from": "4.17.20",
+          "version_to": "4.17.21"
+        }
+      }
+    ],
+    "drift_summary": {
+      "version_drift": 1,
+      "integrity_drift": 0,
+      "metadata_drift": 0
+    }
+  }
+}
