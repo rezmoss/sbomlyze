@@ -17,7 +17,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: "1.24"
+          go-version-file: go.mod
 
       - name: Download dependencies
         run: go mod download
@@ -36,7 +36,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: "1.24"
+          go-version-file: go.mod
 
       - name: Download dependencies
         run: go mod download
@@ -59,7 +59,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: "1.24"
+          go-version-file: go.mod
 
       - name: Verify build
         run: go build -v ./...
