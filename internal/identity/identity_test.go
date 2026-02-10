@@ -241,6 +241,36 @@ func TestNormalizePURL(t *testing.T) {
 			"",
 			"",
 		},
+		{
+			"strips rpm distro namespace",
+			"pkg:rpm/amzn/bash@4.2",
+			"pkg:rpm/bash",
+		},
+		{
+			"strips deb distro namespace",
+			"pkg:deb/debian/curl@7.0",
+			"pkg:deb/curl",
+		},
+		{
+			"strips apk distro namespace",
+			"pkg:apk/alpine/busybox@1.35",
+			"pkg:apk/busybox",
+		},
+		{
+			"preserves maven namespace",
+			"pkg:maven/com.google/guava@30",
+			"pkg:maven/com.google/guava",
+		},
+		{
+			"preserves npm scoped namespace",
+			"pkg:npm/@angular/core@14",
+			"pkg:npm/@angular/core",
+		},
+		{
+			"rpm without namespace unchanged",
+			"pkg:rpm/bash@4.2",
+			"pkg:rpm/bash",
+		},
 	}
 
 	for _, tt := range tests {
@@ -293,6 +323,18 @@ func TestExtractPURLVersion(t *testing.T) {
 				t.Errorf("ExtractPURLVersion(%q) = %q, want %q", tt.purl, result, tt.expected)
 			}
 		})
+	}
+}
+
+func TestNormalizePURL_CrossNamespaceMatch(t *testing.T) {
+	// pkg:rpm/amzn/bash and pkg:rpm/bash should produce the same normalized PURL
+	id1 := NormalizePURL("pkg:rpm/amzn/bash@4.2")
+	id2 := NormalizePURL("pkg:rpm/bash@4.2")
+	if id1 != id2 {
+		t.Errorf("cross-namespace RPM PURLs should match: %q != %q", id1, id2)
+	}
+	if id1 != "pkg:rpm/bash" {
+		t.Errorf("expected pkg:rpm/bash, got %q", id1)
 	}
 }
 

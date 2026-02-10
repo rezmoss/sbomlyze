@@ -16,9 +16,14 @@ func ParseSyft(data []byte) ([]Component, error) {
 func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 	// Parse document structure - use RawMessage for optional fields to prevent parse failures
 	var doc struct {
-		Artifacts []json.RawMessage `json:"artifacts"`
-		Source    json.RawMessage   `json:"source"` // RawMessage to handle missing/malformed
-		Distro    json.RawMessage   `json:"distro"` // RawMessage to handle object or array
+		Artifacts             []json.RawMessage `json:"artifacts"`
+		ArtifactRelationships []struct {
+			Parent string `json:"parent"`
+			Child  string `json:"child"`
+			Type   string `json:"type"`
+		} `json:"artifactRelationships"`
+		Source json.RawMessage `json:"source"` // RawMessage to handle missing/malformed
+		Distro json.RawMessage `json:"distro"` // RawMessage to handle object or array
 	}
 	if err := json.Unmarshal(data, &doc); err != nil {
 		return nil, SBOMInfo{}, err
@@ -69,10 +74,14 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 		}
 	}
 
+	// Build Syft artifact ID → component index map for relationship resolution
+	syftIDToIdx := make(map[string]int)
+
 	var comps []Component
 	for _, rawArtifact := range doc.Artifacts {
 		// Parse the artifact for our normalized fields
 		var a struct {
+			SyftID   string `json:"id"`
 			Name     string `json:"name"`
 			Version  string `json:"version"`
 			PURL     string `json:"purl"`
@@ -80,33 +89,34 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 			Language string `json:"language"`
 			FoundBy  string `json:"foundBy"`
 			Licenses []struct {
-				Value string `json:"value"`
+				Value          string `json:"value"`
+				SPDXExpression string `json:"spdxExpression"`
 			} `json:"licenses"`
 			CPEs []struct {
 				CPE string `json:"cpe"`
 			} `json:"cpes"`
-			Metadata struct {
-				PullDependencies []string `json:"pullDependencies"`
-			} `json:"metadata"`
 		}
 		if err := json.Unmarshal(rawArtifact, &a); err != nil {
 			continue // Skip malformed artifacts
 		}
 
 		comp := Component{
-			Name:         a.Name,
-			Version:      a.Version,
-			PURL:         a.PURL,
-			Type:         a.Type,
-			Language:     a.Language,
-			FoundBy:      a.FoundBy,
-			Hashes:       make(map[string]string),
-			Dependencies: a.Metadata.PullDependencies,
-			RawJSON:      rawArtifact, // Preserve the original JSON
+			Name:     a.Name,
+			Version:  a.Version,
+			PURL:     a.PURL,
+			Type:     a.Type,
+			Language: a.Language,
+			FoundBy:  a.FoundBy,
+			Hashes:   make(map[string]string),
+			RawJSON:  rawArtifact, // Preserve the original JSON
 		}
 		for _, lic := range a.Licenses {
-			if lic.Value != "" {
-				comp.Licenses = append(comp.Licenses, lic.Value)
+			val := lic.SPDXExpression
+			if val == "" {
+				val = lic.Value
+			}
+			if val != "" {
+				comp.Licenses = append(comp.Licenses, val)
 			}
 		}
 		for _, cpe := range a.CPEs {
@@ -116,7 +126,28 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 		}
 		// Compute ID using identity matcher
 		comp.ID = identity.ComputeID(comp.ToIdentity())
+
+		if a.SyftID != "" {
+			syftIDToIdx[a.SyftID] = len(comps)
+		}
 		comps = append(comps, comp)
 	}
+
+	// Resolve dependency-of relationships from artifactRelationships
+	depMap := make(map[int][]string) // parent comp index → child comp IDs
+	for _, rel := range doc.ArtifactRelationships {
+		if rel.Type != "dependency-of" {
+			continue
+		}
+		parentIdx, parentOK := syftIDToIdx[rel.Parent]
+		childIdx, childOK := syftIDToIdx[rel.Child]
+		if parentOK && childOK {
+			depMap[parentIdx] = append(depMap[parentIdx], comps[childIdx].ID)
+		}
+	}
+	for idx, deps := range depMap {
+		comps[idx].Dependencies = deps
+	}
+
 	return comps, info, nil
 }
