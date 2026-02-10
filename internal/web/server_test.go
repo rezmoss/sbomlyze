@@ -22,7 +22,9 @@ func TestWebWorkflow_UploadThenQuery(t *testing.T) {
 	}
 
 	var uploadResp map[string]interface{}
-	json.Unmarshal(rr.Body.Bytes(), &uploadResp)
+	if err := json.Unmarshal(rr.Body.Bytes(), &uploadResp); err != nil {
+		t.Fatalf("failed to parse upload response: %v", err)
+	}
 	componentCount := int(uploadResp["components"].(float64))
 	if componentCount == 0 {
 		t.Fatal("expected >0 components after upload")
@@ -36,7 +38,9 @@ func TestWebWorkflow_UploadThenQuery(t *testing.T) {
 		t.Fatalf("tree request failed: %d", rr.Code)
 	}
 	var treeNodes []TreeNode
-	json.Unmarshal(rr.Body.Bytes(), &treeNodes)
+	if err := json.Unmarshal(rr.Body.Bytes(), &treeNodes); err != nil {
+		t.Fatalf("failed to parse tree response: %v", err)
+	}
 	if len(treeNodes) == 0 {
 		t.Error("expected non-empty tree after upload")
 	}
@@ -49,7 +53,9 @@ func TestWebWorkflow_UploadThenQuery(t *testing.T) {
 		t.Fatalf("stats request failed: %d", rr.Code)
 	}
 	var statsResp map[string]interface{}
-	json.Unmarshal(rr.Body.Bytes(), &statsResp)
+	if err := json.Unmarshal(rr.Body.Bytes(), &statsResp); err != nil {
+		t.Fatalf("failed to parse stats response: %v", err)
+	}
 	stats := statsResp["stats"].(map[string]interface{})
 	if int(stats["total_components"].(float64)) != componentCount {
 		t.Errorf("stats total_components=%v doesn't match upload count=%d",
@@ -74,10 +80,11 @@ func TestWebWorkflow_UploadThenQuery(t *testing.T) {
 			t.Errorf("get component failed: %d", rr.Code)
 		}
 		var detail ComponentDetail
-		json.Unmarshal(rr.Body.Bytes(), &detail)
+		if err := json.Unmarshal(rr.Body.Bytes(), &detail); err != nil {
+			t.Fatalf("failed to parse component response: %v", err)
+		}
 		if detail.ID != compID {
 			t.Errorf("expected component ID=%s, got %s", compID, detail.ID)
 		}
 	}
 }
-

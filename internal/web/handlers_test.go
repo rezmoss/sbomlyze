@@ -49,8 +49,12 @@ func createMultipartRequest(filePath string) (*http.Request, error) {
 	if err != nil {
 		return nil, err
 	}
-	part.Write(data)
-	writer.Close()
+	if _, err := part.Write(data); err != nil {
+		return nil, err
+	}
+	if err := writer.Close(); err != nil {
+		return nil, err
+	}
 	req := httptest.NewRequest(http.MethodPost, "/api/upload", body)
 	req.Header.Set("Content-Type", writer.FormDataContentType())
 	return req, nil
@@ -178,7 +182,9 @@ func TestHandleUpload_Syft(t *testing.T) {
 		t.Errorf("expected 200, got %d: %s", rr.Code, rr.Body.String())
 	}
 	var resp map[string]interface{}
-	json.Unmarshal(rr.Body.Bytes(), &resp)
+	if err := json.Unmarshal(rr.Body.Bytes(), &resp); err != nil {
+		t.Fatalf("failed to parse response: %v", err)
+	}
 	if int(resp["components"].(float64)) != 3 {
 		t.Errorf("expected 3 components, got %v", resp["components"])
 	}
@@ -196,7 +202,9 @@ func TestHandleUpload_SPDX(t *testing.T) {
 		t.Errorf("expected 200, got %d: %s", rr.Code, rr.Body.String())
 	}
 	var resp map[string]interface{}
-	json.Unmarshal(rr.Body.Bytes(), &resp)
+	if err := json.Unmarshal(rr.Body.Bytes(), &resp); err != nil {
+		t.Fatalf("failed to parse response: %v", err)
+	}
 	if int(resp["components"].(float64)) != 2 {
 		t.Errorf("expected 2 components, got %v", resp["components"])
 	}
@@ -260,7 +268,9 @@ func TestHandleGetTree_Empty(t *testing.T) {
 		t.Errorf("expected 200, got %d", rr.Code)
 	}
 	var nodes []TreeNode
-	json.Unmarshal(rr.Body.Bytes(), &nodes)
+	if err := json.Unmarshal(rr.Body.Bytes(), &nodes); err != nil {
+		t.Fatalf("failed to parse response: %v", err)
+	}
 	if len(nodes) != 0 {
 		t.Errorf("expected empty tree, got %d nodes", len(nodes))
 	}
@@ -278,7 +288,9 @@ func TestHandleGetTree_NoDeps(t *testing.T) {
 	handleGetTree(rr, req)
 
 	var nodes []TreeNode
-	json.Unmarshal(rr.Body.Bytes(), &nodes)
+	if err := json.Unmarshal(rr.Body.Bytes(), &nodes); err != nil {
+		t.Fatalf("failed to parse response: %v", err)
+	}
 	// With no deps, all components become roots
 	if len(nodes) != 2 {
 		t.Errorf("expected 2 root nodes (no deps), got %d", len(nodes))
@@ -302,7 +314,9 @@ func TestHandleGetStats_WithData(t *testing.T) {
 		t.Errorf("expected 200, got %d", rr.Code)
 	}
 	var resp map[string]interface{}
-	json.Unmarshal(rr.Body.Bytes(), &resp)
+	if err := json.Unmarshal(rr.Body.Bytes(), &resp); err != nil {
+		t.Fatalf("failed to parse response: %v", err)
+	}
 	if _, ok := resp["stats"]; !ok {
 		t.Error("expected 'stats' field in response")
 	}
@@ -315,7 +329,9 @@ func TestHandleGetStats_Empty(t *testing.T) {
 	handleGetStats(rr, req)
 
 	var resp map[string]interface{}
-	json.Unmarshal(rr.Body.Bytes(), &resp)
+	if err := json.Unmarshal(rr.Body.Bytes(), &resp); err != nil {
+		t.Fatalf("failed to parse response: %v", err)
+	}
 	stats := resp["stats"].(map[string]interface{})
 	if stats["total_components"].(float64) != 0 {
 		t.Errorf("expected 0 total components, got %v", stats["total_components"])
@@ -334,7 +350,9 @@ func TestHandleGetStats_CoveragePercentages(t *testing.T) {
 	handleGetStats(rr, req)
 
 	var resp map[string]interface{}
-	json.Unmarshal(rr.Body.Bytes(), &resp)
+	if err := json.Unmarshal(rr.Body.Bytes(), &resp); err != nil {
+		t.Fatalf("failed to parse response: %v", err)
+	}
 	coverage, ok := resp["coverage"].(map[string]interface{})
 	if !ok {
 		t.Fatal("expected coverage field")
@@ -361,7 +379,9 @@ func TestHandleGetComponent_Found(t *testing.T) {
 		t.Errorf("expected 200, got %d", rr.Code)
 	}
 	var detail ComponentDetail
-	json.Unmarshal(rr.Body.Bytes(), &detail)
+	if err := json.Unmarshal(rr.Body.Bytes(), &detail); err != nil {
+		t.Fatalf("failed to parse response: %v", err)
+	}
 	if detail.Name != "test" {
 		t.Errorf("expected name=test, got %s", detail.Name)
 	}
@@ -399,7 +419,9 @@ func TestHandleSearch_ByName(t *testing.T) {
 		t.Errorf("expected 200, got %d", rr.Code)
 	}
 	var results []ComponentDetail
-	json.Unmarshal(rr.Body.Bytes(), &results)
+	if err := json.Unmarshal(rr.Body.Bytes(), &results); err != nil {
+		t.Fatalf("failed to parse response: %v", err)
+	}
 	if len(results) != 1 {
 		t.Errorf("expected 1 result, got %d", len(results))
 	}
@@ -420,7 +442,9 @@ func TestHandleSearch_ByLicense(t *testing.T) {
 	handleSearch(rr, req)
 
 	var results []ComponentDetail
-	json.Unmarshal(rr.Body.Bytes(), &results)
+	if err := json.Unmarshal(rr.Body.Bytes(), &results); err != nil {
+		t.Fatalf("failed to parse response: %v", err)
+	}
 	if len(results) != 1 {
 		t.Errorf("expected 1 result for MIT search, got %d", len(results))
 	}
@@ -437,8 +461,10 @@ func TestHandleSearch_NoResults(t *testing.T) {
 	handleSearch(rr, req)
 
 	var results []ComponentDetail
-	json.Unmarshal(rr.Body.Bytes(), &results)
-	if results != nil && len(results) != 0 {
+	if err := json.Unmarshal(rr.Body.Bytes(), &results); err != nil {
+		t.Fatalf("failed to parse response: %v", err)
+	}
+	if len(results) != 0 {
 		t.Errorf("expected 0 results, got %d", len(results))
 	}
 }

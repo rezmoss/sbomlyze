@@ -236,15 +236,16 @@ func TestFormatDetectionPrecedence(t *testing.T) {
 		t.Error("expected CycloneDX detection to take precedence")
 	}
 	// In ParseFileWithInfo, CycloneDX is checked first
-	tmpFile, err := os.CreateTemp("", "test-*.json")
+	tmpFile, err := os.CreateTemp(t.TempDir(), "test-*.json")
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer os.Remove(tmpFile.Name())
 	if _, err := tmpFile.Write(data); err != nil {
 		t.Fatal(err)
 	}
-	tmpFile.Close()
+	if err := tmpFile.Close(); err != nil {
+		t.Fatal(err)
+	}
 
 	comps, _, err := ParseFileWithInfo(tmpFile.Name())
 	if err != nil {
@@ -278,13 +279,16 @@ func TestParse_UnicodeNames(t *testing.T) {
 			{"type":"library","name":"ünïcödé-pkg","version":"1.0.0","bom-ref":"unicode"}
 		]
 	}`)
-	tmpFile, err := os.CreateTemp("", "unicode-*.json")
+	tmpFile, err := os.CreateTemp(t.TempDir(), "unicode-*.json")
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer os.Remove(tmpFile.Name())
-	tmpFile.Write(data)
-	tmpFile.Close()
+	if _, err := tmpFile.Write(data); err != nil {
+		t.Fatal(err)
+	}
+	if err := tmpFile.Close(); err != nil {
+		t.Fatal(err)
+	}
 
 	comps, err := ParseFile(tmpFile.Name())
 	if err != nil {
@@ -306,13 +310,16 @@ func TestParse_SpecialCharsInPURL(t *testing.T) {
 			{"type":"library","name":"scoped-pkg","version":"1.0.0","purl":"pkg:npm/%40scope/pkg@1.0.0","bom-ref":"scoped"}
 		]
 	}`)
-	tmpFile, err := os.CreateTemp("", "purl-*.json")
+	tmpFile, err := os.CreateTemp(t.TempDir(), "purl-*.json")
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer os.Remove(tmpFile.Name())
-	tmpFile.Write(data)
-	tmpFile.Close()
+	if _, err := tmpFile.Write(data); err != nil {
+		t.Fatal(err)
+	}
+	if err := tmpFile.Close(); err != nil {
+		t.Fatal(err)
+	}
 
 	comps, err := ParseFile(tmpFile.Name())
 	if err != nil {
