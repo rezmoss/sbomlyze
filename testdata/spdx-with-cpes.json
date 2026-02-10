@@ -1,0 +1,33 @@
+{
+  "spdxVersion": "SPDX-2.3",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "name": "test-spdx-cpes",
+  "dataLicense": "CC0-1.0",
+  "documentNamespace": "https://example.com/test",
+  "packages": [
+    {
+      "SPDXID": "SPDXRef-Package-curl",
+      "name": "curl",
+      "versionInfo": "8.0.0",
+      "downloadLocation": "NOASSERTION",
+      "licenseConcluded": "MIT",
+      "externalRefs": [
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "cpe22Type",
+          "referenceLocator": "cpe:/a:haxx:curl:8.0.0"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "cpe23Type",
+          "referenceLocator": "cpe:2.3:a:haxx:curl:8.0.0:*:*:*:*:*:*:*"
+        },
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:generic/curl@8.0.0"
+        }
+      ]
+    }
+  ]
+}

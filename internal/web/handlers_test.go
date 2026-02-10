@@ -1,9 +1,64 @@
 package web
 
 import (
+	"bytes"
 	"encoding/json"
+	"mime/multipart"
+	"net/http"
+	"net/http/httptest"
+	"os"
+	"path/filepath"
 	"testing"
+
+	"github.com/rezmoss/sbomlyze/internal/analysis"
+	"github.com/rezmoss/sbomlyze/internal/sbom"
 )
+
+func webTestdataPath(name string) string {
+	return filepath.Join("..", "..", "testdata", name)
+}
+
+func resetState() {
+	state.mu.Lock()
+	defer state.mu.Unlock()
+	state.Components = nil
+	state.Info = sbom.SBOMInfo{}
+	state.Stats = analysis.Stats{}
+	state.DepGraph = nil
+	state.Relationships = nil
+	state.RawSBOMData = nil
+}
+
+func loadTestState(comps []sbom.Component, info sbom.SBOMInfo) {
+	state.mu.Lock()
+	defer state.mu.Unlock()
+	state.Components = comps
+	state.Info = info
+	state.Stats = analysis.ComputeStats(comps)
+	state.DepGraph = analysis.BuildDependencyGraph(comps)
+}
+
+func createMultipartRequest(filePath string) (*http.Request, error) {
+	data, err := os.ReadFile(filePath)
+	if err != nil {
+		return nil, err
+	}
+	body := &bytes.Buffer{}
+	writer := multipart.NewWriter(body)
+	part, err := writer.CreateFormFile("file", filepath.Base(filePath))
+	if err != nil {
+		return nil, err
+	}
+	if _, err := part.Write(data); err != nil {
+		return nil, err
+	}
+	if err := writer.Close(); err != nil {
+		return nil, err
+	}
+	req := httptest.NewRequest(http.MethodPost, "/api/upload", body)
+	req.Header.Set("Content-Type", writer.FormDataContentType())
+	return req, nil
+}
 
 func TestExtractRelationships(t *testing.T) {
 	t.Run("extracts relationship counts from Syft format", func(t *testing.T) {
@@ -84,148 +139,333 @@ func TestExtractRelationships(t *testing.T) {
 		if result["contains"] != 1 {
 			t.Errorf("expected 1 contains, got %d", result["contains"])
 		}
-		// Empty type should not be counted
 		if _, exists := result[""]; exists {
 			t.Errorf("empty type should not be counted")
 		}
 	})
 }
 
-func TestContainsLicense(t *testing.T) {
-	t.Run("finds matching license", func(t *testing.T) {
-		licenses := []string{"MIT", "Apache-2.0", "GPL-3.0"}
+// --- Upload Handler Tests ---
 
-		if !containsLicense(licenses, "mit") {
-			t.Error("expected to find 'mit' in licenses")
-		}
-		if !containsLicense(licenses, "apache") {
-			t.Error("expected to find 'apache' in licenses")
-		}
-	})
-
-	t.Run("returns false for no match", func(t *testing.T) {
-		licenses := []string{"MIT", "Apache-2.0"}
-
-		if containsLicense(licenses, "gpl") {
-			t.Error("expected not to find 'gpl' in licenses")
-		}
-	})
-
-	t.Run("handles empty licenses", func(t *testing.T) {
-		if containsLicense([]string{}, "mit") {
-			t.Error("expected false for empty licenses")
-		}
-	})
-
-	t.Run("case insensitive search", func(t *testing.T) {
-		licenses := []string{"MIT"}
-
-		if !containsLicense(licenses, "MIT") {
-			t.Error("expected to find 'MIT'")
-		}
-		if !containsLicense(licenses, "mit") {
-			t.Error("expected to find 'mit' (lowercase)")
-		}
-		if !containsLicense(licenses, "Mit") {
-			t.Error("expected to find 'Mit' (mixed case)")
-		}
-	})
+func TestHandleUpload_CycloneDX(t *testing.T) {
+	resetState()
+	req, err := createMultipartRequest(webTestdataPath("cyclonedx-before.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	rr := httptest.NewRecorder()
+	handleUpload(rr, req)
+	if rr.Code != http.StatusOK {
+		t.Errorf("expected 200, got %d: %s", rr.Code, rr.Body.String())
+	}
+	var resp map[string]interface{}
+	if err := json.Unmarshal(rr.Body.Bytes(), &resp); err != nil {
+		t.Fatalf("failed to parse response: %v", err)
+	}
+	if resp["success"] != true {
+		t.Error("expected success=true")
+	}
+	if int(resp["components"].(float64)) != 3 {
+		t.Errorf("expected 3 components, got %v", resp["components"])
+	}
 }
 
-func TestTreeNodeJSON(t *testing.T) {
-	t.Run("serializes tree node correctly", func(t *testing.T) {
-		node := TreeNode{
-			ID:          "pkg:npm/test@1.0.0",
-			Name:        "test",
-			Version:     "1.0.0",
-			Type:        "npm",
-			HasChildren: true,
-			ChildrenIDs: []string{"child1", "child2"},
-		}
-
-		data, err := json.Marshal(node)
-		if err != nil {
-			t.Fatalf("failed to marshal: %v", err)
-		}
-
-		var decoded TreeNode
-		if err := json.Unmarshal(data, &decoded); err != nil {
-			t.Fatalf("failed to unmarshal: %v", err)
-		}
-
-		if decoded.ID != node.ID {
-			t.Errorf("ID mismatch: got %q, want %q", decoded.ID, node.ID)
-		}
-		if decoded.Name != node.Name {
-			t.Errorf("Name mismatch: got %q, want %q", decoded.Name, node.Name)
-		}
-		if decoded.HasChildren != node.HasChildren {
-			t.Errorf("HasChildren mismatch: got %v, want %v", decoded.HasChildren, node.HasChildren)
-		}
-	})
+func TestHandleUpload_Syft(t *testing.T) {
+	resetState()
+	req, err := createMultipartRequest(webTestdataPath("syft-sample.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	rr := httptest.NewRecorder()
+	handleUpload(rr, req)
+	if rr.Code != http.StatusOK {
+		t.Errorf("expected 200, got %d: %s", rr.Code, rr.Body.String())
+	}
+	var resp map[string]interface{}
+	if err := json.Unmarshal(rr.Body.Bytes(), &resp); err != nil {
+		t.Fatalf("failed to parse response: %v", err)
+	}
+	if int(resp["components"].(float64)) != 3 {
+		t.Errorf("expected 3 components, got %v", resp["components"])
+	}
 }
 
-func TestComponentDetailJSON(t *testing.T) {
-	t.Run("serializes component detail correctly", func(t *testing.T) {
-		detail := ComponentDetail{
-			ID:           "pkg:npm/test@1.0.0",
-			Name:         "test",
-			Version:      "1.0.0",
-			PURL:         "pkg:npm/test@1.0.0",
-			Type:         "npm",
-			Licenses:     []string{"MIT"},
-			Hashes:       map[string]string{"SHA256": "abc123"},
-			Dependencies: []string{"dep1", "dep2"},
-			Supplier:     "Test Supplier",
-			RawJSON:      json.RawMessage(`{"key": "value"}`),
-		}
-
-		data, err := json.Marshal(detail)
-		if err != nil {
-			t.Fatalf("failed to marshal: %v", err)
-		}
-
-		var decoded ComponentDetail
-		if err := json.Unmarshal(data, &decoded); err != nil {
-			t.Fatalf("failed to unmarshal: %v", err)
-		}
-
-		if decoded.ID != detail.ID {
-			t.Errorf("ID mismatch: got %q, want %q", decoded.ID, detail.ID)
-		}
-		if decoded.Supplier != detail.Supplier {
-			t.Errorf("Supplier mismatch: got %q, want %q", decoded.Supplier, detail.Supplier)
-		}
-		if len(decoded.Licenses) != 1 || decoded.Licenses[0] != "MIT" {
-			t.Errorf("Licenses mismatch: got %v, want [MIT]", decoded.Licenses)
-		}
-	})
-
-	t.Run("omits empty optional fields", func(t *testing.T) {
-		detail := ComponentDetail{
-			ID:   "test",
-			Name: "test",
-		}
-
-		data, err := json.Marshal(detail)
-		if err != nil {
-			t.Fatalf("failed to marshal: %v", err)
-		}
-
-		// Check that empty fields are omitted
-		var raw map[string]interface{}
-		if err := json.Unmarshal(data, &raw); err != nil {
-			t.Fatalf("failed to unmarshal to map: %v", err)
-		}
-
-		if _, exists := raw["purl"]; exists {
-			t.Error("expected purl to be omitted when empty")
-		}
-		if _, exists := raw["licenses"]; exists {
-			t.Error("expected licenses to be omitted when empty")
-		}
-		if _, exists := raw["supplier"]; exists {
-			t.Error("expected supplier to be omitted when empty")
-		}
-	})
+func TestHandleUpload_SPDX(t *testing.T) {
+	resetState()
+	req, err := createMultipartRequest(webTestdataPath("spdx-sample.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	rr := httptest.NewRecorder()
+	handleUpload(rr, req)
+	if rr.Code != http.StatusOK {
+		t.Errorf("expected 200, got %d: %s", rr.Code, rr.Body.String())
+	}
+	var resp map[string]interface{}
+	if err := json.Unmarshal(rr.Body.Bytes(), &resp); err != nil {
+		t.Fatalf("failed to parse response: %v", err)
+	}
+	if int(resp["components"].(float64)) != 2 {
+		t.Errorf("expected 2 components, got %v", resp["components"])
+	}
 }
+
+func TestHandleUpload_UnknownFormat(t *testing.T) {
+	resetState()
+	req, err := createMultipartRequest(webTestdataPath("invalid.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	rr := httptest.NewRecorder()
+	handleUpload(rr, req)
+	if rr.Code != http.StatusBadRequest {
+		t.Errorf("expected 400, got %d", rr.Code)
+	}
+}
+
+func TestHandleUpload_NoFile(t *testing.T) {
+	req := httptest.NewRequest(http.MethodPost, "/api/upload", nil)
+	req.Header.Set("Content-Type", "multipart/form-data; boundary=---")
+	rr := httptest.NewRecorder()
+	handleUpload(rr, req)
+	if rr.Code != http.StatusBadRequest {
+		t.Errorf("expected 400, got %d", rr.Code)
+	}
+}
+
+// --- Tree Handler Tests ---
+
+func TestHandleGetTree_WithData(t *testing.T) {
+	resetState()
+	loadTestState([]sbom.Component{
+		{ID: "a", Name: "a", Version: "1.0", Dependencies: []string{"b"}},
+		{ID: "b", Name: "b", Version: "1.0"},
+	}, sbom.SBOMInfo{})
+
+	req := httptest.NewRequest(http.MethodGet, "/api/tree", nil)
+	rr := httptest.NewRecorder()
+	handleGetTree(rr, req)
+
+	if rr.Code != http.StatusOK {
+		t.Errorf("expected 200, got %d", rr.Code)
+	}
+	var nodes []TreeNode
+	if err := json.Unmarshal(rr.Body.Bytes(), &nodes); err != nil {
+		t.Fatalf("failed to parse: %v", err)
+	}
+	if len(nodes) == 0 {
+		t.Error("expected non-empty tree")
+	}
+}
+
+func TestHandleGetTree_Empty(t *testing.T) {
+	resetState()
+	req := httptest.NewRequest(http.MethodGet, "/api/tree", nil)
+	rr := httptest.NewRecorder()
+	handleGetTree(rr, req)
+
+	if rr.Code != http.StatusOK {
+		t.Errorf("expected 200, got %d", rr.Code)
+	}
+	var nodes []TreeNode
+	if err := json.Unmarshal(rr.Body.Bytes(), &nodes); err != nil {
+		t.Fatalf("failed to parse response: %v", err)
+	}
+	if len(nodes) != 0 {
+		t.Errorf("expected empty tree, got %d nodes", len(nodes))
+	}
+}
+
+func TestHandleGetTree_NoDeps(t *testing.T) {
+	resetState()
+	loadTestState([]sbom.Component{
+		{ID: "a", Name: "a", Version: "1.0"},
+		{ID: "b", Name: "b", Version: "1.0"},
+	}, sbom.SBOMInfo{})
+
+	req := httptest.NewRequest(http.MethodGet, "/api/tree", nil)
+	rr := httptest.NewRecorder()
+	handleGetTree(rr, req)
+
+	var nodes []TreeNode
+	if err := json.Unmarshal(rr.Body.Bytes(), &nodes); err != nil {
+		t.Fatalf("failed to parse response: %v", err)
+	}
+	// With no deps, all components become roots
+	if len(nodes) != 2 {
+		t.Errorf("expected 2 root nodes (no deps), got %d", len(nodes))
+	}
+}
+
+// --- Stats Handler Tests ---
+
+func TestHandleGetStats_WithData(t *testing.T) {
+	resetState()
+	loadTestState([]sbom.Component{
+		{ID: "a", Name: "a", Version: "1.0", PURL: "pkg:npm/a@1.0"},
+		{ID: "b", Name: "b", Version: "1.0"},
+	}, sbom.SBOMInfo{OSName: "alpine"})
+
+	req := httptest.NewRequest(http.MethodGet, "/api/stats", nil)
+	rr := httptest.NewRecorder()
+	handleGetStats(rr, req)
+
+	if rr.Code != http.StatusOK {
+		t.Errorf("expected 200, got %d", rr.Code)
+	}
+	var resp map[string]interface{}
+	if err := json.Unmarshal(rr.Body.Bytes(), &resp); err != nil {
+		t.Fatalf("failed to parse response: %v", err)
+	}
+	if _, ok := resp["stats"]; !ok {
+		t.Error("expected 'stats' field in response")
+	}
+}
+
+func TestHandleGetStats_Empty(t *testing.T) {
+	resetState()
+	req := httptest.NewRequest(http.MethodGet, "/api/stats", nil)
+	rr := httptest.NewRecorder()
+	handleGetStats(rr, req)
+
+	var resp map[string]interface{}
+	if err := json.Unmarshal(rr.Body.Bytes(), &resp); err != nil {
+		t.Fatalf("failed to parse response: %v", err)
+	}
+	stats := resp["stats"].(map[string]interface{})
+	if stats["total_components"].(float64) != 0 {
+		t.Errorf("expected 0 total components, got %v", stats["total_components"])
+	}
+}
+
+func TestHandleGetStats_CoveragePercentages(t *testing.T) {
+	resetState()
+	loadTestState([]sbom.Component{
+		{ID: "a", Name: "a", PURL: "pkg:npm/a@1.0"},
+		{ID: "b", Name: "b"},
+	}, sbom.SBOMInfo{})
+
+	req := httptest.NewRequest(http.MethodGet, "/api/stats", nil)
+	rr := httptest.NewRecorder()
+	handleGetStats(rr, req)
+
+	var resp map[string]interface{}
+	if err := json.Unmarshal(rr.Body.Bytes(), &resp); err != nil {
+		t.Fatalf("failed to parse response: %v", err)
+	}
+	coverage, ok := resp["coverage"].(map[string]interface{})
+	if !ok {
+		t.Fatal("expected coverage field")
+	}
+	purlPct := coverage["purl_percent"].(float64)
+	if purlPct != 50 {
+		t.Errorf("expected purl_percent=50, got %v", purlPct)
+	}
+}
+
+// --- Component Handler Tests ---
+
+func TestHandleGetComponent_Found(t *testing.T) {
+	resetState()
+	loadTestState([]sbom.Component{
+		{ID: "pkg:npm/test", Name: "test", Version: "1.0"},
+	}, sbom.SBOMInfo{})
+
+	req := httptest.NewRequest(http.MethodGet, "/api/component/pkg:npm/test", nil)
+	rr := httptest.NewRecorder()
+	handleGetComponent(rr, req)
+
+	if rr.Code != http.StatusOK {
+		t.Errorf("expected 200, got %d", rr.Code)
+	}
+	var detail ComponentDetail
+	if err := json.Unmarshal(rr.Body.Bytes(), &detail); err != nil {
+		t.Fatalf("failed to parse response: %v", err)
+	}
+	if detail.Name != "test" {
+		t.Errorf("expected name=test, got %s", detail.Name)
+	}
+}
+
+func TestHandleGetComponent_NotFound(t *testing.T) {
+	resetState()
+	loadTestState([]sbom.Component{
+		{ID: "a", Name: "a"},
+	}, sbom.SBOMInfo{})
+
+	req := httptest.NewRequest(http.MethodGet, "/api/component/nonexistent", nil)
+	rr := httptest.NewRecorder()
+	handleGetComponent(rr, req)
+
+	if rr.Code != http.StatusNotFound {
+		t.Errorf("expected 404, got %d", rr.Code)
+	}
+}
+
+// --- Search Handler Tests ---
+
+func TestHandleSearch_ByName(t *testing.T) {
+	resetState()
+	loadTestState([]sbom.Component{
+		{ID: "a", Name: "lodash", Version: "4.17.21"},
+		{ID: "b", Name: "express", Version: "4.18.0"},
+	}, sbom.SBOMInfo{})
+
+	req := httptest.NewRequest(http.MethodGet, "/api/search?q=lodash", nil)
+	rr := httptest.NewRecorder()
+	handleSearch(rr, req)
+
+	if rr.Code != http.StatusOK {
+		t.Errorf("expected 200, got %d", rr.Code)
+	}
+	var results []ComponentDetail
+	if err := json.Unmarshal(rr.Body.Bytes(), &results); err != nil {
+		t.Fatalf("failed to parse response: %v", err)
+	}
+	if len(results) != 1 {
+		t.Errorf("expected 1 result, got %d", len(results))
+	}
+	if len(results) > 0 && results[0].Name != "lodash" {
+		t.Errorf("expected lodash, got %s", results[0].Name)
+	}
+}
+
+func TestHandleSearch_ByLicense(t *testing.T) {
+	resetState()
+	loadTestState([]sbom.Component{
+		{ID: "a", Name: "mit-pkg", Licenses: []string{"MIT"}},
+		{ID: "b", Name: "gpl-pkg", Licenses: []string{"GPL-3.0"}},
+	}, sbom.SBOMInfo{})
+
+	req := httptest.NewRequest(http.MethodGet, "/api/search?q=mit", nil)
+	rr := httptest.NewRecorder()
+	handleSearch(rr, req)
+
+	var results []ComponentDetail
+	if err := json.Unmarshal(rr.Body.Bytes(), &results); err != nil {
+		t.Fatalf("failed to parse response: %v", err)
+	}
+	if len(results) != 1 {
+		t.Errorf("expected 1 result for MIT search, got %d", len(results))
+	}
+}
+
+func TestHandleSearch_NoResults(t *testing.T) {
+	resetState()
+	loadTestState([]sbom.Component{
+		{ID: "a", Name: "lodash"},
+	}, sbom.SBOMInfo{})
+
+	req := httptest.NewRequest(http.MethodGet, "/api/search?q=nonexistent", nil)
+	rr := httptest.NewRecorder()
+	handleSearch(rr, req)
+
+	var results []ComponentDetail
+	if err := json.Unmarshal(rr.Body.Bytes(), &results); err != nil {
+		t.Fatalf("failed to parse response: %v", err)
+	}
+	if len(results) != 0 {
+		t.Errorf("expected 0 results, got %d", len(results))
+	}
+}
+

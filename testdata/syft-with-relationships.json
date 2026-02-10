@@ -1,0 +1,36 @@
+{
+  "artifacts": [
+    {
+      "id": "abc123",
+      "name": "busybox",
+      "version": "1.36.1",
+      "type": "apk",
+      "purl": "pkg:apk/alpine/busybox@1.36.1"
+    },
+    {
+      "id": "def456",
+      "name": "musl",
+      "version": "1.2.4",
+      "type": "apk",
+      "purl": "pkg:apk/alpine/musl@1.2.4"
+    }
+  ],
+  "artifactRelationships": [
+    {
+      "parent": "abc123",
+      "child": "def456",
+      "type": "contains"
+    },
+    {
+      "parent": "abc123",
+      "child": "def456",
+      "type": "dependency-of"
+    }
+  ],
+  "source": {
+    "type": "image",
+    "target": {
+      "userInput": "alpine:latest"
+    }
+  }
+}

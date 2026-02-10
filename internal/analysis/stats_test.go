@@ -308,3 +308,14 @@ func TestCategorizeLicense(t *testing.T) {
 		})
 	}
 }
+
+func TestComputeStats_CompoundLicenses(t *testing.T) {
+	comps := []sbom.Component{
+		{ID: "a", Name: "a", Licenses: []string{"MIT OR Apache-2.0"}},
+	}
+	stats := ComputeStats(comps)
+	if stats.ByLicense["MIT OR Apache-2.0"] != 1 {
+		t.Errorf("expected compound license counted, got %v", stats.ByLicense)
+	}
+}
+

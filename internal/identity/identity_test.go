@@ -295,3 +295,33 @@ func TestExtractPURLVersion(t *testing.T) {
 		})
 	}
 }
+
+func TestNormalizePURL_MalformedPURL(t *testing.T) {
+	result := NormalizePURL("not-a-purl-at-all")
+	if result != "not-a-purl-at-all" {
+		t.Errorf("expected passthrough for malformed PURL, got %q", result)
+	}
+}
+
+func TestNormalizePURL_SpecialChars(t *testing.T) {
+	result := NormalizePURL("pkg:npm/%40scope/pkg@1.0.0")
+	if result != "pkg:npm/%40scope/pkg" {
+		t.Errorf("expected version stripped, got %q", result)
+	}
+}
+
+func TestNormalizeCPE_MalformedCPE(t *testing.T) {
+	result := NormalizeCPE("cpe:2.3:a:")
+	if result != "" {
+		t.Errorf("expected empty for malformed CPE, got %q", result)
+	}
+}
+
+func TestComputeID_AllEmpty(t *testing.T) {
+	c := ComponentIdentity{}
+	id := ComputeID(c)
+	if id != "" {
+		t.Errorf("expected empty ID for empty identity, got %q", id)
+	}
+}
+

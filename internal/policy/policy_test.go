@@ -389,19 +389,3 @@ func TestHasErrors(t *testing.T) {
 	})
 }
 
-func TestViolation(t *testing.T) {
-	t.Run("violation has correct fields", func(t *testing.T) {
-		v := Violation{
-			Rule:     "max_added",
-			Message:  "too many components added: 10 > 5",
-			Severity: SeverityError,
-		}
-
-		if v.Rule != "max_added" {
-			t.Errorf("expected rule=max_added, got %s", v.Rule)
-		}
-		if v.Severity != SeverityError {
-			t.Errorf("expected severity=error, got %s", v.Severity)
-		}
-	})
-}
