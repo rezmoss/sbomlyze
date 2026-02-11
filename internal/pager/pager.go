@@ -1,0 +1,107 @@
+package pager
+
+import (
+	"os"
+	"os/exec"
+	"os/signal"
+	"strings"
+	"syscall"
+
+	"github.com/mattn/go-isatty"
+)
+
+// Pager pipes stdout through an external pager (e.g. less) for interactive use.
+// When stdout is not a TTY (piped, redirected), all methods are no-ops,
+// preserving full compatibility with scripts and pipelines.
+type Pager struct {
+	cmd       *exec.Cmd
+	pipe      *os.File
+	oldStdout *os.File
+	stopped   bool
+}
+
+// resolve returns the pager command from environment variables.
+// Priority: $SBOMLYZE_PAGER > $PAGER > "less"
+func resolve() string {
+	if p := os.Getenv("SBOMLYZE_PAGER"); p != "" {
+		return p
+	}
+	if p := os.Getenv("PAGER"); p != "" {
+		return p
+	}
+	return "less"
+}
+
+// Start spawns a pager process and redirects os.Stdout to it.
+// Returns nil (no-op) when: disabled is true, stdout is not a TTY,
+// or pager is set to "" or "cat".
+// The returned Pager's Stop method is safe to call on a nil receiver.
+func Start(disabled bool) *Pager {
+	if disabled || !isatty.IsTerminal(os.Stdout.Fd()) {
+		return nil
+	}
+
+	pagerCmd := resolve()
+	if pagerCmd == "" || pagerCmd == "cat" {
+		return nil
+	}
+
+	args := strings.Fields(pagerCmd)
+
+	// Create pipe: r is the pager's stdin, w replaces os.Stdout
+	r, w, err := os.Pipe()
+	if err != nil {
+		return nil
+	}
+
+	cmd := exec.Command(args[0], args[1:]...)
+	cmd.Stdin = r
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	// Set LESS=FRX if not already set:
+	//   F = quit if output fits one screen
+	//   R = display raw ANSI color codes
+	//   X = don't clear screen on exit
+	cmd.Env = os.Environ()
+	if _, ok := os.LookupEnv("LESS"); !ok {
+		cmd.Env = append(cmd.Env, "LESS=FRX")
+	}
+	if _, ok := os.LookupEnv("LV"); !ok {
+		cmd.Env = append(cmd.Env, "LV=-c")
+	}
+
+	// Ignore SIGPIPE so writes to a closed pager pipe don't kill us
+	signal.Ignore(syscall.SIGPIPE)
+
+	if err := cmd.Start(); err != nil {
+		w.Close()
+		r.Close()
+		return nil
+	}
+
+	// Close read end in parent — the pager process owns it now
+	r.Close()
+
+	oldStdout := os.Stdout
+	os.Stdout = w
+
+	return &Pager{
+		cmd:       cmd,
+		pipe:      w,
+		oldStdout: oldStdout,
+	}
+}
+
+// Stop restores os.Stdout, closes the pipe, and waits for the pager to exit.
+// Safe to call multiple times or on a nil receiver.
+func (p *Pager) Stop() {
+	if p == nil || p.stopped {
+		return
+	}
+	p.stopped = true
+
+	os.Stdout = p.oldStdout
+	p.pipe.Close()
+	_ = p.cmd.Wait()
+}

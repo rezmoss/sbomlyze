@@ -9,6 +9,7 @@ import (
 	"github.com/rezmoss/sbomlyze/internal/analysis"
 	"github.com/rezmoss/sbomlyze/internal/cli"
 	"github.com/rezmoss/sbomlyze/internal/output"
+	"github.com/rezmoss/sbomlyze/internal/pager"
 	"github.com/rezmoss/sbomlyze/internal/policy"
 	"github.com/rezmoss/sbomlyze/internal/progress"
 	"github.com/rezmoss/sbomlyze/internal/sbom"
@@ -95,6 +96,9 @@ func main() {
 			return
 		}
 
+		p := pager.Start(opts.NoPager)
+		defer p.Stop()
+
 		if opts.JSONOutput {
 			output := struct {
 				Stats    analysis.Stats     `json:"stats"`
@@ -106,6 +110,7 @@ func main() {
 			enc := json.NewEncoder(os.Stdout)
 			enc.SetIndent("", "  ")
 			if err := enc.Encode(output); err != nil {
+				p.Stop()
 				fmt.Fprintf(os.Stderr, "Error encoding JSON: %v\n", err)
 				os.Exit(1)
 			}
@@ -168,6 +173,8 @@ func main() {
 		sbomFile = opts.Files[1]
 	}
 
+	p := pager.Start(opts.NoPager)
+
 	switch opts.Format {
 	case "json":
 		out := struct {
@@ -182,6 +189,7 @@ func main() {
 		enc := json.NewEncoder(os.Stdout)
 		enc.SetIndent("", "  ")
 		if err := enc.Encode(out); err != nil {
+			p.Stop()
 			fmt.Fprintf(os.Stderr, "Error encoding JSON: %v\n", err)
 			os.Exit(1)
 		}
@@ -191,6 +199,7 @@ func main() {
 		enc := json.NewEncoder(os.Stdout)
 		enc.SetIndent("", "  ")
 		if err := enc.Encode(sarif); err != nil {
+			p.Stop()
 			fmt.Fprintf(os.Stderr, "Error encoding SARIF: %v\n", err)
 			os.Exit(1)
 		}
@@ -199,6 +208,7 @@ func main() {
 		junit := output.GenerateJUnit(result, violations)
 		out, err := xml.MarshalIndent(junit, "", "  ")
 		if err != nil {
+			p.Stop()
 			fmt.Fprintf(os.Stderr, "Error encoding JUnit: %v\n", err)
 			os.Exit(1)
 		}
@@ -211,6 +221,7 @@ func main() {
 		patch := output.GenerateJSONPatch(result)
 		out, err := json.MarshalIndent(patch, "", "  ")
 		if err != nil {
+			p.Stop()
 			fmt.Fprintf(os.Stderr, "Error encoding JSON Patch: %v\n", err)
 			os.Exit(1)
 		}
@@ -221,6 +232,8 @@ func main() {
 		output.PrintViolations(violations)
 		cli.PrintWarnings(parseOpts.Warnings)
 	}
+
+	p.Stop()
 
 	// Exit with error if there are differences OR policy errors (not warnings)
 	hasDiff := len(result.Added) > 0 || len(result.Removed) > 0 || len(result.Changed) > 0

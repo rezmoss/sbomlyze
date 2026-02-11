@@ -28,6 +28,7 @@ type Options struct {
 	Interactive bool   // Interactive TUI mode
 	WebServer   bool   // Web server mode
 	WebPort     int    // Web server port (default 8080)
+	NoPager     bool   // Disable automatic paging
 }
 
 // DefaultParseOptions returns tolerant parsing options
@@ -78,6 +79,8 @@ func ParseArgs(args []string) Options {
 			}
 		case "--interactive", "-i":
 			opts.Interactive = true
+		case "--no-pager":
+			opts.NoPager = true
 		case "-web", "--web":
 			opts.WebServer = true
 		case "--port":

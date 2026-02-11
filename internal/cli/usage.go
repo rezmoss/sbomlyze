@@ -23,6 +23,7 @@ func PrintUsage() {
 	fmt.Fprintf(os.Stderr, "  --policy <file>     Policy file for CI checks\n")
 	fmt.Fprintf(os.Stderr, "  --strict            Fail on parse warnings\n")
 	fmt.Fprintf(os.Stderr, "  --tolerant          Continue on parse warnings (default)\n")
+	fmt.Fprintf(os.Stderr, "  --no-pager          Disable automatic paging of output\n")
 	fmt.Fprintf(os.Stderr, "  --version, -v       Show version information\n")
 	fmt.Fprintf(os.Stderr, "  --help, -h          Show this help message\n\n")
 	fmt.Fprintf(os.Stderr, "Output Formats:\n")

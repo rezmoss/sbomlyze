@@ -17,6 +17,7 @@ Options:
   --policy <file>     Policy file for CI checks
   --strict            Fail on parse warnings
   --tolerant          Continue on parse warnings (default)
+  --no-pager          Disable automatic paging of output
   --version, -v       Show version information
   --help, -h          Show this help message
 
