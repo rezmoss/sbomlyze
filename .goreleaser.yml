@@ -10,44 +10,49 @@ before:
     - go mod vendor
 
 builds:
-  - id: binary
+  - id: linux-build
     main: ./cmd/sbomlyze
-    goos:
-      - windows
-      - darwin
-      - linux
-    goarch:
-      - amd64
-      - arm64
-      - "386"
-    ignore:
-      - goos: windows
-        goarch: arm64
-    ldflags:
-      - -s -w
-      - -X github.com/rezmoss/sbomlyze/internal/version.Version={{.Version}}
-      - -X github.com/rezmoss/sbomlyze/internal/version.Commit={{.Commit}}
-      - -X github.com/rezmoss/sbomlyze/internal/version.Date={{.Date}}
-      - -X github.com/rezmoss/sbomlyze/internal/version.BuildSource=binaryRelease
+    binary: sbomlyze
+    goos: [linux]
+    goarch: [amd64, arm64, "386"]
+    mod_timestamp: &build-timestamp '{{ .CommitTimestamp }}'
+    ldflags: &build-ldflags |
+      -w
+      -s
+      -extldflags '-static'
+      -X github.com/rezmoss/sbomlyze/internal/version.Version={{.Version}}
+      -X github.com/rezmoss/sbomlyze/internal/version.Commit={{.Commit}}
+      -X github.com/rezmoss/sbomlyze/internal/version.Date={{.Date}}
+      -X github.com/rezmoss/sbomlyze/internal/version.BuildSource=binaryRelease
 
-  - id: binary-arm
+  - id: linux-arm-build
     main: ./cmd/sbomlyze
-    goos:
-      - linux
-    goarch:
-      - arm
-    goarm:
-      - "6"
-      - "7"
-    ldflags:
-      - -s -w
-      - -X github.com/rezmoss/sbomlyze/internal/version.Version={{.Version}}
-      - -X github.com/rezmoss/sbomlyze/internal/version.Commit={{.Commit}}
-      - -X github.com/rezmoss/sbomlyze/internal/version.Date={{.Date}}
-      - -X github.com/rezmoss/sbomlyze/internal/version.BuildSource=binaryRelease
+    binary: sbomlyze
+    goos: [linux]
+    goarch: [arm]
+    goarm: ["6", "7"]
+    mod_timestamp: *build-timestamp
+    ldflags: *build-ldflags
+
+  - id: darwin-build
+    main: ./cmd/sbomlyze
+    binary: sbomlyze
+    goos: [darwin]
+    goarch: [amd64, arm64]
+    mod_timestamp: *build-timestamp
+    ldflags: *build-ldflags
+
+  - id: windows-build
+    main: ./cmd/sbomlyze
+    binary: sbomlyze
+    goos: [windows]
+    goarch: [amd64]
+    mod_timestamp: *build-timestamp
+    ldflags: *build-ldflags
 
 archives:
-  - id: default
+  - id: linux-archives
+    ids: [linux-build, linux-arm-build]
     name_template: >-
       {{ .ProjectName }}_
       {{- .Version }}_
@@ -58,22 +63,52 @@ archives:
       {{- else }}{{ .Arch }}{{ end }}
     formats:
       - tar.gz
-    format_overrides:
-      - goos: windows
-        formats:
-          - zip
+
+  - id: darwin-archives
+    ids: [darwin-build]
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- .Version }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else }}{{ .Arch }}{{ end }}
+    formats:
+      - tar.gz
+
+  - id: windows-archives
+    ids: [windows-build]
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- .Version }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else }}{{ .Arch }}{{ end }}
+    formats:
+      - zip
 
 checksum:
   name_template: "checksums.txt"
+
+# Generate SBOMs for each archive using Syft
+sboms:
+  - artifacts: archive
+    cmd: syft
+    documents:
+      - "{{ .Binary }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}.sbom"
+    args:
+      - "scan"
+      - "$artifact"
+      - "--output"
+      - "json=$document"
 
 # Linux packages (.deb, .rpm, .apk)
 nfpms:
   - id: packages
     package_name: sbomlyze
     vendor: rezmoss
-    homepage: https://github.com/rezmoss/sbomlyze
+    homepage: &website "https://github.com/rezmoss/sbomlyze"
     maintainer: rezmoss <rezmoss@users.noreply.github.com>
-    description: A fast, reliable SBOM diff and analysis tool
+    description: &description "A fast, reliable SBOM diff and analysis tool"
     license: Apache-2.0
     formats:
       - deb
@@ -115,9 +150,10 @@ brews:
       owner: rezmoss
       name: homebrew-sbomlyze
       token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+    ids: [darwin-archives, linux-archives]
     directory: Formula
-    homepage: "https://github.com/rezmoss/sbomlyze"
-    description: "A fast, reliable SBOM diff and analysis tool"
+    homepage: *website
+    description: *description
     license: "Apache-2.0"
     test: |
       system "#{bin}/sbomlyze", "--version"

@@ -1,28 +1,36 @@
-.PHONY: all test lint build build-quick clean snapshot-test update-snapshot
+.PHONY: all test lint build build-quick clean snapshot-test update-snapshot help
 
-all: test lint build
+all: test lint build ## Run test, lint, and build (full CI check)
 
-test:
+test: ## Run all tests with race detector
 	go test -v -race -count=1 ./...
 
-lint:
+lint: ## Run golangci-lint
 	golangci-lint run ./...
 
-build:
+build: ## Build with goreleaser (snapshot)
 	@which goreleaser > /dev/null || (echo "goreleaser not found. Install: go install github.com/goreleaser/goreleaser/v2@latest" && exit 1)
 	goreleaser build --snapshot --clean
 	@echo "Build artifacts in ./dist/"
 
-# Quick build for development
-build-quick:
+build-quick: ## Quick development build (./sbomlyze)
 	go build -o sbomlyze ./cmd/sbomlyze
 	@echo "Built ./sbomlyze"
 
-snapshot-test:
+snapshot-test: ## Run snapshot tests only
 	go test -v -run TestSnapshot ./cmd/sbomlyze/
 
-update-snapshot:
+update-snapshot: ## Update snapshot golden files
 	go test -v -run TestSnapshot ./cmd/sbomlyze/ -update
 
-clean:
+clean: ## Remove build artifacts
 	rm -rf dist/ sbomlyze
+
+help: ## Show this help
+	@echo "Usage: make [target]"
+	@echo ""
+	@echo "Targets:"
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-20s %s\n", $$1, $$2}'
+	@echo ""
+	@echo "Pre-commit checklist:"
+	@echo "  make test && make lint"
