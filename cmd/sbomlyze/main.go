@@ -10,6 +10,7 @@ import (
 	"github.com/rezmoss/sbomlyze/internal/cli"
 	"github.com/rezmoss/sbomlyze/internal/output"
 	"github.com/rezmoss/sbomlyze/internal/policy"
+	"github.com/rezmoss/sbomlyze/internal/progress"
 	"github.com/rezmoss/sbomlyze/internal/sbom"
 	"github.com/rezmoss/sbomlyze/internal/tui"
 	"github.com/rezmoss/sbomlyze/internal/version"
@@ -59,25 +60,31 @@ func main() {
 
 	// Single file mode - stats or interactive
 	if len(opts.Files) == 1 {
+		spin := progress.New(opts.JSONOutput || opts.Interactive)
+
 		// For interactive mode, we need SBOM info as well
 		var comps []sbom.Component
 		var sbomInfo sbom.SBOMInfo
 		var err error
 
+		spin.Start("Parsing SBOM...")
 		if opts.Interactive {
 			comps, sbomInfo, err = parseFileWithOptionsAndInfo(opts.Files[0], &parseOpts)
 		} else {
 			comps, err = parseFileWithOptions(opts.Files[0], &parseOpts)
 		}
 		if err != nil {
+			spin.Stop()
 			fmt.Fprintf(os.Stderr, "Error parsing %s: %v\n", opts.Files[0], err)
 			os.Exit(1)
 		}
+		spin.Done(fmt.Sprintf("Parsed %d components", len(comps)))
 
 		// Normalize components
+		spin.Start("Analyzing...")
 		comps = sbom.NormalizeComponents(comps)
-
 		stats := analysis.ComputeStats(comps)
+		spin.Done("Analysis complete")
 
 		// Interactive mode
 		if opts.Interactive {
@@ -111,24 +118,33 @@ func main() {
 
 	// Two file mode - diff
 	file1, file2 := opts.Files[0], opts.Files[1]
+	spin := progress.New(opts.Format != "" && opts.Format != "text")
 
+	spin.Start("Parsing first SBOM...")
 	comps1, err := parseFileWithOptions(file1, &parseOpts)
 	if err != nil {
+		spin.Stop()
 		fmt.Fprintf(os.Stderr, "Error parsing %s: %v\n", file1, err)
 		os.Exit(1)
 	}
+	spin.Done(fmt.Sprintf("Parsed %d components", len(comps1)))
 
+	spin.Start("Parsing second SBOM...")
 	comps2, err := parseFileWithOptions(file2, &parseOpts)
 	if err != nil {
+		spin.Stop()
 		fmt.Fprintf(os.Stderr, "Error parsing %s: %v\n", file2, err)
 		os.Exit(1)
 	}
+	spin.Done(fmt.Sprintf("Parsed %d components", len(comps2)))
 
 	// Normalize components
+	spin.Start("Comparing SBOMs...")
 	comps1 = sbom.NormalizeComponents(comps1)
 	comps2 = sbom.NormalizeComponents(comps2)
 
 	result := analysis.DiffComponents(comps1, comps2)
+	spin.Done("Comparison complete")
 
 	// Policy evaluation
 	var violations []policy.Violation
