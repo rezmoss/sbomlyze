@@ -12,6 +12,16 @@ let loadingMore = false;
 let searchTotal = 0;
 let searchResultCount = 0;
 
+// Filesystem state
+let fsCurrentPath = '/';
+let fsSearchQuery = '';
+let fsEntries = [];
+let fsTotal = 0;
+let fsOffset = 0;
+let fsSelectedPath = null;
+let fsAvailable = false;
+let fsLoadingMore = false;
+
 // DOM Elements
 const dropZone = document.getElementById('drop-zone');
 const fileInput = document.getElementById('file-input');
@@ -21,6 +31,15 @@ const detailContainer = document.getElementById('detail-container');
 const statsContainer = document.getElementById('stats-container');
 const searchInput = document.getElementById('search-input');
 const uploadNewBtn = document.getElementById('upload-new');
+const filesystemBtn = document.getElementById('filesystem-btn');
+const filesystemView = document.getElementById('filesystem-view');
+const contentGrid = document.querySelector('.content-grid');
+const fsBreadcrumbs = document.getElementById('fs-breadcrumbs');
+const fsSearchInput = document.getElementById('fs-search-input');
+const fsBackBtn = document.getElementById('fs-back-btn');
+const fsListContainer = document.getElementById('fs-list-container');
+const fsInfoContainer = document.getElementById('fs-info-container');
+const fsCount = document.getElementById('fs-count');
 
 // Event Listeners
 dropZone.addEventListener('click', () => fileInput.click());
@@ -30,6 +49,9 @@ dropZone.addEventListener('drop', handleDrop);
 fileInput.addEventListener('change', handleFileSelect);
 searchInput.addEventListener('input', debounce(handleSearch, 200));
 uploadNewBtn.addEventListener('click', resetUI);
+filesystemBtn.addEventListener('click', showFilesystemView);
+fsBackBtn.addEventListener('click', showComponentsView);
+fsSearchInput.addEventListener('input', debounce(handleFsSearch, 200));
 
 function handleDragOver(e) {
     e.preventDefault();
@@ -99,6 +121,15 @@ function uploadFile(file) {
 
                 dropZone.classList.add('hidden');
                 mainContent.classList.remove('hidden');
+
+                // Show filesystem button if file data is available
+                if (result.filesCount && result.filesCount > 0) {
+                    fsAvailable = true;
+                    filesystemBtn.classList.remove('hidden');
+                } else {
+                    fsAvailable = false;
+                    filesystemBtn.classList.add('hidden');
+                }
 
                 Promise.all([loadTree(), loadStats()]);
             } catch (e) {
@@ -723,6 +754,351 @@ function filterTreeLocal(nodes, query) {
     return results;
 }
 
+// ============================================================
+// Filesystem Browser
+// ============================================================
+
+function showFilesystemView() {
+    contentGrid.classList.add('hidden');
+    filesystemView.classList.remove('hidden');
+    filesystemBtn.classList.add('active');
+    fsCurrentPath = '/';
+    fsSearchQuery = '';
+    fsSearchInput.value = '';
+    fsOffset = 0;
+    fsSelectedPath = null;
+    fsInfoContainer.innerHTML = '<p class="placeholder">Select a file to view details</p>';
+    loadFilesystemEntries();
+
+    // Attach scroll listener for infinite scroll
+    fsListContainer.removeEventListener('scroll', handleFsScroll);
+    fsListContainer.addEventListener('scroll', handleFsScroll);
+}
+
+function showComponentsView() {
+    filesystemView.classList.add('hidden');
+    contentGrid.classList.remove('hidden');
+    filesystemBtn.classList.remove('active');
+}
+
+function handleFsScroll() {
+    if (fsLoadingMore) return;
+    if (fsOffset >= fsTotal) return;
+
+    const { scrollTop, scrollHeight, clientHeight } = fsListContainer;
+    if (scrollTop + clientHeight >= scrollHeight - 100) {
+        loadMoreFsEntries();
+    }
+}
+
+async function loadFilesystemEntries() {
+    try {
+        let url = `/api/filesystem?path=${encodeURIComponent(fsCurrentPath)}&offset=0&limit=100`;
+        if (fsSearchQuery) {
+            url = `/api/filesystem?q=${encodeURIComponent(fsSearchQuery)}&offset=0&limit=100`;
+        }
+
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Failed to load filesystem');
+
+        const data = await response.json();
+        fsEntries = data.entries || [];
+        fsTotal = data.total || 0;
+        fsOffset = fsEntries.length;
+
+        renderFsList();
+        renderFsBreadcrumbs(data.breadcrumbs || []);
+        fsCount.textContent = `(${fsTotal.toLocaleString()})`;
+    } catch (error) {
+        console.error('Load filesystem error:', error);
+        fsListContainer.innerHTML = '<p class="placeholder">Failed to load files</p>';
+    }
+}
+
+async function loadMoreFsEntries() {
+    if (fsLoadingMore || fsOffset >= fsTotal) return;
+    fsLoadingMore = true;
+
+    const loadMoreEl = document.createElement('div');
+    loadMoreEl.className = 'load-more';
+    loadMoreEl.textContent = 'Loading more...';
+    fsListContainer.appendChild(loadMoreEl);
+
+    try {
+        let url = `/api/filesystem?path=${encodeURIComponent(fsCurrentPath)}&offset=${fsOffset}&limit=100`;
+        if (fsSearchQuery) {
+            url = `/api/filesystem?q=${encodeURIComponent(fsSearchQuery)}&offset=${fsOffset}&limit=100`;
+        }
+
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Failed to load more');
+
+        const data = await response.json();
+        const newEntries = data.entries || [];
+        fsEntries = fsEntries.concat(newEntries);
+        fsOffset += newEntries.length;
+
+        loadMoreEl.remove();
+        appendFsEntries(newEntries);
+    } catch (error) {
+        console.error('Load more fs error:', error);
+        loadMoreEl.textContent = 'Failed to load more';
+    } finally {
+        fsLoadingMore = false;
+    }
+}
+
+function handleFsNavigate(path) {
+    fsCurrentPath = path;
+    fsSearchQuery = '';
+    fsSearchInput.value = '';
+    fsOffset = 0;
+    fsSelectedPath = null;
+    fsInfoContainer.innerHTML = '<p class="placeholder">Select a file to view details</p>';
+    loadFilesystemEntries();
+}
+
+function handleFsSearch() {
+    fsSearchQuery = fsSearchInput.value.trim();
+    fsOffset = 0;
+    loadFilesystemEntries();
+}
+
+function handleFsSelect(path, isDir) {
+    if (isDir) {
+        handleFsNavigate(path);
+    } else {
+        fsSelectedPath = path;
+        // Highlight selected entry
+        fsListContainer.querySelectorAll('.fs-entry').forEach(el => {
+            el.classList.toggle('selected', el.dataset.path === path);
+        });
+        loadFsInfo(path);
+    }
+}
+
+async function loadFsInfo(filePath) {
+    try {
+        const response = await fetch(`/api/filesystem/info?path=${encodeURIComponent(filePath)}`);
+        if (!response.ok) throw new Error('Failed to load file info');
+
+        const data = await response.json();
+        renderFsInfo(data);
+    } catch (error) {
+        console.error('Load file info error:', error);
+        fsInfoContainer.innerHTML = '<p class="placeholder">Failed to load file info</p>';
+    }
+}
+
+function renderFsList() {
+    if (fsEntries.length === 0) {
+        if (fsSearchQuery) {
+            fsListContainer.innerHTML = '<p class="placeholder">No matching files</p>';
+        } else {
+            fsListContainer.innerHTML = '<p class="placeholder">Empty directory</p>';
+        }
+        return;
+    }
+
+    const html = fsEntries.map(entry => renderFsEntry(entry)).join('');
+    fsListContainer.innerHTML = html;
+    attachFsEntryHandlers();
+}
+
+function appendFsEntries(entries) {
+    const html = entries.map(entry => renderFsEntry(entry)).join('');
+    const temp = document.createElement('div');
+    temp.innerHTML = html;
+
+    while (temp.firstChild) {
+        const child = temp.firstChild;
+        fsListContainer.appendChild(child);
+    }
+    attachFsEntryHandlers();
+}
+
+function attachFsEntryHandlers() {
+    fsListContainer.querySelectorAll('.fs-entry').forEach(el => {
+        el.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const path = el.dataset.path;
+            const isDir = el.dataset.isDir === 'true';
+            handleFsSelect(path, isDir);
+        });
+    });
+}
+
+function renderFsEntry(entry) {
+    const isSelected = entry.path === fsSelectedPath;
+    const icon = entry.isDir ? getFolderIcon() : getFileIcon();
+    const typeBadge = entry.fileType ? `<span class="fs-type">${escapeHtml(entry.fileType)}</span>` : '';
+    const mimeBadge = entry.mimeType ? `<span class="fs-mime">${escapeHtml(entry.mimeType)}</span>` : '';
+    const sizeStr = !entry.isDir && entry.size > 0 ? `<span class="fs-size">${formatFileSize(entry.size)}</span>` : '';
+    const childCount = entry.isDir && entry.children > 0 ? `<span class="fs-children">${entry.children} items</span>` : '';
+
+    return `
+        <div class="fs-entry ${isSelected ? 'selected' : ''}" data-path="${escapeHtml(entry.path)}" data-is-dir="${entry.isDir}">
+            <span class="fs-icon">${icon}</span>
+            <span class="fs-name">${escapeHtml(entry.name)}</span>
+            ${typeBadge}
+            ${mimeBadge}
+            ${sizeStr}
+            ${childCount}
+        </div>
+    `;
+}
+
+function renderFsBreadcrumbs(breadcrumbs) {
+    if (!breadcrumbs || breadcrumbs.length === 0) {
+        fsBreadcrumbs.innerHTML = '';
+        return;
+    }
+
+    const html = breadcrumbs.map((crumb, i) => {
+        const isLast = i === breadcrumbs.length - 1;
+        if (isLast) {
+            return `<span class="fs-crumb active">${escapeHtml(crumb.name)}</span>`;
+        }
+        return `<span class="fs-crumb clickable" data-path="${escapeHtml(crumb.path)}">${escapeHtml(crumb.name)}</span><span class="fs-crumb-sep">/</span>`;
+    }).join('');
+
+    fsBreadcrumbs.innerHTML = html;
+
+    // Attach click handlers to breadcrumbs
+    fsBreadcrumbs.querySelectorAll('.fs-crumb.clickable').forEach(el => {
+        el.addEventListener('click', () => {
+            handleFsNavigate(el.dataset.path);
+        });
+    });
+}
+
+function renderFsInfo(data) {
+    const file = data.file;
+    const components = data.components || [];
+
+    let html = '';
+
+    // File path
+    html += `
+        <div class="fs-info-section">
+            <h3>Path</h3>
+            <div class="detail-value" style="font-family: monospace; font-size: 0.85rem;">${escapeHtml(file.path)}</div>
+        </div>
+    `;
+
+    // File type & MIME
+    if (file.fileType || file.mimeType) {
+        html += '<div class="fs-info-section">';
+        if (file.fileType) {
+            html += `<h3>Type</h3><div class="detail-value">${escapeHtml(file.fileType)}</div>`;
+        }
+        if (file.mimeType) {
+            html += `<h3>MIME Type</h3><div class="detail-value">${escapeHtml(file.mimeType)}</div>`;
+        }
+        html += '</div>';
+    }
+
+    // Mode, size, user/group
+    if (file.mode || file.size || file.userID || file.groupID) {
+        html += '<div class="fs-info-section"><h3>Attributes</h3>';
+        if (file.mode) {
+            html += `<div class="fs-attr"><span class="fs-attr-label">Mode:</span> <span class="fs-attr-value">${formatFileMode(file.mode)}</span></div>`;
+        }
+        if (file.size) {
+            html += `<div class="fs-attr"><span class="fs-attr-label">Size:</span> <span class="fs-attr-value">${formatFileSize(file.size)}</span></div>`;
+        }
+        if (file.userID !== undefined && file.userID !== 0) {
+            html += `<div class="fs-attr"><span class="fs-attr-label">UID:</span> <span class="fs-attr-value">${file.userID}</span></div>`;
+        }
+        if (file.groupID !== undefined && file.groupID !== 0) {
+            html += `<div class="fs-attr"><span class="fs-attr-label">GID:</span> <span class="fs-attr-value">${file.groupID}</span></div>`;
+        }
+        html += '</div>';
+    }
+
+    // Layer ID
+    if (file.layerID) {
+        html += `
+            <div class="fs-info-section">
+                <h3>Layer ID</h3>
+                <div class="detail-value" style="font-family: monospace; font-size: 0.8rem; word-break: break-all;">${escapeHtml(file.layerID)}</div>
+            </div>
+        `;
+    }
+
+    // Digests
+    if (file.digests && file.digests.length > 0) {
+        html += `
+            <div class="fs-info-section">
+                <h3>Digests</h3>
+                <ul class="detail-list">
+                    ${file.digests.map(d => `
+                        <li class="hash-item">
+                            <span class="hash-algo">${escapeHtml(d.algorithm)}</span>
+                            <span class="hash-value">${escapeHtml(d.value)}</span>
+                        </li>
+                    `).join('')}
+                </ul>
+            </div>
+        `;
+    }
+
+    // Component references
+    if (components.length > 0) {
+        html += `
+            <div class="fs-info-section">
+                <h3>Components (${components.length})</h3>
+                <div class="fs-comp-list">
+                    ${components.map(comp => `
+                        <div class="fs-comp-ref">
+                            <div class="fs-comp-header">
+                                <span class="fs-comp-name">${escapeHtml(comp.name)}</span>
+                                <span class="fs-comp-version">${escapeHtml(comp.version || '')}</span>
+                            </div>
+                            <div class="fs-comp-meta">
+                                ${comp.type ? `<span class="fs-type">${escapeHtml(comp.type)}</span>` : ''}
+                                <span class="fs-rel-badge fs-rel-${comp.relationship}">${escapeHtml(comp.relationship)}</span>
+                            </div>
+                            ${comp.licenses && comp.licenses.length > 0 ? `<div class="fs-comp-licenses">${comp.licenses.map(l => escapeHtml(l)).join(', ')}</div>` : ''}
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    } else {
+        html += `
+            <div class="fs-info-section">
+                <h3>Components</h3>
+                <p class="placeholder" style="padding: 10px;">No component references</p>
+            </div>
+        `;
+    }
+
+    fsInfoContainer.innerHTML = html;
+}
+
+// Utility functions for filesystem
+function formatFileSize(bytes) {
+    if (bytes === 0) return '0 B';
+    const units = ['B', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(1024));
+    const size = (bytes / Math.pow(1024, i)).toFixed(i > 0 ? 1 : 0);
+    return size + ' ' + units[i];
+}
+
+function formatFileMode(mode) {
+    // Show octal representation
+    return '0' + (mode & 0o7777).toString(8);
+}
+
+function getFolderIcon() {
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>';
+}
+
+function getFileIcon() {
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14,2 14,8 20,8"></polyline></svg>';
+}
+
 function resetUI() {
     mainContent.classList.add('hidden');
     dropZone.classList.remove('hidden');
@@ -757,6 +1133,22 @@ function resetUI() {
     searchResultCount = 0;
     searchInput.value = '';
     detailContainer.innerHTML = '<p class="placeholder">Select a component to view details</p>';
+
+    // Reset filesystem state
+    fsCurrentPath = '/';
+    fsSearchQuery = '';
+    fsEntries = [];
+    fsTotal = 0;
+    fsOffset = 0;
+    fsSelectedPath = null;
+    fsAvailable = false;
+    fsLoadingMore = false;
+    filesystemBtn.classList.add('hidden');
+    filesystemBtn.classList.remove('active');
+    filesystemView.classList.add('hidden');
+    contentGrid.classList.remove('hidden');
+    fsInfoContainer.innerHTML = '<p class="placeholder">Select a file to view details</p>';
+    fsSearchInput.value = '';
 }
 
 function escapeHtml(str) {
