@@ -17,7 +17,19 @@
         {
           "cpe": "cpe:2.3:a:busybox:busybox:1.36.1-r15:*:*:*:*:*:*:*"
         }
-      ]
+      ],
+      "metadataType": "rpm-db-entry",
+      "metadata": {
+        "files": [
+          {
+            "path": "/usr/bin/busybox",
+            "digest": {
+              "algorithm": "sha256",
+              "value": "abc123def456"
+            }
+          }
+        ]
+      }
     },
     {
       "id": "def456",
@@ -36,7 +48,16 @@
         {
           "cpe": "cpe:2.3:a:musl:musl:1.2.4-r2:*:*:*:*:*:*:*"
         }
-      ]
+      ],
+      "metadataType": "java-archive",
+      "metadata": {
+        "digest": [
+          {
+            "algorithm": "sha1",
+            "value": "deadbeef1234"
+          }
+        ]
+      }
     },
     {
       "id": "ghi789",

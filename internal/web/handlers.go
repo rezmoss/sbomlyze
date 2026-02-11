@@ -88,8 +88,11 @@ func handleUpload(w http.ResponseWriter, r *http.Request) {
 	stats := analysis.ComputeStats(comps)
 	depGraph := analysis.BuildDependencyGraph(comps)
 
-	// Extract relationship statistics (Syft format)
-	relationships := extractRelationships(data)
+	// Use relationship counts from parsed SBOMInfo, fall back to raw extraction
+	relationships := info.RelationshipCounts
+	if relationships == nil {
+		relationships = extractRelationships(data)
+	}
 
 	// Store in server state
 	state.mu.Lock()

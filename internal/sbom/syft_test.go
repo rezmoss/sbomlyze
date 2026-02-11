@@ -181,6 +181,27 @@ func TestParseSyftWithInfo_Source(t *testing.T) {
 	}
 }
 
+func TestParseSyftWithInfo_Descriptor(t *testing.T) {
+	data := []byte(`{
+		"artifacts": [],
+		"descriptor": {"name": "syft", "version": "0.98.0"},
+		"schema": {"version": "16.0.15", "url": "https://example.com/schema.json"}
+	}`)
+	_, info, err := ParseSyftWithInfo(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if info.ToolName != "syft" {
+		t.Errorf("expected ToolName=syft, got %q", info.ToolName)
+	}
+	if info.ToolVersion != "0.98.0" {
+		t.Errorf("expected ToolVersion=0.98.0, got %q", info.ToolVersion)
+	}
+	if info.SchemaVersion != "16.0.15" {
+		t.Errorf("expected SchemaVersion=16.0.15, got %q", info.SchemaVersion)
+	}
+}
+
 func TestParseSyftWithInfo_DistroObject(t *testing.T) {
 	data := []byte(`{
 		"artifacts": [],
@@ -195,6 +216,29 @@ func TestParseSyftWithInfo_DistroObject(t *testing.T) {
 	}
 	if info.OSVersion != "22.04" {
 		t.Errorf("expected OSVersion=22.04, got %q", info.OSVersion)
+	}
+}
+
+func TestParseSyftWithInfo_DistroExtraFields(t *testing.T) {
+	data := []byte(`{
+		"artifacts": [],
+		"distro": {
+			"name": "Amazon Linux",
+			"prettyName": "Amazon Linux 2",
+			"version": "2",
+			"id": "amzn",
+			"idLike": ["centos", "rhel", "fedora"]
+		}
+	}`)
+	_, info, err := ParseSyftWithInfo(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if info.OSPrettyName != "Amazon Linux 2" {
+		t.Errorf("expected OSPrettyName='Amazon Linux 2', got %q", info.OSPrettyName)
+	}
+	if len(info.OSIDLike) != 3 || info.OSIDLike[0] != "centos" {
+		t.Errorf("expected OSIDLike=[centos rhel fedora], got %v", info.OSIDLike)
 	}
 }
 
@@ -260,6 +304,60 @@ func TestParseSyftWithInfo_NoDistro(t *testing.T) {
 	}
 	if info.OSVersion != "" {
 		t.Errorf("expected empty OSVersion, got %q", info.OSVersion)
+	}
+}
+
+func TestParseSyft_Hashes(t *testing.T) {
+	data, err := os.ReadFile(testdataPath("syft-sample.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	comps, err := ParseSyft(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, c := range comps {
+		switch c.Name {
+		case "busybox":
+			// rpm-db-entry: metadata.files[0].digest
+			if v, ok := c.Hashes["SHA256"]; !ok || v != "abc123def456" {
+				t.Errorf("busybox: expected SHA256=abc123def456, got %v", c.Hashes)
+			}
+		case "musl":
+			// java-archive: metadata.digest[]
+			if v, ok := c.Hashes["SHA1"]; !ok || v != "deadbeef1234" {
+				t.Errorf("musl: expected SHA1=deadbeef1234, got %v", c.Hashes)
+			}
+		case "alpine-baselayout":
+			// no metadata — hashes should be empty
+			if len(c.Hashes) != 0 {
+				t.Errorf("alpine-baselayout: expected no hashes, got %v", c.Hashes)
+			}
+		}
+	}
+}
+
+func TestParseSyft_HashesNPM(t *testing.T) {
+	data := []byte(`{
+		"artifacts": [{
+			"name": "lodash",
+			"version": "4.17.21",
+			"purl": "pkg:npm/lodash@4.17.21",
+			"metadataType": "javascript-npm-package-lock-entry",
+			"metadata": {
+				"integrity": "sha512-WFN04846+u76oB43base64data"
+			}
+		}]
+	}`)
+	comps, err := ParseSyft(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(comps) != 1 {
+		t.Fatalf("expected 1 component, got %d", len(comps))
+	}
+	if v, ok := comps[0].Hashes["SHA512"]; !ok || v != "WFN04846+u76oB43base64data" {
+		t.Errorf("expected SHA512 hash from npm integrity, got %v", comps[0].Hashes)
 	}
 }
 

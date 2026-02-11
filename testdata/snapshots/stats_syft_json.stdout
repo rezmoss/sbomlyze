@@ -9,8 +9,8 @@
       "MIT": 1
     },
     "without_license": 0,
-    "with_hashes": 0,
-    "without_hashes": 3,
+    "with_hashes": 2,
+    "without_hashes": 1,
     "total_dependencies": 2,
     "with_dependencies": 1,
     "duplicate_count": 0,
