@@ -5,6 +5,10 @@
       {
         "icon": "📦",
         "message": "Dominated by npm: 2 of 2 packages (100.0%)"
+      },
+      {
+        "icon": "📜",
+        "message": "License profile: 100% permissive"
       }
     ]
   },

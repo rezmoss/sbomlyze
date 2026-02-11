@@ -66,6 +66,10 @@
       {
         "icon": "🔄",
         "message": "0 version changes among 3 shared packages — no actual upgrades"
+      },
+      {
+        "icon": "⚠️",
+        "message": "Integrity drift (1 total): 1 npm (review recommended)"
       }
     ]
   },

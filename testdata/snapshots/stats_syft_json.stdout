@@ -13,6 +13,14 @@
         "message": "Dominated by apk: 3 of 3 packages (100.0%)"
       },
       {
+        "icon": "🔗",
+        "message": "Relationships: 2 dependency"
+      },
+      {
+        "icon": "📜",
+        "message": "License profile: 33% permissive, 67% copyleft"
+      },
+      {
         "icon": "🔍",
         "message": "Top catalogers: apkdb-cataloger (3)"
       }

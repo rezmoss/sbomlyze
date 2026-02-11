@@ -19,6 +19,7 @@ Data Quality:
 
 Key Findings:
   🔄 0 version changes among 3 shared packages — no actual upgrades
+  ⚠️ Integrity drift (1 total): 1 npm (review recommended)
 
 📊 Drift Summary:
   ⚠️  Integrity drift: 1 components (hash changed without version change!)

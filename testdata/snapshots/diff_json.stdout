@@ -67,6 +67,10 @@
       {
         "icon": "🔄",
         "message": "1 version upgrades among 2 shared packages"
+      },
+      {
+        "icon": "📜",
+        "message": "License shift: permissive +1"
       }
     ]
   },

@@ -62,7 +62,12 @@
     }
   },
   "findings": {
-    "findings": null
+    "findings": [
+      {
+        "icon": "📉",
+        "message": "Attack surface: -1 packages (-33.3%)"
+      }
+    ]
   },
   "diff": {
     "added": [
