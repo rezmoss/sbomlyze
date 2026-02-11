@@ -19,6 +19,151 @@ type KeyFindings struct {
 	Findings []Finding `json:"findings"`
 }
 
+// ComputeSingleFindings analyzes a single SBOM and produces key insights
+func ComputeSingleFindings(stats Stats, info sbom.SBOMInfo, comps []sbom.Component) KeyFindings {
+	var findings []Finding
+
+	findings = append(findings, detectSingleOS(info)...)
+	findings = append(findings, detectDominantType(stats)...)
+	findings = append(findings, detectDataQuality(stats)...)
+	findings = append(findings, detectDuplicateWarning(stats)...)
+	findings = append(findings, detectCatalogerBreakdown(stats)...)
+
+	return KeyFindings{Findings: findings}
+}
+
+// detectSingleOS reports OS/distro for a single SBOM
+func detectSingleOS(info sbom.SBOMInfo) []Finding {
+	os := info.OSPrettyName
+	if os == "" {
+		os = info.OSName
+	}
+	if os == "" {
+		return nil
+	}
+	msg := fmt.Sprintf("OS/Distro: %s", os)
+	if info.OSVersion != "" && !strings.Contains(os, info.OSVersion) {
+		msg = fmt.Sprintf("OS/Distro: %s %s", os, info.OSVersion)
+	}
+	return []Finding{{Icon: "\U0001f4bb", Message: msg}}
+}
+
+// detectDominantType reports the top ecosystem(s) by package count
+func detectDominantType(stats Stats) []Finding {
+	if len(stats.ByType) == 0 {
+		return nil
+	}
+
+	total := stats.TotalComponents
+	if total == 0 {
+		return nil
+	}
+
+	types := SortedByValue(stats.ByType)
+	// Report top type if it dominates (>60%)
+	topType := types[0]
+	topCount := stats.ByType[topType]
+	pct := float64(topCount) / float64(total) * 100
+
+	if pct >= 60.0 {
+		return []Finding{{
+			Icon:    "\U0001f4e6",
+			Message: fmt.Sprintf("Dominated by %s: %s of %s packages (%.1f%%)", topType, fmtCount(topCount), fmtCount(total), pct),
+		}}
+	}
+
+	// Otherwise summarize top 3
+	limit := len(types)
+	if limit > 3 {
+		limit = 3
+	}
+	parts := make([]string, limit)
+	for i := 0; i < limit; i++ {
+		t := types[i]
+		parts[i] = fmt.Sprintf("%s (%s)", t, fmtCount(stats.ByType[t]))
+	}
+	remaining := len(types) - limit
+	msg := fmt.Sprintf("Top ecosystems: %s", strings.Join(parts, ", "))
+	if remaining > 0 {
+		msg += fmt.Sprintf(" + %d more", remaining)
+	}
+	return []Finding{{Icon: "\U0001f4e6", Message: msg}}
+}
+
+// detectDataQuality highlights significant gaps in data quality
+func detectDataQuality(stats Stats) []Finding {
+	if stats.TotalComponents == 0 {
+		return nil
+	}
+
+	var findings []Finding
+	total := stats.TotalComponents
+
+	// License coverage
+	licensePct := float64(total-stats.WithoutLicense) / float64(total) * 100
+	if licensePct < 50.0 {
+		findings = append(findings, Finding{
+			Icon:    "\u26a0\ufe0f",
+			Message: fmt.Sprintf("Low license coverage: %.1f%% (%d of %d missing)", licensePct, stats.WithoutLicense, total),
+		})
+	}
+
+	// Hash coverage
+	hashPct := float64(stats.WithHashes) / float64(total) * 100
+	if hashPct < 50.0 {
+		findings = append(findings, Finding{
+			Icon:    "\u26a0\ufe0f",
+			Message: fmt.Sprintf("Low hash coverage: %.1f%% (%d of %d missing)", hashPct, stats.WithoutHashes, total),
+		})
+	}
+
+	// PURL coverage
+	purlPct := float64(stats.WithPURL) / float64(total) * 100
+	if purlPct < 80.0 {
+		findings = append(findings, Finding{
+			Icon:    "\u26a0\ufe0f",
+			Message: fmt.Sprintf("Low PURL coverage: %.1f%% (%d of %d missing)", purlPct, stats.WithoutPURL, total),
+		})
+	}
+
+	return findings
+}
+
+// detectDuplicateWarning warns about duplicates in a single SBOM
+func detectDuplicateWarning(stats Stats) []Finding {
+	if stats.DuplicateCount == 0 {
+		return nil
+	}
+	return []Finding{{
+		Icon:    "\u26a0\ufe0f",
+		Message: fmt.Sprintf("%d duplicate component groups detected", stats.DuplicateCount),
+	}}
+}
+
+// detectCatalogerBreakdown summarizes which scanners/catalogers contributed
+func detectCatalogerBreakdown(stats Stats) []Finding {
+	if len(stats.ByFoundBy) == 0 {
+		return nil
+	}
+
+	catalogers := SortedByValue(stats.ByFoundBy)
+	limit := len(catalogers)
+	if limit > 3 {
+		limit = 3
+	}
+	parts := make([]string, limit)
+	for i := 0; i < limit; i++ {
+		c := catalogers[i]
+		parts[i] = fmt.Sprintf("%s (%s)", c, fmtCount(stats.ByFoundBy[c]))
+	}
+	remaining := len(catalogers) - limit
+	msg := fmt.Sprintf("Top catalogers: %s", strings.Join(parts, ", "))
+	if remaining > 0 {
+		msg += fmt.Sprintf(" + %d more", remaining)
+	}
+	return []Finding{{Icon: "\U0001f50d", Message: msg}}
+}
+
 // ComputeKeyFindings analyzes a DiffResult and DiffOverview to produce key insights
 func ComputeKeyFindings(result DiffResult, overview DiffOverview) KeyFindings {
 	var findings []Finding

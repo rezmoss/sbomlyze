@@ -1,4 +1,12 @@
 
+Scan Context:
+  Source Type:        image
+  Source:             alpine:latest
+
+Key Findings:
+  📦 Dominated by apk: 3 of 3 packages (100.0%)
+  🔍 Top catalogers: apkdb-cataloger (3)
+
 📦 SBOM Statistics
 ==================
 

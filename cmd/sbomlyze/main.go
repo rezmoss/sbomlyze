@@ -62,17 +62,8 @@ func main() {
 	if len(opts.Files) == 1 {
 		spin := progress.New(opts.JSONOutput || opts.Interactive)
 
-		// For interactive mode, we need SBOM info as well
-		var comps []sbom.Component
-		var sbomInfo sbom.SBOMInfo
-		var err error
-
 		spin.Start("Parsing SBOM...")
-		if opts.Interactive {
-			comps, sbomInfo, err = parseFileWithOptionsAndInfo(opts.Files[0], &parseOpts)
-		} else {
-			comps, err = parseFileWithOptions(opts.Files[0], &parseOpts)
-		}
+		comps, sbomInfo, err := parseFileWithOptionsAndInfo(opts.Files[0], &parseOpts)
 		if err != nil {
 			spin.Stop()
 			fmt.Fprintf(os.Stderr, "Error parsing %s: %v\n", opts.Files[0], err)
@@ -83,6 +74,7 @@ func main() {
 		spin.Start("Analyzing...")
 		comps = sbom.NormalizeComponents(comps)
 		stats := analysis.ComputeStats(comps)
+		findings := analysis.ComputeSingleFindings(stats, sbomInfo, comps)
 		spin.Done("Analysis complete")
 
 		if opts.Interactive {
@@ -97,21 +89,27 @@ func main() {
 		defer p.Stop()
 
 		if opts.JSONOutput {
-			output := struct {
+			out := struct {
+				Info     sbom.SBOMInfo      `json:"info"`
+				Findings analysis.KeyFindings `json:"findings"`
 				Stats    analysis.Stats     `json:"stats"`
 				Warnings []cli.ParseWarning `json:"warnings,omitempty"`
 			}{
+				Info:     sbomInfo,
+				Findings: findings,
 				Stats:    stats,
 				Warnings: parseOpts.Warnings,
 			}
 			enc := json.NewEncoder(os.Stdout)
 			enc.SetIndent("", "  ")
-			if err := enc.Encode(output); err != nil {
+			if err := enc.Encode(out); err != nil {
 				p.Stop()
 				fmt.Fprintf(os.Stderr, "Error encoding JSON: %v\n", err)
 				os.Exit(1)
 			}
 		} else {
+			output.PrintSingleScanContext(sbomInfo)
+			output.PrintKeyFindings(findings)
 			analysis.PrintStats(stats)
 			cli.PrintWarnings(parseOpts.Warnings)
 		}
@@ -245,19 +243,6 @@ func main() {
 	if hasDiff || hasPolicyErrors {
 		os.Exit(1)
 	}
-}
-
-func parseFileWithOptions(path string, opts *cli.ParseOptions) ([]sbom.Component, error) {
-	comps, err := sbom.ParseFile(path)
-	if err != nil {
-		if opts.Strict {
-			return nil, err
-		}
-		// In tolerant mode, add warning and return empty
-		opts.AddWarning(path, err.Error(), "")
-		return []sbom.Component{}, nil
-	}
-	return comps, nil
 }
 
 func parseFileWithOptionsAndInfo(path string, opts *cli.ParseOptions) ([]sbom.Component, sbom.SBOMInfo, error) {

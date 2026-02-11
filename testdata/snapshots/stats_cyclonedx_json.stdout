@@ -1,4 +1,17 @@
 {
+  "info": {},
+  "findings": {
+    "findings": [
+      {
+        "icon": "📦",
+        "message": "Dominated by npm: 3 of 3 packages (100.0%)"
+      },
+      {
+        "icon": "⚠️",
+        "message": "Low hash coverage: 33.3% (2 of 3 missing)"
+      }
+    ]
+  },
   "stats": {
     "total_components": 3,
     "by_type": {

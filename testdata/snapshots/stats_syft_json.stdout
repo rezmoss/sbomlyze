@@ -1,4 +1,23 @@
 {
+  "info": {
+    "source_type": "image",
+    "source_name": "alpine:latest",
+    "relationship_counts": {
+      "dependency-of": 2
+    }
+  },
+  "findings": {
+    "findings": [
+      {
+        "icon": "📦",
+        "message": "Dominated by apk: 3 of 3 packages (100.0%)"
+      },
+      {
+        "icon": "🔍",
+        "message": "Top catalogers: apkdb-cataloger (3)"
+      }
+    ]
+  },
   "stats": {
     "total_components": 3,
     "by_type": {

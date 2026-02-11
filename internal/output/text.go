@@ -7,6 +7,7 @@ import (
 
 	"github.com/rezmoss/sbomlyze/internal/analysis"
 	"github.com/rezmoss/sbomlyze/internal/policy"
+	"github.com/rezmoss/sbomlyze/internal/sbom"
 )
 
 // formatFileSize formats bytes into a human-readable string
@@ -116,6 +117,35 @@ func PrintDiffOverview(overview analysis.DiffOverview) {
 		formatPct(b.Stats.WithCPEs, b.Stats.TotalComponents),
 		formatPct(a.Stats.WithCPEs, a.Stats.TotalComponents))
 	fmt.Printf("%s\n", sep)
+}
+
+// PrintSingleScanContext prints scan context for a single SBOM
+func PrintSingleScanContext(info sbom.SBOMInfo) {
+	hasAny := info.SchemaVersion != "" || info.SearchScope != "" || info.ToolName != "" || info.SourceType != ""
+	if !hasAny {
+		return
+	}
+
+	fmt.Printf("\nScan Context:\n")
+	if info.ToolName != "" {
+		tool := info.ToolName
+		if info.ToolVersion != "" {
+			tool += " " + info.ToolVersion
+		}
+		fmt.Printf("  %-20s%s\n", "Tool:", tool)
+	}
+	if info.SchemaVersion != "" {
+		fmt.Printf("  %-20s%s\n", "Schema:", info.SchemaVersion)
+	}
+	if info.SearchScope != "" {
+		fmt.Printf("  %-20s%s\n", "Scan Scope:", info.SearchScope)
+	}
+	if info.SourceType != "" {
+		fmt.Printf("  %-20s%s\n", "Source Type:", info.SourceType)
+	}
+	if info.SourceName != "" {
+		fmt.Printf("  %-20s%s\n", "Source:", info.SourceName)
+	}
 }
 
 // PrintScanContext prints the scan context comparison (schema + scope) if available
