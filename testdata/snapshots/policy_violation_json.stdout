@@ -62,6 +62,14 @@
       }
     }
   },
+  "findings": {
+    "findings": [
+      {
+        "icon": "🔄",
+        "message": "1 version upgrades among 2 shared packages"
+      }
+    ]
+  },
   "diff": {
     "added": [
       {

@@ -10,8 +10,8 @@ import (
 	"github.com/rezmoss/sbomlyze/internal/policy"
 )
 
-// GenerateMarkdownWithOverview creates a Markdown report with overview and samples
-func GenerateMarkdownWithOverview(result analysis.DiffResult, violations []policy.Violation, overview analysis.DiffOverview) string {
+// GenerateMarkdownWithOverview creates a Markdown report with overview, findings, and samples
+func GenerateMarkdownWithOverview(result analysis.DiffResult, violations []policy.Violation, overview analysis.DiffOverview, findings analysis.KeyFindings) string {
 	var sb strings.Builder
 
 	sb.WriteString("## 📦 SBOM Diff Report\n\n")
@@ -41,6 +41,31 @@ func GenerateMarkdownWithOverview(result analysis.DiffResult, violations []polic
 		formatPct(b.Stats.WithCPEs, b.Stats.TotalComponents),
 		formatPct(a.Stats.WithCPEs, a.Stats.TotalComponents))
 	sb.WriteString("\n")
+
+	// Scan context (if available)
+	hasSchema := b.Info.SchemaVersion != "" || a.Info.SchemaVersion != ""
+	hasScope := b.Info.SearchScope != "" || a.Info.SearchScope != ""
+	if hasSchema || hasScope {
+		sb.WriteString("### Scan Context\n\n")
+		sb.WriteString("| | Before | After |\n")
+		sb.WriteString("|---|---|---|\n")
+		if hasSchema {
+			fmt.Fprintf(&sb, "| **Schema** | %s | %s |\n", orNone(b.Info.SchemaVersion), orNone(a.Info.SchemaVersion))
+		}
+		if hasScope {
+			fmt.Fprintf(&sb, "| **Scan Scope** | %s | %s |\n", orNone(b.Info.SearchScope), orNone(a.Info.SearchScope))
+		}
+		sb.WriteString("\n")
+	}
+
+	// Key findings
+	if len(findings.Findings) > 0 {
+		sb.WriteString("### Key Findings\n\n")
+		for _, f := range findings.Findings {
+			fmt.Fprintf(&sb, "- %s %s\n", f.Icon, f.Message)
+		}
+		sb.WriteString("\n")
+	}
 
 	// Package samples in collapsible sections
 	if len(result.AddedByType) > 0 {

@@ -147,6 +147,7 @@ func main() {
 	overview := analysis.ComputeDiffOverview(file1, file2, comps1, comps2, info1, info2)
 	result := analysis.DiffComponents(comps1, comps2)
 	analysis.ComputePackageSamples(&result)
+	findings := analysis.ComputeKeyFindings(result, overview)
 	spin.Done("Comparison complete")
 
 	var violations []policy.Violation
@@ -175,11 +176,13 @@ func main() {
 	case "json":
 		out := struct {
 			Overview   analysis.DiffOverview `json:"overview"`
+			Findings   analysis.KeyFindings  `json:"findings"`
 			Diff       analysis.DiffResult   `json:"diff"`
 			Violations []policy.Violation    `json:"violations,omitempty"`
 			Warnings   []cli.ParseWarning    `json:"warnings,omitempty"`
 		}{
 			Overview:   overview,
+			Findings:   findings,
 			Diff:       result,
 			Violations: violations,
 			Warnings:   parseOpts.Warnings,
@@ -213,7 +216,7 @@ func main() {
 		fmt.Println(xml.Header + string(out))
 
 	case "markdown", "md":
-		fmt.Println(output.GenerateMarkdownWithOverview(result, violations, overview))
+		fmt.Println(output.GenerateMarkdownWithOverview(result, violations, overview, findings))
 
 	case "patch":
 		patch := output.GenerateJSONPatch(result)
@@ -227,6 +230,8 @@ func main() {
 
 	default: // text
 		output.PrintDiffOverview(overview)
+		output.PrintScanContext(overview)
+		output.PrintKeyFindings(findings)
 		output.PrintPackageSamples(result.AddedByType, result.RemovedByType)
 		output.PrintTextDiff(result)
 		output.PrintViolations(violations)

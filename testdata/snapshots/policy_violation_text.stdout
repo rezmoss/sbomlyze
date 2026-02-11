@@ -17,6 +17,9 @@ Data Quality:
   CPE Coverage:         0.0%                    0.0%
 ======================================================================
 
+Key Findings:
+  🔄 1 version upgrades among 2 shared packages
+
 + Added by type (up to 5 samples each):
   npm (1 total):
     + new-package 2.0.0

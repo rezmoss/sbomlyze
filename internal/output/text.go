@@ -118,6 +118,39 @@ func PrintDiffOverview(overview analysis.DiffOverview) {
 	fmt.Printf("%s\n", sep)
 }
 
+// PrintScanContext prints the scan context comparison (schema + scope) if available
+func PrintScanContext(overview analysis.DiffOverview) {
+	b := overview.Before.Info
+	a := overview.After.Info
+
+	hasSchema := b.SchemaVersion != "" || a.SchemaVersion != ""
+	hasScope := b.SearchScope != "" || a.SearchScope != ""
+
+	if !hasSchema && !hasScope {
+		return
+	}
+
+	fmt.Printf("\nScan Context:\n")
+	if hasSchema {
+		fmt.Printf("  %-24s%-24s%s\n", "Schema:", orNone(b.SchemaVersion), orNone(a.SchemaVersion))
+	}
+	if hasScope {
+		fmt.Printf("  %-24s%-24s%s\n", "Scan Scope:", orNone(b.SearchScope), orNone(a.SearchScope))
+	}
+}
+
+// PrintKeyFindings prints the computed key findings as a bullet list
+func PrintKeyFindings(findings analysis.KeyFindings) {
+	if len(findings.Findings) == 0 {
+		return
+	}
+
+	fmt.Printf("\nKey Findings:\n")
+	for _, f := range findings.Findings {
+		fmt.Printf("  %s %s\n", f.Icon, f.Message)
+	}
+}
+
 // PrintPackageSamples prints sample packages grouped by type for added/removed
 func PrintPackageSamples(added, removed []analysis.PackageSamplesByType) {
 	if len(added) > 0 {

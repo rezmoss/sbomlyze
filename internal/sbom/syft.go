@@ -25,9 +25,15 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 		} `json:"artifactRelationships"`
 		Source     json.RawMessage `json:"source"` // RawMessage to handle missing/malformed
 		Distro     json.RawMessage `json:"distro"` // RawMessage to handle object or array
+		Files      json.RawMessage `json:"files"`
 		Descriptor struct {
-			Name    string `json:"name"`
-			Version string `json:"version"`
+			Name          string `json:"name"`
+			Version       string `json:"version"`
+			Configuration struct {
+				Search struct {
+					Scope string `json:"scope"`
+				} `json:"search"`
+			} `json:"configuration"`
 		} `json:"descriptor"`
 		Schema struct {
 			Version string `json:"version"`
@@ -41,6 +47,15 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 	info.ToolName = doc.Descriptor.Name
 	info.ToolVersion = doc.Descriptor.Version
 	info.SchemaVersion = doc.Schema.Version
+	info.SearchScope = doc.Descriptor.Configuration.Search.Scope
+
+	// Count files without fully parsing the array
+	if len(doc.Files) > 2 { // non-empty JSON array is at least "[]"
+		var filesArr []json.RawMessage
+		if json.Unmarshal(doc.Files, &filesArr) == nil {
+			info.FilesCount = len(filesArr)
+		}
+	}
 
 	// Parse source flexibly - ignore errors, just use empty values
 	if len(doc.Source) > 0 {

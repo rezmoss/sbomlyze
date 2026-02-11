@@ -61,6 +61,14 @@
       }
     }
   },
+  "findings": {
+    "findings": [
+      {
+        "icon": "🔄",
+        "message": "0 version changes among 3 shared packages — no actual upgrades"
+      }
+    ]
+  },
   "diff": {
     "changed": [
       {

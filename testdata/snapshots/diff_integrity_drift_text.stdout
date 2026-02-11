@@ -17,6 +17,9 @@ Data Quality:
   CPE Coverage:         0.0%                    0.0%
 ======================================================================
 
+Key Findings:
+  🔄 0 version changes among 3 shared packages — no actual upgrades
+
 📊 Drift Summary:
   ⚠️  Integrity drift: 1 components (hash changed without version change!)
 
