@@ -38,7 +38,6 @@ func main() {
 
 	opts := cli.ParseArgs(os.Args)
 
-	// Web server mode
 	if opts.WebServer {
 		port := opts.WebPort
 		if port == 0 {
@@ -81,13 +80,11 @@ func main() {
 		}
 		spin.Done(fmt.Sprintf("Parsed %d components", len(comps)))
 
-		// Normalize components
 		spin.Start("Analyzing...")
 		comps = sbom.NormalizeComponents(comps)
 		stats := analysis.ComputeStats(comps)
 		spin.Done("Analysis complete")
 
-		// Interactive mode
 		if opts.Interactive {
 			if err := tui.Run(comps, stats, sbomInfo); err != nil {
 				fmt.Fprintf(os.Stderr, "Error running interactive mode: %v\n", err)
@@ -143,7 +140,6 @@ func main() {
 	}
 	spin.Done(fmt.Sprintf("Parsed %d components", len(comps2)))
 
-	// Normalize components
 	spin.Start("Comparing SBOMs...")
 	comps1 = sbom.NormalizeComponents(comps1)
 	comps2 = sbom.NormalizeComponents(comps2)
@@ -151,7 +147,6 @@ func main() {
 	result := analysis.DiffComponents(comps1, comps2)
 	spin.Done("Comparison complete")
 
-	// Policy evaluation
 	var violations []policy.Violation
 	if opts.PolicyFile != "" {
 		policyData, err := os.ReadFile(opts.PolicyFile)
@@ -167,7 +162,6 @@ func main() {
 		violations = policy.Evaluate(pol, result)
 	}
 
-	// Determine output format
 	sbomFile := ""
 	if len(opts.Files) > 1 {
 		sbomFile = opts.Files[1]
@@ -235,7 +229,6 @@ func main() {
 
 	p.Stop()
 
-	// Exit with error if there are differences OR policy errors (not warnings)
 	hasDiff := len(result.Added) > 0 || len(result.Removed) > 0 || len(result.Changed) > 0
 	hasPolicyErrors := policy.HasErrors(violations)
 	if hasDiff || hasPolicyErrors {

@@ -11,7 +11,6 @@ import (
 
 var frames = []rune{'⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'}
 
-// Spinner displays a progress spinner on stderr.
 type Spinner struct {
 	disabled bool
 	mu       sync.Mutex
@@ -22,7 +21,7 @@ type Spinner struct {
 	msg      string
 }
 
-// New creates a spinner. It is a no-op if disabled is true or stderr is not a TTY.
+// New returns a no-op spinner if disabled or stderr is not a TTY.
 func New(disabled bool) *Spinner {
 	if disabled || !isatty.IsTerminal(os.Stderr.Fd()) {
 		return &Spinner{disabled: true}
@@ -30,7 +29,6 @@ func New(disabled bool) *Spinner {
 	return &Spinner{}
 }
 
-// Start begins displaying the spinner with the given message on stderr.
 func (s *Spinner) Start(msg string) {
 	if s.disabled {
 		return
@@ -64,7 +62,6 @@ func (s *Spinner) Start(msg string) {
 	}()
 }
 
-// Stop halts the spinner and clears its line.
 func (s *Spinner) Stop() {
 	if s.disabled {
 		return
@@ -87,7 +84,6 @@ func (s *Spinner) Stop() {
 	})
 }
 
-// Done stops the spinner and prints a success message.
 func (s *Spinner) Done(msg string) {
 	if s.disabled {
 		return

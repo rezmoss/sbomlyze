@@ -10,9 +10,7 @@ import (
 	"github.com/mattn/go-isatty"
 )
 
-// Pager pipes stdout through an external pager (e.g. less) for interactive use.
-// When stdout is not a TTY (piped, redirected), all methods are no-ops,
-// preserving full compatibility with scripts and pipelines.
+// Pager pipes stdout through an external pager (e.g. less).
 type Pager struct {
 	cmd       *exec.Cmd
 	pipe      *os.File
@@ -20,8 +18,7 @@ type Pager struct {
 	stopped   bool
 }
 
-// resolve returns the pager command from environment variables.
-// Priority: $SBOMLYZE_PAGER > $PAGER > "less"
+// resolve: $SBOMLYZE_PAGER > $PAGER > "less"
 func resolve() string {
 	if p := os.Getenv("SBOMLYZE_PAGER"); p != "" {
 		return p
@@ -32,10 +29,8 @@ func resolve() string {
 	return "less"
 }
 
-// Start spawns a pager process and redirects os.Stdout to it.
-// Returns nil (no-op) when: disabled is true, stdout is not a TTY,
-// or pager is set to "" or "cat".
-// The returned Pager's Stop method is safe to call on a nil receiver.
+// Start spawns a pager and redirects os.Stdout to it.
+// Returns nil if disabled, stdout is not a TTY, or pager is ""/cat.
 func Start(disabled bool) *Pager {
 	if disabled || !isatty.IsTerminal(os.Stdout.Fd()) {
 		return nil
@@ -48,7 +43,6 @@ func Start(disabled bool) *Pager {
 
 	args := strings.Fields(pagerCmd)
 
-	// Create pipe: r is the pager's stdin, w replaces os.Stdout
 	r, w, err := os.Pipe()
 	if err != nil {
 		return nil
@@ -93,8 +87,8 @@ func Start(disabled bool) *Pager {
 	}
 }
 
-// Stop restores os.Stdout, closes the pipe, and waits for the pager to exit.
-// Safe to call multiple times or on a nil receiver.
+// Stop restores os.Stdout and waits for the pager to exit.
+// Safe to call on nil or multiple times.
 func (p *Pager) Stop() {
 	if p == nil || p.stopped {
 		return

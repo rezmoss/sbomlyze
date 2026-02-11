@@ -19,6 +19,8 @@ type ServerState struct {
 	DepGraph      map[string][]string
 	Relationships map[string]int // Relationship type counts (Syft only)
 	RawSBOMData   []byte         // Keep raw data for extended analysis
+	CompIndex     map[string]int // ID → Components slice index for O(1) lookup
+	SearchIndex   []string       // pre-built lowercase search string per component
 }
 
 var state = &ServerState{}

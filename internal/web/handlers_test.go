@@ -27,6 +27,8 @@ func resetState() {
 	state.DepGraph = nil
 	state.Relationships = nil
 	state.RawSBOMData = nil
+	state.CompIndex = nil
+	state.SearchIndex = nil
 }
 
 func loadTestState(comps []sbom.Component, info sbom.SBOMInfo) {
@@ -36,6 +38,8 @@ func loadTestState(comps []sbom.Component, info sbom.SBOMInfo) {
 	state.Info = info
 	state.Stats = analysis.ComputeStats(comps)
 	state.DepGraph = analysis.BuildDependencyGraph(comps)
+	state.CompIndex = buildCompIndex(comps)
+	state.SearchIndex = buildSearchIndex(comps)
 }
 
 func createMultipartRequest(filePath string) (*http.Request, error) {
@@ -249,12 +253,18 @@ func TestHandleGetTree_WithData(t *testing.T) {
 	if rr.Code != http.StatusOK {
 		t.Errorf("expected 200, got %d", rr.Code)
 	}
-	var nodes []TreeNode
-	if err := json.Unmarshal(rr.Body.Bytes(), &nodes); err != nil {
+	var resp struct {
+		Nodes []TreeNode `json:"nodes"`
+		Total int        `json:"total"`
+	}
+	if err := json.Unmarshal(rr.Body.Bytes(), &resp); err != nil {
 		t.Fatalf("failed to parse: %v", err)
 	}
-	if len(nodes) == 0 {
+	if len(resp.Nodes) == 0 {
 		t.Error("expected non-empty tree")
+	}
+	if resp.Total == 0 {
+		t.Error("expected non-zero total")
 	}
 }
 
@@ -267,12 +277,18 @@ func TestHandleGetTree_Empty(t *testing.T) {
 	if rr.Code != http.StatusOK {
 		t.Errorf("expected 200, got %d", rr.Code)
 	}
-	var nodes []TreeNode
-	if err := json.Unmarshal(rr.Body.Bytes(), &nodes); err != nil {
+	var resp struct {
+		Nodes []TreeNode `json:"nodes"`
+		Total int        `json:"total"`
+	}
+	if err := json.Unmarshal(rr.Body.Bytes(), &resp); err != nil {
 		t.Fatalf("failed to parse response: %v", err)
 	}
-	if len(nodes) != 0 {
-		t.Errorf("expected empty tree, got %d nodes", len(nodes))
+	if len(resp.Nodes) != 0 {
+		t.Errorf("expected empty tree, got %d nodes", len(resp.Nodes))
+	}
+	if resp.Total != 0 {
+		t.Errorf("expected total=0, got %d", resp.Total)
 	}
 }
 
@@ -287,13 +303,19 @@ func TestHandleGetTree_NoDeps(t *testing.T) {
 	rr := httptest.NewRecorder()
 	handleGetTree(rr, req)
 
-	var nodes []TreeNode
-	if err := json.Unmarshal(rr.Body.Bytes(), &nodes); err != nil {
+	var resp struct {
+		Nodes []TreeNode `json:"nodes"`
+		Total int        `json:"total"`
+	}
+	if err := json.Unmarshal(rr.Body.Bytes(), &resp); err != nil {
 		t.Fatalf("failed to parse response: %v", err)
 	}
 	// With no deps, all components become roots
-	if len(nodes) != 2 {
-		t.Errorf("expected 2 root nodes (no deps), got %d", len(nodes))
+	if len(resp.Nodes) != 2 {
+		t.Errorf("expected 2 root nodes (no deps), got %d", len(resp.Nodes))
+	}
+	if resp.Total != 2 {
+		t.Errorf("expected total=2, got %d", resp.Total)
 	}
 }
 
@@ -418,15 +440,21 @@ func TestHandleSearch_ByName(t *testing.T) {
 	if rr.Code != http.StatusOK {
 		t.Errorf("expected 200, got %d", rr.Code)
 	}
-	var results []ComponentDetail
-	if err := json.Unmarshal(rr.Body.Bytes(), &results); err != nil {
+	var resp struct {
+		Results []ComponentDetail `json:"results"`
+		Total   int               `json:"total"`
+	}
+	if err := json.Unmarshal(rr.Body.Bytes(), &resp); err != nil {
 		t.Fatalf("failed to parse response: %v", err)
 	}
-	if len(results) != 1 {
-		t.Errorf("expected 1 result, got %d", len(results))
+	if len(resp.Results) != 1 {
+		t.Errorf("expected 1 result, got %d", len(resp.Results))
 	}
-	if len(results) > 0 && results[0].Name != "lodash" {
-		t.Errorf("expected lodash, got %s", results[0].Name)
+	if resp.Total != 1 {
+		t.Errorf("expected total=1, got %d", resp.Total)
+	}
+	if len(resp.Results) > 0 && resp.Results[0].Name != "lodash" {
+		t.Errorf("expected lodash, got %s", resp.Results[0].Name)
 	}
 }
 
@@ -441,12 +469,15 @@ func TestHandleSearch_ByLicense(t *testing.T) {
 	rr := httptest.NewRecorder()
 	handleSearch(rr, req)
 
-	var results []ComponentDetail
-	if err := json.Unmarshal(rr.Body.Bytes(), &results); err != nil {
+	var resp struct {
+		Results []ComponentDetail `json:"results"`
+		Total   int               `json:"total"`
+	}
+	if err := json.Unmarshal(rr.Body.Bytes(), &resp); err != nil {
 		t.Fatalf("failed to parse response: %v", err)
 	}
-	if len(results) != 1 {
-		t.Errorf("expected 1 result for MIT search, got %d", len(results))
+	if len(resp.Results) != 1 {
+		t.Errorf("expected 1 result for MIT search, got %d", len(resp.Results))
 	}
 }
 
@@ -460,12 +491,18 @@ func TestHandleSearch_NoResults(t *testing.T) {
 	rr := httptest.NewRecorder()
 	handleSearch(rr, req)
 
-	var results []ComponentDetail
-	if err := json.Unmarshal(rr.Body.Bytes(), &results); err != nil {
+	var resp struct {
+		Results []ComponentDetail `json:"results"`
+		Total   int               `json:"total"`
+	}
+	if err := json.Unmarshal(rr.Body.Bytes(), &resp); err != nil {
 		t.Fatalf("failed to parse response: %v", err)
 	}
-	if len(results) != 0 {
-		t.Errorf("expected 0 results, got %d", len(results))
+	if len(resp.Results) != 0 {
+		t.Errorf("expected 0 results, got %d", len(resp.Results))
+	}
+	if resp.Total != 0 {
+		t.Errorf("expected total=0, got %d", resp.Total)
 	}
 }
 

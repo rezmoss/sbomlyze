@@ -37,10 +37,14 @@ func TestWebWorkflow_UploadThenQuery(t *testing.T) {
 	if rr.Code != http.StatusOK {
 		t.Fatalf("tree request failed: %d", rr.Code)
 	}
-	var treeNodes []TreeNode
-	if err := json.Unmarshal(rr.Body.Bytes(), &treeNodes); err != nil {
+	var treeResp struct {
+		Nodes []TreeNode `json:"nodes"`
+		Total int        `json:"total"`
+	}
+	if err := json.Unmarshal(rr.Body.Bytes(), &treeResp); err != nil {
 		t.Fatalf("failed to parse tree response: %v", err)
 	}
+	treeNodes := treeResp.Nodes
 	if len(treeNodes) == 0 {
 		t.Error("expected non-empty tree after upload")
 	}

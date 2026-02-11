@@ -31,7 +31,6 @@ type Options struct {
 	NoPager     bool   // Disable automatic paging
 }
 
-// DefaultParseOptions returns tolerant parsing options
 func DefaultParseOptions() ParseOptions {
 	return ParseOptions{
 		Strict:   false,
@@ -39,7 +38,6 @@ func DefaultParseOptions() ParseOptions {
 	}
 }
 
-// AddWarning adds a warning (in tolerant mode) or could trigger error (in strict mode)
 func (p *ParseOptions) AddWarning(file, message, field string) {
 	p.Warnings = append(p.Warnings, ParseWarning{
 		File:    file,

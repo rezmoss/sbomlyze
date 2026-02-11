@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 	"sort"
+	"strconv"
 	"strings"
 
 	"github.com/rezmoss/sbomlyze/internal/analysis"
@@ -42,8 +43,8 @@ func handleUpload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Parse multipart form (max 50MB)
-	if err := r.ParseMultipartForm(50 << 20); err != nil {
+	// Parse multipart form (max 500MB)
+	if err := r.ParseMultipartForm(500 << 20); err != nil {
 		http.Error(w, "Failed to parse form: "+err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -94,6 +95,10 @@ func handleUpload(w http.ResponseWriter, r *http.Request) {
 		relationships = extractRelationships(data)
 	}
 
+	// Build indexes for fast lookup and search
+	compIndex := buildCompIndex(comps)
+	searchIndex := buildSearchIndex(comps)
+
 	// Store in server state
 	state.mu.Lock()
 	state.Components = comps
@@ -102,6 +107,8 @@ func handleUpload(w http.ResponseWriter, r *http.Request) {
 	state.DepGraph = depGraph
 	state.Relationships = relationships
 	state.RawSBOMData = data
+	state.CompIndex = compIndex
+	state.SearchIndex = searchIndex
 	state.mu.Unlock()
 
 	w.Header().Set("Content-Type", "application/json")
@@ -118,25 +125,64 @@ func handleGetTree(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	offset := parseIntParam(r, "offset", 0)
+	limit := parseIntParam(r, "limit", 200)
+
 	state.mu.RLock()
 	defer state.mu.RUnlock()
 
-	if len(state.Components) == 0 {
+	total := len(state.Components)
+
+	if total == 0 {
 		w.Header().Set("Content-Type", "application/json")
-		_ = json.NewEncoder(w).Encode([]TreeNode{})
+		_ = json.NewEncoder(w).Encode(map[string]interface{}{
+			"nodes": []TreeNode{},
+			"total": 0,
+		})
 		return
 	}
 
-	// Build component lookup map
+	const treeThreshold = 5000
+
+	if total > treeThreshold {
+		// Large dataset: return flat paginated list (no tree expansion)
+		if offset > total {
+			offset = total
+		}
+		end := offset + limit
+		if end > total {
+			end = total
+		}
+
+		nodes := make([]TreeNode, 0, end-offset)
+		for i := offset; i < end; i++ {
+			c := state.Components[i]
+			nodes = append(nodes, TreeNode{
+				ID:          c.ID,
+				Name:        c.Name,
+				Version:     c.Version,
+				Type:        analysis.ExtractPURLType(c.PURL),
+				HasChildren: len(state.DepGraph[c.ID]) > 0,
+				ChildrenIDs: state.DepGraph[c.ID],
+			})
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		_ = json.NewEncoder(w).Encode(map[string]interface{}{
+			"nodes": nodes,
+			"total": total,
+		})
+		return
+	}
+
+	// Small dataset: build full tree structure
 	compMap := make(map[string]sbom.Component)
 	for _, c := range state.Components {
 		compMap[c.ID] = c
 	}
 
-	// Find root nodes using exported FindRoots
 	roots := analysis.FindRoots(state.DepGraph)
 
-	// If no roots found (no dependencies), treat all components as roots
 	if len(roots) == 0 {
 		for _, c := range state.Components {
 			roots = append(roots, c.ID)
@@ -144,7 +190,6 @@ func handleGetTree(w http.ResponseWriter, r *http.Request) {
 		sort.Strings(roots)
 	}
 
-	// Build tree nodes for roots
 	var treeNodes []TreeNode
 	for _, rootID := range roots {
 		if comp, ok := compMap[rootID]; ok {
@@ -154,7 +199,10 @@ func handleGetTree(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	_ = json.NewEncoder(w).Encode(treeNodes)
+	_ = json.NewEncoder(w).Encode(map[string]interface{}{
+		"nodes": treeNodes,
+		"total": len(treeNodes),
+	})
 }
 
 func buildTreeNode(comp sbom.Component, depGraph map[string][]string, compMap map[string]sbom.Component, depth int) TreeNode {
@@ -230,28 +278,28 @@ func handleGetComponent(w http.ResponseWriter, r *http.Request) {
 	state.mu.RLock()
 	defer state.mu.RUnlock()
 
-	// Find component by ID
-	for _, c := range state.Components {
-		if c.ID == id {
-			detail := ComponentDetail{
-				ID:           c.ID,
-				Name:         c.Name,
-				Version:      c.Version,
-				PURL:         c.PURL,
-				Type:         analysis.ExtractPURLType(c.PURL),
-				Licenses:     c.Licenses,
-				Hashes:       c.Hashes,
-				Dependencies: state.DepGraph[c.ID],
-				Supplier:     c.Supplier,
-				RawJSON:      c.RawJSON,
-			}
-			w.Header().Set("Content-Type", "application/json")
-			_ = json.NewEncoder(w).Encode(detail)
-			return
-		}
+	// O(1) lookup using CompIndex
+	idx, ok := state.CompIndex[id]
+	if !ok || idx >= len(state.Components) {
+		http.Error(w, "Component not found", http.StatusNotFound)
+		return
 	}
 
-	http.Error(w, "Component not found", http.StatusNotFound)
+	c := state.Components[idx]
+	detail := ComponentDetail{
+		ID:           c.ID,
+		Name:         c.Name,
+		Version:      c.Version,
+		PURL:         c.PURL,
+		Type:         analysis.ExtractPURLType(c.PURL),
+		Licenses:     c.Licenses,
+		Hashes:       c.Hashes,
+		Dependencies: state.DepGraph[c.ID],
+		Supplier:     c.Supplier,
+		RawJSON:      c.RawJSON,
+	}
+	w.Header().Set("Content-Type", "application/json")
+	_ = json.NewEncoder(w).Encode(detail)
 }
 
 func handleSearch(w http.ResponseWriter, r *http.Request) {
@@ -270,19 +318,10 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 	defer state.mu.RUnlock()
 
 	var results []ComponentDetail
-	for _, c := range state.Components {
-		// Build searchable string from core fields.
-		searchable := strings.ToLower(
-			c.Name + " " +
-				c.Version + " " +
-				c.PURL + " " +
-				c.ID + " " +
-				c.Supplier + " " +
-				strings.Join(c.CPEs, " ") +
-				string(c.RawJSON),
-		)
 
-		if strings.Contains(searchable, query) || containsLicense(c.Licenses, query) {
+	for i, searchStr := range state.SearchIndex {
+		if strings.Contains(searchStr, query) {
+			c := state.Components[i]
 			results = append(results, ComponentDetail{
 				ID:       c.ID,
 				Name:     c.Name,
@@ -291,23 +330,56 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 				Type:     analysis.ExtractPURLType(c.PURL),
 				Licenses: c.Licenses,
 				Supplier: c.Supplier,
-				RawJSON:  c.RawJSON,
 			})
 		}
 	}
 
+	if results == nil {
+		results = []ComponentDetail{}
+	}
+
 	w.Header().Set("Content-Type", "application/json")
-	_ = json.NewEncoder(w).Encode(results)
+	_ = json.NewEncoder(w).Encode(map[string]interface{}{
+		"results": results,
+		"total":   len(results),
+	})
 }
 
-func containsLicense(licenses []string, query string) bool {
-	lowerQuery := strings.ToLower(query)
-	for _, lic := range licenses {
-		if strings.Contains(strings.ToLower(lic), lowerQuery) {
-			return true
-		}
+func parseIntParam(r *http.Request, name string, defaultVal int) int {
+	s := r.URL.Query().Get(name)
+	if s == "" {
+		return defaultVal
 	}
-	return false
+	v, err := strconv.Atoi(s)
+	if err != nil || v < 0 {
+		return defaultVal
+	}
+	return v
+}
+
+func buildCompIndex(comps []sbom.Component) map[string]int {
+	idx := make(map[string]int, len(comps))
+	for i, c := range comps {
+		idx[c.ID] = i
+	}
+	return idx
+}
+
+func buildSearchIndex(comps []sbom.Component) []string {
+	index := make([]string, len(comps))
+	for i, c := range comps {
+		index[i] = strings.ToLower(
+			c.Name + " " +
+				c.Version + " " +
+				c.PURL + " " +
+				c.ID + " " +
+				c.Supplier + " " +
+				strings.Join(c.CPEs, " ") + " " +
+				strings.Join(c.Licenses, " ") + " " +
+				string(c.RawJSON),
+		)
+	}
+	return index
 }
 
 // extractRelationships extracts relationship statistics from Syft SBOM format

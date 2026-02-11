@@ -6,6 +6,11 @@ let expandedNodes = new Set();
 let currentSearchQuery = '';
 let currentComponentDetail = null;  // Store current component detail for view toggle
 let showRawJson = false;  // Toggle between detail and raw JSON view
+let treeOffset = 0;
+let treeTotal = 0;
+let loadingMore = false;
+let searchTotal = 0;
+let searchResultCount = 0;
 
 // DOM Elements
 const dropZone = document.getElementById('drop-zone');
@@ -52,55 +57,163 @@ function handleFileSelect(e) {
     }
 }
 
-async function uploadFile(file) {
+function uploadFile(file) {
     const formData = new FormData();
     formData.append('file', file);
 
-    try {
-        dropZone.innerHTML = '<p>Uploading...</p>';
-
-        const response = await fetch('/api/upload', {
-            method: 'POST',
-            body: formData
-        });
-
-        if (!response.ok) {
-            const error = await response.text();
-            throw new Error(error);
-        }
-
-        const result = await response.json();
-        console.log('Upload result:', result);
-
-        // Show main content
-        dropZone.classList.add('hidden');
-        mainContent.classList.remove('hidden');
-
-        // Load tree and stats
-        await Promise.all([loadTree(), loadStats()]);
-
-    } catch (error) {
-        console.error('Upload error:', error);
-        dropZone.innerHTML = `
-            <div class="drop-content">
-                <p style="color: var(--accent);">Error: ${error.message}</p>
-                <p class="hint">Click to try again</p>
+    // Show progress bar
+    dropZone.innerHTML = `
+        <div class="drop-content">
+            <p>Uploading...</p>
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="upload-progress-fill"></div>
+                </div>
+                <div class="progress-text" id="upload-progress-text">0%</div>
             </div>
-        `;
-    }
+        </div>
+    `;
+
+    const xhr = new XMLHttpRequest();
+
+    xhr.upload.onprogress = function(e) {
+        if (e.lengthComputable) {
+            const pct = Math.round((e.loaded / e.total) * 100);
+            const fill = document.getElementById('upload-progress-fill');
+            const text = document.getElementById('upload-progress-text');
+            if (fill) fill.style.width = pct + '%';
+            if (text) text.textContent = pct + '%';
+        }
+    };
+
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            const text = document.getElementById('upload-progress-text');
+            const fill = document.getElementById('upload-progress-fill');
+            if (text) text.textContent = 'Processing...';
+            if (fill) fill.style.width = '100%';
+
+            try {
+                const result = JSON.parse(xhr.responseText);
+                console.log('Upload result:', result);
+
+                dropZone.classList.add('hidden');
+                mainContent.classList.remove('hidden');
+
+                Promise.all([loadTree(), loadStats()]);
+            } catch (e) {
+                showUploadError(e.message);
+            }
+        } else {
+            showUploadError(xhr.responseText || 'Upload failed');
+        }
+    };
+
+    xhr.onerror = function() {
+        showUploadError('Network error during upload');
+    };
+
+    xhr.open('POST', '/api/upload');
+    xhr.send(formData);
+}
+
+function showUploadError(message) {
+    dropZone.innerHTML = `
+        <div class="drop-content">
+            <p style="color: var(--accent);">Error: ${escapeHtml(message)}</p>
+            <p class="hint">Click to try again</p>
+        </div>
+    `;
 }
 
 async function loadTree() {
     try {
-        const response = await fetch('/api/tree');
+        treeOffset = 0;
+        treeTotal = 0;
+
+        const response = await fetch('/api/tree?offset=0&limit=200');
         if (!response.ok) throw new Error('Failed to load tree');
 
-        originalTreeData = await response.json();
+        const data = await response.json();
+        originalTreeData = data.nodes || [];
+        treeTotal = data.total || 0;
+        treeOffset = originalTreeData.length;
         treeData = originalTreeData;
         renderTree();
+
+        // Attach scroll listener for infinite scroll
+        treeContainer.removeEventListener('scroll', handleTreeScroll);
+        treeContainer.addEventListener('scroll', handleTreeScroll);
     } catch (error) {
         console.error('Load tree error:', error);
         treeContainer.innerHTML = '<p class="placeholder">Failed to load components</p>';
+    }
+}
+
+function handleTreeScroll() {
+    if (loadingMore || currentSearchQuery) return;
+    if (treeOffset >= treeTotal) return;
+
+    const { scrollTop, scrollHeight, clientHeight } = treeContainer;
+    if (scrollTop + clientHeight >= scrollHeight - 100) {
+        loadMoreTree();
+    }
+}
+
+async function loadMoreTree() {
+    if (loadingMore || treeOffset >= treeTotal) return;
+    loadingMore = true;
+
+    // Show loading indicator
+    const loadMoreEl = document.createElement('div');
+    loadMoreEl.className = 'load-more';
+    loadMoreEl.textContent = 'Loading more...';
+    treeContainer.appendChild(loadMoreEl);
+
+    try {
+        const response = await fetch(`/api/tree?offset=${treeOffset}&limit=200`);
+        if (!response.ok) throw new Error('Failed to load more');
+
+        const data = await response.json();
+        const newNodes = data.nodes || [];
+
+        // Append to data arrays
+        originalTreeData = originalTreeData.concat(newNodes);
+        treeData = originalTreeData;
+        treeOffset += newNodes.length;
+
+        // Remove loading indicator
+        loadMoreEl.remove();
+
+        // Append new nodes to DOM
+        appendTreeNodes(newNodes);
+    } catch (error) {
+        console.error('Load more error:', error);
+        loadMoreEl.textContent = 'Failed to load more';
+    } finally {
+        loadingMore = false;
+    }
+}
+
+function appendTreeNodes(nodes) {
+    const html = nodes.map(node => renderTreeNode(node, 0)).join('');
+    const temp = document.createElement('div');
+    temp.innerHTML = html;
+
+    while (temp.firstChild) {
+        const child = temp.firstChild;
+        treeContainer.appendChild(child);
+
+        const items = child.querySelectorAll ? child.querySelectorAll('.tree-item') : [];
+        items.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = item.dataset.id;
+                const hasChildren = item.dataset.hasChildren === 'true';
+                if (hasChildren) toggleNode(id);
+                selectComponent(id);
+            });
+        });
     }
 }
 
@@ -130,7 +243,11 @@ function renderTree() {
     // Show result count when filtering
     let headerHtml = '';
     if (currentSearchQuery) {
-        headerHtml = `<div class="filter-info">${treeData.length} result${treeData.length !== 1 ? 's' : ''} for "${escapeHtml(currentSearchQuery)}" <span class="filter-hint">(searching all fields)</span></div>`;
+        if (searchTotal > searchResultCount) {
+            headerHtml = `<div class="filter-info">Showing ${searchResultCount} of ${searchTotal} results for "${escapeHtml(currentSearchQuery)}" <span class="filter-hint">(searching all fields)</span></div>`;
+        } else {
+            headerHtml = `<div class="filter-info">${treeData.length} result${treeData.length !== 1 ? 's' : ''} for "${escapeHtml(currentSearchQuery)}" <span class="filter-hint">(searching all fields)</span></div>`;
+        }
     }
 
     const html = headerHtml + treeData.map(node => renderTreeNode(node, 0)).join('');
@@ -537,6 +654,8 @@ async function handleSearch() {
     if (query.length === 0) {
         // Reset to original data
         treeData = originalTreeData;
+        searchTotal = 0;
+        searchResultCount = 0;
         renderTree();
         return;
     }
@@ -546,7 +665,10 @@ async function handleSearch() {
         const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
         if (!response.ok) throw new Error('Search failed');
 
-        const results = await response.json();
+        const data = await response.json();
+        const results = data.results || [];
+        searchTotal = data.total || 0;
+        searchResultCount = results.length;
 
         // Convert search results to tree format
         treeData = results.map(result => ({
@@ -563,6 +685,8 @@ async function handleSearch() {
         console.error('Search error:', error);
         // Fallback to client-side filtering
         treeData = filterTreeLocal(originalTreeData, currentSearchQuery);
+        searchTotal = 0;
+        searchResultCount = 0;
         renderTree();
     }
 }
@@ -626,6 +750,11 @@ function resetUI() {
     currentSearchQuery = '';
     currentComponentDetail = null;
     showRawJson = false;
+    treeOffset = 0;
+    treeTotal = 0;
+    loadingMore = false;
+    searchTotal = 0;
+    searchResultCount = 0;
     searchInput.value = '';
     detailContainer.innerHTML = '<p class="placeholder">Select a component to view details</p>';
 }
