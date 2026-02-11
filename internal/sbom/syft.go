@@ -114,7 +114,10 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 			FoundBy      string          `json:"foundBy"`
 			MetadataType string          `json:"metadataType"`
 			Metadata     json.RawMessage `json:"metadata"`
-			Licenses     []struct {
+			Locations    []struct {
+				Path string `json:"path"`
+			} `json:"locations"`
+			Licenses []struct {
 				Value          string `json:"value"`
 				SPDXExpression string `json:"spdxExpression"`
 			} `json:"licenses"`
@@ -135,6 +138,11 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 			FoundBy:  a.FoundBy,
 			Hashes:   make(map[string]string),
 			RawJSON:  rawArtifact, // Preserve the original JSON
+		}
+		for _, loc := range a.Locations {
+			if loc.Path != "" {
+				comp.Locations = append(comp.Locations, loc.Path)
+			}
 		}
 		for _, lic := range a.Licenses {
 			val := lic.SPDXExpression

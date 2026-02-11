@@ -45,8 +45,8 @@ func TestStart_NonTTYReturnsNil(t *testing.T) {
 		os.Stdout = f
 		defer func() {
 			os.Stdout = oldStdout
-			f.Close()
-			os.Remove(f.Name())
+			_ = f.Close()
+			_ = os.Remove(f.Name())
 		}()
 
 		p := Start(false)

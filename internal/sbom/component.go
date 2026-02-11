@@ -38,6 +38,7 @@ type Component struct {
 	Language     string            `json:"language,omitempty"` // Programming language (go, python, java, etc.)
 	FoundBy      string            `json:"foundBy,omitempty"`  // Scanner/cataloger that found this component
 	Type         string            `json:"type,omitempty"`     // Package type from SBOM (e.g., library, application)
+	Locations    []string          `json:"locations,omitempty"` // File paths where the package was found
 	RawJSON      json.RawMessage   `json:"-"`                  // Original JSON from SBOM, excluded from output
 }
 

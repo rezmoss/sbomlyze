@@ -46,6 +46,10 @@ func NormalizeComponent(c Component) Component {
 		SPDXID:       strings.TrimSpace(c.SPDXID),
 		Namespace:    strings.TrimSpace(c.Namespace),
 		Supplier:     strings.TrimSpace(c.Supplier),
+		Language:     c.Language,
+		FoundBy:      c.FoundBy,
+		Type:         c.Type,
+		Locations:    c.Locations,
 		RawJSON:      c.RawJSON, // Preserve original SBOM JSON
 	}
 

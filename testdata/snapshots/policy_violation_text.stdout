@@ -1,4 +1,30 @@
 
+SBOM Comparison
+======================================================================
+                        Before                  After
+File:                   cyclonedx-before.json   cyclonedx-after.json
+File Size:              921 B                   1 KB
+Format:                 (none)                  (none)
+OS:                     (none)                  (none)
+Source:                 (none)                  (none)
+Source Type:            (none)                  (none)
+Total Components:       3                       3
+  npm:                  3                       3               
+Data Quality:
+  PURL Coverage:        100.0%                  100.0%
+  License Coverage:     66.7%                   100.0%
+  Hash Coverage:        33.3%                   33.3%
+  CPE Coverage:         0.0%                    0.0%
+======================================================================
+
++ Added by type (up to 5 samples each):
+  npm (1 total):
+    + new-package 2.0.0
+
+- Removed by type (up to 5 samples each):
+  npm (1 total):
+    - old-package 1.0.0
+
 📊 Drift Summary:
   📦 Version drift:   1 components
 

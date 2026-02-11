@@ -1,4 +1,66 @@
 {
+  "overview": {
+    "before": {
+      "file_name": "TESTDATA/cyclonedx-before.json",
+      "file_size": 921,
+      "info": {},
+      "stats": {
+        "total_components": 3,
+        "by_type": {
+          "npm": 3
+        },
+        "by_license": {
+          "MIT": 2
+        },
+        "without_license": 1,
+        "with_hashes": 1,
+        "without_hashes": 2,
+        "total_dependencies": 0,
+        "with_dependencies": 0,
+        "duplicate_count": 0,
+        "license_categories": {
+          "copyleft": 0,
+          "permissive": 2,
+          "public_domain": 0,
+          "unknown": 1
+        },
+        "with_cpes": 0,
+        "without_cpes": 3,
+        "with_purl": 3,
+        "without_purl": 0
+      }
+    },
+    "after": {
+      "file_name": "TESTDATA/spdx-sample.json",
+      "file_size": 1474,
+      "info": {},
+      "stats": {
+        "total_components": 2,
+        "by_type": {
+          "npm": 2
+        },
+        "by_license": {
+          "MIT": 2
+        },
+        "without_license": 0,
+        "with_hashes": 1,
+        "without_hashes": 1,
+        "total_dependencies": 0,
+        "with_dependencies": 0,
+        "duplicate_count": 0,
+        "license_categories": {
+          "copyleft": 0,
+          "permissive": 2,
+          "public_domain": 0,
+          "unknown": 0
+        },
+        "with_cpes": 0,
+        "without_cpes": 2,
+        "with_purl": 2,
+        "without_purl": 0
+      }
+    }
+  },
   "diff": {
     "added": [
       {
@@ -55,6 +117,47 @@
         "version": "1.0.0",
         "purl": "pkg:npm/old-package@1.0.0",
         "bom-ref": "old-package@1.0.0"
+      }
+    ],
+    "added_by_type": [
+      {
+        "type": "npm",
+        "total": 2,
+        "samples": [
+          {
+            "name": "axios",
+            "version": "1.6.0",
+            "type": "npm"
+          },
+          {
+            "name": "react",
+            "version": "18.2.0",
+            "type": "npm"
+          }
+        ]
+      }
+    ],
+    "removed_by_type": [
+      {
+        "type": "npm",
+        "total": 3,
+        "samples": [
+          {
+            "name": "express",
+            "version": "4.18.0",
+            "type": "npm"
+          },
+          {
+            "name": "lodash",
+            "version": "4.17.20",
+            "type": "npm"
+          },
+          {
+            "name": "old-package",
+            "version": "1.0.0",
+            "type": "npm"
+          }
+        ]
       }
     ]
   }

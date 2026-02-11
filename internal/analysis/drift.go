@@ -55,14 +55,31 @@ type ChangedComponent struct {
 	Drift   *DriftInfo     `json:"drift,omitempty"`
 }
 
+// PackageSample represents a sample package for display
+type PackageSample struct {
+	Name      string   `json:"name"`
+	Version   string   `json:"version"`
+	Type      string   `json:"type"`
+	Locations []string `json:"locations,omitempty"`
+}
+
+// PackageSamplesByType groups package samples by type
+type PackageSamplesByType struct {
+	Type    string          `json:"type"`
+	Total   int             `json:"total"`
+	Samples []PackageSample `json:"samples"`
+}
+
 // DiffResult contains the complete result of comparing two SBOMs
 type DiffResult struct {
-	Added        []sbom.Component `json:"added,omitempty"`
-	Removed      []sbom.Component `json:"removed,omitempty"`
-	Changed      []ChangedComponent `json:"changed,omitempty"`
-	Duplicates   *DuplicateReport   `json:"duplicates,omitempty"`
-	Dependencies *DependencyDiff    `json:"dependencies,omitempty"`
-	DriftSummary *DriftSummary      `json:"drift_summary,omitempty"`
+	Added         []sbom.Component     `json:"added,omitempty"`
+	Removed       []sbom.Component     `json:"removed,omitempty"`
+	Changed       []ChangedComponent   `json:"changed,omitempty"`
+	Duplicates    *DuplicateReport     `json:"duplicates,omitempty"`
+	Dependencies  *DependencyDiff      `json:"dependencies,omitempty"`
+	DriftSummary  *DriftSummary        `json:"drift_summary,omitempty"`
+	AddedByType   []PackageSamplesByType `json:"added_by_type,omitempty"`
+	RemovedByType []PackageSamplesByType `json:"removed_by_type,omitempty"`
 }
 
 // IsEmpty returns true if no hash changes
@@ -306,4 +323,58 @@ func DiffComponents(before, after []sbom.Component) DiffResult {
 	}
 
 	return result
+}
+
+// groupSamplesByType groups components by PURL type and picks up to maxSamples per type
+func groupSamplesByType(comps []sbom.Component, maxSamples int) []PackageSamplesByType {
+	typeMap := make(map[string][]sbom.Component)
+	for _, c := range comps {
+		ptype := ExtractPURLType(c.PURL)
+		if ptype == "unknown" && c.PURL == "" {
+			ptype = ExtractPURLType(c.ID)
+		}
+		typeMap[ptype] = append(typeMap[ptype], c)
+	}
+
+	// Sort by count descending
+	types := make([]string, 0, len(typeMap))
+	for t := range typeMap {
+		types = append(types, t)
+	}
+	sort.Slice(types, func(i, j int) bool {
+		return len(typeMap[types[i]]) > len(typeMap[types[j]])
+	})
+
+	var result []PackageSamplesByType
+	for _, t := range types {
+		group := typeMap[t]
+		samples := make([]PackageSample, 0, maxSamples)
+		for i, c := range group {
+			if i >= maxSamples {
+				break
+			}
+			samples = append(samples, PackageSample{
+				Name:      c.Name,
+				Version:   c.Version,
+				Type:      t,
+				Locations: c.Locations,
+			})
+		}
+		result = append(result, PackageSamplesByType{
+			Type:    t,
+			Total:   len(group),
+			Samples: samples,
+		})
+	}
+	return result
+}
+
+// ComputePackageSamples populates AddedByType and RemovedByType on a DiffResult
+func ComputePackageSamples(result *DiffResult) {
+	if len(result.Added) > 0 {
+		result.AddedByType = groupSamplesByType(result.Added, 5)
+	}
+	if len(result.Removed) > 0 {
+		result.RemovedByType = groupSamplesByType(result.Removed, 5)
+	}
 }

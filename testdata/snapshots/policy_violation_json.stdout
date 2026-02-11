@@ -1,4 +1,67 @@
 {
+  "overview": {
+    "before": {
+      "file_name": "TESTDATA/cyclonedx-before.json",
+      "file_size": 921,
+      "info": {},
+      "stats": {
+        "total_components": 3,
+        "by_type": {
+          "npm": 3
+        },
+        "by_license": {
+          "MIT": 2
+        },
+        "without_license": 1,
+        "with_hashes": 1,
+        "without_hashes": 2,
+        "total_dependencies": 0,
+        "with_dependencies": 0,
+        "duplicate_count": 0,
+        "license_categories": {
+          "copyleft": 0,
+          "permissive": 2,
+          "public_domain": 0,
+          "unknown": 1
+        },
+        "with_cpes": 0,
+        "without_cpes": 3,
+        "with_purl": 3,
+        "without_purl": 0
+      }
+    },
+    "after": {
+      "file_name": "TESTDATA/cyclonedx-after.json",
+      "file_size": 1037,
+      "info": {},
+      "stats": {
+        "total_components": 3,
+        "by_type": {
+          "npm": 3
+        },
+        "by_license": {
+          "Apache-2.0": 1,
+          "MIT": 2
+        },
+        "without_license": 0,
+        "with_hashes": 1,
+        "without_hashes": 2,
+        "total_dependencies": 0,
+        "with_dependencies": 0,
+        "duplicate_count": 0,
+        "license_categories": {
+          "copyleft": 0,
+          "permissive": 3,
+          "public_domain": 0,
+          "unknown": 0
+        },
+        "with_cpes": 0,
+        "without_cpes": 3,
+        "with_purl": 3,
+        "without_purl": 0
+      }
+    }
+  },
   "diff": {
     "added": [
       {
@@ -74,7 +137,33 @@
       "version_drift": 1,
       "integrity_drift": 0,
       "metadata_drift": 0
-    }
+    },
+    "added_by_type": [
+      {
+        "type": "npm",
+        "total": 1,
+        "samples": [
+          {
+            "name": "new-package",
+            "version": "2.0.0",
+            "type": "npm"
+          }
+        ]
+      }
+    ],
+    "removed_by_type": [
+      {
+        "type": "npm",
+        "total": 1,
+        "samples": [
+          {
+            "name": "old-package",
+            "version": "1.0.0",
+            "type": "npm"
+          }
+        ]
+      }
+    ]
   },
   "violations": [
     {

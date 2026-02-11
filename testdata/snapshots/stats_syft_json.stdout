@@ -14,6 +14,9 @@
     "total_dependencies": 2,
     "with_dependencies": 1,
     "duplicate_count": 0,
+    "by_found_by": {
+      "apkdb-cataloger": 3
+    },
     "license_categories": {
       "copyleft": 2,
       "permissive": 1,

@@ -123,7 +123,7 @@ func main() {
 	spin := progress.New(opts.Format != "" && opts.Format != "text")
 
 	spin.Start("Parsing first SBOM...")
-	comps1, err := parseFileWithOptions(file1, &parseOpts)
+	comps1, info1, err := parseFileWithOptionsAndInfo(file1, &parseOpts)
 	if err != nil {
 		spin.Stop()
 		fmt.Fprintf(os.Stderr, "Error parsing %s: %v\n", file1, err)
@@ -132,7 +132,7 @@ func main() {
 	spin.Done(fmt.Sprintf("Parsed %d components", len(comps1)))
 
 	spin.Start("Parsing second SBOM...")
-	comps2, err := parseFileWithOptions(file2, &parseOpts)
+	comps2, info2, err := parseFileWithOptionsAndInfo(file2, &parseOpts)
 	if err != nil {
 		spin.Stop()
 		fmt.Fprintf(os.Stderr, "Error parsing %s: %v\n", file2, err)
@@ -144,7 +144,9 @@ func main() {
 	comps1 = sbom.NormalizeComponents(comps1)
 	comps2 = sbom.NormalizeComponents(comps2)
 
+	overview := analysis.ComputeDiffOverview(file1, file2, comps1, comps2, info1, info2)
 	result := analysis.DiffComponents(comps1, comps2)
+	analysis.ComputePackageSamples(&result)
 	spin.Done("Comparison complete")
 
 	var violations []policy.Violation
@@ -172,10 +174,12 @@ func main() {
 	switch opts.Format {
 	case "json":
 		out := struct {
-			Diff       analysis.DiffResult `json:"diff"`
-			Violations []policy.Violation  `json:"violations,omitempty"`
-			Warnings   []cli.ParseWarning  `json:"warnings,omitempty"`
+			Overview   analysis.DiffOverview `json:"overview"`
+			Diff       analysis.DiffResult   `json:"diff"`
+			Violations []policy.Violation    `json:"violations,omitempty"`
+			Warnings   []cli.ParseWarning    `json:"warnings,omitempty"`
 		}{
+			Overview:   overview,
 			Diff:       result,
 			Violations: violations,
 			Warnings:   parseOpts.Warnings,
@@ -209,7 +213,7 @@ func main() {
 		fmt.Println(xml.Header + string(out))
 
 	case "markdown", "md":
-		fmt.Println(output.GenerateMarkdown(result, violations))
+		fmt.Println(output.GenerateMarkdownWithOverview(result, violations, overview))
 
 	case "patch":
 		patch := output.GenerateJSONPatch(result)
@@ -222,6 +226,8 @@ func main() {
 		fmt.Println(string(out))
 
 	default: // text
+		output.PrintDiffOverview(overview)
+		output.PrintPackageSamples(result.AddedByType, result.RemovedByType)
 		output.PrintTextDiff(result)
 		output.PrintViolations(violations)
 		cli.PrintWarnings(parseOpts.Warnings)

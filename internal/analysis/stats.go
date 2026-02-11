@@ -2,6 +2,7 @@ package analysis
 
 import (
 	"fmt"
+	"os"
 	"sort"
 	"strings"
 
@@ -262,4 +263,44 @@ func SortedByValue(m map[string]int) []string {
 		return m[keys[i]] > m[keys[j]]
 	})
 	return keys
+}
+
+// SBOMSide holds info for one side of a diff comparison
+type SBOMSide struct {
+	FileName string        `json:"file_name"`
+	FileSize int64         `json:"file_size"`
+	Info     sbom.SBOMInfo `json:"info"`
+	Stats    Stats         `json:"stats"`
+}
+
+// DiffOverview holds the side-by-side comparison data
+type DiffOverview struct {
+	Before SBOMSide `json:"before"`
+	After  SBOMSide `json:"after"`
+}
+
+// ComputeDiffOverview computes the overview comparison for two SBOMs
+func ComputeDiffOverview(file1, file2 string, comps1, comps2 []sbom.Component, info1, info2 sbom.SBOMInfo) DiffOverview {
+	var size1, size2 int64
+	if fi, err := os.Stat(file1); err == nil {
+		size1 = fi.Size()
+	}
+	if fi, err := os.Stat(file2); err == nil {
+		size2 = fi.Size()
+	}
+
+	return DiffOverview{
+		Before: SBOMSide{
+			FileName: file1,
+			FileSize: size1,
+			Info:     info1,
+			Stats:    ComputeStats(comps1),
+		},
+		After: SBOMSide{
+			FileName: file2,
+			FileSize: size2,
+			Info:     info2,
+			Stats:    ComputeStats(comps2),
+		},
+	}
 }
