@@ -8,10 +8,17 @@ import (
 
 // SBOMInfo holds metadata about the SBOM source (OS, distro, source type)
 type SBOMInfo struct {
-	OSName     string `json:"os_name,omitempty"`
-	OSVersion  string `json:"os_version,omitempty"`
-	SourceType string `json:"source_type,omitempty"` // e.g., "image", "directory", "file"
-	SourceName string `json:"source_name,omitempty"` // e.g., "alpine:latest", "/path/to/dir"
+	OSName             string         `json:"os_name,omitempty"`
+	OSVersion          string         `json:"os_version,omitempty"`
+	OSPrettyName       string         `json:"os_pretty_name,omitempty"`      // Human-readable OS name (e.g., "Amazon Linux 2")
+	OSIDLike           []string       `json:"os_id_like,omitempty"`          // Related distro families (e.g., ["centos","rhel","fedora"])
+	SourceType         string         `json:"source_type,omitempty"`         // e.g., "image", "directory", "file"
+	SourceName         string         `json:"source_name,omitempty"`         // e.g., "alpine:latest", "/path/to/dir"
+	SourceID           string         `json:"source_id,omitempty"`           // Source content hash/identifier
+	RelationshipCounts map[string]int `json:"relationship_counts,omitempty"` // Counts by relationship type (Syft only)
+	ToolName           string         `json:"tool_name,omitempty"`           // e.g., "syft"
+	ToolVersion        string         `json:"tool_version,omitempty"`        // Tool version that generated the SBOM
+	SchemaVersion      string         `json:"schema_version,omitempty"`      // SBOM schema version
 }
 
 // Component represents a normalized component from any SBOM format
@@ -28,10 +35,10 @@ type Component struct {
 	SPDXID       string            `json:"spdxid,omitempty"`
 	Namespace    string            `json:"namespace,omitempty"`
 	Supplier     string            `json:"supplier,omitempty"`
-	Language     string            `json:"language,omitempty"`  // Programming language (go, python, java, etc.)
-	FoundBy      string            `json:"foundBy,omitempty"`   // Scanner/cataloger that found this component
-	Type         string            `json:"type,omitempty"`      // Package type from SBOM (e.g., library, application)
-	RawJSON      json.RawMessage   `json:"-"`                   // Original JSON from SBOM, excluded from output
+	Language     string            `json:"language,omitempty"` // Programming language (go, python, java, etc.)
+	FoundBy      string            `json:"foundBy,omitempty"`  // Scanner/cataloger that found this component
+	Type         string            `json:"type,omitempty"`     // Package type from SBOM (e.g., library, application)
+	RawJSON      json.RawMessage   `json:"-"`                  // Original JSON from SBOM, excluded from output
 }
 
 // ToIdentity converts a Component to a ComponentIdentity for ID computation

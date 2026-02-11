@@ -55,7 +55,12 @@ func ComputeID(c ComponentIdentity) string {
 	return c.Name
 }
 
-// NormalizePURL strips version, qualifiers, and subpath from a PURL
+// OS package types where namespace is a distro name (optional, not identity-significant)
+var osPackageTypes = map[string]bool{
+	"rpm": true, "deb": true, "apk": true, "alpm": true,
+}
+
+// NormalizePURL strips version, qualifiers, subpath, and distro namespace (for OS packages) from a PURL
 func NormalizePURL(purl string) string {
 	if purl == "" {
 		return ""
@@ -69,6 +74,22 @@ func NormalizePURL(purl string) string {
 	if idx := strings.LastIndex(purl, "@"); idx != -1 {
 		purl = purl[:idx]
 	}
+
+	// Strip distro namespace for OS package types
+	// e.g. pkg:rpm/amzn/bash → pkg:rpm/bash
+	if strings.HasPrefix(purl, "pkg:") {
+		rest := purl[4:]
+		if slashIdx := strings.Index(rest, "/"); slashIdx != -1 {
+			ptype := rest[:slashIdx]
+			if osPackageTypes[ptype] {
+				afterType := rest[slashIdx+1:]
+				if secondSlash := strings.Index(afterType, "/"); secondSlash != -1 {
+					purl = "pkg:" + ptype + "/" + afterType[secondSlash+1:]
+				}
+			}
+		}
+	}
+
 	return purl
 }
 

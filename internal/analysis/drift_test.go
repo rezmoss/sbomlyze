@@ -110,6 +110,39 @@ func TestClassifyDrift(t *testing.T) {
 	})
 }
 
+func TestDiffComponents_CrossNamespaceRPM(t *testing.T) {
+	// RPM packages with different distro namespaces should match after PURL normalization
+	// e.g. pkg:rpm/amzn/bash@4.2 and pkg:rpm/bash@4.2 both normalize to pkg:rpm/bash
+	before := []sbom.Component{
+		{
+			ID:      "pkg:rpm/bash",
+			Name:    "bash",
+			Version: "4.2.46",
+			PURL:    "pkg:rpm/amzn/bash@4.2.46",
+		},
+	}
+	after := []sbom.Component{
+		{
+			ID:      "pkg:rpm/bash",
+			Name:    "bash",
+			Version: "5.1.8",
+			PURL:    "pkg:rpm/bash@5.1.8",
+		},
+	}
+
+	result := DiffComponents(before, after)
+
+	if len(result.Added) != 0 {
+		t.Errorf("expected 0 added (cross-namespace match), got %d", len(result.Added))
+	}
+	if len(result.Removed) != 0 {
+		t.Errorf("expected 0 removed (cross-namespace match), got %d", len(result.Removed))
+	}
+	if len(result.Changed) != 1 {
+		t.Errorf("expected 1 changed (version drift), got %d", len(result.Changed))
+	}
+}
+
 func TestHashDiff(t *testing.T) {
 	t.Run("detects added hash", func(t *testing.T) {
 		before := map[string]string{}

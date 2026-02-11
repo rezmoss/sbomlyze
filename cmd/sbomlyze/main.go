@@ -9,7 +9,9 @@ import (
 	"github.com/rezmoss/sbomlyze/internal/analysis"
 	"github.com/rezmoss/sbomlyze/internal/cli"
 	"github.com/rezmoss/sbomlyze/internal/output"
+	"github.com/rezmoss/sbomlyze/internal/pager"
 	"github.com/rezmoss/sbomlyze/internal/policy"
+	"github.com/rezmoss/sbomlyze/internal/progress"
 	"github.com/rezmoss/sbomlyze/internal/sbom"
 	"github.com/rezmoss/sbomlyze/internal/tui"
 	"github.com/rezmoss/sbomlyze/internal/version"
@@ -36,7 +38,6 @@ func main() {
 
 	opts := cli.ParseArgs(os.Args)
 
-	// Web server mode
 	if opts.WebServer {
 		port := opts.WebPort
 		if port == 0 {
@@ -59,27 +60,31 @@ func main() {
 
 	// Single file mode - stats or interactive
 	if len(opts.Files) == 1 {
+		spin := progress.New(opts.JSONOutput || opts.Interactive)
+
 		// For interactive mode, we need SBOM info as well
 		var comps []sbom.Component
 		var sbomInfo sbom.SBOMInfo
 		var err error
 
+		spin.Start("Parsing SBOM...")
 		if opts.Interactive {
 			comps, sbomInfo, err = parseFileWithOptionsAndInfo(opts.Files[0], &parseOpts)
 		} else {
 			comps, err = parseFileWithOptions(opts.Files[0], &parseOpts)
 		}
 		if err != nil {
+			spin.Stop()
 			fmt.Fprintf(os.Stderr, "Error parsing %s: %v\n", opts.Files[0], err)
 			os.Exit(1)
 		}
+		spin.Done(fmt.Sprintf("Parsed %d components", len(comps)))
 
-		// Normalize components
+		spin.Start("Analyzing...")
 		comps = sbom.NormalizeComponents(comps)
-
 		stats := analysis.ComputeStats(comps)
+		spin.Done("Analysis complete")
 
-		// Interactive mode
 		if opts.Interactive {
 			if err := tui.Run(comps, stats, sbomInfo); err != nil {
 				fmt.Fprintf(os.Stderr, "Error running interactive mode: %v\n", err)
@@ -87,6 +92,9 @@ func main() {
 			}
 			return
 		}
+
+		p := pager.Start(opts.NoPager)
+		defer p.Stop()
 
 		if opts.JSONOutput {
 			output := struct {
@@ -99,6 +107,7 @@ func main() {
 			enc := json.NewEncoder(os.Stdout)
 			enc.SetIndent("", "  ")
 			if err := enc.Encode(output); err != nil {
+				p.Stop()
 				fmt.Fprintf(os.Stderr, "Error encoding JSON: %v\n", err)
 				os.Exit(1)
 			}
@@ -111,26 +120,33 @@ func main() {
 
 	// Two file mode - diff
 	file1, file2 := opts.Files[0], opts.Files[1]
+	spin := progress.New(opts.Format != "" && opts.Format != "text")
 
+	spin.Start("Parsing first SBOM...")
 	comps1, err := parseFileWithOptions(file1, &parseOpts)
 	if err != nil {
+		spin.Stop()
 		fmt.Fprintf(os.Stderr, "Error parsing %s: %v\n", file1, err)
 		os.Exit(1)
 	}
+	spin.Done(fmt.Sprintf("Parsed %d components", len(comps1)))
 
+	spin.Start("Parsing second SBOM...")
 	comps2, err := parseFileWithOptions(file2, &parseOpts)
 	if err != nil {
+		spin.Stop()
 		fmt.Fprintf(os.Stderr, "Error parsing %s: %v\n", file2, err)
 		os.Exit(1)
 	}
+	spin.Done(fmt.Sprintf("Parsed %d components", len(comps2)))
 
-	// Normalize components
+	spin.Start("Comparing SBOMs...")
 	comps1 = sbom.NormalizeComponents(comps1)
 	comps2 = sbom.NormalizeComponents(comps2)
 
 	result := analysis.DiffComponents(comps1, comps2)
+	spin.Done("Comparison complete")
 
-	// Policy evaluation
 	var violations []policy.Violation
 	if opts.PolicyFile != "" {
 		policyData, err := os.ReadFile(opts.PolicyFile)
@@ -146,11 +162,12 @@ func main() {
 		violations = policy.Evaluate(pol, result)
 	}
 
-	// Determine output format
 	sbomFile := ""
 	if len(opts.Files) > 1 {
 		sbomFile = opts.Files[1]
 	}
+
+	p := pager.Start(opts.NoPager)
 
 	switch opts.Format {
 	case "json":
@@ -166,6 +183,7 @@ func main() {
 		enc := json.NewEncoder(os.Stdout)
 		enc.SetIndent("", "  ")
 		if err := enc.Encode(out); err != nil {
+			p.Stop()
 			fmt.Fprintf(os.Stderr, "Error encoding JSON: %v\n", err)
 			os.Exit(1)
 		}
@@ -175,6 +193,7 @@ func main() {
 		enc := json.NewEncoder(os.Stdout)
 		enc.SetIndent("", "  ")
 		if err := enc.Encode(sarif); err != nil {
+			p.Stop()
 			fmt.Fprintf(os.Stderr, "Error encoding SARIF: %v\n", err)
 			os.Exit(1)
 		}
@@ -183,6 +202,7 @@ func main() {
 		junit := output.GenerateJUnit(result, violations)
 		out, err := xml.MarshalIndent(junit, "", "  ")
 		if err != nil {
+			p.Stop()
 			fmt.Fprintf(os.Stderr, "Error encoding JUnit: %v\n", err)
 			os.Exit(1)
 		}
@@ -195,6 +215,7 @@ func main() {
 		patch := output.GenerateJSONPatch(result)
 		out, err := json.MarshalIndent(patch, "", "  ")
 		if err != nil {
+			p.Stop()
 			fmt.Fprintf(os.Stderr, "Error encoding JSON Patch: %v\n", err)
 			os.Exit(1)
 		}
@@ -206,7 +227,8 @@ func main() {
 		cli.PrintWarnings(parseOpts.Warnings)
 	}
 
-	// Exit with error if there are differences OR policy errors (not warnings)
+	p.Stop()
+
 	hasDiff := len(result.Added) > 0 || len(result.Removed) > 0 || len(result.Changed) > 0
 	hasPolicyErrors := policy.HasErrors(violations)
 	if hasDiff || hasPolicyErrors {

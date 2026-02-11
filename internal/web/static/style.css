@@ -628,6 +628,42 @@ mark {
     background: var(--text-secondary);
 }
 
+/* Upload progress bar */
+.progress-container {
+    width: 100%;
+    max-width: 400px;
+    margin-top: 15px;
+}
+
+.progress-bar {
+    height: 8px;
+    background: var(--bg-tertiary);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 4px;
+    transition: width 0.2s ease;
+    width: 0%;
+}
+
+.progress-text {
+    margin-top: 8px;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+/* Load more indicator */
+.load-more {
+    text-align: center;
+    padding: 15px;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
 /* Info banner */
 .info-banner {
     background: var(--bg-tertiary);
