@@ -29,6 +29,7 @@ func resetState() {
 	state.RawSBOMData = nil
 	state.CompIndex = nil
 	state.SearchIndex = nil
+	state.FileIndex = nil
 }
 
 func loadTestState(comps []sbom.Component, info sbom.SBOMInfo) {
