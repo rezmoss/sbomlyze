@@ -38,6 +38,7 @@ func Serve(port int) error {
 	mux.HandleFunc("/api/search", handleSearch)
 	mux.HandleFunc("/api/filesystem", handleFilesystem)
 	mux.HandleFunc("/api/filesystem/info", handleFilesystemInfo)
+	mux.HandleFunc("/api/filesystem/stats", handleFilesystemStats)
 
 	// Serve static files
 	staticFS, err := fs.Sub(staticFiles, "static")

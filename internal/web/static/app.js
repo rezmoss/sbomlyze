@@ -21,6 +21,10 @@ let fsOffset = 0;
 let fsSelectedPath = null;
 let fsAvailable = false;
 let fsLoadingMore = false;
+let fsSelectedLayer = null;
+let fsLayers = [];
+let fsFilterComponentId = null;
+let fsFilterComponentName = '';
 
 // DOM Elements
 const dropZone = document.getElementById('drop-zone');
@@ -40,6 +44,7 @@ const fsBackBtn = document.getElementById('fs-back-btn');
 const fsListContainer = document.getElementById('fs-list-container');
 const fsInfoContainer = document.getElementById('fs-info-container');
 const fsCount = document.getElementById('fs-count');
+const fsLayerSelector = document.getElementById('fs-layer-selector');
 
 // Event Listeners
 dropZone.addEventListener('click', () => fileInput.click());
@@ -480,6 +485,15 @@ function renderDetail(detail) {
                 </div>
             `;
         }
+
+        if (fsAvailable && detail.fileCount > 0) {
+            html += `
+                <div class="detail-section">
+                    <h3>Files</h3>
+                    <button class="btn-small" onclick="viewComponentFiles('${escapeHtml(detail.id)}', '${escapeHtml(detail.name)}')">View ${detail.fileCount} file${detail.fileCount !== 1 ? 's' : ''}</button>
+                </div>
+            `;
+        }
     }
 
     detailContainer.innerHTML = html;
@@ -767,7 +781,8 @@ function showFilesystemView() {
     fsSearchInput.value = '';
     fsOffset = 0;
     fsSelectedPath = null;
-    fsInfoContainer.innerHTML = '<p class="placeholder">Select a file to view details</p>';
+    fsSelectedLayer = null;
+    loadFsStats();
     loadFilesystemEntries();
 
     // Attach scroll listener for infinite scroll
@@ -797,6 +812,12 @@ async function loadFilesystemEntries() {
         if (fsSearchQuery) {
             url = `/api/filesystem?q=${encodeURIComponent(fsSearchQuery)}&offset=0&limit=100`;
         }
+        if (fsSelectedLayer) {
+            url += `&layer=${encodeURIComponent(fsSelectedLayer)}`;
+        }
+        if (fsFilterComponentId) {
+            url += `&component=${encodeURIComponent(fsFilterComponentId)}`;
+        }
 
         const response = await fetch(url);
         if (!response.ok) throw new Error('Failed to load filesystem');
@@ -806,8 +827,15 @@ async function loadFilesystemEntries() {
         fsTotal = data.total || 0;
         fsOffset = fsEntries.length;
 
+        // Capture layer info
+        if (data.layers) {
+            fsLayers = data.layers;
+        }
+
+        renderFsFilterBanner();
         renderFsList();
         renderFsBreadcrumbs(data.breadcrumbs || []);
+        renderFsLayerSelector();
         fsCount.textContent = `(${fsTotal.toLocaleString()})`;
     } catch (error) {
         console.error('Load filesystem error:', error);
@@ -828,6 +856,12 @@ async function loadMoreFsEntries() {
         let url = `/api/filesystem?path=${encodeURIComponent(fsCurrentPath)}&offset=${fsOffset}&limit=100`;
         if (fsSearchQuery) {
             url = `/api/filesystem?q=${encodeURIComponent(fsSearchQuery)}&offset=${fsOffset}&limit=100`;
+        }
+        if (fsSelectedLayer) {
+            url += `&layer=${encodeURIComponent(fsSelectedLayer)}`;
+        }
+        if (fsFilterComponentId) {
+            url += `&component=${encodeURIComponent(fsFilterComponentId)}`;
         }
 
         const response = await fetch(url);
@@ -854,7 +888,7 @@ function handleFsNavigate(path) {
     fsSearchInput.value = '';
     fsOffset = 0;
     fsSelectedPath = null;
-    fsInfoContainer.innerHTML = '<p class="placeholder">Select a file to view details</p>';
+    loadFsStats();
     loadFilesystemEntries();
 }
 
@@ -1077,6 +1111,143 @@ function renderFsInfo(data) {
     fsInfoContainer.innerHTML = html;
 }
 
+// Layer selector rendering
+function renderFsLayerSelector() {
+    if (!fsLayers || fsLayers.length === 0) {
+        fsLayerSelector.innerHTML = '';
+        return;
+    }
+
+    let html = `<span class="fs-layer-pill ${!fsSelectedLayer ? 'active' : ''}" data-layer="">All</span>`;
+    for (const layer of fsLayers) {
+        const shortId = layer.layerID.substring(0, 12);
+        const isActive = fsSelectedLayer === layer.layerID;
+        html += `<span class="fs-layer-pill ${isActive ? 'active' : ''}" data-layer="${escapeHtml(layer.layerID)}">${escapeHtml(shortId)} <span class="layer-count">(${layer.fileCount})</span></span>`;
+    }
+
+    fsLayerSelector.innerHTML = html;
+
+    fsLayerSelector.querySelectorAll('.fs-layer-pill').forEach(el => {
+        el.addEventListener('click', () => {
+            const layer = el.dataset.layer;
+            fsSelectedLayer = layer || null;
+            fsOffset = 0;
+            loadFilesystemEntries();
+        });
+    });
+}
+
+// Filter banner for component filter
+function renderFsFilterBanner() {
+    // Remove existing banner
+    const existing = fsListContainer.parentElement.querySelector('.fs-filter-banner');
+    if (existing) existing.remove();
+
+    if (!fsFilterComponentId) return;
+
+    const banner = document.createElement('div');
+    banner.className = 'fs-filter-banner';
+    banner.innerHTML = `
+        <span>Showing files for <strong>${escapeHtml(fsFilterComponentName)}</strong></span>
+        <button class="clear-filter" onclick="clearComponentFilter()">Clear</button>
+    `;
+    fsListContainer.parentElement.insertBefore(banner, fsListContainer);
+}
+
+function clearComponentFilter() {
+    fsFilterComponentId = null;
+    fsFilterComponentName = '';
+    fsOffset = 0;
+    loadFilesystemEntries();
+}
+
+// Component → Files navigation
+function viewComponentFiles(compId, compName) {
+    fsFilterComponentId = compId;
+    fsFilterComponentName = compName;
+    fsSelectedLayer = null;
+    showFilesystemView();
+}
+
+// File stats loading and rendering
+async function loadFsStats() {
+    try {
+        const response = await fetch('/api/filesystem/stats');
+        if (!response.ok) throw new Error('Failed to load file stats');
+
+        const stats = await response.json();
+        renderFsStats(stats);
+    } catch (error) {
+        console.error('Load fs stats error:', error);
+        fsInfoContainer.innerHTML = '<p class="placeholder">Select a file to view details</p>';
+    }
+}
+
+function renderFsStats(stats) {
+    let html = '<div class="fs-stats-overview">';
+    html += `
+        <div class="fs-stat-card">
+            <span class="stat-value">${(stats.totalFiles || 0).toLocaleString()}</span>
+            <span class="stat-label">Total Files</span>
+        </div>
+        <div class="fs-stat-card">
+            <span class="stat-value">${formatFileSize(stats.totalSize || 0)}</span>
+            <span class="stat-label">Total Size</span>
+        </div>
+        <div class="fs-stat-card ${stats.unownedFiles > 0 ? 'warning' : ''}">
+            <span class="stat-value">${(stats.unownedFiles || 0).toLocaleString()}</span>
+            <span class="stat-label">Unowned Files</span>
+        </div>
+    `;
+    html += '</div>';
+
+    // By File Type
+    if (stats.byFileType && Object.keys(stats.byFileType).length > 0) {
+        html += '<div class="stat-group"><h4>By File Type</h4>';
+        html += renderStatBars(stats.byFileType, 10);
+        html += '</div>';
+    }
+
+    // By MIME Type
+    if (stats.byMimeType && stats.byMimeType.length > 0) {
+        const mimeObj = {};
+        for (const tc of stats.byMimeType) {
+            mimeObj[tc.name] = tc.count;
+        }
+        html += '<div class="stat-group"><h4>By MIME Type</h4>';
+        html += renderStatBars(mimeObj, 15);
+        html += '</div>';
+    }
+
+    // By Extension
+    if (stats.byExtension && stats.byExtension.length > 0) {
+        const extObj = {};
+        for (const tc of stats.byExtension) {
+            extObj[tc.name] = tc.count;
+        }
+        html += '<div class="stat-group"><h4>By Extension</h4>';
+        html += renderStatBars(extObj, 15);
+        html += '</div>';
+    }
+
+    // By Layer
+    if (stats.layers && stats.layers.length > 0) {
+        html += '<div class="stat-group"><h4>By Layer</h4>';
+        for (const layer of stats.layers) {
+            const shortId = layer.layerID.substring(0, 12);
+            html += `
+                <div class="stat-item-small">
+                    <span class="stat-label" style="font-family: monospace; font-size: 0.8rem;">${escapeHtml(shortId)}...</span>
+                    <span class="stat-value">${layer.fileCount} files (${formatFileSize(layer.totalSize)})</span>
+                </div>
+            `;
+        }
+        html += '</div>';
+    }
+
+    fsInfoContainer.innerHTML = html;
+}
+
 // Utility functions for filesystem
 function formatFileSize(bytes) {
     if (bytes === 0) return '0 B';
@@ -1143,12 +1314,17 @@ function resetUI() {
     fsSelectedPath = null;
     fsAvailable = false;
     fsLoadingMore = false;
+    fsSelectedLayer = null;
+    fsLayers = [];
+    fsFilterComponentId = null;
+    fsFilterComponentName = '';
     filesystemBtn.classList.add('hidden');
     filesystemBtn.classList.remove('active');
     filesystemView.classList.add('hidden');
     contentGrid.classList.remove('hidden');
     fsInfoContainer.innerHTML = '<p class="placeholder">Select a file to view details</p>';
     fsSearchInput.value = '';
+    fsLayerSelector.innerHTML = '';
 }
 
 function escapeHtml(str) {

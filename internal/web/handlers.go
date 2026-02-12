@@ -35,6 +35,7 @@ type ComponentDetail struct {
 	Dependencies []string          `json:"dependencies,omitempty"`
 	Supplier     string            `json:"supplier,omitempty"`
 	RawJSON      json.RawMessage   `json:"rawJson,omitempty"`
+	FileCount    int               `json:"fileCount"`
 }
 
 func handleUpload(w http.ResponseWriter, r *http.Request) {
@@ -312,6 +313,11 @@ func handleGetComponent(w http.ResponseWriter, r *http.Request) {
 		Supplier:     c.Supplier,
 		RawJSON:      c.RawJSON,
 	}
+
+	if state.FileIndex != nil {
+		detail.FileCount = len(state.FileIndex.CompToFiles[idx])
+	}
+
 	w.Header().Set("Content-Type", "application/json")
 	_ = json.NewEncoder(w).Encode(detail)
 }
