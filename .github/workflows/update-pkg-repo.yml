@@ -10,12 +10,14 @@ on:
         required: true
 
 permissions:
-  contents: write
-  pages: write
+  contents: read
 
 jobs:
   update-repo:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
     steps:
       - name: Checkout gh-pages branch
         uses: actions/checkout@v4
