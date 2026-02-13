@@ -1,4 +1,26 @@
 
+SBOM Comparison
+======================================================================
+                        Before                  After
+File:                   cyclonedx-before.json   cyclonedx-integrity-drift.json
+File Size:              921 B                   936 B
+Format:                 (none)                  (none)
+OS:                     (none)                  (none)
+Source:                 (none)                  (none)
+Source Type:            (none)                  (none)
+Total Components:       3                       3
+  npm:                  3                       3               
+Data Quality:
+  PURL Coverage:        100.0%                  100.0%
+  License Coverage:     66.7%                   66.7%
+  Hash Coverage:        33.3%                   33.3%
+  CPE Coverage:         0.0%                    0.0%
+======================================================================
+
+Key Findings:
+  🔄 0 version changes among 3 shared packages — no actual upgrades
+  ⚠️ Integrity drift (1 total): 1 npm (review recommended)
+
 📊 Drift Summary:
   ⚠️  Integrity drift: 1 components (hash changed without version change!)
 

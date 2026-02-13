@@ -35,6 +35,7 @@
                     </svg>
                     <input type="text" id="search-input" placeholder="Search all fields (name, license, purl, metadata...)">
                 </div>
+                <button id="filesystem-btn" class="btn btn-secondary hidden">File System</button>
                 <button id="upload-new" class="btn btn-secondary">Upload New</button>
             </div>
 
@@ -54,6 +55,33 @@
                 <div class="panel stats-panel">
                     <h2>Statistics</h2>
                     <div id="stats-container" class="stats-container"></div>
+                </div>
+            </div>
+
+            <div id="filesystem-view" class="filesystem-view hidden">
+                <div class="fs-toolbar">
+                    <div class="fs-breadcrumbs" id="fs-breadcrumbs"></div>
+                    <div id="fs-layer-selector" class="fs-layer-selector"></div>
+                    <div class="fs-search-box">
+                        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <input type="text" id="fs-search-input" placeholder="Search files... (supports *.jar, /etc/**)">
+                    </div>
+                    <button id="fs-back-btn" class="btn btn-secondary">Back to Components</button>
+                </div>
+                <div class="fs-content-grid">
+                    <div class="panel fs-list-panel">
+                        <h2>Files <span id="fs-count" class="fs-count"></span></h2>
+                        <div id="fs-list-container" class="fs-list-container"></div>
+                    </div>
+                    <div class="panel fs-info-panel">
+                        <h2>File Info</h2>
+                        <div id="fs-info-container" class="fs-info-container">
+                            <p class="placeholder">Select a file to view details</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

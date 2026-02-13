@@ -21,6 +21,7 @@ type ServerState struct {
 	RawSBOMData   []byte         // Keep raw data for extended analysis
 	CompIndex     map[string]int // ID → Components slice index for O(1) lookup
 	SearchIndex   []string       // pre-built lowercase search string per component
+	FileIndex     *FileIndex     // File system index (nil when no file data available)
 }
 
 var state = &ServerState{}
@@ -35,6 +36,9 @@ func Serve(port int) error {
 	mux.HandleFunc("/api/stats", handleGetStats)
 	mux.HandleFunc("/api/component/", handleGetComponent)
 	mux.HandleFunc("/api/search", handleSearch)
+	mux.HandleFunc("/api/filesystem", handleFilesystem)
+	mux.HandleFunc("/api/filesystem/info", handleFilesystemInfo)
+	mux.HandleFunc("/api/filesystem/stats", handleFilesystemStats)
 
 	// Serve static files
 	staticFS, err := fs.Sub(staticFiles, "static")

@@ -25,9 +25,15 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 		} `json:"artifactRelationships"`
 		Source     json.RawMessage `json:"source"` // RawMessage to handle missing/malformed
 		Distro     json.RawMessage `json:"distro"` // RawMessage to handle object or array
+		Files      json.RawMessage `json:"files"`
 		Descriptor struct {
-			Name    string `json:"name"`
-			Version string `json:"version"`
+			Name          string `json:"name"`
+			Version       string `json:"version"`
+			Configuration struct {
+				Search struct {
+					Scope string `json:"scope"`
+				} `json:"search"`
+			} `json:"configuration"`
 		} `json:"descriptor"`
 		Schema struct {
 			Version string `json:"version"`
@@ -41,6 +47,15 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 	info.ToolName = doc.Descriptor.Name
 	info.ToolVersion = doc.Descriptor.Version
 	info.SchemaVersion = doc.Schema.Version
+	info.SearchScope = doc.Descriptor.Configuration.Search.Scope
+
+	// Count files without fully parsing the array
+	if len(doc.Files) > 2 { // non-empty JSON array is at least "[]"
+		var filesArr []json.RawMessage
+		if json.Unmarshal(doc.Files, &filesArr) == nil {
+			info.FilesCount = len(filesArr)
+		}
+	}
 
 	// Parse source flexibly - ignore errors, just use empty values
 	if len(doc.Source) > 0 {
@@ -114,7 +129,10 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 			FoundBy      string          `json:"foundBy"`
 			MetadataType string          `json:"metadataType"`
 			Metadata     json.RawMessage `json:"metadata"`
-			Licenses     []struct {
+			Locations    []struct {
+				Path string `json:"path"`
+			} `json:"locations"`
+			Licenses []struct {
 				Value          string `json:"value"`
 				SPDXExpression string `json:"spdxExpression"`
 			} `json:"licenses"`
@@ -135,6 +153,11 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 			FoundBy:  a.FoundBy,
 			Hashes:   make(map[string]string),
 			RawJSON:  rawArtifact, // Preserve the original JSON
+		}
+		for _, loc := range a.Locations {
+			if loc.Path != "" {
+				comp.Locations = append(comp.Locations, loc.Path)
+			}
 		}
 		for _, lic := range a.Licenses {
 			val := lic.SPDXExpression

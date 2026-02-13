@@ -2,10 +2,221 @@ package output
 
 import (
 	"fmt"
+	"path/filepath"
+	"strings"
 
 	"github.com/rezmoss/sbomlyze/internal/analysis"
 	"github.com/rezmoss/sbomlyze/internal/policy"
+	"github.com/rezmoss/sbomlyze/internal/sbom"
 )
+
+// formatFileSize formats bytes into a human-readable string
+func formatFileSize(size int64) string {
+	const (
+		kb = 1024
+		mb = kb * 1024
+		gb = mb * 1024
+	)
+	switch {
+	case size >= gb:
+		return fmt.Sprintf("%.1f GB", float64(size)/float64(gb))
+	case size >= mb:
+		return fmt.Sprintf("%.0f MB", float64(size)/float64(mb))
+	case size >= kb:
+		return fmt.Sprintf("%.0f KB", float64(size)/float64(kb))
+	default:
+		return fmt.Sprintf("%d B", size)
+	}
+}
+
+// formatPct formats a percentage from a count and total
+func formatPct(count, total int) string {
+	if total == 0 {
+		return "0.0%"
+	}
+	return fmt.Sprintf("%.1f%%", float64(count)/float64(total)*100)
+}
+
+// orNone returns the string or "(none)" if empty
+func orNone(s string) string {
+	if s == "" {
+		return "(none)"
+	}
+	return s
+}
+
+// PrintDiffOverview prints the side-by-side SBOM comparison header
+func PrintDiffOverview(overview analysis.DiffOverview) {
+	b := overview.Before
+	a := overview.After
+
+	sep := strings.Repeat("=", 70)
+	fmt.Printf("\nSBOM Comparison\n%s\n", sep)
+	fmt.Printf("%-24s%-24s%s\n", "", "Before", "After")
+	fmt.Printf("%-24s%-24s%s\n", "File:", filepath.Base(b.FileName), filepath.Base(a.FileName))
+	fmt.Printf("%-24s%-24s%s\n", "File Size:", formatFileSize(b.FileSize), formatFileSize(a.FileSize))
+	fmt.Printf("%-24s%-24s%s\n", "Format:", orNone(b.Info.ToolName), orNone(a.Info.ToolName))
+	fmt.Printf("%-24s%-24s%s\n", "OS:", orNone(b.Info.OSPrettyName), orNone(a.Info.OSPrettyName))
+	fmt.Printf("%-24s%-24s%s\n", "Source:", orNone(b.Info.SourceName), orNone(a.Info.SourceName))
+	fmt.Printf("%-24s%-24s%s\n", "Source Type:", orNone(b.Info.SourceType), orNone(a.Info.SourceType))
+	fmt.Printf("%-24s%-24s%s\n", "Total Components:",
+		fmt.Sprintf("%d", b.Stats.TotalComponents),
+		fmt.Sprintf("%d", a.Stats.TotalComponents))
+
+	// Merge all type keys from both sides
+	allTypes := make(map[string]bool)
+	for t := range b.Stats.ByType {
+		allTypes[t] = true
+	}
+	for t := range a.Stats.ByType {
+		allTypes[t] = true
+	}
+	if len(allTypes) > 0 {
+		types := analysis.SortedByValue(b.Stats.ByType)
+		// Add types only in 'after' that are missing from 'before'
+		afterOnly := analysis.SortedByValue(a.Stats.ByType)
+		seen := make(map[string]bool)
+		for _, t := range types {
+			seen[t] = true
+		}
+		for _, t := range afterOnly {
+			if !seen[t] {
+				types = append(types, t)
+			}
+		}
+		for _, t := range types {
+			bCount := b.Stats.ByType[t]
+			aCount := a.Stats.ByType[t]
+			diff := aCount - bCount
+			diffStr := ""
+			if diff > 0 {
+				diffStr = fmt.Sprintf("+%d", diff)
+			} else if diff < 0 {
+				diffStr = fmt.Sprintf("%d", diff)
+			}
+			label := fmt.Sprintf("  %s:", t)
+			fmt.Printf("%-24s%-24s%-16s%s\n", label,
+				fmt.Sprintf("%d", bCount),
+				fmt.Sprintf("%d", aCount),
+				diffStr)
+		}
+	}
+
+	// Data quality section
+	fmt.Printf("Data Quality:\n")
+	fmt.Printf("%-24s%-24s%s\n", "  PURL Coverage:",
+		formatPct(b.Stats.WithPURL, b.Stats.TotalComponents),
+		formatPct(a.Stats.WithPURL, a.Stats.TotalComponents))
+	fmt.Printf("%-24s%-24s%s\n", "  License Coverage:",
+		formatPct(b.Stats.TotalComponents-b.Stats.WithoutLicense, b.Stats.TotalComponents),
+		formatPct(a.Stats.TotalComponents-a.Stats.WithoutLicense, a.Stats.TotalComponents))
+	fmt.Printf("%-24s%-24s%s\n", "  Hash Coverage:",
+		formatPct(b.Stats.WithHashes, b.Stats.TotalComponents),
+		formatPct(a.Stats.WithHashes, a.Stats.TotalComponents))
+	fmt.Printf("%-24s%-24s%s\n", "  CPE Coverage:",
+		formatPct(b.Stats.WithCPEs, b.Stats.TotalComponents),
+		formatPct(a.Stats.WithCPEs, a.Stats.TotalComponents))
+	fmt.Printf("%s\n", sep)
+}
+
+// PrintSingleScanContext prints scan context for a single SBOM
+func PrintSingleScanContext(info sbom.SBOMInfo) {
+	hasAny := info.SchemaVersion != "" || info.SearchScope != "" || info.ToolName != "" || info.SourceType != ""
+	if !hasAny {
+		return
+	}
+
+	fmt.Printf("\nScan Context:\n")
+	if info.ToolName != "" {
+		tool := info.ToolName
+		if info.ToolVersion != "" {
+			tool += " " + info.ToolVersion
+		}
+		fmt.Printf("  %-20s%s\n", "Tool:", tool)
+	}
+	if info.SchemaVersion != "" {
+		fmt.Printf("  %-20s%s\n", "Schema:", info.SchemaVersion)
+	}
+	if info.SearchScope != "" {
+		fmt.Printf("  %-20s%s\n", "Scan Scope:", info.SearchScope)
+	}
+	if info.SourceType != "" {
+		fmt.Printf("  %-20s%s\n", "Source Type:", info.SourceType)
+	}
+	if info.SourceName != "" {
+		fmt.Printf("  %-20s%s\n", "Source:", info.SourceName)
+	}
+}
+
+// PrintScanContext prints the scan context comparison (schema + scope) if available
+func PrintScanContext(overview analysis.DiffOverview) {
+	b := overview.Before.Info
+	a := overview.After.Info
+
+	hasSchema := b.SchemaVersion != "" || a.SchemaVersion != ""
+	hasScope := b.SearchScope != "" || a.SearchScope != ""
+
+	if !hasSchema && !hasScope {
+		return
+	}
+
+	fmt.Printf("\nScan Context:\n")
+	if hasSchema {
+		fmt.Printf("  %-24s%-24s%s\n", "Schema:", orNone(b.SchemaVersion), orNone(a.SchemaVersion))
+	}
+	if hasScope {
+		fmt.Printf("  %-24s%-24s%s\n", "Scan Scope:", orNone(b.SearchScope), orNone(a.SearchScope))
+	}
+}
+
+// PrintKeyFindings prints the computed key findings as a bullet list
+func PrintKeyFindings(findings analysis.KeyFindings) {
+	if len(findings.Findings) == 0 {
+		return
+	}
+
+	fmt.Printf("\nKey Findings:\n")
+	for _, f := range findings.Findings {
+		fmt.Printf("  %s %s\n", f.Icon, f.Message)
+	}
+}
+
+// PrintPackageSamples prints sample packages grouped by type for added/removed
+func PrintPackageSamples(added, removed []analysis.PackageSamplesByType) {
+	if len(added) > 0 {
+		fmt.Printf("\n+ Added by type (up to 5 samples each):\n")
+		for _, group := range added {
+			fmt.Printf("  %s (%d total):\n", group.Type, group.Total)
+			for _, s := range group.Samples {
+				fmt.Printf("    + %s %s\n", s.Name, s.Version)
+				for _, loc := range s.Locations {
+					fmt.Printf("      %s\n", loc)
+				}
+			}
+			remaining := group.Total - len(group.Samples)
+			if remaining > 0 {
+				fmt.Printf("    ...and %d more\n", remaining)
+			}
+		}
+	}
+
+	if len(removed) > 0 {
+		fmt.Printf("\n- Removed by type (up to 5 samples each):\n")
+		for _, group := range removed {
+			fmt.Printf("  %s (%d total):\n", group.Type, group.Total)
+			for _, s := range group.Samples {
+				fmt.Printf("    - %s %s\n", s.Name, s.Version)
+				for _, loc := range s.Locations {
+					fmt.Printf("      %s\n", loc)
+				}
+			}
+			remaining := group.Total - len(group.Samples)
+			if remaining > 0 {
+				fmt.Printf("    ...and %d more\n", remaining)
+			}
+		}
+	}
+}
 
 // PrintTextDiff outputs the diff result in human-readable text format
 func PrintTextDiff(result analysis.DiffResult) {

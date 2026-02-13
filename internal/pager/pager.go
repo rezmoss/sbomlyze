@@ -69,13 +69,13 @@ func Start(disabled bool) *Pager {
 	signal.Ignore(syscall.SIGPIPE)
 
 	if err := cmd.Start(); err != nil {
-		w.Close()
-		r.Close()
+		_ = w.Close()
+		_ = r.Close()
 		return nil
 	}
 
 	// Close read end in parent — the pager process owns it now
-	r.Close()
+	_ = r.Close()
 
 	oldStdout := os.Stdout
 	os.Stdout = w
@@ -96,6 +96,6 @@ func (p *Pager) Stop() {
 	p.stopped = true
 
 	os.Stdout = p.oldStdout
-	p.pipe.Close()
+	_ = p.pipe.Close()
 	_ = p.cmd.Wait()
 }

@@ -1,4 +1,31 @@
 {
+  "info": {
+    "source_type": "image",
+    "source_name": "alpine:latest",
+    "relationship_counts": {
+      "dependency-of": 2
+    }
+  },
+  "findings": {
+    "findings": [
+      {
+        "icon": "📦",
+        "message": "Dominated by apk: 3 of 3 packages (100.0%)"
+      },
+      {
+        "icon": "🔗",
+        "message": "Relationships: 2 dependency"
+      },
+      {
+        "icon": "📜",
+        "message": "License profile: 33% permissive, 67% copyleft"
+      },
+      {
+        "icon": "🔍",
+        "message": "Top catalogers: apkdb-cataloger (3)"
+      }
+    ]
+  },
   "stats": {
     "total_components": 3,
     "by_type": {
@@ -14,6 +41,9 @@
     "total_dependencies": 2,
     "with_dependencies": 1,
     "duplicate_count": 0,
+    "by_found_by": {
+      "apkdb-cataloger": 3
+    },
     "license_categories": {
       "copyleft": 2,
       "permissive": 1,

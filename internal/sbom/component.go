@@ -19,6 +19,8 @@ type SBOMInfo struct {
 	ToolName           string         `json:"tool_name,omitempty"`           // e.g., "syft"
 	ToolVersion        string         `json:"tool_version,omitempty"`        // Tool version that generated the SBOM
 	SchemaVersion      string         `json:"schema_version,omitempty"`      // SBOM schema version
+	SearchScope        string         `json:"search_scope,omitempty"`        // e.g., "squashed", "all-layers"
+	FilesCount         int            `json:"files_count,omitempty"`         // Top-level files array length
 }
 
 // Component represents a normalized component from any SBOM format
@@ -38,6 +40,7 @@ type Component struct {
 	Language     string            `json:"language,omitempty"` // Programming language (go, python, java, etc.)
 	FoundBy      string            `json:"foundBy,omitempty"`  // Scanner/cataloger that found this component
 	Type         string            `json:"type,omitempty"`     // Package type from SBOM (e.g., library, application)
+	Locations    []string          `json:"locations,omitempty"` // File paths where the package was found
 	RawJSON      json.RawMessage   `json:"-"`                  // Original JSON from SBOM, excluded from output
 }
 

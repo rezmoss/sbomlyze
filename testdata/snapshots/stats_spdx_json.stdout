@@ -1,4 +1,17 @@
 {
+  "info": {},
+  "findings": {
+    "findings": [
+      {
+        "icon": "📦",
+        "message": "Dominated by npm: 2 of 2 packages (100.0%)"
+      },
+      {
+        "icon": "📜",
+        "message": "License profile: 100% permissive"
+      }
+    ]
+  },
   "stats": {
     "total_components": 2,
     "by_type": {

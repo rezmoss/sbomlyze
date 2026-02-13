@@ -35,6 +35,7 @@ type ComponentDetail struct {
 	Dependencies []string          `json:"dependencies,omitempty"`
 	Supplier     string            `json:"supplier,omitempty"`
 	RawJSON      json.RawMessage   `json:"rawJson,omitempty"`
+	FileCount    int               `json:"fileCount"`
 }
 
 func handleUpload(w http.ResponseWriter, r *http.Request) {
@@ -99,6 +100,14 @@ func handleUpload(w http.ResponseWriter, r *http.Request) {
 	compIndex := buildCompIndex(comps)
 	searchIndex := buildSearchIndex(comps)
 
+	// Build file system index
+	var fileIdx *FileIndex
+	if sbom.IsSyft(data) {
+		fileIdx = buildFileIndex(data, comps, compIndex)
+	} else {
+		fileIdx = buildFileIndexFromLocations(comps, compIndex)
+	}
+
 	// Store in server state
 	state.mu.Lock()
 	state.Components = comps
@@ -109,14 +118,20 @@ func handleUpload(w http.ResponseWriter, r *http.Request) {
 	state.RawSBOMData = data
 	state.CompIndex = compIndex
 	state.SearchIndex = searchIndex
+	state.FileIndex = fileIdx
 	state.mu.Unlock()
 
-	w.Header().Set("Content-Type", "application/json")
-	_ = json.NewEncoder(w).Encode(map[string]interface{}{
+	resp := map[string]interface{}{
 		"success":    true,
 		"components": len(comps),
 		"info":       info,
-	})
+	}
+	if fileIdx != nil {
+		resp["filesCount"] = fileIdx.TotalFiles
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	_ = json.NewEncoder(w).Encode(resp)
 }
 
 func handleGetTree(w http.ResponseWriter, r *http.Request) {
@@ -298,6 +313,11 @@ func handleGetComponent(w http.ResponseWriter, r *http.Request) {
 		Supplier:     c.Supplier,
 		RawJSON:      c.RawJSON,
 	}
+
+	if state.FileIndex != nil {
+		detail.FileCount = len(state.FileIndex.CompToFiles[idx])
+	}
+
 	w.Header().Set("Content-Type", "application/json")
 	_ = json.NewEncoder(w).Encode(detail)
 }
