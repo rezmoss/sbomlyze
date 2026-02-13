@@ -171,16 +171,40 @@ func buildFileIndex(rawData []byte, comps []sbom.Component, compIndex map[string
 	}
 
 	// Build syft artifact ID → component index mapping
+	// To avoid O(len(Artifacts) * len(comps)) behavior, first build a lookup
+	// from component identity (purl or name+version) to its index, then do
+	// O(1) lookups for each artifact.
+	buildCompKey := func(name, version, purl string) string {
+		if purl != "" {
+			return purl
+		}
+		// Use a delimiter unlikely to appear in name/version to avoid collisions.
+		return name + "\x00" + version
+	}
+
+	compKeyToIdx := make(map[string]int, len(comps))
+	for i, c := range comps {
+		key := buildCompKey(c.Name, c.Version, c.PURL)
+		if key == "" {
+			continue
+		}
+		// Preserve "first match wins" behavior if duplicates exist.
+		if _, exists := compKeyToIdx[key]; !exists {
+			compKeyToIdx[key] = i
+		}
+	}
+
 	syftIDToCompIdx := make(map[string]int, len(doc.Artifacts))
 	for _, art := range doc.Artifacts {
-		if art.SyftID != "" {
-			// Find matching component by name+version+purl
-			for i, c := range comps {
-				if c.Name == art.Name && c.Version == art.Version && c.PURL == art.PURL {
-					syftIDToCompIdx[art.SyftID] = i
-					break
-				}
-			}
+		if art.SyftID == "" {
+			continue
+		}
+		key := buildCompKey(art.Name, art.Version, art.PURL)
+		if key == "" {
+			continue
+		}
+		if idx, ok := compKeyToIdx[key]; ok {
+			syftIDToCompIdx[art.SyftID] = idx
 		}
 	}
 
