@@ -6,24 +6,24 @@ import (
 	"github.com/rezmoss/sbomlyze/internal/identity"
 )
 
-// SBOMInfo holds metadata about the SBOM source (OS, distro, source type)
+// SBOMInfo holds SBOM source metadata.
 type SBOMInfo struct {
 	OSName             string         `json:"os_name,omitempty"`
 	OSVersion          string         `json:"os_version,omitempty"`
-	OSPrettyName       string         `json:"os_pretty_name,omitempty"`      // Human-readable OS name (e.g., "Amazon Linux 2")
-	OSIDLike           []string       `json:"os_id_like,omitempty"`          // Related distro families (e.g., ["centos","rhel","fedora"])
-	SourceType         string         `json:"source_type,omitempty"`         // e.g., "image", "directory", "file"
-	SourceName         string         `json:"source_name,omitempty"`         // e.g., "alpine:latest", "/path/to/dir"
-	SourceID           string         `json:"source_id,omitempty"`           // Source content hash/identifier
-	RelationshipCounts map[string]int `json:"relationship_counts,omitempty"` // Counts by relationship type (Syft only)
-	ToolName           string         `json:"tool_name,omitempty"`           // e.g., "syft"
-	ToolVersion        string         `json:"tool_version,omitempty"`        // Tool version that generated the SBOM
-	SchemaVersion      string         `json:"schema_version,omitempty"`      // SBOM schema version
-	SearchScope        string         `json:"search_scope,omitempty"`        // e.g., "squashed", "all-layers"
-	FilesCount         int            `json:"files_count,omitempty"`         // Top-level files array length
+	OSPrettyName       string         `json:"os_pretty_name,omitempty"`
+	OSIDLike           []string       `json:"os_id_like,omitempty"`
+	SourceType         string         `json:"source_type,omitempty"`
+	SourceName         string         `json:"source_name,omitempty"`
+	SourceID           string         `json:"source_id,omitempty"`
+	RelationshipCounts map[string]int `json:"relationship_counts,omitempty"`
+	ToolName           string         `json:"tool_name,omitempty"`
+	ToolVersion        string         `json:"tool_version,omitempty"`
+	SchemaVersion      string         `json:"schema_version,omitempty"`
+	SearchScope        string         `json:"search_scope,omitempty"`
+	FilesCount         int            `json:"files_count,omitempty"`
 }
 
-// Component represents a normalized component from any SBOM format
+// Component is a normalized SBOM component.
 type Component struct {
 	ID           string            `json:"id"`
 	Name         string            `json:"name"`
@@ -37,14 +37,14 @@ type Component struct {
 	SPDXID       string            `json:"spdxid,omitempty"`
 	Namespace    string            `json:"namespace,omitempty"`
 	Supplier     string            `json:"supplier,omitempty"`
-	Language     string            `json:"language,omitempty"` // Programming language (go, python, java, etc.)
-	FoundBy      string            `json:"foundBy,omitempty"`  // Scanner/cataloger that found this component
-	Type         string            `json:"type,omitempty"`     // Package type from SBOM (e.g., library, application)
-	Locations    []string          `json:"locations,omitempty"` // File paths where the package was found
-	RawJSON      json.RawMessage   `json:"-"`                  // Original JSON from SBOM, excluded from output
+	Language     string            `json:"language,omitempty"`  // lang
+	FoundBy      string            `json:"foundBy,omitempty"`  // scanner
+	Type         string            `json:"type,omitempty"`     // pkg type
+	Locations    []string          `json:"locations,omitempty"` // file paths
+	RawJSON      json.RawMessage   `json:"-"`                  // original JSON, excluded from output
 }
 
-// ToIdentity converts a Component to a ComponentIdentity for ID computation
+// ToIdentity converts to ComponentIdentity.
 func (c Component) ToIdentity() identity.ComponentIdentity {
 	return identity.ComponentIdentity{
 		PURL:      c.PURL,
@@ -56,7 +56,7 @@ func (c Component) ToIdentity() identity.ComponentIdentity {
 	}
 }
 
-// ComputeID computes the canonical ID for this component
+// ComputeID returns the canonical ID.
 func (c *Component) ComputeID() string {
 	return identity.ComputeID(c.ToIdentity())
 }

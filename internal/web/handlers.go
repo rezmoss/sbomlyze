@@ -12,7 +12,6 @@ import (
 	"github.com/rezmoss/sbomlyze/internal/sbom"
 )
 
-// TreeNode represents a node in the dependency tree
 type TreeNode struct {
 	ID           string     `json:"id"`
 	Name         string     `json:"name"`
@@ -23,7 +22,6 @@ type TreeNode struct {
 	ChildrenIDs  []string   `json:"childrenIds,omitempty"`
 }
 
-// ComponentDetail provides detailed info about a component
 type ComponentDetail struct {
 	ID           string            `json:"id"`
 	Name         string            `json:"name"`
@@ -44,7 +42,6 @@ func handleUpload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Parse multipart form (max 500MB)
 	if err := r.ParseMultipartForm(500 << 20); err != nil {
 		http.Error(w, "Failed to parse form: "+err.Error(), http.StatusBadRequest)
 		return
@@ -66,7 +63,6 @@ func handleUpload(w http.ResponseWriter, r *http.Request) {
 	var comps []sbom.Component
 	var info sbom.SBOMInfo
 
-	// Use existing format detection and parsing
 	if sbom.IsCycloneDX(data) {
 		comps, info, err = sbom.ParseCycloneDXWithInfo(data)
 	} else if sbom.IsSyft(data) {
@@ -83,24 +79,18 @@ func handleUpload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Normalize components
 	comps = sbom.NormalizeComponents(comps)
-
-	// Compute stats and dependency graph
 	stats := analysis.ComputeStats(comps)
 	depGraph := analysis.BuildDependencyGraph(comps)
 
-	// Use relationship counts from parsed SBOMInfo, fall back to raw extraction
 	relationships := info.RelationshipCounts
 	if relationships == nil {
 		relationships = extractRelationships(data)
 	}
 
-	// Build indexes for fast lookup and search
 	compIndex := buildCompIndex(comps)
 	searchIndex := buildSearchIndex(comps)
 
-	// Build file system index
 	var fileIdx *FileIndex
 	if sbom.IsSyft(data) {
 		fileIdx = buildFileIndex(data, comps, compIndex)
@@ -108,7 +98,6 @@ func handleUpload(w http.ResponseWriter, r *http.Request) {
 		fileIdx = buildFileIndexFromLocations(comps, compIndex)
 	}
 
-	// Store in server state
 	state.mu.Lock()
 	state.Components = comps
 	state.Info = info
@@ -230,7 +219,6 @@ func buildTreeNode(comp sbom.Component, depGraph map[string][]string, compMap ma
 		HasChildren: len(depGraph[comp.ID]) > 0,
 	}
 
-	// Only expand children for first 2 levels to avoid huge payloads
 	if depth < 2 && len(depGraph[comp.ID]) > 0 {
 		for _, childID := range depGraph[comp.ID] {
 			if childComp, ok := compMap[childID]; ok {
@@ -257,12 +245,10 @@ func handleGetStats(w http.ResponseWriter, r *http.Request) {
 		"info":  state.Info,
 	}
 
-	// Add relationship statistics if available (Syft format)
 	if len(state.Relationships) > 0 {
 		response["relationships"] = state.Relationships
 	}
 
-	// Calculate coverage percentages
 	if state.Stats.TotalComponents > 0 {
 		total := float64(state.Stats.TotalComponents)
 		response["coverage"] = map[string]interface{}{
@@ -283,7 +269,6 @@ func handleGetComponent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Extract component ID from path: /api/component/{id}
 	id := strings.TrimPrefix(r.URL.Path, "/api/component/")
 	if id == "" {
 		http.Error(w, "Component ID required", http.StatusBadRequest)
@@ -293,7 +278,6 @@ func handleGetComponent(w http.ResponseWriter, r *http.Request) {
 	state.mu.RLock()
 	defer state.mu.RUnlock()
 
-	// O(1) lookup using CompIndex
 	idx, ok := state.CompIndex[id]
 	if !ok || idx >= len(state.Components) {
 		http.Error(w, "Component not found", http.StatusNotFound)
@@ -402,7 +386,6 @@ func buildSearchIndex(comps []sbom.Component) []string {
 	return index
 }
 
-// extractRelationships extracts relationship statistics from Syft SBOM format
 func extractRelationships(data []byte) map[string]int {
 	var doc struct {
 		ArtifactRelationships []struct {

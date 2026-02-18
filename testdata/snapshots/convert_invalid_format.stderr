@@ -1,1 +1,1 @@
-Error: unknown format "bogus": supported formats are cyclonedx (cdx), spdx, syft
+err: unknown format "bogus": supported formats are cyclonedx (cdx), spdx, syft

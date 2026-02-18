@@ -6,7 +6,7 @@ import (
 	"github.com/rezmoss/sbomlyze/internal/analysis"
 )
 
-// JSONPatchOp represents a JSON Patch operation (RFC 6902)
+// JSONPatchOp is a JSON Patch operation (RFC 6902).
 type JSONPatchOp struct {
 	Op    string      `json:"op"`
 	Path  string      `json:"path"`
@@ -14,11 +14,10 @@ type JSONPatchOp struct {
 	From  string      `json:"from,omitempty"`
 }
 
-// GenerateJSONPatch creates a JSON Patch from diff results
+// GenerateJSONPatch creates a JSON Patch from a diff.
 func GenerateJSONPatch(result analysis.DiffResult) []JSONPatchOp {
 	var ops []JSONPatchOp
 
-	// Added components
 	for i, c := range result.Added {
 		ops = append(ops, JSONPatchOp{
 			Op:    "add",
@@ -27,7 +26,6 @@ func GenerateJSONPatch(result analysis.DiffResult) []JSONPatchOp {
 		})
 	}
 
-	// Removed components
 	for _, c := range result.Removed {
 		ops = append(ops, JSONPatchOp{
 			Op:   "remove",
@@ -35,9 +33,7 @@ func GenerateJSONPatch(result analysis.DiffResult) []JSONPatchOp {
 		})
 	}
 
-	// Changed components
 	for _, c := range result.Changed {
-		// Version change
 		if c.Before.Version != c.After.Version {
 			ops = append(ops, JSONPatchOp{
 				Op:    "replace",
@@ -46,7 +42,6 @@ func GenerateJSONPatch(result analysis.DiffResult) []JSONPatchOp {
 			})
 		}
 
-		// License changes
 		if !stringSliceEqual(c.Before.Licenses, c.After.Licenses) {
 			ops = append(ops, JSONPatchOp{
 				Op:    "replace",
@@ -55,7 +50,6 @@ func GenerateJSONPatch(result analysis.DiffResult) []JSONPatchOp {
 			})
 		}
 
-		// Hash changes
 		if !hashMapEqual(c.Before.Hashes, c.After.Hashes) {
 			ops = append(ops, JSONPatchOp{
 				Op:    "replace",

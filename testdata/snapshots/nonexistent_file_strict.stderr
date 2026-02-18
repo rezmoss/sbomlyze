@@ -1,1 +1,1 @@
-Error parsing nonexistent.json: open nonexistent.json: no such file or directory
+err: parse nonexistent.json: open nonexistent.json: no such file or directory

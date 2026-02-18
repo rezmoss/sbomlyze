@@ -8,8 +8,6 @@ import (
 	"github.com/rezmoss/sbomlyze/internal/version"
 )
 
-// SARIF types for GitHub Code Scanning
-
 type SARIFReport struct {
 	Schema  string     `json:"$schema"`
 	Version string     `json:"version"`
@@ -73,7 +71,7 @@ type SARIFArtifactLocation struct {
 	URI string `json:"uri"`
 }
 
-// GenerateSARIF creates a SARIF report from diff results and policy violations
+// GenerateSARIF creates a SARIF report.
 func GenerateSARIF(result analysis.DiffResult, violations []policy.Violation, sbomFile string) SARIFReport {
 	rules := []SARIFRule{
 		{
@@ -118,7 +116,6 @@ func GenerateSARIF(result analysis.DiffResult, violations []policy.Violation, sb
 
 	var results []SARIFResult
 
-	// Add integrity drift results
 	for _, changed := range result.Changed {
 		if changed.Drift != nil && changed.Drift.Type == analysis.DriftTypeIntegrity {
 			results = append(results, SARIFResult{
@@ -134,7 +131,6 @@ func GenerateSARIF(result analysis.DiffResult, violations []policy.Violation, sb
 		}
 	}
 
-	// Add deep dependency results
 	if result.Dependencies != nil {
 		for _, td := range result.Dependencies.TransitiveNew {
 			if td.Depth >= 3 {
@@ -152,7 +148,6 @@ func GenerateSARIF(result analysis.DiffResult, violations []policy.Violation, sb
 		}
 	}
 
-	// Add new component results
 	for _, added := range result.Added {
 		results = append(results, SARIFResult{
 			RuleID:  "new-component",
@@ -166,7 +161,6 @@ func GenerateSARIF(result analysis.DiffResult, violations []policy.Violation, sb
 		})
 	}
 
-	// Add removed component results
 	for _, removed := range result.Removed {
 		results = append(results, SARIFResult{
 			RuleID:  "removed-component",
@@ -180,7 +174,6 @@ func GenerateSARIF(result analysis.DiffResult, violations []policy.Violation, sb
 		})
 	}
 
-	// Add version change results
 	for _, changed := range result.Changed {
 		if changed.Before.Version != changed.After.Version {
 			results = append(results, SARIFResult{
@@ -196,7 +189,6 @@ func GenerateSARIF(result analysis.DiffResult, violations []policy.Violation, sb
 		}
 	}
 
-	// Add policy violations
 	for _, v := range violations {
 		level := "error"
 		if v.Severity == policy.SeverityWarning {

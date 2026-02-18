@@ -180,7 +180,7 @@
   "violations": [
     {
       "rule": "deny_licenses",
-      "message": "component new-package has denied license: Apache-2.0",
+      "message": "new-package: denied license Apache-2.0",
       "severity": "error"
     }
   ]

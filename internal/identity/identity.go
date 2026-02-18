@@ -5,8 +5,7 @@ import (
 	"strings"
 )
 
-// ComponentIdentity contains the fields needed to compute a component's canonical ID.
-// This is used to avoid circular imports with the sbom package.
+// ComponentIdentity holds fields for canonical ID computation.
 type ComponentIdentity struct {
 	PURL      string
 	CPEs      []string
@@ -16,19 +15,12 @@ type ComponentIdentity struct {
 	Name      string
 }
 
-// ComputeID generates a canonical identity for a component using the following precedence:
-// 1. PURL (normalized - without version/qualifiers)
-// 2. CPE (normalized - vendor:product only)
-// 3. BOM-ref / SPDXID
-// 4. Namespace + Name
-// 5. Name only (fallback)
+// ComputeID generates a canonical identity. Precedence: PURL > CPE > BOM-ref/SPDXID > namespace/name > name.
 func ComputeID(c ComponentIdentity) string {
-	// 1. PURL - highest precedence
 	if c.PURL != "" {
 		return NormalizePURL(c.PURL)
 	}
 
-	// 2. CPE - second precedence
 	if len(c.CPEs) > 0 {
 		for _, cpe := range c.CPEs {
 			normalized := NormalizeCPE(cpe)
@@ -38,7 +30,6 @@ func ComputeID(c ComponentIdentity) string {
 		}
 	}
 
-	// 3. BOM-ref or SPDXID
 	if c.BOMRef != "" {
 		return "ref:" + c.BOMRef
 	}
@@ -46,21 +37,18 @@ func ComputeID(c ComponentIdentity) string {
 		return "ref:" + c.SPDXID
 	}
 
-	// 4. Namespace + Name
 	if c.Namespace != "" {
 		return c.Namespace + "/" + c.Name
 	}
 
-	// 5. Name only (fallback)
 	return c.Name
 }
 
-// OS package types where namespace is a distro name (optional, not identity-significant)
 var osPackageTypes = map[string]bool{
 	"rpm": true, "deb": true, "apk": true, "alpm": true,
 }
 
-// NormalizePURL strips version, qualifiers, subpath, and distro namespace (for OS packages) from a PURL
+// NormalizePURL strips version/qualifiers/subpath from a PURL.
 func NormalizePURL(purl string) string {
 	if purl == "" {
 		return ""
@@ -93,7 +81,7 @@ func NormalizePURL(purl string) string {
 	return purl
 }
 
-// ExtractPURLVersion extracts the version from a PURL string
+// ExtractPURLVersion extracts the version from a PURL.
 func ExtractPURLVersion(purl string) string {
 	if purl == "" {
 		return ""
@@ -114,15 +102,12 @@ func ExtractPURLVersion(purl string) string {
 	return ""
 }
 
-// NormalizeCPE extracts vendor:product from a CPE string.
-// Supports both CPE 2.3 and CPE 2.2 formats.
-// Returns empty string if CPE is invalid.
+// NormalizeCPE extracts vendor:product from CPE 2.2/2.3.
 func NormalizeCPE(cpe string) string {
 	if cpe == "" {
 		return ""
 	}
 
-	// CPE 2.3 format: cpe:2.3:part:vendor:product:version:...
 	if strings.HasPrefix(cpe, "cpe:2.3:") {
 		parts := strings.Split(cpe, ":")
 		if len(parts) >= 5 {
@@ -135,7 +120,6 @@ func NormalizeCPE(cpe string) string {
 		return ""
 	}
 
-	// CPE 2.2 format: cpe:/part:vendor:product:version...
 	if strings.HasPrefix(cpe, "cpe:/") {
 		rest := cpe[5:] // remove "cpe:/"
 		parts := strings.Split(rest, ":")

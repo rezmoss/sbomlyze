@@ -5,7 +5,7 @@ import (
 	"runtime"
 )
 
-// Version information - set by goreleaser ldflags
+// Set by goreleaser ldflags.
 var (
 	Version     = "dev"
 	Commit      = "none"
@@ -13,13 +13,12 @@ var (
 	BuildSource = "source"
 )
 
-// Info returns formatted version information
+// Info returns version info.
 func Info() string {
 	return fmt.Sprintf("sbomlyze %s\n  commit: %s\n  built:  %s\n  source: %s\n  go:     %s",
 		Version, Commit, Date, BuildSource, runtime.Version())
 }
 
-// Short returns just the version string
 func Short() string {
 	return Version
 }

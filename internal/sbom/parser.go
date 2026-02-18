@@ -7,13 +7,13 @@ import (
 	"strings"
 )
 
-// ParseFile reads an SBOM file and returns normalized components
+// ParseFile parses an SBOM file.
 func ParseFile(path string) ([]Component, error) {
 	comps, _, err := ParseFileWithInfo(path)
 	return comps, err
 }
 
-// ParseFileWithInfo reads an SBOM file and returns normalized components along with SBOM metadata
+// ParseFileWithInfo parses an SBOM file with metadata.
 func ParseFileWithInfo(path string) ([]Component, SBOMInfo, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
@@ -25,7 +25,7 @@ func ParseFileWithInfo(path string) ([]Component, SBOMInfo, error) {
 	}
 	if IsSPDX(data) {
 		comps, err := ParseSPDX(path)
-		return comps, SBOMInfo{}, err // SPDX doesn't typically have OS info
+		return comps, SBOMInfo{}, err
 	}
 	if IsSyft(data) {
 		return ParseSyftWithInfo(data)
@@ -33,8 +33,7 @@ func ParseFileWithInfo(path string) ([]Component, SBOMInfo, error) {
 	return nil, SBOMInfo{}, fmt.Errorf("unknown SBOM format")
 }
 
-// decodeTopLevelKeys partially decodes JSON to extract top-level keys.
-// String values are decoded; non-string values (arrays, objects) are kept as json.RawMessage.
+// decodeTopLevelKeys extracts top-level JSON keys.
 func decodeTopLevelKeys(data []byte) map[string]interface{} {
 	var top map[string]json.RawMessage
 	if err := json.Unmarshal(data, &top); err != nil {
@@ -52,41 +51,34 @@ func decodeTopLevelKeys(data []byte) map[string]interface{} {
 	return result
 }
 
-// IsCycloneDX returns true if data is CycloneDX JSON format.
-// Checks for bomFormat="CycloneDX" (required per CycloneDX spec) or
-// $schema URL containing "cyclonedx".
+// IsCycloneDX detects CycloneDX JSON format.
 func IsCycloneDX(data []byte) bool {
 	keys := decodeTopLevelKeys(data)
 	if keys == nil {
 		return false
 	}
-	// CycloneDX spec: bomFormat="CycloneDX" is required at root
 	if v, ok := keys["bomFormat"].(string); ok && v == "CycloneDX" {
 		return true
 	}
-	// Fallback: $schema containing "cyclonedx"
 	if v, ok := keys["$schema"].(string); ok && strings.Contains(strings.ToLower(v), "cyclonedx") {
 		return true
 	}
 	return false
 }
 
-// IsSPDX returns true if data is SPDX JSON format.
-// Checks for spdxVersion starting with "SPDX-" (required per SPDX spec).
+// IsSPDX detects SPDX JSON format.
 func IsSPDX(data []byte) bool {
 	keys := decodeTopLevelKeys(data)
 	if keys == nil {
 		return false
 	}
-	// SPDX spec: spdxVersion="SPDX-X.Y" is required at root
 	if v, ok := keys["spdxVersion"].(string); ok && strings.HasPrefix(v, "SPDX-") {
 		return true
 	}
 	return false
 }
 
-// IsSyft returns true if data is Syft JSON format.
-// Requires "artifacts" key AND at least one of source/distro/descriptor.
+// IsSyft detects Syft JSON format.
 func IsSyft(data []byte) bool {
 	keys := decodeTopLevelKeys(data)
 	if keys == nil {

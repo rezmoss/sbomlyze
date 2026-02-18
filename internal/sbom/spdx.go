@@ -9,7 +9,7 @@ import (
 	"github.com/spdx/tools-golang/spdx"
 )
 
-// ParseSPDXFromBytes parses SPDX from byte data (writes temp file internally)
+// ParseSPDXFromBytes parses SPDX from bytes.
 func ParseSPDXFromBytes(data []byte) ([]Component, error) {
 	tmpFile, err := os.CreateTemp("", "sbom-*.json")
 	if err != nil {
@@ -26,15 +26,13 @@ func ParseSPDXFromBytes(data []byte) ([]Component, error) {
 	return ParseSPDX(tmpFile.Name())
 }
 
-// ParseSPDX parses SPDX format SBOM file
+// ParseSPDX parses an SPDX file.
 func ParseSPDX(path string) ([]Component, error) {
-	// First read raw data to extract raw package JSON
 	data, err := os.ReadFile(path)
 	if err != nil {
 		return nil, err
 	}
 
-	// Extract raw packages
 	var rawDoc struct {
 		Packages []json.RawMessage `json:"packages"`
 	}
@@ -63,7 +61,6 @@ func ParseSPDX(path string) ([]Component, error) {
 			if ref.RefType == spdx.PackageManagerPURL || ref.RefType == "purl" {
 				comp.PURL = ref.Locator
 			}
-			// Extract CPEs from external references
 			if ref.RefType == "cpe22Type" || ref.RefType == "cpe23Type" {
 				comp.CPEs = append(comp.CPEs, ref.Locator)
 			}
@@ -74,11 +71,9 @@ func ParseSPDX(path string) ([]Component, error) {
 		for _, cs := range pkg.PackageChecksums {
 			comp.Hashes[string(cs.Algorithm)] = cs.Value
 		}
-		// Preserve raw JSON if available
 		if i < len(rawDoc.Packages) {
 			comp.RawJSON = rawDoc.Packages[i]
 		}
-		// Compute ID using identity matcher
 		comp.ID = identity.ComputeID(comp.ToIdentity())
 		comps = append(comps, comp)
 	}

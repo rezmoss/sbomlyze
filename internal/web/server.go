@@ -10,23 +10,23 @@ import (
 	"github.com/rezmoss/sbomlyze/internal/sbom"
 )
 
-// ServerState holds the current SBOM data for the web UI
+// ServerState holds current SBOM data.
 type ServerState struct {
 	mu            sync.RWMutex
 	Components    []sbom.Component
 	Info          sbom.SBOMInfo
 	Stats         analysis.Stats
 	DepGraph      map[string][]string
-	Relationships map[string]int // Relationship type counts (Syft only)
-	RawSBOMData   []byte         // Keep raw data for extended analysis
-	CompIndex     map[string]int // ID → Components slice index for O(1) lookup
-	SearchIndex   []string       // pre-built lowercase search string per component
-	FileIndex     *FileIndex     // File system index (nil when no file data available)
+	Relationships map[string]int // Syft only
+	RawSBOMData   []byte
+	CompIndex     map[string]int // ID → index
+	SearchIndex   []string       // lowercase search strings
+	FileIndex     *FileIndex
 }
 
 var state = &ServerState{}
 
-// Serve starts the web server on the specified port
+// Serve starts the web server.
 func Serve(port int) error {
 	mux := http.NewServeMux()
 

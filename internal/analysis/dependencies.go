@@ -6,7 +6,7 @@ import (
 	"github.com/rezmoss/sbomlyze/internal/sbom"
 )
 
-// DependencyDiff contains information about dependency changes
+// DependencyDiff holds dependency graph changes between two SBOMs.
 type DependencyDiff struct {
 	AddedDeps      map[string][]string `json:"added_deps,omitempty"`
 	RemovedDeps    map[string][]string `json:"removed_deps,omitempty"`
@@ -15,27 +15,26 @@ type DependencyDiff struct {
 	DepthSummary   *DepthSummary       `json:"depth_summary,omitempty"`
 }
 
-// TransitiveDep represents a new transitive dependency
+// TransitiveDep represents a transitive dependency change.
 type TransitiveDep struct {
-	Target string   `json:"target"` // The new transitive dep
-	Via    []string `json:"via"`    // Path to reach it
-	Depth  int      `json:"depth"`  // Depth from root
+	Target string   `json:"target"`
+	Via    []string `json:"via"`
+	Depth  int      `json:"depth"`
 }
 
-// DepthSummary shows deps introduced at various depths
+// DepthSummary groups new deps by hop distance.
 type DepthSummary struct {
-	Depth1     int `json:"depth_1"`      // Direct deps
-	Depth2     int `json:"depth_2"`      // 2 hops away
-	Depth3Plus int `json:"depth_3_plus"` // 3+ hops (risky)
+	Depth1     int `json:"depth_1"`
+	Depth2     int `json:"depth_2"`
+	Depth3Plus int `json:"depth_3_plus"`
 }
 
-// IsEmpty returns true if there are no dependency changes
 func (d *DependencyDiff) IsEmpty() bool {
 	return len(d.AddedDeps) == 0 && len(d.RemovedDeps) == 0 &&
 		len(d.TransitiveNew) == 0 && len(d.TransitiveLost) == 0
 }
 
-// BuildDependencyGraph creates a dependency graph from components
+// BuildDependencyGraph returns component ID -> dependency IDs.
 func BuildDependencyGraph(comps []sbom.Component) map[string][]string {
 	graph := make(map[string][]string)
 	for _, c := range comps {
@@ -44,14 +43,13 @@ func BuildDependencyGraph(comps []sbom.Component) map[string][]string {
 	return graph
 }
 
-// DiffDependencyGraphs compares two dependency graphs
+// DiffDependencyGraphs compares two dependency graphs.
 func DiffDependencyGraphs(before, after map[string][]string) DependencyDiff {
 	diff := DependencyDiff{
 		AddedDeps:   make(map[string][]string),
 		RemovedDeps: make(map[string][]string),
 	}
 
-	// Check for added/changed deps
 	for id, afterDeps := range after {
 		beforeDeps := before[id]
 		beforeSet := ToSet(beforeDeps)
@@ -68,7 +66,6 @@ func DiffDependencyGraphs(before, after map[string][]string) DependencyDiff {
 		}
 	}
 
-	// Check for removed deps
 	for id, beforeDeps := range before {
 		afterDeps := after[id]
 		afterSet := ToSet(afterDeps)
@@ -85,13 +82,13 @@ func DiffDependencyGraphs(before, after map[string][]string) DependencyDiff {
 		}
 	}
 
-	// Compute transitive reachability changes
+	// Transitive reachability changes
 	beforeReach := computeAllReachable(before)
 	afterReach := computeAllReachable(after)
 
 	diff.TransitiveNew, diff.TransitiveLost = diffReachability(before, after, beforeReach, afterReach)
 
-	// Compute depth summary for new transitive deps
+	// Depth summary
 	if len(diff.TransitiveNew) > 0 {
 		diff.DepthSummary = computeDepthSummary(diff.TransitiveNew)
 	}
@@ -99,7 +96,6 @@ func DiffDependencyGraphs(before, after map[string][]string) DependencyDiff {
 	return diff
 }
 
-// computeAllReachable computes the set of all reachable nodes from each node
 func computeAllReachable(graph map[string][]string) map[string]map[string]bool {
 	reachable := make(map[string]map[string]bool)
 
@@ -110,7 +106,7 @@ func computeAllReachable(graph map[string][]string) map[string]map[string]bool {
 	return reachable
 }
 
-// bfsReachable finds all nodes reachable from start using BFS
+// bfsReachable returns all nodes reachable from start via BFS.
 func bfsReachable(graph map[string][]string, start string) map[string]bool {
 	visited := make(map[string]bool)
 	queue := []string{start}
@@ -131,12 +127,10 @@ func bfsReachable(graph map[string][]string, start string) map[string]bool {
 		}
 	}
 
-	// Remove self from reachable set
 	delete(visited, start)
 	return visited
 }
 
-// bfsWithPath finds shortest path from start to target
 func bfsWithPath(graph map[string][]string, start, target string) ([]string, int) {
 	if start == target {
 		return nil, 0
@@ -176,7 +170,6 @@ func bfsWithPath(graph map[string][]string, start, target string) ([]string, int
 	return nil, -1
 }
 
-// diffReachability finds new and lost transitive dependencies
 func diffReachability(before, after map[string][]string, beforeReach, afterReach map[string]map[string]bool) ([]TransitiveDep, []TransitiveDep) {
 	var newDeps, lostDeps []TransitiveDep
 	seen := make(map[string]bool)
@@ -247,16 +240,14 @@ func diffReachability(before, after map[string][]string, beforeReach, afterReach
 		}
 	}
 
-	// Sort for deterministic output
 	sort.Slice(newDeps, func(i, j int) bool { return newDeps[i].Target < newDeps[j].Target })
 	sort.Slice(lostDeps, func(i, j int) bool { return lostDeps[i].Target < lostDeps[j].Target })
 
 	return newDeps, lostDeps
 }
 
-// FindRoots finds nodes that are not dependencies of any other node
+// FindRoots returns nodes that no other node depends on.
 func FindRoots(graph map[string][]string) []string {
-	// Build set of all nodes that are dependencies
 	isDep := make(map[string]bool)
 	for _, deps := range graph {
 		for _, dep := range deps {
@@ -264,7 +255,6 @@ func FindRoots(graph map[string][]string) []string {
 		}
 	}
 
-	// Roots are nodes that exist in graph but are not dependencies
 	var roots []string
 	for node := range graph {
 		if !isDep[node] {
@@ -275,7 +265,6 @@ func FindRoots(graph map[string][]string) []string {
 	return roots
 }
 
-// computeDepthSummary summarizes new deps by depth
 func computeDepthSummary(deps []TransitiveDep) *DepthSummary {
 	summary := &DepthSummary{}
 

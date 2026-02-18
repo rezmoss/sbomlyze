@@ -10,7 +10,7 @@ import (
 	"github.com/mattn/go-isatty"
 )
 
-// Pager pipes stdout through an external pager (e.g. less).
+// Pager pipes stdout through a pager.
 type Pager struct {
 	cmd       *exec.Cmd
 	pipe      *os.File
@@ -18,7 +18,6 @@ type Pager struct {
 	stopped   bool
 }
 
-// resolve: $SBOMLYZE_PAGER > $PAGER > "less"
 func resolve() string {
 	if p := os.Getenv("SBOMLYZE_PAGER"); p != "" {
 		return p
@@ -29,8 +28,7 @@ func resolve() string {
 	return "less"
 }
 
-// Start spawns a pager and redirects os.Stdout to it.
-// Returns nil if disabled, stdout is not a TTY, or pager is ""/cat.
+// Start spawns a pager and redirects os.Stdout.
 func Start(disabled bool) *Pager {
 	if disabled || !isatty.IsTerminal(os.Stdout.Fd()) {
 		return nil
@@ -53,10 +51,7 @@ func Start(disabled bool) *Pager {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
-	// Set LESS=FRX if not already set:
-	//   F = quit if output fits one screen
-	//   R = display raw ANSI color codes
-	//   X = don't clear screen on exit
+	// LESS=FRX: quit-if-fits, raw-ANSI, no-clear
 	cmd.Env = os.Environ()
 	if _, ok := os.LookupEnv("LESS"); !ok {
 		cmd.Env = append(cmd.Env, "LESS=FRX")
@@ -65,7 +60,6 @@ func Start(disabled bool) *Pager {
 		cmd.Env = append(cmd.Env, "LV=-c")
 	}
 
-	// Ignore SIGPIPE so writes to a closed pager pipe don't kill us
 	signal.Ignore(syscall.SIGPIPE)
 
 	if err := cmd.Start(); err != nil {
@@ -74,7 +68,6 @@ func Start(disabled bool) *Pager {
 		return nil
 	}
 
-	// Close read end in parent — the pager process owns it now
 	_ = r.Close()
 
 	oldStdout := os.Stdout
@@ -87,8 +80,7 @@ func Start(disabled bool) *Pager {
 	}
 }
 
-// Stop restores os.Stdout and waits for the pager to exit.
-// Safe to call on nil or multiple times.
+// Stop restores os.Stdout. Safe to call on nil.
 func (p *Pager) Stop() {
 	if p == nil || p.stopped {
 		return

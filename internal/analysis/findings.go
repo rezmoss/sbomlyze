@@ -12,18 +12,18 @@ import (
 
 var versionNumRe = regexp.MustCompile(`^(\d+)`)
 
-// Finding represents a single auto-detected insight from the diff
+// Finding is a single insight.
 type Finding struct {
 	Icon    string `json:"icon"`    // emoji for text output
 	Message string `json:"message"` // human-readable finding
 }
 
-// KeyFindings holds the computed list of findings
+// KeyFindings holds computed insights.
 type KeyFindings struct {
 	Findings []Finding `json:"findings"`
 }
 
-// ComputeSingleFindings analyzes a single SBOM and produces key insights
+// ComputeSingleFindings produces insights for a single SBOM.
 func ComputeSingleFindings(stats Stats, info sbom.SBOMInfo, comps []sbom.Component) KeyFindings {
 	var findings []Finding
 
@@ -40,7 +40,6 @@ func ComputeSingleFindings(stats Stats, info sbom.SBOMInfo, comps []sbom.Compone
 	return KeyFindings{Findings: findings}
 }
 
-// detectFilesystemFootprint reports the number of tracked files
 func detectFilesystemFootprint(info sbom.SBOMInfo) []Finding {
 	if info.FilesCount == 0 {
 		return nil
@@ -51,7 +50,6 @@ func detectFilesystemFootprint(info sbom.SBOMInfo) []Finding {
 	}}
 }
 
-// detectRelationshipDensity summarizes relationship counts
 func detectRelationshipDensity(info sbom.SBOMInfo, stats Stats) []Finding {
 	if len(info.RelationshipCounts) == 0 {
 		return nil
@@ -74,7 +72,6 @@ func detectRelationshipDensity(info sbom.SBOMInfo, stats Stats) []Finding {
 	}}
 }
 
-// detectLocationHotspots groups all component locations by top directory
 func detectLocationHotspots(comps []sbom.Component) []Finding {
 	if len(comps) < 20 {
 		return nil
@@ -105,7 +102,6 @@ func detectLocationHotspots(comps []sbom.Component) []Finding {
 	}}
 }
 
-// detectLicenseRiskProfile shows the copyleft/permissive/unknown breakdown
 func detectLicenseRiskProfile(stats Stats) []Finding {
 	if stats.LicenseCategories == nil || stats.TotalComponents == 0 {
 		return nil
@@ -132,7 +128,6 @@ func detectLicenseRiskProfile(stats Stats) []Finding {
 	}}
 }
 
-// detectSingleOS reports OS/distro for a single SBOM
 func detectSingleOS(info sbom.SBOMInfo) []Finding {
 	os := info.OSPrettyName
 	if os == "" {
@@ -148,7 +143,6 @@ func detectSingleOS(info sbom.SBOMInfo) []Finding {
 	return []Finding{{Icon: "\U0001f4bb", Message: msg}}
 }
 
-// detectDominantType reports the top ecosystem(s) by package count
 func detectDominantType(stats Stats) []Finding {
 	if len(stats.ByType) == 0 {
 		return nil
@@ -160,7 +154,6 @@ func detectDominantType(stats Stats) []Finding {
 	}
 
 	types := SortedByValue(stats.ByType)
-	// Report top type if it dominates (>60%)
 	topType := types[0]
 	topCount := stats.ByType[topType]
 	pct := float64(topCount) / float64(total) * 100
@@ -172,7 +165,6 @@ func detectDominantType(stats Stats) []Finding {
 		}}
 	}
 
-	// Otherwise summarize top 3
 	limit := len(types)
 	if limit > 3 {
 		limit = 3
@@ -190,7 +182,6 @@ func detectDominantType(stats Stats) []Finding {
 	return []Finding{{Icon: "\U0001f4e6", Message: msg}}
 }
 
-// detectDataQuality highlights significant gaps in data quality
 func detectDataQuality(stats Stats) []Finding {
 	if stats.TotalComponents == 0 {
 		return nil
@@ -199,7 +190,6 @@ func detectDataQuality(stats Stats) []Finding {
 	var findings []Finding
 	total := stats.TotalComponents
 
-	// License coverage
 	licensePct := float64(total-stats.WithoutLicense) / float64(total) * 100
 	if licensePct < 50.0 {
 		findings = append(findings, Finding{
@@ -208,7 +198,6 @@ func detectDataQuality(stats Stats) []Finding {
 		})
 	}
 
-	// Hash coverage
 	hashPct := float64(stats.WithHashes) / float64(total) * 100
 	if hashPct < 50.0 {
 		findings = append(findings, Finding{
@@ -217,7 +206,6 @@ func detectDataQuality(stats Stats) []Finding {
 		})
 	}
 
-	// PURL coverage
 	purlPct := float64(stats.WithPURL) / float64(total) * 100
 	if purlPct < 80.0 {
 		findings = append(findings, Finding{
@@ -229,7 +217,6 @@ func detectDataQuality(stats Stats) []Finding {
 	return findings
 }
 
-// detectDuplicateWarning warns about duplicates in a single SBOM
 func detectDuplicateWarning(stats Stats) []Finding {
 	if stats.DuplicateCount == 0 {
 		return nil
@@ -240,7 +227,6 @@ func detectDuplicateWarning(stats Stats) []Finding {
 	}}
 }
 
-// detectCatalogerBreakdown summarizes which scanners/catalogers contributed
 func detectCatalogerBreakdown(stats Stats) []Finding {
 	if len(stats.ByFoundBy) == 0 {
 		return nil
@@ -264,7 +250,7 @@ func detectCatalogerBreakdown(stats Stats) []Finding {
 	return []Finding{{Icon: "\U0001f50d", Message: msg}}
 }
 
-// ComputeKeyFindings analyzes a DiffResult and DiffOverview to produce key insights
+// ComputeKeyFindings produces insights from a diff.
 func ComputeKeyFindings(result DiffResult, overview DiffOverview) KeyFindings {
 	var findings []Finding
 
@@ -283,7 +269,6 @@ func ComputeKeyFindings(result DiffResult, overview DiffOverview) KeyFindings {
 	return KeyFindings{Findings: findings}
 }
 
-// detectScanContextMismatch warns if schema version or scan scope changed
 func detectScanContextMismatch(overview DiffOverview) []Finding {
 	var findings []Finding
 
@@ -308,14 +293,12 @@ func detectScanContextMismatch(overview DiffOverview) []Finding {
 	return findings
 }
 
-// detectVanishedEcosystems finds package types that went from >0 to 0 or 0 to >0
 func detectVanishedEcosystems(overview DiffOverview) []Finding {
 	var findings []Finding
 
 	bTypes := overview.Before.Stats.ByType
 	aTypes := overview.After.Stats.ByType
 
-	// Types that vanished (before > 0, after == 0)
 	vanished := make([]string, 0)
 	for t := range bTypes {
 		if bTypes[t] > 0 && aTypes[t] == 0 {
@@ -332,7 +315,6 @@ func detectVanishedEcosystems(overview DiffOverview) []Finding {
 		})
 	}
 
-	// Types that appeared (before == 0, after > 0)
 	appeared := make([]string, 0)
 	for t := range aTypes {
 		if aTypes[t] > 0 && bTypes[t] == 0 {
@@ -352,11 +334,9 @@ func detectVanishedEcosystems(overview DiffOverview) []Finding {
 	return findings
 }
 
-// detectOSChange detects changes in OS/distro between the two SBOMs
 func detectOSChange(overview DiffOverview) []Finding {
 	bOS := overview.Before.Info.OSPrettyName
 	aOS := overview.After.Info.OSPrettyName
-	// Fall back to OSName if PrettyName is empty
 	if bOS == "" {
 		bOS = overview.Before.Info.OSName
 	}
@@ -368,7 +348,6 @@ func detectOSChange(overview DiffOverview) []Finding {
 		return nil
 	}
 
-	// Both empty - nothing to report
 	if bOS == "" && aOS == "" {
 		return nil
 	}
@@ -393,7 +372,6 @@ func detectOSChange(overview DiffOverview) []Finding {
 	return []Finding{{Icon: "\U0001f4bb", Message: msg}}
 }
 
-// detectDominantPathPattern finds if removed/added packages are concentrated in one path prefix and type
 func detectDominantPathPattern(result DiffResult) []Finding {
 	var findings []Finding
 
@@ -412,7 +390,6 @@ func dominantPattern(comps []sbom.Component, direction string) *Finding {
 		return nil
 	}
 
-	// Group by PURL type + top-level path prefix
 	type typePathKey struct {
 		ptype string
 		path  string
@@ -433,7 +410,6 @@ func dominantPattern(comps []sbom.Component, direction string) *Finding {
 		}
 	}
 
-	// Find the dominant type+path combo
 	var bestKey typePathKey
 	var bestCount int
 	for k, v := range counts {
@@ -456,7 +432,6 @@ func dominantPattern(comps []sbom.Component, direction string) *Finding {
 	}
 }
 
-// topPathPrefix extracts the first 3 segments of the first location path
 func topPathPrefix(locations []string) string {
 	if len(locations) == 0 {
 		return ""
@@ -469,7 +444,6 @@ func topPathPrefix(locations []string) string {
 	return "/" + strings.Join(parts, "/")
 }
 
-// detectStableTypes finds package types with identical counts between before and after
 func detectStableTypes(overview DiffOverview) []Finding {
 	bTypes := overview.Before.Stats.ByType
 	aTypes := overview.After.Stats.ByType
@@ -485,7 +459,6 @@ func detectStableTypes(overview DiffOverview) []Finding {
 		return nil
 	}
 
-	// Sort by count descending
 	sort.Slice(stable, func(i, j int) bool {
 		return bTypes[stable[i]] > bTypes[stable[j]]
 	})
@@ -501,7 +474,6 @@ func detectStableTypes(overview DiffOverview) []Finding {
 	}}
 }
 
-// parseVersionParts splits a version string into numeric segments for comparison
 func parseVersionParts(v string) []int {
 	parts := regexp.MustCompile(`[.\-_]`).Split(v, -1)
 	var nums []int
@@ -544,21 +516,18 @@ func compareVersions(from, to string) int {
 	return 0
 }
 
-// classifySemVerChange returns "major", "minor", "patch" based on which part changed
 func classifySemVerChange(from, to string) string {
 	pf := parseVersionParts(from)
 	pt := parseVersionParts(to)
 	if len(pf) == 0 || len(pt) == 0 {
 		return "unknown"
 	}
-	// Compare major
 	var fMajor, tMajor int
 	fMajor = pf[0]
 	tMajor = pt[0]
 	if fMajor != tMajor {
 		return "major"
 	}
-	// Compare minor
 	var fMinor, tMinor int
 	if len(pf) > 1 {
 		fMinor = pf[1]
@@ -572,7 +541,6 @@ func classifySemVerChange(from, to string) string {
 	return "patch"
 }
 
-// detectVersionChangeAnalysis replaces detectSharedVersionStability with full upgrade/downgrade/semver analysis
 func detectVersionChangeAnalysis(result DiffResult, overview DiffOverview) []Finding {
 	totalBefore := overview.Before.Stats.TotalComponents
 	removed := len(result.Removed)
@@ -628,7 +596,6 @@ func detectVersionChangeAnalysis(result DiffResult, overview DiffOverview) []Fin
 
 	var findings []Finding
 
-	// Downgrades first — critical security signal
 	if downgrades > 0 {
 		names := make([]string, len(topDowngrades))
 		for i, d := range topDowngrades {
@@ -644,7 +611,6 @@ func detectVersionChangeAnalysis(result DiffResult, overview DiffOverview) []Fin
 		})
 	}
 
-	// Upgrade breakdown
 	if upgrades > 0 {
 		msg := fmt.Sprintf("%d version upgrades", upgrades)
 		if majorUp > 0 || minorUp > 0 {
@@ -670,7 +636,6 @@ func detectVersionChangeAnalysis(result DiffResult, overview DiffOverview) []Fin
 	return findings
 }
 
-// detectAttackSurfaceDelta surfaces filesystem and relationship count changes
 func detectAttackSurfaceDelta(overview DiffOverview) []Finding {
 	bTotal := overview.Before.Stats.TotalComponents
 	aTotal := overview.After.Stats.TotalComponents
@@ -680,14 +645,12 @@ func detectAttackSurfaceDelta(overview DiffOverview) []Finding {
 
 	var parts []string
 
-	// Package delta
 	pkgDelta := aTotal - bTotal
 	if pkgDelta != 0 {
 		pct := float64(pkgDelta) / float64(bTotal) * 100
 		parts = append(parts, fmt.Sprintf("%+d packages (%.1f%%)", pkgDelta, pct))
 	}
 
-	// Files delta
 	bFiles := overview.Before.Info.FilesCount
 	aFiles := overview.After.Info.FilesCount
 	if bFiles > 0 && aFiles > 0 && bFiles != aFiles {
@@ -696,7 +659,6 @@ func detectAttackSurfaceDelta(overview DiffOverview) []Finding {
 		parts = append(parts, fmt.Sprintf("%+d files (%.1f%%)", fileDelta, pct))
 	}
 
-	// Containment relationship delta
 	bContains := overview.Before.Info.RelationshipCounts["contains"]
 	aContains := overview.After.Info.RelationshipCounts["contains"]
 	if bContains > 0 && aContains > 0 && bContains != aContains {
@@ -720,7 +682,6 @@ func detectAttackSurfaceDelta(overview DiffOverview) []Finding {
 	}}
 }
 
-// detectRemovalHotspots groups removed/added packages by top directory paths
 func detectRemovalHotspots(result DiffResult) []Finding {
 	var findings []Finding
 	if f := pathHotspots(result.Removed, "removal"); f != nil {
@@ -762,7 +723,6 @@ func pathHotspots(comps []sbom.Component, direction string) *Finding {
 	}
 }
 
-// detectIntegrityDriftContext breaks down integrity drift by package type
 func detectIntegrityDriftContext(result DiffResult) []Finding {
 	typeCounts := make(map[string]int)
 	for _, c := range result.Changed {
@@ -803,7 +763,6 @@ func detectIntegrityDriftContext(result DiffResult) []Finding {
 	}}
 }
 
-// detectLicenseCategoryShift shows the change in copyleft/permissive/unknown between before and after
 func detectLicenseCategoryShift(overview DiffOverview) []Finding {
 	bLC := overview.Before.Stats.LicenseCategories
 	aLC := overview.After.Stats.LicenseCategories
@@ -829,7 +788,6 @@ func detectLicenseCategoryShift(overview DiffOverview) []Finding {
 	}}
 }
 
-// detectCatalogerGaps finds scanners that found packages in Before but none in After
 func detectCatalogerGaps(overview DiffOverview) []Finding {
 	bFoundBy := overview.Before.Stats.ByFoundBy
 	aFoundBy := overview.After.Stats.ByFoundBy
@@ -838,7 +796,6 @@ func detectCatalogerGaps(overview DiffOverview) []Finding {
 	}
 
 	var findings []Finding
-	// Sort catalogers by count descending for deterministic output
 	catalogers := SortedByValue(bFoundBy)
 	for _, cat := range catalogers {
 		bCount := bFoundBy[cat]
@@ -854,13 +811,11 @@ func detectCatalogerGaps(overview DiffOverview) []Finding {
 	return findings
 }
 
-// fmtCount formats a number with commas for readability
 func fmtCount(n int) string {
 	if n < 1000 {
 		return fmt.Sprintf("%d", n)
 	}
 	s := fmt.Sprintf("%d", n)
-	// Insert commas from right
 	var result []byte
 	for i, c := range s {
 		if i > 0 && (len(s)-i)%3 == 0 {

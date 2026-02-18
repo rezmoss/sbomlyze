@@ -6,7 +6,7 @@ import (
 	"github.com/rezmoss/sbomlyze/internal/sbom"
 )
 
-// DriftType classifies the type of change detected
+// DriftType classifies the kind of change.
 type DriftType string
 
 const (
@@ -16,7 +16,7 @@ const (
 	DriftTypeMetadata  DriftType = "metadata"
 )
 
-// DriftInfo contains details about component drift
+// DriftInfo holds drift details for a component.
 type DriftInfo struct {
 	Type         DriftType `json:"type"`
 	HashChanges  *HashDiff `json:"hash_changes,omitempty"`
@@ -25,27 +25,27 @@ type DriftInfo struct {
 	LicensesDiff []string  `json:"licenses_diff,omitempty"`
 }
 
-// HashDiff represents changes in hash values
+// HashDiff tracks hash changes.
 type HashDiff struct {
 	Added   map[string]string     `json:"added,omitempty"`
 	Removed map[string]string     `json:"removed,omitempty"`
 	Changed map[string]HashChange `json:"changed,omitempty"`
 }
 
-// HashChange represents a before/after hash value
+// HashChange holds before/after hash values.
 type HashChange struct {
 	Before string `json:"before"`
 	After  string `json:"after"`
 }
 
-// DriftSummary provides aggregate drift statistics
+// DriftSummary aggregates drift counts.
 type DriftSummary struct {
 	VersionDrift   int `json:"version_drift"`
 	IntegrityDrift int `json:"integrity_drift"`
 	MetadataDrift  int `json:"metadata_drift"`
 }
 
-// ChangedComponent represents a component that changed between SBOMs
+// ChangedComponent holds a changed component with before/after state.
 type ChangedComponent struct {
 	ID      string         `json:"id"`
 	Name    string         `json:"name"`
@@ -55,7 +55,7 @@ type ChangedComponent struct {
 	Drift   *DriftInfo     `json:"drift,omitempty"`
 }
 
-// PackageSample represents a sample package for display
+// PackageSample is a display sample.
 type PackageSample struct {
 	Name      string   `json:"name"`
 	Version   string   `json:"version"`
@@ -63,14 +63,14 @@ type PackageSample struct {
 	Locations []string `json:"locations,omitempty"`
 }
 
-// PackageSamplesByType groups package samples by type
+// PackageSamplesByType groups samples by package type.
 type PackageSamplesByType struct {
 	Type    string          `json:"type"`
 	Total   int             `json:"total"`
 	Samples []PackageSample `json:"samples"`
 }
 
-// DiffResult contains the complete result of comparing two SBOMs
+// DiffResult holds the complete SBOM comparison.
 type DiffResult struct {
 	Added         []sbom.Component     `json:"added,omitempty"`
 	Removed       []sbom.Component     `json:"removed,omitempty"`
@@ -82,32 +82,26 @@ type DiffResult struct {
 	RemovedByType []PackageSamplesByType `json:"removed_by_type,omitempty"`
 }
 
-// IsEmpty returns true if no hash changes
 func (h *HashDiff) IsEmpty() bool {
 	return len(h.Added) == 0 && len(h.Removed) == 0 && len(h.Changed) == 0
 }
 
-// ClassifyDrift determines the type of drift between two components.
-// Priority: integrity > version > metadata > none
+// ClassifyDrift classifies drift. Priority: integrity > version > metadata > none
 func ClassifyDrift(before, after sbom.Component) DriftInfo {
 	drift := DriftInfo{Type: DriftTypeNone}
 
-	// Check for version change
 	versionChanged := before.Version != after.Version
 	if versionChanged {
 		drift.VersionFrom = before.Version
 		drift.VersionTo = after.Version
 	}
 
-	// Check for hash changes
 	hashDiff := DiffHashes(before.Hashes, after.Hashes)
 	if !hashDiff.IsEmpty() {
 		drift.HashChanges = &hashDiff
 	}
 
-	// Check for license changes
 	if !EqualSlices(before.Licenses, after.Licenses) {
-		// Compute license diff
 		beforeSet := ToSet(before.Licenses)
 		afterSet := ToSet(after.Licenses)
 		for lic := range afterSet {
@@ -122,20 +116,16 @@ func ClassifyDrift(before, after sbom.Component) DriftInfo {
 		}
 	}
 
-	// Classify drift type by severity
-	// Integrity drift: hash changed WITHOUT version change (suspicious!)
 	if !hashDiff.IsEmpty() && !versionChanged {
 		drift.Type = DriftTypeIntegrity
 		return drift
 	}
 
-	// Version drift: version changed (normal update)
 	if versionChanged {
 		drift.Type = DriftTypeVersion
 		return drift
 	}
 
-	// Metadata drift: only metadata (licenses, etc.) changed
 	if len(drift.LicensesDiff) > 0 {
 		drift.Type = DriftTypeMetadata
 		return drift
@@ -144,7 +134,6 @@ func ClassifyDrift(before, after sbom.Component) DriftInfo {
 	return drift
 }
 
-// DiffHashes compares two hash maps
 func DiffHashes(before, after map[string]string) HashDiff {
 	diff := HashDiff{
 		Added:   make(map[string]string),
@@ -152,7 +141,6 @@ func DiffHashes(before, after map[string]string) HashDiff {
 		Changed: make(map[string]HashChange),
 	}
 
-	// Find added and changed
 	for algo, hash := range after {
 		if beforeHash, exists := before[algo]; exists {
 			if beforeHash != hash {
@@ -163,7 +151,6 @@ func DiffHashes(before, after map[string]string) HashDiff {
 		}
 	}
 
-	// Find removed
 	for algo, hash := range before {
 		if _, exists := after[algo]; !exists {
 			diff.Removed[algo] = hash
@@ -173,7 +160,7 @@ func DiffHashes(before, after map[string]string) HashDiff {
 	return diff
 }
 
-// SummarizeDrift aggregates drift statistics from changes
+// SummarizeDrift aggregates drift counts.
 func SummarizeDrift(changes []ChangedComponent) DriftSummary {
 	summary := DriftSummary{}
 
@@ -194,7 +181,6 @@ func SummarizeDrift(changes []ChangedComponent) DriftSummary {
 	return summary
 }
 
-// ToSet converts a string slice to a set (map[string]bool)
 func ToSet(slice []string) map[string]bool {
 	set := make(map[string]bool)
 	for _, s := range slice {
@@ -203,7 +189,6 @@ func ToSet(slice []string) map[string]bool {
 	return set
 }
 
-// EqualSlices checks if two string slices contain the same elements
 func EqualSlices(a, b []string) bool {
 	if len(a) != len(b) {
 		return false
@@ -222,7 +207,7 @@ func EqualSlices(a, b []string) bool {
 	return true
 }
 
-// DiffComponents compares two sets of components and returns a DiffResult
+// DiffComponents compares two component sets.
 func DiffComponents(before, after []sbom.Component) DiffResult {
 	beforeDups := DetectDuplicates(before)
 	afterDups := DetectDuplicates(after)
@@ -325,7 +310,6 @@ func DiffComponents(before, after []sbom.Component) DiffResult {
 	return result
 }
 
-// groupSamplesByType groups components by PURL type and picks up to maxSamples per type
 func groupSamplesByType(comps []sbom.Component, maxSamples int) []PackageSamplesByType {
 	typeMap := make(map[string][]sbom.Component)
 	for _, c := range comps {
@@ -369,7 +353,7 @@ func groupSamplesByType(comps []sbom.Component, maxSamples int) []PackageSamples
 	return result
 }
 
-// ComputePackageSamples populates AddedByType and RemovedByType on a DiffResult
+// ComputePackageSamples fills AddedByType and RemovedByType.
 func ComputePackageSamples(result *DiffResult) {
 	if len(result.Added) > 0 {
 		result.AddedByType = groupSamplesByType(result.Added, 5)

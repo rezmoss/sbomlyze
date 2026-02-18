@@ -7,15 +7,14 @@ import (
 	"github.com/rezmoss/sbomlyze/internal/identity"
 )
 
-// ParseSyft parses Syft format SBOM data
+// ParseSyft parses Syft JSON.
 func ParseSyft(data []byte) ([]Component, error) {
 	comps, _, err := ParseSyftWithInfo(data)
 	return comps, err
 }
 
-// ParseSyftWithInfo parses Syft format SBOM data and extracts source/distro info
+// ParseSyftWithInfo parses Syft JSON with metadata.
 func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
-	// Parse document structure - use RawMessage for optional fields to prevent parse failures
 	var doc struct {
 		Artifacts             []json.RawMessage `json:"artifacts"`
 		ArtifactRelationships []struct {
@@ -49,15 +48,13 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 	info.SchemaVersion = doc.Schema.Version
 	info.SearchScope = doc.Descriptor.Configuration.Search.Scope
 
-	// Count files without fully parsing the array
-	if len(doc.Files) > 2 { // non-empty JSON array is at least "[]"
+	if len(doc.Files) > 2 {
 		var filesArr []json.RawMessage
 		if json.Unmarshal(doc.Files, &filesArr) == nil {
 			info.FilesCount = len(filesArr)
 		}
 	}
 
-	// Parse source flexibly - ignore errors, just use empty values
 	if len(doc.Source) > 0 {
 		var sourceInfo struct {
 			ID   string `json:"id"`
@@ -69,17 +66,14 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 		}
 		if err := json.Unmarshal(doc.Source, &sourceInfo); err == nil {
 			info.SourceType = sourceInfo.Type
-			// Prefer target.userInput (image scans), fall back to source.name (filesystem scans)
 			info.SourceName = sourceInfo.Target.UserInput
 			if info.SourceName == "" {
 				info.SourceName = sourceInfo.Name
 			}
 			info.SourceID = sourceInfo.ID
 		}
-		// If parsing fails, continue with empty source info
 	}
 
-	// Parse distro flexibly - can be object or array, ignore errors
 	if len(doc.Distro) > 0 {
 		var distroInfo struct {
 			Name       string   `json:"name"`
@@ -101,24 +95,20 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 			if err := json.Unmarshal(doc.Distro, &distroArray); err == nil && len(distroArray) > 0 {
 				distroInfo = distroArray[0]
 			}
-			// If both fail, continue with empty distro info
 		}
 		info.OSName = distroInfo.Name
 		info.OSVersion = distroInfo.Version
 		info.OSPrettyName = distroInfo.PrettyName
 		info.OSIDLike = distroInfo.IDLike
-		// If distro name is empty but ID is set, use ID
 		if info.OSName == "" && distroInfo.ID != "" {
 			info.OSName = distroInfo.ID
 		}
 	}
 
-	// Build Syft artifact ID → component index map for relationship resolution
 	syftIDToIdx := make(map[string]int)
 
 	var comps []Component
 	for _, rawArtifact := range doc.Artifacts {
-		// Parse the artifact for our normalized fields
 		var a struct {
 			SyftID       string          `json:"id"`
 			Name         string          `json:"name"`
@@ -141,7 +131,7 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 			} `json:"cpes"`
 		}
 		if err := json.Unmarshal(rawArtifact, &a); err != nil {
-			continue // Skip malformed artifacts
+			continue
 		}
 
 		comp := Component{
@@ -152,7 +142,7 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 			Language: a.Language,
 			FoundBy:  a.FoundBy,
 			Hashes:   make(map[string]string),
-			RawJSON:  rawArtifact, // Preserve the original JSON
+			RawJSON:  rawArtifact,
 		}
 		for _, loc := range a.Locations {
 			if loc.Path != "" {
@@ -174,10 +164,8 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 			}
 		}
 
-		// Extract hashes from type-specific metadata
 		extractSyftHashes(a.MetadataType, a.Metadata, comp.Hashes)
 
-		// Compute ID using identity matcher
 		comp.ID = identity.ComputeID(comp.ToIdentity())
 
 		if a.SyftID != "" {
@@ -186,7 +174,6 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 		comps = append(comps, comp)
 	}
 
-	// Process all artifact relationships: count by type + resolve dependency-of
 	relCounts := make(map[string]int)
 	depMap := make(map[int][]string) // parent comp index → child comp IDs
 	for _, rel := range doc.ArtifactRelationships {
@@ -211,8 +198,7 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 	return comps, info, nil
 }
 
-// extractSyftHashes extracts hash/digest information from Syft metadata into the hashes map.
-// Different metadata types store hashes in different fields.
+// extractSyftHashes extracts hashes from Syft metadata.
 func extractSyftHashes(metadataType string, metadata json.RawMessage, hashes map[string]string) {
 	if len(metadata) == 0 {
 		return
