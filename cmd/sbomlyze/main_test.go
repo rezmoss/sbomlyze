@@ -14,27 +14,22 @@ import (
 var binaryPath string
 
 func TestMain(m *testing.M) {
-	// Build the binary before running tests
 	dir, err := os.Getwd()
 	if err != nil {
 		panic(err)
 	}
 
-	// Navigate to project root
 	projectRoot := filepath.Join(dir, "..", "..")
 	binaryPath = filepath.Join(projectRoot, "sbomlyze-test")
 
-	// Build the binary
 	cmd := exec.Command("go", "build", "-o", binaryPath, "./cmd/sbomlyze")
 	cmd.Dir = projectRoot
 	if output, err := cmd.CombinedOutput(); err != nil {
 		panic("Failed to build binary: " + string(output))
 	}
 
-	// Run tests
 	code := m.Run()
 
-	// Cleanup
 	_ = os.Remove(binaryPath)
 
 	os.Exit(code)
@@ -61,10 +56,6 @@ func testdataPath(filename string) string {
 	dir, _ := os.Getwd()
 	return filepath.Join(dir, "..", "..", "testdata", filename)
 }
-
-// ============================================
-// Version and Help Tests
-// ============================================
 
 func TestVersionFlag(t *testing.T) {
 	tests := []struct {
@@ -128,10 +119,6 @@ func TestNoArgsShowsHelp(t *testing.T) {
 		t.Errorf("expected usage message in stderr")
 	}
 }
-
-// ============================================
-// Single File Mode (Stats) Tests
-// ============================================
 
 func TestStatsModeText(t *testing.T) {
 	stdout, _, exitCode := runCLI(testdataPath("cyclonedx-before.json"))
@@ -201,17 +188,12 @@ func TestStatsModeWithDifferentFormats(t *testing.T) {
 	}
 }
 
-// ============================================
-// Two File Mode (Diff) Tests
-// ============================================
-
 func TestDiffModeText(t *testing.T) {
 	stdout, _, exitCode := runCLI(
 		testdataPath("cyclonedx-before.json"),
 		testdataPath("cyclonedx-after.json"),
 	)
 
-	// Exit code 1 because there are differences
 	if exitCode != 1 {
 		t.Errorf("expected exit code 1 (differences found), got %d", exitCode)
 	}
@@ -267,7 +249,6 @@ func TestDiffModeJSON(t *testing.T) {
 }
 
 func TestDiffNoDifferences(t *testing.T) {
-	// Compare file with itself - no differences
 	stdout, _, exitCode := runCLI(
 		testdataPath("cyclonedx-before.json"),
 		testdataPath("cyclonedx-before.json"),
@@ -280,10 +261,6 @@ func TestDiffNoDifferences(t *testing.T) {
 		t.Errorf("expected 'No differences found' message")
 	}
 }
-
-// ============================================
-// Output Format Tests
-// ============================================
 
 func TestFormatSARIF(t *testing.T) {
 	stdout, _, _ := runCLI(
@@ -324,7 +301,6 @@ func TestFormatJUnit(t *testing.T) {
 		"--format", "junit",
 	)
 
-	// Check XML header
 	if !strings.Contains(stdout, "<?xml") {
 		t.Errorf("expected XML header in JUnit output")
 	}
@@ -378,7 +354,6 @@ func TestFormatPatch(t *testing.T) {
 		t.Errorf("expected non-empty patch operations")
 	}
 
-	// Check for expected operations
 	hasAdd := false
 	hasRemove := false
 	for _, op := range patch {
@@ -397,10 +372,6 @@ func TestFormatPatch(t *testing.T) {
 	}
 }
 
-// ============================================
-// Policy Tests
-// ============================================
-
 func TestPolicyPass(t *testing.T) {
 	_, _, exitCode := runCLI(
 		testdataPath("cyclonedx-before.json"),
@@ -408,8 +379,6 @@ func TestPolicyPass(t *testing.T) {
 		"--policy", testdataPath("test-policy.json"),
 	)
 
-	// Policy allows up to 5 added/removed, we have 1 each, so should pass
-	// But exit code 1 because there are differences
 	if exitCode != 1 {
 		t.Errorf("expected exit code 1 (differences exist), got %d", exitCode)
 	}
@@ -425,7 +394,6 @@ func TestPolicyViolation(t *testing.T) {
 	if exitCode != 1 {
 		t.Errorf("expected exit code 1, got %d", exitCode)
 	}
-	// The strict policy denies Apache-2.0 which new-package has
 	if !strings.Contains(stdout, "Policy Errors") {
 		t.Errorf("expected 'Policy Errors' in output, got: %s", stdout)
 	}
@@ -464,10 +432,6 @@ func TestPolicyWithJSON(t *testing.T) {
 	}
 }
 
-// ============================================
-// Strict/Tolerant Mode Tests
-// ============================================
-
 func TestStrictModeWithInvalidFile(t *testing.T) {
 	_, stderr, exitCode := runCLI(
 		testdataPath("invalid.json"),
@@ -488,7 +452,6 @@ func TestTolerantModeWithInvalidFile(t *testing.T) {
 		"--tolerant",
 	)
 
-	// In tolerant mode, it should continue and show stats (with 0 components)
 	if exitCode != 0 {
 		t.Errorf("expected exit code 0 in tolerant mode, got %d", exitCode)
 	}
@@ -507,10 +470,6 @@ func TestTolerantModeShowsWarnings(t *testing.T) {
 		t.Errorf("expected parse warnings in tolerant mode output")
 	}
 }
-
-// ============================================
-// Drift Detection Tests
-// ============================================
 
 func TestIntegrityDriftDetection(t *testing.T) {
 	stdout, _, _ := runCLI(
@@ -561,13 +520,7 @@ func TestVersionDriftDetection(t *testing.T) {
 	}
 }
 
-// ============================================
-// Error Handling Tests
-// ============================================
-
 func TestNonExistentFile(t *testing.T) {
-	// Use --strict to ensure nonexistent file causes failure
-	// In default tolerant mode, it returns 0 with warnings
 	_, stderr, exitCode := runCLI("nonexistent.json", "--strict")
 
 	if exitCode != 1 {
@@ -579,8 +532,6 @@ func TestNonExistentFile(t *testing.T) {
 }
 
 func TestInvalidPolicyFile(t *testing.T) {
-	// Use malformed.json which has invalid JSON syntax
-	// invalid.json is valid JSON (just not a policy), so it would parse as empty policy
 	_, stderr, exitCode := runCLI(
 		testdataPath("cyclonedx-before.json"),
 		testdataPath("cyclonedx-after.json"),
@@ -610,12 +561,7 @@ func TestNonExistentPolicyFile(t *testing.T) {
 	}
 }
 
-// ============================================
-// Format Flag Shortcuts
-// ============================================
-
 func TestFormatFlagShortcut(t *testing.T) {
-	// Test -f shortcut for --format
 	stdout, _, _ := runCLI(
 		testdataPath("cyclonedx-before.json"),
 		testdataPath("cyclonedx-after.json"),
@@ -628,7 +574,6 @@ func TestFormatFlagShortcut(t *testing.T) {
 }
 
 func TestMarkdownFormatAlias(t *testing.T) {
-	// Test "md" alias for "markdown"
 	stdout, _, _ := runCLI(
 		testdataPath("cyclonedx-before.json"),
 		testdataPath("cyclonedx-after.json"),
@@ -637,5 +582,156 @@ func TestMarkdownFormatAlias(t *testing.T) {
 
 	if !strings.Contains(stdout, "## 📦 SBOM Diff Report") {
 		t.Errorf("expected markdown output with 'md' alias")
+	}
+}
+
+func TestConvertCycloneDXToSPDX(t *testing.T) {
+	stdout, _, exitCode := runCLI(
+		"convert", testdataPath("cyclonedx-before.json"), "--to", "spdx",
+	)
+
+	if exitCode != 0 {
+		t.Errorf("expected exit code 0, got %d", exitCode)
+	}
+
+	var result map[string]interface{}
+	if err := json.Unmarshal([]byte(stdout), &result); err != nil {
+		t.Fatalf("output is not valid JSON: %v", err)
+	}
+	if result["spdxVersion"] != "SPDX-2.3" {
+		t.Errorf("expected spdxVersion SPDX-2.3, got %v", result["spdxVersion"])
+	}
+	if result["dataLicense"] != "CC0-1.0" {
+		t.Errorf("expected dataLicense CC0-1.0, got %v", result["dataLicense"])
+	}
+}
+
+func TestConvertSPDXToCycloneDX(t *testing.T) {
+	stdout, _, exitCode := runCLI(
+		"convert", testdataPath("spdx-sample.json"), "--to", "cyclonedx",
+	)
+
+	if exitCode != 0 {
+		t.Errorf("expected exit code 0, got %d", exitCode)
+	}
+
+	var result map[string]interface{}
+	if err := json.Unmarshal([]byte(stdout), &result); err != nil {
+		t.Fatalf("output is not valid JSON: %v", err)
+	}
+	if result["bomFormat"] != "CycloneDX" {
+		t.Errorf("expected bomFormat CycloneDX, got %v", result["bomFormat"])
+	}
+}
+
+func TestConvertSyftToCycloneDX(t *testing.T) {
+	stdout, _, exitCode := runCLI(
+		"convert", testdataPath("syft-sample.json"), "--to", "cdx",
+	)
+
+	if exitCode != 0 {
+		t.Errorf("expected exit code 0, got %d", exitCode)
+	}
+
+	var result map[string]interface{}
+	if err := json.Unmarshal([]byte(stdout), &result); err != nil {
+		t.Fatalf("output is not valid JSON: %v", err)
+	}
+	if result["bomFormat"] != "CycloneDX" {
+		t.Errorf("expected bomFormat CycloneDX, got %v", result["bomFormat"])
+	}
+}
+
+func TestConvertToFile(t *testing.T) {
+	tmpFile := filepath.Join(t.TempDir(), "output.json")
+	_, _, exitCode := runCLI(
+		"convert", testdataPath("cyclonedx-before.json"), "--to", "spdx", "-o", tmpFile,
+	)
+
+	if exitCode != 0 {
+		t.Errorf("expected exit code 0, got %d", exitCode)
+	}
+
+	data, err := os.ReadFile(tmpFile)
+	if err != nil {
+		t.Fatalf("failed to read output file: %v", err)
+	}
+
+	var result map[string]interface{}
+	if err := json.Unmarshal(data, &result); err != nil {
+		t.Fatalf("output file is not valid JSON: %v", err)
+	}
+	if result["spdxVersion"] != "SPDX-2.3" {
+		t.Errorf("expected spdxVersion SPDX-2.3 in output file")
+	}
+}
+
+func TestConvertNoTargetFormat(t *testing.T) {
+	_, stderr, exitCode := runCLI(
+		"convert", testdataPath("cyclonedx-before.json"),
+	)
+
+	if exitCode != 1 {
+		t.Errorf("expected exit code 1, got %d", exitCode)
+	}
+	if !strings.Contains(stderr, "--to") {
+		t.Errorf("expected error about --to flag, got: %s", stderr)
+	}
+}
+
+func TestConvertNoInput(t *testing.T) {
+	_, stderr, exitCode := runCLI("convert", "--to", "spdx")
+
+	if exitCode != 1 {
+		t.Errorf("expected exit code 1, got %d", exitCode)
+	}
+	if !strings.Contains(stderr, "no input") {
+		t.Errorf("expected error about no input file, got: %s", stderr)
+	}
+}
+
+func TestConvertInvalidFormat(t *testing.T) {
+	_, stderr, exitCode := runCLI(
+		"convert", testdataPath("cyclonedx-before.json"), "--to", "bogus",
+	)
+
+	if exitCode != 1 {
+		t.Errorf("expected exit code 1, got %d", exitCode)
+	}
+	if !strings.Contains(stderr, "unknown format") {
+		t.Errorf("expected 'unknown format' error, got: %s", stderr)
+	}
+}
+
+func TestConvertSameFormat(t *testing.T) {
+	stdout, _, exitCode := runCLI(
+		"convert", testdataPath("cyclonedx-before.json"), "--to", "cyclonedx",
+	)
+
+	if exitCode != 0 {
+		t.Errorf("expected exit code 0 for same-format conversion, got %d", exitCode)
+	}
+
+	var result map[string]interface{}
+	if err := json.Unmarshal([]byte(stdout), &result); err != nil {
+		t.Fatalf("output is not valid JSON: %v", err)
+	}
+	if result["bomFormat"] != "CycloneDX" {
+		t.Errorf("expected CycloneDX output for self-conversion")
+	}
+}
+
+func TestConvertStdoutIsValidJSON(t *testing.T) {
+	stdout, _, exitCode := runCLI(
+		"convert", testdataPath("syft-sample.json"), "--to", "spdx",
+	)
+
+	if exitCode != 0 {
+		t.Errorf("expected exit code 0, got %d", exitCode)
+	}
+
+	var result interface{}
+	if err := json.Unmarshal([]byte(stdout), &result); err != nil {
+		t.Fatalf("stdout is not valid JSON: %v", err)
 	}
 }

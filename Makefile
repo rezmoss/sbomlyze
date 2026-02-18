@@ -1,12 +1,17 @@
-.PHONY: all test lint build build-quick clean snapshot-test update-snapshot help
+.PHONY: all test lint vulncheck build build-quick clean snapshot-test update-snapshot help
 
 all: test lint build ## Run test, lint, and build (full CI check)
 
 test: ## Run all tests with race detector
 	go test -v -race -count=1 ./...
 
-lint: ## Run golangci-lint
+lint: ## Run vet, golangci-lint, and staticcheck
+	go vet ./...
 	golangci-lint run ./...
+	staticcheck ./...
+
+vulncheck: ## Run govulncheck for known vulnerabilities
+	govulncheck ./...
 
 build: ## Build with goreleaser (snapshot)
 	@which goreleaser > /dev/null || (echo "goreleaser not found. Install: go install github.com/goreleaser/goreleaser/v2@latest" && exit 1)

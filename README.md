@@ -20,6 +20,7 @@ A fast, reliable SBOM diff and analysis tool. Compare Software Bill of Materials
 ## Features
 
 - **Multi-format support**: Syft, CycloneDX, SPDX (JSON)
+- **Format conversion**: Convert between CycloneDX, SPDX, and Syft formats
 - **Strong identity matching**: PURL → CPE → BOM-ref → namespace/name precedence
 - **Drift detection**: Classify changes as version, integrity, or metadata drift
 - **Dependency graph diff**: Track transitive dependencies and supply-chain depth
@@ -137,6 +138,10 @@ sbomlyze image.json -i
 # Web UI (opens browser)
 sbomlyze -web
 
+# Convert between SBOM formats
+sbomlyze convert syft.json --to spdx
+sbomlyze convert cdx.json --to syft -o output.json
+
 # JSON output for CI integration
 sbomlyze before.json after.json --json
 
@@ -154,12 +159,14 @@ sbomlyze before.json after.json --policy policy.json
 
 ```
 sbomlyze <sbom1> [sbom2] [options]
+sbomlyze convert <sbom> --to <format> [-o output]
 
 Modes:
-  Single file:  sbomlyze <sbom> [--json]        Show statistics
-  Interactive:  sbomlyze <sbom> -i              Interactive explorer
-  Web server:   sbomlyze -web [--port 8080]     Web UI explorer
-  Two files:    sbomlyze <sbom1> <sbom2> [...]  Show diff
+  Single file:  sbomlyze <sbom> [--json]            Show statistics
+  Interactive:  sbomlyze <sbom> -i                  Interactive explorer
+  Convert:      sbomlyze convert <sbom> --to <fmt>  Convert SBOM format
+  Web server:   sbomlyze -web [--port 8080]         Web UI explorer
+  Two files:    sbomlyze <sbom1> <sbom2> [...]      Show diff
 
 Options:
   -i, --interactive   Interactive TUI explorer
@@ -171,6 +178,8 @@ Options:
   --strict            Fail on parse warnings
   --tolerant          Continue on parse warnings (default)
   --no-pager          Disable automatic paging of output
+  --to <format>       Target format for convert: cyclonedx (cdx), spdx, syft
+  -o, --output <file> Output file for convert (default: stdout)
   --version, -v       Show version information
   --help, -h          Show this help message
 ```
@@ -266,6 +275,33 @@ Licenses are automatically categorized into:
 | **Permissive** | MIT, BSD, Apache, ISC, Zlib, Unlicense |
 | **Public Domain** | Public Domain dedications |
 | **Unknown** | Unrecognized or missing licenses |
+
+### Convert Mode
+
+Convert SBOMs between CycloneDX, SPDX, and Syft JSON formats. The input format is auto-detected.
+
+```bash
+# CycloneDX to SPDX
+sbomlyze convert image.cdx.json --to spdx
+
+# Syft to CycloneDX (cdx is an alias for cyclonedx)
+sbomlyze convert syft-output.json --to cdx
+
+# SPDX to Syft, writing to a file
+sbomlyze convert spdx-output.json --to syft -o converted.json
+```
+
+#### Supported Target Formats
+
+| Format | `--to` value | Output |
+|--------|-------------|--------|
+| CycloneDX 1.5 | `cyclonedx` or `cdx` | CycloneDX JSON with metadata, dependencies, and properties |
+| SPDX 2.3 | `spdx` | SPDX JSON with packages, relationships, and external references |
+| Syft | `syft` | Syft JSON with artifacts, relationships, source, and distro info |
+
+#### What's Preserved
+
+Conversion preserves component names, versions, PURLs, CPEs, licenses, hashes, supplier info, and dependency relationships. Format-specific fields (e.g., Syft language, foundBy, locations) are carried through CycloneDX properties when converting to CDX.
 
 ### Diff Mode (Two Files)
 
@@ -892,6 +928,18 @@ Create policies to enforce rules in CI/CD pipelines. sbomlyze exits with code 1 
 
 All formats must be JSON. XML support is not currently available.
 
+### Format Conversion
+
+sbomlyze can convert between any of the three supported formats:
+
+```bash
+sbomlyze convert input.json --to spdx          # any format → SPDX 2.3
+sbomlyze convert input.json --to cyclonedx     # any format → CycloneDX 1.5
+sbomlyze convert input.json --to syft          # any format → Syft JSON
+```
+
+See [Convert Mode](#convert-mode) for details.
+
 ### Cross-Format Comparison
 
 sbomlyze can compare SBOMs in different formats:
@@ -1057,6 +1105,20 @@ EOF
 sbomlyze baseline.json current.json --policy no-drift.json
 ```
 
+### Convert SBOM Formats
+
+```bash
+# Convert a Syft SBOM to CycloneDX for tools that require it
+syft alpine:latest -o json > alpine-syft.json
+sbomlyze convert alpine-syft.json --to cyclonedx -o alpine-cdx.json
+
+# Convert CycloneDX to SPDX for compliance workflows
+sbomlyze convert vendor-sbom.cdx.json --to spdx > vendor-sbom.spdx.json
+
+# Pipe conversion output directly
+sbomlyze convert input.json --to spdx | jq '.packages | length'
+```
+
 ### Explore SBOM in Browser
 
 ```bash
@@ -1091,9 +1153,8 @@ go test -v ./...
 ### Lint
 
 ```bash
-make lint
-# or
-golangci-lint run ./...
+make lint        # runs go vet + golangci-lint + staticcheck
+make vulncheck   # runs govulncheck for known CVEs
 ```
 
 ### Build
@@ -1107,12 +1168,15 @@ go build -o sbomlyze ./cmd/sbomlyze
 ### Make Commands
 
 ```bash
-make all         # Run test, lint, and build
-make test        # Run all tests
-make lint        # Run golangci-lint
-make build       # Build with goreleaser (snapshot)
-make build-quick # Quick build for development
-make clean       # Remove build artifacts
+make all            # Run test, lint, and build
+make test           # Run all tests with race detector
+make lint           # Run go vet, golangci-lint, and staticcheck
+make vulncheck      # Run govulncheck for known vulnerabilities
+make build          # Build with goreleaser (snapshot)
+make build-quick    # Quick build for development
+make snapshot-test  # Run snapshot tests only
+make update-snapshot # Update snapshot golden files
+make clean          # Remove build artifacts
 ```
 
 

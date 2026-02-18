@@ -8,6 +8,7 @@ import (
 
 	"github.com/rezmoss/sbomlyze/internal/analysis"
 	"github.com/rezmoss/sbomlyze/internal/cli"
+	"github.com/rezmoss/sbomlyze/internal/convert"
 	"github.com/rezmoss/sbomlyze/internal/output"
 	"github.com/rezmoss/sbomlyze/internal/pager"
 	"github.com/rezmoss/sbomlyze/internal/policy"
@@ -19,7 +20,6 @@ import (
 )
 
 func main() {
-	// Handle --version and --help early
 	for _, arg := range os.Args[1:] {
 		if arg == "--version" || arg == "-v" {
 			fmt.Println(version.Info())
@@ -51,6 +51,45 @@ func main() {
 		return
 	}
 
+	if opts.Convert {
+		if len(opts.Files) == 0 {
+			fmt.Fprintf(os.Stderr, "Error: no input file specified for convert\n")
+			os.Exit(1)
+		}
+		if opts.TargetFormat == "" {
+			fmt.Fprintf(os.Stderr, "Error: --to flag is required for convert\n")
+			os.Exit(1)
+		}
+		targetFmt, err := convert.ParseFormat(opts.TargetFormat)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			os.Exit(1)
+		}
+		comps, info, err := sbom.ParseFileWithInfo(opts.Files[0])
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error parsing %s: %v\n", opts.Files[0], err)
+			os.Exit(1)
+		}
+		comps = sbom.NormalizeComponents(comps)
+
+		var w *os.File
+		if opts.OutputFile != "" {
+			w, err = os.Create(opts.OutputFile)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Error creating output file: %v\n", err)
+				os.Exit(1)
+			}
+			defer func() { _ = w.Close() }()
+		} else {
+			w = os.Stdout
+		}
+		if err := convert.Convert(w, comps, info, targetFmt); err != nil {
+			fmt.Fprintf(os.Stderr, "Error converting: %v\n", err)
+			os.Exit(1)
+		}
+		return
+	}
+
 	if len(opts.Files) == 0 {
 		fmt.Fprintf(os.Stderr, "Error: no input files specified\n")
 		os.Exit(1)
@@ -58,7 +97,6 @@ func main() {
 
 	parseOpts := cli.ParseOptions{Strict: opts.Strict}
 
-	// Single file mode - stats or interactive
 	if len(opts.Files) == 1 {
 		spin := progress.New(opts.JSONOutput || opts.Interactive)
 
@@ -116,7 +154,6 @@ func main() {
 		return
 	}
 
-	// Two file mode - diff
 	file1, file2 := opts.Files[0], opts.Files[1]
 	spin := progress.New(opts.Format != "" && opts.Format != "text")
 
@@ -251,7 +288,6 @@ func parseFileWithOptionsAndInfo(path string, opts *cli.ParseOptions) ([]sbom.Co
 		if opts.Strict {
 			return nil, sbom.SBOMInfo{}, err
 		}
-		// In tolerant mode, add warning and return empty
 		opts.AddWarning(path, err.Error(), "")
 		return []sbom.Component{}, sbom.SBOMInfo{}, nil
 	}
