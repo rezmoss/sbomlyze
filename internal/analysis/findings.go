@@ -87,10 +87,7 @@ func detectLocationHotspots(comps []sbom.Component) []Finding {
 		return nil
 	}
 	dirs := SortedByValue(dirCounts)
-	limit := len(dirs)
-	if limit > 4 {
-		limit = 4
-	}
+	limit := min(len(dirs), 4)
 	parts := make([]string, limit)
 	for i := 0; i < limit; i++ {
 		d := dirs[i]
@@ -165,10 +162,7 @@ func detectDominantType(stats Stats) []Finding {
 		}}
 	}
 
-	limit := len(types)
-	if limit > 3 {
-		limit = 3
-	}
+	limit := min(len(types), 3)
 	parts := make([]string, limit)
 	for i := 0; i < limit; i++ {
 		t := types[i]
@@ -233,10 +227,7 @@ func detectCatalogerBreakdown(stats Stats) []Finding {
 	}
 
 	catalogers := SortedByValue(stats.ByFoundBy)
-	limit := len(catalogers)
-	if limit > 3 {
-		limit = 3
-	}
+	limit := min(len(catalogers), 3)
 	parts := make([]string, limit)
 	for i := 0; i < limit; i++ {
 		c := catalogers[i]
@@ -708,10 +699,7 @@ func pathHotspots(comps []sbom.Component, direction string) *Finding {
 		return nil
 	}
 	dirs := SortedByValue(dirCounts)
-	limit := len(dirs)
-	if limit > 4 {
-		limit = 4
-	}
+	limit := min(len(dirs), 4)
 	parts := make([]string, limit)
 	for i := 0; i < limit; i++ {
 		d := dirs[i]

@@ -2,6 +2,8 @@ package output
 
 import (
 	"fmt"
+	"maps"
+	"slices"
 
 	"github.com/rezmoss/sbomlyze/internal/analysis"
 )
@@ -42,7 +44,7 @@ func GenerateJSONPatch(result analysis.DiffResult) []JSONPatchOp {
 			})
 		}
 
-		if !stringSliceEqual(c.Before.Licenses, c.After.Licenses) {
+		if !slices.Equal(c.Before.Licenses, c.After.Licenses) {
 			ops = append(ops, JSONPatchOp{
 				Op:    "replace",
 				Path:  fmt.Sprintf("/components/%s/licenses", c.ID),
@@ -50,7 +52,7 @@ func GenerateJSONPatch(result analysis.DiffResult) []JSONPatchOp {
 			})
 		}
 
-		if !hashMapEqual(c.Before.Hashes, c.After.Hashes) {
+		if !maps.Equal(c.Before.Hashes, c.After.Hashes) {
 			ops = append(ops, JSONPatchOp{
 				Op:    "replace",
 				Path:  fmt.Sprintf("/components/%s/hashes", c.ID),
@@ -60,28 +62,4 @@ func GenerateJSONPatch(result analysis.DiffResult) []JSONPatchOp {
 	}
 
 	return ops
-}
-
-func stringSliceEqual(a, b []string) bool {
-	if len(a) != len(b) {
-		return false
-	}
-	for i := range a {
-		if a[i] != b[i] {
-			return false
-		}
-	}
-	return true
-}
-
-func hashMapEqual(a, b map[string]string) bool {
-	if len(a) != len(b) {
-		return false
-	}
-	for k, v := range a {
-		if b[k] != v {
-			return false
-		}
-	}
-	return true
 }

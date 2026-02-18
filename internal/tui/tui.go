@@ -47,9 +47,9 @@ func (i ComponentItem) Description() string {
 	if i.component.PURL != "" {
 		// Extract type from PURL
 		if strings.HasPrefix(i.component.PURL, "pkg:") {
-			parts := strings.SplitN(i.component.PURL[4:], "/", 2)
-			if len(parts) > 0 {
-				return fmt.Sprintf("Type: %s", parts[0])
+			purlParts := strings.SplitN(i.component.PURL[4:], "/", 2)
+			if len(purlParts) > 0 {
+				return fmt.Sprintf("Type: %s", purlParts[0])
 			}
 		}
 	}
@@ -447,9 +447,8 @@ func (m *Model) applyFilters() {
 
 func extractPkgType(purl string) string {
 	if strings.HasPrefix(purl, "pkg:") {
-		parts := strings.SplitN(purl[4:], "/", 2)
-		if len(parts) > 0 {
-			return parts[0]
+		if ptype, _, ok := strings.Cut(purl[4:], "/"); ok {
+			return ptype
 		}
 	}
 	return ""

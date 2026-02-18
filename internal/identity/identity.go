@@ -53,12 +53,8 @@ func NormalizePURL(purl string) string {
 	if purl == "" {
 		return ""
 	}
-	if idx := strings.Index(purl, "#"); idx != -1 {
-		purl = purl[:idx]
-	}
-	if idx := strings.Index(purl, "?"); idx != -1 {
-		purl = purl[:idx]
-	}
+	purl, _, _ = strings.Cut(purl, "#")
+	purl, _, _ = strings.Cut(purl, "?")
 	if idx := strings.LastIndex(purl, "@"); idx != -1 {
 		purl = purl[:idx]
 	}
@@ -67,12 +63,10 @@ func NormalizePURL(purl string) string {
 	// e.g. pkg:rpm/amzn/bash → pkg:rpm/bash
 	if strings.HasPrefix(purl, "pkg:") {
 		rest := purl[4:]
-		if slashIdx := strings.Index(rest, "/"); slashIdx != -1 {
-			ptype := rest[:slashIdx]
+		if ptype, afterType, ok := strings.Cut(rest, "/"); ok {
 			if osPackageTypes[ptype] {
-				afterType := rest[slashIdx+1:]
-				if secondSlash := strings.Index(afterType, "/"); secondSlash != -1 {
-					purl = "pkg:" + ptype + "/" + afterType[secondSlash+1:]
+				if _, name, ok := strings.Cut(afterType, "/"); ok {
+					purl = "pkg:" + ptype + "/" + name
 				}
 			}
 		}
@@ -86,12 +80,8 @@ func ExtractPURLVersion(purl string) string {
 	if purl == "" {
 		return ""
 	}
-	if idx := strings.Index(purl, "#"); idx != -1 {
-		purl = purl[:idx]
-	}
-	if idx := strings.Index(purl, "?"); idx != -1 {
-		purl = purl[:idx]
-	}
+	purl, _, _ = strings.Cut(purl, "#")
+	purl, _, _ = strings.Cut(purl, "?")
 	if idx := strings.LastIndex(purl, "@"); idx != -1 {
 		ver := purl[idx+1:]
 		if decoded, err := url.QueryUnescape(ver); err == nil {

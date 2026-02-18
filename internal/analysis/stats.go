@@ -160,13 +160,11 @@ func ExtractPURLType(purl string) string {
 	if purl == "" || !strings.HasPrefix(purl, "pkg:") {
 		return "unknown"
 	}
-	// pkg:type/...
-	rest := purl[4:] // remove "pkg:"
-	idx := strings.Index(rest, "/")
-	if idx == -1 {
-		return "unknown"
+	rest := purl[4:]
+	if ptype, _, ok := strings.Cut(rest, "/"); ok {
+		return ptype
 	}
-	return rest[:idx]
+	return "unknown"
 }
 
 // PrintStats prints SBOM statistics.

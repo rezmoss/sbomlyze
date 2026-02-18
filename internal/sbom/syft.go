@@ -227,10 +227,8 @@ func extractSyftHashes(metadataType string, metadata json.RawMessage, hashes map
 			Integrity string `json:"integrity"`
 		}
 		if json.Unmarshal(metadata, &md) == nil && md.Integrity != "" {
-			// Format: "sha512-XXXX" or "sha256-XXXX"
-			if idx := strings.Index(md.Integrity, "-"); idx != -1 {
-				algo := strings.ToUpper(md.Integrity[:idx])
-				hashes[algo] = md.Integrity[idx+1:]
+			if algo, hash, ok := strings.Cut(md.Integrity, "-"); ok {
+				hashes[strings.ToUpper(algo)] = hash
 			} else {
 				hashes["INTEGRITY"] = md.Integrity
 			}

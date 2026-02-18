@@ -191,8 +191,7 @@ func syftTypeFor(c sbom.Component) string {
 	}
 	if c.PURL != "" {
 		purl := strings.TrimPrefix(c.PURL, "pkg:")
-		if idx := strings.Index(purl, "/"); idx > 0 {
-			scheme := purl[:idx]
+		if scheme, _, ok := strings.Cut(purl, "/"); ok && scheme != "" {
 			switch scheme {
 			case "npm":
 				return "npm"
