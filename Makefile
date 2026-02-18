@@ -1,4 +1,4 @@
-.PHONY: all test lint vulncheck build build-quick clean snapshot-test update-snapshot help
+.PHONY: all test lint vulncheck build build-quick clean snapshot-test update-snapshot snapshot-diff snapshot-review help
 
 all: test lint build ## Run test, lint, and build (full CI check)
 
@@ -25,8 +25,21 @@ build-quick: ## Quick development build (./sbomlyze)
 snapshot-test: ## Run snapshot tests only
 	go test -v -run TestSnapshot ./cmd/sbomlyze/
 
-update-snapshot: ## Update snapshot golden files
+update-snapshot: ## Update snapshot golden files (use NAME= to filter)
+ifdef NAME
+	go test -v -run TestSnapshot ./cmd/sbomlyze/ -update -snapshot-filter="$(NAME)"
+else
+	@echo "Updating ALL snapshots. Use NAME=foo,bar to update selectively."
+	@echo "Run 'make snapshot-diff' first to review changes."
+	@echo ""
 	go test -v -run TestSnapshot ./cmd/sbomlyze/ -update
+endif
+
+snapshot-diff: ## Show what snapshot changes would occur (no writes)
+	go test -v -run TestSnapshot ./cmd/sbomlyze/ -diff
+
+snapshot-review: ## Interactively review and accept snapshot changes
+	@bash scripts/review-snapshots.sh
 
 clean: ## Remove build artifacts
 	rm -rf dist/ sbomlyze

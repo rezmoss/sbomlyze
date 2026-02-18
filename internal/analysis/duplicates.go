@@ -6,7 +6,7 @@ import (
 	"github.com/rezmoss/sbomlyze/internal/sbom"
 )
 
-// DuplicateReport contains information about duplicate components
+// DuplicateReport holds duplicate component data.
 type DuplicateReport struct {
 	Before      []DuplicateGroup      `json:"before,omitempty"`
 	After       []DuplicateGroup      `json:"after,omitempty"`
@@ -14,7 +14,7 @@ type DuplicateReport struct {
 	Collisions  []Collision           `json:"collisions,omitempty"`
 }
 
-// DuplicateGroup represents a group of components with the same ID but different versions
+// DuplicateGroup is a set of components sharing an ID.
 type DuplicateGroup struct {
 	ID         string           `json:"id"`
 	Name       string           `json:"name"`
@@ -22,7 +22,7 @@ type DuplicateGroup struct {
 	Components []sbom.Component `json:"components"`
 }
 
-// DuplicateVersionDiff tracks changes in duplicate version sets
+// DuplicateVersionDiff tracks version set changes.
 type DuplicateVersionDiff struct {
 	VersionsAdded      map[string][]string `json:"versions_added,omitempty"`
 	VersionsRemoved    map[string][]string `json:"versions_removed,omitempty"`
@@ -30,14 +30,13 @@ type DuplicateVersionDiff struct {
 	ResolvedDuplicates []DuplicateGroup    `json:"resolved_duplicates,omitempty"`
 }
 
-// Collision represents an ambiguous identity match
+// Collision is an ambiguous identity match.
 type Collision struct {
 	ID         string           `json:"id"`
 	Reason     string           `json:"reason"`
 	Components []sbom.Component `json:"components"`
 }
 
-// IsEmpty returns true if there are no version differences
 func (d *DuplicateVersionDiff) IsEmpty() bool {
 	return len(d.VersionsAdded) == 0 &&
 		len(d.VersionsRemoved) == 0 &&
@@ -45,7 +44,7 @@ func (d *DuplicateVersionDiff) IsEmpty() bool {
 		len(d.ResolvedDuplicates) == 0
 }
 
-// DetectDuplicates finds components with the same ID but different versions
+// DetectDuplicates finds same-ID components with different versions.
 func DetectDuplicates(comps []sbom.Component) []DuplicateGroup {
 	groups := make(map[string][]sbom.Component)
 	for _, c := range comps {
@@ -76,7 +75,7 @@ func DetectDuplicates(comps []sbom.Component) []DuplicateGroup {
 	return dups
 }
 
-// DiffDuplicateVersions compares duplicate groups between before and after
+// DiffDuplicateVersions compares duplicate groups.
 func DiffDuplicateVersions(before, after []DuplicateGroup) DuplicateVersionDiff {
 	diff := DuplicateVersionDiff{
 		VersionsAdded:   make(map[string][]string),
@@ -93,25 +92,20 @@ func DiffDuplicateVersions(before, after []DuplicateGroup) DuplicateVersionDiff 
 		afterMap[g.ID] = g
 	}
 
-	// Check for new duplicates and version changes
 	for id, afterGroup := range afterMap {
 		beforeGroup, exists := beforeMap[id]
 		if !exists {
-			// New duplicate group
 			diff.NewDuplicates = append(diff.NewDuplicates, afterGroup)
 		} else {
-			// Check for version changes
 			beforeVersions := ToSet(beforeGroup.Versions)
 			afterVersions := ToSet(afterGroup.Versions)
 
-			// Versions added
 			for v := range afterVersions {
 				if !beforeVersions[v] {
 					diff.VersionsAdded[id] = append(diff.VersionsAdded[id], v)
 				}
 			}
 
-			// Versions removed
 			for v := range beforeVersions {
 				if !afterVersions[v] {
 					diff.VersionsRemoved[id] = append(diff.VersionsRemoved[id], v)
@@ -120,14 +114,12 @@ func DiffDuplicateVersions(before, after []DuplicateGroup) DuplicateVersionDiff 
 		}
 	}
 
-	// Check for resolved duplicates
 	for id, beforeGroup := range beforeMap {
 		if _, exists := afterMap[id]; !exists {
 			diff.ResolvedDuplicates = append(diff.ResolvedDuplicates, beforeGroup)
 		}
 	}
 
-	// Sort results
 	sort.Slice(diff.NewDuplicates, func(i, j int) bool {
 		return diff.NewDuplicates[i].ID < diff.NewDuplicates[j].ID
 	})
@@ -144,8 +136,7 @@ func DiffDuplicateVersions(before, after []DuplicateGroup) DuplicateVersionDiff 
 	return diff
 }
 
-// DetectCollisions finds components with same ID but different characteristics
-// indicating an ambiguous or incorrect identity match
+// DetectCollisions finds same-ID components with conflicting characteristics.
 func DetectCollisions(comps []sbom.Component) []Collision {
 	groups := make(map[string][]sbom.Component)
 	for _, c := range comps {
@@ -158,7 +149,6 @@ func DetectCollisions(comps []sbom.Component) []Collision {
 			continue
 		}
 
-		// Check for name collisions (different names, same ID)
 		names := make(map[string]bool)
 		for _, c := range components {
 			names[c.Name] = true
@@ -172,7 +162,6 @@ func DetectCollisions(comps []sbom.Component) []Collision {
 			continue
 		}
 
-		// Check for hash collisions (same version, different hashes)
 		versionHashes := make(map[string]map[string]string) // version -> algo -> hash
 		for _, c := range components {
 			if len(c.Hashes) == 0 {

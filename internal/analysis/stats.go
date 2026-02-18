@@ -9,7 +9,7 @@ import (
 	"github.com/rezmoss/sbomlyze/internal/sbom"
 )
 
-// Stats contains statistics about an SBOM
+// Stats holds SBOM statistics.
 type Stats struct {
 	TotalComponents   int              `json:"total_components"`
 	ByType            map[string]int   `json:"by_type,omitempty"`
@@ -22,7 +22,6 @@ type Stats struct {
 	DuplicateCount    int              `json:"duplicate_count"`
 	Duplicates        []DuplicateGroup `json:"duplicates,omitempty"`
 
-	// Extended statistics
 	ByLanguage        map[string]int   `json:"by_language,omitempty"`
 	ByFoundBy         map[string]int   `json:"by_found_by,omitempty"`
 	LicenseCategories *LicenseCategory `json:"license_categories,omitempty"`
@@ -32,7 +31,7 @@ type Stats struct {
 	WithoutPURL       int              `json:"without_purl"`
 }
 
-// LicenseCategory groups licenses by type
+// LicenseCategory groups license counts.
 type LicenseCategory struct {
 	Copyleft    int `json:"copyleft"`    // GPL, LGPL, AGPL, etc.
 	Permissive  int `json:"permissive"`  // MIT, BSD, Apache, etc.
@@ -40,7 +39,7 @@ type LicenseCategory struct {
 	Unknown     int `json:"unknown"`
 }
 
-// ComputeStats calculates statistics for a list of components
+// ComputeStats calculates SBOM statistics.
 func ComputeStats(comps []sbom.Component) Stats {
 	stats := Stats{
 		ByType:     make(map[string]int),
@@ -53,24 +52,20 @@ func ComputeStats(comps []sbom.Component) Stats {
 	licenseCategories := &LicenseCategory{}
 
 	for _, c := range comps {
-		// Count by type (from PURL, fallback to ID)
 		ptype := ExtractPURLType(c.PURL)
 		if ptype == "unknown" && c.PURL == "" {
 			ptype = ExtractPURLType(c.ID)
 		}
 		stats.ByType[ptype]++
 
-		// Count by language
 		if c.Language != "" {
 			stats.ByLanguage[c.Language]++
 		}
 
-		// Count by scanner/foundBy
 		if c.FoundBy != "" {
 			stats.ByFoundBy[c.FoundBy]++
 		}
 
-		// Count licenses and categorize
 		if len(c.Licenses) == 0 {
 			stats.WithoutLicense++
 			licenseCategories.Unknown++
@@ -78,7 +73,6 @@ func ComputeStats(comps []sbom.Component) Stats {
 			for _, lic := range c.Licenses {
 				stats.ByLicense[lic]++
 			}
-			// Categorize by first license
 			category := CategorizeLicense(c.Licenses[0])
 			switch category {
 			case "copyleft":
@@ -92,40 +86,34 @@ func ComputeStats(comps []sbom.Component) Stats {
 			}
 		}
 
-		// Count hashes
 		if len(c.Hashes) > 0 {
 			stats.WithHashes++
 		} else {
 			stats.WithoutHashes++
 		}
 
-		// Count CPEs
 		if len(c.CPEs) > 0 {
 			stats.WithCPEs++
 		} else {
 			stats.WithoutCPEs++
 		}
 
-		// Count PURLs
 		if c.PURL != "" {
 			stats.WithPURL++
 		} else {
 			stats.WithoutPURL++
 		}
 
-		// Count dependencies
 		if len(c.Dependencies) > 0 {
 			stats.WithDependencies++
 			stats.TotalDependencies += len(c.Dependencies)
 		}
 	}
 
-	// Only include license categories if we have data
 	if stats.TotalComponents > 0 {
 		stats.LicenseCategories = licenseCategories
 	}
 
-	// Clean up empty maps
 	if len(stats.ByLanguage) == 0 {
 		stats.ByLanguage = nil
 	}
@@ -133,7 +121,6 @@ func ComputeStats(comps []sbom.Component) Stats {
 		stats.ByFoundBy = nil
 	}
 
-	// Detect duplicates
 	dups := DetectDuplicates(comps)
 	stats.DuplicateCount = len(dups)
 	if len(dups) > 0 {
@@ -143,11 +130,10 @@ func ComputeStats(comps []sbom.Component) Stats {
 	return stats
 }
 
-// CategorizeLicense categorizes a license into copyleft, permissive, public_domain, or unknown
+// CategorizeLicense returns copyleft/permissive/public_domain/unknown.
 func CategorizeLicense(license string) string {
 	lic := strings.ToUpper(license)
 
-	// Copyleft licenses
 	copyleftPrefixes := []string{"GPL", "LGPL", "AGPL", "MPL", "EPL", "CPL", "CDDL", "EUPL"}
 	for _, prefix := range copyleftPrefixes {
 		if strings.Contains(lic, prefix) {
@@ -155,7 +141,6 @@ func CategorizeLicense(license string) string {
 		}
 	}
 
-	// Permissive licenses
 	permissivePrefixes := []string{"MIT", "BSD", "APACHE", "ISC", "ZLIB", "UNLICENSE", "WTFPL", "CC0", "EXPAT", "X11"}
 	for _, prefix := range permissivePrefixes {
 		if strings.Contains(lic, prefix) {
@@ -163,7 +148,6 @@ func CategorizeLicense(license string) string {
 		}
 	}
 
-	// Public domain
 	if strings.Contains(lic, "PUBLIC-DOMAIN") || strings.Contains(lic, "PUBLIC DOMAIN") || strings.Contains(lic, "PUBLICDOMAIN") {
 		return "public_domain"
 	}
@@ -171,28 +155,25 @@ func CategorizeLicense(license string) string {
 	return "unknown"
 }
 
-// ExtractPURLType extracts the package type from a PURL
+// ExtractPURLType extracts the type segment from a PURL.
 func ExtractPURLType(purl string) string {
 	if purl == "" || !strings.HasPrefix(purl, "pkg:") {
 		return "unknown"
 	}
-	// pkg:type/...
-	rest := purl[4:] // remove "pkg:"
-	idx := strings.Index(rest, "/")
-	if idx == -1 {
-		return "unknown"
+	rest := purl[4:]
+	if ptype, _, ok := strings.Cut(rest, "/"); ok {
+		return ptype
 	}
-	return rest[:idx]
+	return "unknown"
 }
 
-// PrintStats outputs statistics in a human-readable format
+// PrintStats prints SBOM statistics.
 func PrintStats(stats Stats) {
 	fmt.Printf("\n📦 SBOM Statistics\n")
 	fmt.Printf("==================\n\n")
 
 	fmt.Printf("Total Components: %d\n\n", stats.TotalComponents)
 
-	// By type
 	if len(stats.ByType) > 0 {
 		fmt.Printf("By Package Type:\n")
 		types := SortedKeys(stats.ByType)
@@ -202,7 +183,6 @@ func PrintStats(stats Stats) {
 		fmt.Println()
 	}
 
-	// Licenses
 	fmt.Printf("Licenses:\n")
 	fmt.Printf("  With license:    %d\n", stats.TotalComponents-stats.WithoutLicense)
 	fmt.Printf("  Without license: %d\n", stats.WithoutLicense)
@@ -221,19 +201,16 @@ func PrintStats(stats Stats) {
 	}
 	fmt.Println()
 
-	// Hashes
 	fmt.Printf("Integrity:\n")
 	fmt.Printf("  With hashes:    %d\n", stats.WithHashes)
 	fmt.Printf("  Without hashes: %d\n", stats.WithoutHashes)
 	fmt.Println()
 
-	// Dependencies
 	fmt.Printf("Dependencies:\n")
 	fmt.Printf("  Components with deps: %d\n", stats.WithDependencies)
 	fmt.Printf("  Total dep relations:  %d\n", stats.TotalDependencies)
 	fmt.Println()
 
-	// Duplicates
 	if stats.DuplicateCount > 0 {
 		fmt.Printf("⚠️  Duplicates Found: %d\n", stats.DuplicateCount)
 		for _, d := range stats.Duplicates {
@@ -243,7 +220,6 @@ func PrintStats(stats Stats) {
 	}
 }
 
-// SortedKeys returns map keys sorted alphabetically
 func SortedKeys(m map[string]int) []string {
 	keys := make([]string, 0, len(m))
 	for k := range m {
@@ -253,7 +229,6 @@ func SortedKeys(m map[string]int) []string {
 	return keys
 }
 
-// SortedByValue returns map keys sorted by value (descending)
 func SortedByValue(m map[string]int) []string {
 	keys := make([]string, 0, len(m))
 	for k := range m {
@@ -265,7 +240,7 @@ func SortedByValue(m map[string]int) []string {
 	return keys
 }
 
-// SBOMSide holds info for one side of a diff comparison
+// SBOMSide holds one side of a diff.
 type SBOMSide struct {
 	FileName string        `json:"file_name"`
 	FileSize int64         `json:"file_size"`
@@ -273,13 +248,13 @@ type SBOMSide struct {
 	Stats    Stats         `json:"stats"`
 }
 
-// DiffOverview holds the side-by-side comparison data
+// DiffOverview holds side-by-side comparison.
 type DiffOverview struct {
 	Before SBOMSide `json:"before"`
 	After  SBOMSide `json:"after"`
 }
 
-// ComputeDiffOverview computes the overview comparison for two SBOMs
+// ComputeDiffOverview builds the comparison overview.
 func ComputeDiffOverview(file1, file2 string, comps1, comps2 []sbom.Component, info1, info2 sbom.SBOMInfo) DiffOverview {
 	var size1, size2 int64
 	if fi, err := os.Stat(file1); err == nil {

@@ -9,19 +9,15 @@ import (
 	"github.com/rezmoss/sbomlyze/internal/sbom"
 )
 
-// Color palette - modern, consistent theme
 var (
-	// Primary colors
 	primaryColor   = lipgloss.Color("#7C3AED") // Vibrant purple
 	secondaryColor = lipgloss.Color("#06B6D4") // Cyan
 	accentColor    = lipgloss.Color("#F59E0B") // Amber
 
-	// Semantic colors
 	successColor = lipgloss.Color("#10B981") // Green
 	warningColor = lipgloss.Color("#F59E0B") // Amber
 	errorColor   = lipgloss.Color("#EF4444") // Red
 
-	// Neutral colors
 	bgColor      = lipgloss.Color("#1E1E2E") // Dark background
 	surfaceColor = lipgloss.Color("#313244") // Slightly lighter
 	textColor    = lipgloss.Color("#CDD6F4") // Light text
@@ -29,9 +25,7 @@ var (
 	brightColor  = lipgloss.Color("#F5F5F5") // Bright white
 )
 
-// Base styles
 var (
-	// Header styles
 	headerStyle = lipgloss.NewStyle().
 			Bold(true).
 			Foreground(brightColor).
@@ -42,7 +36,6 @@ var (
 			Foreground(lipgloss.Color("#A5B4FC")).
 			Background(primaryColor)
 
-	// Footer styles
 	footerStyle = lipgloss.NewStyle().
 			Foreground(dimColor).
 			Background(surfaceColor).
@@ -57,7 +50,6 @@ var (
 			Foreground(dimColor).
 			Background(surfaceColor)
 
-	// Status bar styles
 	statusBarStyle = lipgloss.NewStyle().
 			Foreground(brightColor).
 			Background(lipgloss.Color("#4C1D95")).
@@ -69,7 +61,6 @@ var (
 			Background(surfaceColor).
 			Padding(0, 1)
 
-	// Detail view styles
 	sectionTitleStyle = lipgloss.NewStyle().
 				Foreground(secondaryColor).
 				Bold(true).
@@ -109,14 +100,12 @@ var (
 	dimStyle = lipgloss.NewStyle().
 			Foreground(dimColor)
 
-	// Modal/overlay styles
 	modalStyle = lipgloss.NewStyle().
 			Border(lipgloss.RoundedBorder()).
 			BorderForeground(primaryColor).
 			Padding(1, 2).
 			Background(bgColor)
 
-	// JSON syntax highlighting styles
 	jsonKeyStyle = lipgloss.NewStyle().
 			Foreground(lipgloss.Color("#89B4FA")).
 			Bold(true)
@@ -140,7 +129,6 @@ var (
 	jsonColonStyle = lipgloss.NewStyle().
 			Foreground(lipgloss.Color("#89DCEB"))
 
-	// Help styles
 	helpKeyStyle = lipgloss.NewStyle().
 			Foreground(secondaryColor).
 			Bold(true).
@@ -238,7 +226,6 @@ func (m Model) renderHeader() string {
 		infoItems = append(infoItems, headerInfoStyle.Render(" "+m.sbomInfo.SourceType))
 	}
 
-	// Component count - show filtered results when search/filter is active
 	var countText string
 	if m.searchQuery != "" || m.filterType != "" {
 		// Show "X of Y" format when filtering
@@ -617,12 +604,10 @@ func (m Model) renderComponentDetail(c sbom.Component) string {
 	return sb.String()
 }
 
-// renderComponentJSON renders the component as syntax-highlighted JSON
 func (m Model) renderComponentJSON(c sbom.Component) string {
 	var jsonBytes []byte
 	var err error
 
-	// Use raw JSON if available (preserves all original fields)
 	if len(c.RawJSON) > 0 {
 		var raw interface{}
 		if err = json.Unmarshal(c.RawJSON, &raw); err == nil {
@@ -630,7 +615,6 @@ func (m Model) renderComponentJSON(c sbom.Component) string {
 		}
 	}
 
-	// Fallback to normalized component if no raw JSON
 	if len(jsonBytes) == 0 || err != nil {
 		jsonBytes, err = json.MarshalIndent(c, "", "  ")
 		if err != nil {
@@ -641,7 +625,6 @@ func (m Model) renderComponentJSON(c sbom.Component) string {
 	return syntaxHighlightJSON(string(jsonBytes))
 }
 
-// syntaxHighlightJSON applies color syntax highlighting to JSON
 func syntaxHighlightJSON(jsonStr string) string {
 	var result strings.Builder
 	inString := false

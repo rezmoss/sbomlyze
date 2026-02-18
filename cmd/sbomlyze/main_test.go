@@ -441,7 +441,7 @@ func TestStrictModeWithInvalidFile(t *testing.T) {
 	if exitCode != 1 {
 		t.Errorf("expected exit code 1 for invalid file in strict mode, got %d", exitCode)
 	}
-	if !strings.Contains(stderr, "Error") {
+	if !strings.Contains(stderr, "err") {
 		t.Errorf("expected error message in stderr")
 	}
 }
@@ -526,7 +526,7 @@ func TestNonExistentFile(t *testing.T) {
 	if exitCode != 1 {
 		t.Errorf("expected exit code 1 for nonexistent file, got %d", exitCode)
 	}
-	if !strings.Contains(stderr, "Error") && !strings.Contains(stderr, "error") {
+	if !strings.Contains(stderr, "err") {
 		t.Errorf("expected error message for nonexistent file, got stderr: %s", stderr)
 	}
 }
@@ -541,7 +541,7 @@ func TestInvalidPolicyFile(t *testing.T) {
 	if exitCode != 1 {
 		t.Errorf("expected exit code 1 for invalid policy, got %d", exitCode)
 	}
-	if !strings.Contains(stderr, "Error") && !strings.Contains(stderr, "error") {
+	if !strings.Contains(stderr, "err") {
 		t.Errorf("expected error message for invalid policy, got stderr: %s", stderr)
 	}
 }
@@ -556,7 +556,7 @@ func TestNonExistentPolicyFile(t *testing.T) {
 	if exitCode != 1 {
 		t.Errorf("expected exit code 1, got %d", exitCode)
 	}
-	if !strings.Contains(stderr, "Error") {
+	if !strings.Contains(stderr, "err") {
 		t.Errorf("expected error message for nonexistent policy file")
 	}
 }

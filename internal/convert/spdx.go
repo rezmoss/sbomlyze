@@ -121,7 +121,6 @@ func componentToSPDXPackage(c sbom.Component, index int) *spdxv23.Package {
 
 func spdxIDFor(c sbom.Component, index int) common.ElementID {
 	if c.SPDXID != "" {
-		// strip SPDXRef- prefix
 		id := strings.TrimPrefix(c.SPDXID, "SPDXRef-")
 		return common.ElementID(sanitizeSPDXID(id))
 	}

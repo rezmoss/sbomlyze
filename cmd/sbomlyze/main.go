@@ -45,7 +45,7 @@ func main() {
 		}
 		fmt.Printf("Starting sbomlyze web server at http://localhost:%d\n", port)
 		if err := web.Serve(port); err != nil {
-			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			fmt.Fprintf(os.Stderr, "err: %v\n", err)
 			os.Exit(1)
 		}
 		return
@@ -53,21 +53,21 @@ func main() {
 
 	if opts.Convert {
 		if len(opts.Files) == 0 {
-			fmt.Fprintf(os.Stderr, "Error: no input file specified for convert\n")
+			fmt.Fprintf(os.Stderr, "err: no input for convert\n")
 			os.Exit(1)
 		}
 		if opts.TargetFormat == "" {
-			fmt.Fprintf(os.Stderr, "Error: --to flag is required for convert\n")
+			fmt.Fprintf(os.Stderr, "err: --to flag required\n")
 			os.Exit(1)
 		}
 		targetFmt, err := convert.ParseFormat(opts.TargetFormat)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			fmt.Fprintf(os.Stderr, "err: %v\n", err)
 			os.Exit(1)
 		}
 		comps, info, err := sbom.ParseFileWithInfo(opts.Files[0])
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error parsing %s: %v\n", opts.Files[0], err)
+			fmt.Fprintf(os.Stderr, "err: parse %s: %v\n", opts.Files[0], err)
 			os.Exit(1)
 		}
 		comps = sbom.NormalizeComponents(comps)
@@ -76,7 +76,7 @@ func main() {
 		if opts.OutputFile != "" {
 			w, err = os.Create(opts.OutputFile)
 			if err != nil {
-				fmt.Fprintf(os.Stderr, "Error creating output file: %v\n", err)
+				fmt.Fprintf(os.Stderr, "err: create output: %v\n", err)
 				os.Exit(1)
 			}
 			defer func() { _ = w.Close() }()
@@ -84,14 +84,14 @@ func main() {
 			w = os.Stdout
 		}
 		if err := convert.Convert(w, comps, info, targetFmt); err != nil {
-			fmt.Fprintf(os.Stderr, "Error converting: %v\n", err)
+			fmt.Fprintf(os.Stderr, "err: convert: %v\n", err)
 			os.Exit(1)
 		}
 		return
 	}
 
 	if len(opts.Files) == 0 {
-		fmt.Fprintf(os.Stderr, "Error: no input files specified\n")
+		fmt.Fprintf(os.Stderr, "err: no input files\n")
 		os.Exit(1)
 	}
 
@@ -100,11 +100,11 @@ func main() {
 	if len(opts.Files) == 1 {
 		spin := progress.New(opts.JSONOutput || opts.Interactive)
 
-		spin.Start("Parsing SBOM...")
+		spin.Start("Parsing...")
 		comps, sbomInfo, err := parseFileWithOptionsAndInfo(opts.Files[0], &parseOpts)
 		if err != nil {
 			spin.Stop()
-			fmt.Fprintf(os.Stderr, "Error parsing %s: %v\n", opts.Files[0], err)
+			fmt.Fprintf(os.Stderr, "err: parse %s: %v\n", opts.Files[0], err)
 			os.Exit(1)
 		}
 		spin.Done(fmt.Sprintf("Parsed %d components", len(comps)))
@@ -113,11 +113,11 @@ func main() {
 		comps = sbom.NormalizeComponents(comps)
 		stats := analysis.ComputeStats(comps)
 		findings := analysis.ComputeSingleFindings(stats, sbomInfo, comps)
-		spin.Done("Analysis complete")
+		spin.Done("Done")
 
 		if opts.Interactive {
 			if err := tui.Run(comps, stats, sbomInfo); err != nil {
-				fmt.Fprintf(os.Stderr, "Error running interactive mode: %v\n", err)
+				fmt.Fprintf(os.Stderr, "err: interactive mode: %v\n", err)
 				os.Exit(1)
 			}
 			return
@@ -142,7 +142,7 @@ func main() {
 			enc.SetIndent("", "  ")
 			if err := enc.Encode(out); err != nil {
 				p.Stop()
-				fmt.Fprintf(os.Stderr, "Error encoding JSON: %v\n", err)
+				fmt.Fprintf(os.Stderr, "err: encode JSON: %v\n", err)
 				os.Exit(1)
 			}
 		} else {
@@ -157,25 +157,25 @@ func main() {
 	file1, file2 := opts.Files[0], opts.Files[1]
 	spin := progress.New(opts.Format != "" && opts.Format != "text")
 
-	spin.Start("Parsing first SBOM...")
+	spin.Start("Parsing first...")
 	comps1, info1, err := parseFileWithOptionsAndInfo(file1, &parseOpts)
 	if err != nil {
 		spin.Stop()
-		fmt.Fprintf(os.Stderr, "Error parsing %s: %v\n", file1, err)
+		fmt.Fprintf(os.Stderr, "err: parse %s: %v\n", file1, err)
 		os.Exit(1)
 	}
 	spin.Done(fmt.Sprintf("Parsed %d components", len(comps1)))
 
-	spin.Start("Parsing second SBOM...")
+	spin.Start("Parsing second...")
 	comps2, info2, err := parseFileWithOptionsAndInfo(file2, &parseOpts)
 	if err != nil {
 		spin.Stop()
-		fmt.Fprintf(os.Stderr, "Error parsing %s: %v\n", file2, err)
+		fmt.Fprintf(os.Stderr, "err: parse %s: %v\n", file2, err)
 		os.Exit(1)
 	}
 	spin.Done(fmt.Sprintf("Parsed %d components", len(comps2)))
 
-	spin.Start("Comparing SBOMs...")
+	spin.Start("Comparing...")
 	comps1 = sbom.NormalizeComponents(comps1)
 	comps2 = sbom.NormalizeComponents(comps2)
 
@@ -183,18 +183,18 @@ func main() {
 	result := analysis.DiffComponents(comps1, comps2)
 	analysis.ComputePackageSamples(&result)
 	findings := analysis.ComputeKeyFindings(result, overview)
-	spin.Done("Comparison complete")
+	spin.Done("Done")
 
 	var violations []policy.Violation
 	if opts.PolicyFile != "" {
 		policyData, err := os.ReadFile(opts.PolicyFile)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error reading policy file: %v\n", err)
+			fmt.Fprintf(os.Stderr, "err: read policy: %v\n", err)
 			os.Exit(1)
 		}
 		pol, err := policy.Load(policyData)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error parsing policy: %v\n", err)
+			fmt.Fprintf(os.Stderr, "err: parse policy: %v\n", err)
 			os.Exit(1)
 		}
 		violations = policy.Evaluate(pol, result)
@@ -226,7 +226,7 @@ func main() {
 		enc.SetIndent("", "  ")
 		if err := enc.Encode(out); err != nil {
 			p.Stop()
-			fmt.Fprintf(os.Stderr, "Error encoding JSON: %v\n", err)
+			fmt.Fprintf(os.Stderr, "err: encode JSON: %v\n", err)
 			os.Exit(1)
 		}
 
@@ -236,7 +236,7 @@ func main() {
 		enc.SetIndent("", "  ")
 		if err := enc.Encode(sarif); err != nil {
 			p.Stop()
-			fmt.Fprintf(os.Stderr, "Error encoding SARIF: %v\n", err)
+			fmt.Fprintf(os.Stderr, "err: encode SARIF: %v\n", err)
 			os.Exit(1)
 		}
 
@@ -245,7 +245,7 @@ func main() {
 		out, err := xml.MarshalIndent(junit, "", "  ")
 		if err != nil {
 			p.Stop()
-			fmt.Fprintf(os.Stderr, "Error encoding JUnit: %v\n", err)
+			fmt.Fprintf(os.Stderr, "err: encode JUnit: %v\n", err)
 			os.Exit(1)
 		}
 		fmt.Println(xml.Header + string(out))
@@ -258,7 +258,7 @@ func main() {
 		out, err := json.MarshalIndent(patch, "", "  ")
 		if err != nil {
 			p.Stop()
-			fmt.Fprintf(os.Stderr, "Error encoding JSON Patch: %v\n", err)
+			fmt.Fprintf(os.Stderr, "err: encode patch: %v\n", err)
 			os.Exit(1)
 		}
 		fmt.Println(string(out))

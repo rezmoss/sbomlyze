@@ -10,7 +10,6 @@ import (
 	"github.com/rezmoss/sbomlyze/internal/sbom"
 )
 
-// formatFileSize formats bytes into a human-readable string
 func formatFileSize(size int64) string {
 	const (
 		kb = 1024
@@ -29,7 +28,6 @@ func formatFileSize(size int64) string {
 	}
 }
 
-// formatPct formats a percentage from a count and total
 func formatPct(count, total int) string {
 	if total == 0 {
 		return "0.0%"
@@ -37,7 +35,6 @@ func formatPct(count, total int) string {
 	return fmt.Sprintf("%.1f%%", float64(count)/float64(total)*100)
 }
 
-// orNone returns the string or "(none)" if empty
 func orNone(s string) string {
 	if s == "" {
 		return "(none)"
@@ -45,7 +42,7 @@ func orNone(s string) string {
 	return s
 }
 
-// PrintDiffOverview prints the side-by-side SBOM comparison header
+// PrintDiffOverview prints the side-by-side comparison.
 func PrintDiffOverview(overview analysis.DiffOverview) {
 	b := overview.Before
 	a := overview.After
@@ -63,7 +60,6 @@ func PrintDiffOverview(overview analysis.DiffOverview) {
 		fmt.Sprintf("%d", b.Stats.TotalComponents),
 		fmt.Sprintf("%d", a.Stats.TotalComponents))
 
-	// Merge all type keys from both sides
 	allTypes := make(map[string]bool)
 	for t := range b.Stats.ByType {
 		allTypes[t] = true
@@ -73,7 +69,6 @@ func PrintDiffOverview(overview analysis.DiffOverview) {
 	}
 	if len(allTypes) > 0 {
 		types := analysis.SortedByValue(b.Stats.ByType)
-		// Add types only in 'after' that are missing from 'before'
 		afterOnly := analysis.SortedByValue(a.Stats.ByType)
 		seen := make(map[string]bool)
 		for _, t := range types {
@@ -102,7 +97,6 @@ func PrintDiffOverview(overview analysis.DiffOverview) {
 		}
 	}
 
-	// Data quality section
 	fmt.Printf("Data Quality:\n")
 	fmt.Printf("%-24s%-24s%s\n", "  PURL Coverage:",
 		formatPct(b.Stats.WithPURL, b.Stats.TotalComponents),
@@ -119,7 +113,7 @@ func PrintDiffOverview(overview analysis.DiffOverview) {
 	fmt.Printf("%s\n", sep)
 }
 
-// PrintSingleScanContext prints scan context for a single SBOM
+// PrintSingleScanContext prints scan context.
 func PrintSingleScanContext(info sbom.SBOMInfo) {
 	hasAny := info.SchemaVersion != "" || info.SearchScope != "" || info.ToolName != "" || info.SourceType != ""
 	if !hasAny {
@@ -148,7 +142,7 @@ func PrintSingleScanContext(info sbom.SBOMInfo) {
 	}
 }
 
-// PrintScanContext prints the scan context comparison (schema + scope) if available
+// PrintScanContext prints scan context comparison.
 func PrintScanContext(overview analysis.DiffOverview) {
 	b := overview.Before.Info
 	a := overview.After.Info
@@ -169,7 +163,7 @@ func PrintScanContext(overview analysis.DiffOverview) {
 	}
 }
 
-// PrintKeyFindings prints the computed key findings as a bullet list
+// PrintKeyFindings prints key findings.
 func PrintKeyFindings(findings analysis.KeyFindings) {
 	if len(findings.Findings) == 0 {
 		return
@@ -181,7 +175,7 @@ func PrintKeyFindings(findings analysis.KeyFindings) {
 	}
 }
 
-// PrintPackageSamples prints sample packages grouped by type for added/removed
+// PrintPackageSamples prints package samples by type.
 func PrintPackageSamples(added, removed []analysis.PackageSamplesByType) {
 	if len(added) > 0 {
 		fmt.Printf("\n+ Added by type (up to 5 samples each):\n")
@@ -218,14 +212,13 @@ func PrintPackageSamples(added, removed []analysis.PackageSamplesByType) {
 	}
 }
 
-// PrintTextDiff outputs the diff result in human-readable text format
+// PrintTextDiff prints the diff in text format.
 func PrintTextDiff(result analysis.DiffResult) {
 	if len(result.Added) == 0 && len(result.Removed) == 0 && len(result.Changed) == 0 && result.Duplicates == nil && result.Dependencies == nil {
 		fmt.Println("No differences found")
 		return
 	}
 
-	// Print drift summary first if there are changes
 	if result.DriftSummary != nil {
 		fmt.Println("\n📊 Drift Summary:")
 		if result.DriftSummary.VersionDrift > 0 {
@@ -339,7 +332,6 @@ func PrintTextDiff(result analysis.DiffResult) {
 			}
 		}
 
-		// Transitive dependency changes
 		if len(result.Dependencies.TransitiveNew) > 0 {
 			fmt.Printf("\n🔗 New transitive dependencies (%d):\n", len(result.Dependencies.TransitiveNew))
 			for _, td := range result.Dependencies.TransitiveNew {
@@ -356,7 +348,6 @@ func PrintTextDiff(result analysis.DiffResult) {
 			}
 		}
 
-		// Depth summary
 		if result.Dependencies.DepthSummary != nil {
 			ds := result.Dependencies.DepthSummary
 			if ds.Depth1 > 0 || ds.Depth2 > 0 || ds.Depth3Plus > 0 {
@@ -377,13 +368,12 @@ func PrintTextDiff(result analysis.DiffResult) {
 	fmt.Println()
 }
 
-// PrintViolations outputs policy violations in human-readable format
+// PrintViolations prints policy violations.
 func PrintViolations(violations []policy.Violation) {
 	if len(violations) == 0 {
 		return
 	}
 
-	// Separate errors and warnings
 	var errors, warnings []policy.Violation
 	for _, v := range violations {
 		if v.Severity == policy.SeverityWarning {

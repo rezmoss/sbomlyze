@@ -8,15 +8,14 @@ import (
 	"github.com/rezmoss/sbomlyze/internal/identity"
 )
 
-// ParseCycloneDX parses CycloneDX format SBOM data
+// ParseCycloneDX parses CycloneDX JSON.
 func ParseCycloneDX(data []byte) ([]Component, error) {
 	comps, _, err := ParseCycloneDXWithInfo(data)
 	return comps, err
 }
 
-// ParseCycloneDXWithInfo parses CycloneDX format SBOM data and extracts metadata
+// ParseCycloneDXWithInfo parses CycloneDX JSON with metadata.
 func ParseCycloneDXWithInfo(data []byte) ([]Component, SBOMInfo, error) {
-	// First, get raw components to preserve original JSON
 	var rawDoc struct {
 		Components []json.RawMessage `json:"components"`
 	}
@@ -27,10 +26,8 @@ func ParseCycloneDXWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 		return nil, SBOMInfo{}, err
 	}
 
-	// Extract SBOM info from metadata
 	info := SBOMInfo{}
 	if bom.Metadata != nil {
-		// Check for main component (the subject of the SBOM)
 		if bom.Metadata.Component != nil {
 			mc := bom.Metadata.Component
 			switch mc.Type {
@@ -43,7 +40,6 @@ func ParseCycloneDXWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 				info.SourceType = string(mc.Type)
 			}
 		}
-		// Check properties for OS info
 		if bom.Metadata.Properties != nil {
 			for _, prop := range *bom.Metadata.Properties {
 				switch strings.ToLower(prop.Name) {
@@ -95,15 +91,12 @@ func ParseCycloneDXWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 				comp.Hashes[string(h.Algorithm)] = h.Value
 			}
 		}
-		// Extract supplier info
 		if c.Supplier != nil && c.Supplier.Name != "" {
 			comp.Supplier = c.Supplier.Name
 		}
-		// Preserve raw JSON if available
 		if i < len(rawDoc.Components) {
 			comp.RawJSON = rawDoc.Components[i]
 		}
-		// Compute ID using identity matcher
 		comp.ID = identity.ComputeID(comp.ToIdentity())
 		comps = append(comps, comp)
 	}

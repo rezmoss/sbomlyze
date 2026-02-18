@@ -10,7 +10,7 @@ import (
 	"github.com/rezmoss/sbomlyze/internal/sbom"
 )
 
-// FileEntry represents a single file from the SBOM
+// FileEntry is an SBOM file entry.
 type FileEntry struct {
 	ID       string       `json:"id"`
 	Path     string       `json:"path"`
@@ -22,25 +22,22 @@ type FileEntry struct {
 	GroupID  int          `json:"groupID"`
 	Size     int64        `json:"size"`
 	Digests  []FileDigest `json:"digests,omitempty"`
-	// Component relationships (stored as syft artifact IDs, resolved to component IDs at query time)
-	ContainedBy []string `json:"-"` // artifact IDs of components that contain this file
-	EvidentFor  []string `json:"-"` // artifact IDs of components this file is evidence for
+	ContainedBy []string `json:"-"`
+	EvidentFor  []string `json:"-"`
 }
 
-// FileDigest holds a hash algorithm and value
 type FileDigest struct {
 	Algorithm string `json:"algorithm"`
 	Value     string `json:"value"`
 }
 
-// DirChild represents an immediate child entry in a directory
 type DirChild struct {
 	Name  string
 	Path  string
 	IsDir bool
 }
 
-// FileStats holds aggregate statistics about files in the SBOM
+// FileStats holds file statistics.
 type FileStats struct {
 	TotalFiles   int            `json:"totalFiles"`
 	TotalSize    int64          `json:"totalSize"`
@@ -50,36 +47,33 @@ type FileStats struct {
 	UnownedFiles int            `json:"unownedFiles"`
 }
 
-// TypeCount holds a name/count pair for ranked statistics
 type TypeCount struct {
 	Name  string `json:"name"`
 	Count int    `json:"count"`
 }
 
-// LayerInfo describes a container image layer's file statistics
+// LayerInfo holds layer file stats.
 type LayerInfo struct {
 	LayerID   string `json:"layerID"`
 	FileCount int    `json:"fileCount"`
 	TotalSize int64  `json:"totalSize"`
 }
 
-// FileIndex is the pre-built index for fast file browsing
+// FileIndex is the file browsing index.
 type FileIndex struct {
-	Files           []FileEntry        // sorted by path
-	PathToIdx       map[string]int     // path → Files index
-	DirEntries      map[string][]DirChild // dir path → immediate children
-	SearchIndex     []string           // lowercase searchable string per file
+	Files           []FileEntry
+	PathToIdx       map[string]int
+	DirEntries      map[string][]DirChild
+	SearchIndex     []string
 	TotalFiles      int
-	SyftIDToCompIdx map[string]int     // syft artifact ID → Components index
-	// Reverse index: file path → component indices that reference it via Locations
+	SyftIDToCompIdx map[string]int
 	LocationRefs    map[string][]int
-	Stats           *FileStats         // aggregate file statistics
-	Layers          []LayerInfo        // ordered unique layers
-	LayerToFiles    map[string][]int   // layerID → file indices
-	CompToFiles     map[int][]int      // component index → file indices
+	Stats           *FileStats
+	Layers          []LayerInfo
+	LayerToFiles    map[string][]int
+	CompToFiles     map[int][]int
 }
 
-// FileBrowseEntry is a single entry in a directory listing
 type FileBrowseEntry struct {
 	Name     string `json:"name"`
 	Path     string `json:"path"`
@@ -91,13 +85,11 @@ type FileBrowseEntry struct {
 	Children int    `json:"children,omitempty"`
 }
 
-// Breadcrumb represents a path segment for navigation
 type Breadcrumb struct {
 	Name string `json:"name"`
 	Path string `json:"path"`
 }
 
-// FileBrowseResponse is the API response for directory listing
 type FileBrowseResponse struct {
 	Entries     []FileBrowseEntry `json:"entries"`
 	Total       int               `json:"total"`
@@ -106,7 +98,6 @@ type FileBrowseResponse struct {
 	Layers      []LayerInfo       `json:"layers,omitempty"`
 }
 
-// FileComponentRef describes a component's relationship to a file
 type FileComponentRef struct {
 	ID           string   `json:"id"`
 	Name         string   `json:"name"`
@@ -116,14 +107,12 @@ type FileComponentRef struct {
 	Licenses     []string `json:"licenses,omitempty"`
 }
 
-// FileInfoResponse is the API response for file detail
 type FileInfoResponse struct {
 	File       *FileEntry         `json:"file"`
 	Components []FileComponentRef `json:"components"`
 }
 
-// buildFileIndex parses the raw Syft JSON files array and relationships
-// to build a browsable file index.
+// buildFileIndex builds a file index from raw Syft data.
 func buildFileIndex(rawData []byte, comps []sbom.Component, compIndex map[string]int) *FileIndex {
 	// Parse files and artifact relationships from raw JSON
 	var doc struct {
@@ -170,15 +159,10 @@ func buildFileIndex(rawData []byte, comps []sbom.Component, compIndex map[string
 		return nil
 	}
 
-	// Build syft artifact ID → component index mapping
-	// To avoid O(len(Artifacts) * len(comps)) behavior, first build a lookup
-	// from component identity (purl or name+version) to its index, then do
-	// O(1) lookups for each artifact.
 	buildCompKey := func(name, version, purl string) string {
 		if purl != "" {
 			return purl
 		}
-		// Use a delimiter unlikely to appear in name/version to avoid collisions.
 		return name + "\x00" + version
 	}
 
@@ -188,7 +172,6 @@ func buildFileIndex(rawData []byte, comps []sbom.Component, compIndex map[string
 		if key == "" {
 			continue
 		}
-		// Preserve "first match wins" behavior if duplicates exist.
 		if _, exists := compKeyToIdx[key]; !exists {
 			compKeyToIdx[key] = i
 		}
@@ -208,7 +191,6 @@ func buildFileIndex(rawData []byte, comps []sbom.Component, compIndex map[string
 		}
 	}
 
-	// Build file entries from files array
 	fileIDToIdx := make(map[string]int, len(doc.Files))
 	pathSeen := make(map[string]bool, len(doc.Files))
 	files := make([]FileEntry, 0, len(doc.Files))
@@ -242,7 +224,6 @@ func buildFileIndex(rawData []byte, comps []sbom.Component, compIndex map[string
 		files = append(files, entry)
 	}
 
-	// Also collect file paths from component Locations that aren't already in the files array
 	locationRefs := make(map[string][]int)
 	for i, c := range comps {
 		for _, loc := range c.Locations {
@@ -260,7 +241,6 @@ func buildFileIndex(rawData []byte, comps []sbom.Component, compIndex map[string
 		return nil
 	}
 
-	// Process relationships: contains and evident-by link artifacts to files
 	for _, rel := range doc.ArtifactRelationships {
 		switch rel.Type {
 		case "contains":
@@ -278,18 +258,15 @@ func buildFileIndex(rawData []byte, comps []sbom.Component, compIndex map[string
 		}
 	}
 
-	// Sort files by path
 	sort.Slice(files, func(i, j int) bool {
 		return files[i].Path < files[j].Path
 	})
 
-	// Build PathToIdx
 	pathToIdx := make(map[string]int, len(files))
 	for i, f := range files {
 		pathToIdx[f.Path] = i
 	}
 
-	// Build DirEntries: group immediate children per directory
 	dirChildren := make(map[string]map[string]DirChild)
 	dirSet := make(map[string]bool)
 
@@ -310,7 +287,6 @@ func buildFileIndex(rawData []byte, comps []sbom.Component, compIndex map[string
 			IsDir: false,
 		}
 
-		// Synthesize intermediate directories
 		cur := parent
 		for cur != "/" && cur != "." && !dirSet[cur] {
 			dirSet[cur] = true
@@ -331,7 +307,6 @@ func buildFileIndex(rawData []byte, comps []sbom.Component, compIndex map[string
 		}
 	}
 
-	// Convert map of maps to map of slices
 	dirEntries := make(map[string][]DirChild, len(dirChildren))
 	for dir, childMap := range dirChildren {
 		children := make([]DirChild, 0, len(childMap))
@@ -339,7 +314,6 @@ func buildFileIndex(rawData []byte, comps []sbom.Component, compIndex map[string
 			children = append(children, child)
 		}
 		sort.Slice(children, func(i, j int) bool {
-			// Directories first, then alphabetical
 			if children[i].IsDir != children[j].IsDir {
 				return children[i].IsDir
 			}
@@ -348,7 +322,6 @@ func buildFileIndex(rawData []byte, comps []sbom.Component, compIndex map[string
 		dirEntries[dir] = children
 	}
 
-	// Build search index
 	searchIndex := make([]string, len(files))
 	for i, f := range files {
 		searchIndex[i] = strings.ToLower(f.Path + " " + f.FileType + " " + f.MimeType)
@@ -373,8 +346,7 @@ func buildFileIndex(rawData []byte, comps []sbom.Component, compIndex map[string
 	return idx
 }
 
-// buildFileIndexFromLocations builds a minimal file index from component Locations only.
-// Used for non-Syft formats where there's no files array.
+// buildFileIndexFromLocations builds a file index from component Locations.
 func buildFileIndexFromLocations(comps []sbom.Component, compIndex map[string]int) *FileIndex {
 	pathSeen := make(map[string]bool)
 	locationRefs := make(map[string][]int)
@@ -467,7 +439,6 @@ func buildFileIndexFromLocations(comps []sbom.Component, compIndex map[string]in
 		CompToFiles:     make(map[int][]int),
 	}
 
-	// Build CompToFiles from LocationRefs
 	for filePath, compIndices := range locationRefs {
 		if fi, ok := pathToIdx[filePath]; ok {
 			for _, compIdx := range compIndices {
@@ -481,7 +452,6 @@ func buildFileIndexFromLocations(comps []sbom.Component, compIndex map[string]in
 	return idx
 }
 
-// computeFileStats computes aggregate statistics from the file index in a single pass.
 func computeFileStats(idx *FileIndex) *FileStats {
 	stats := &FileStats{
 		TotalFiles: len(idx.Files),
@@ -491,7 +461,6 @@ func computeFileStats(idx *FileIndex) *FileStats {
 	mimeMap := make(map[string]int)
 	extMap := make(map[string]int)
 
-	// Build a set of file indices that have component ownership
 	ownedFiles := make(map[int]bool)
 	for _, fileIndices := range idx.CompToFiles {
 		for _, fi := range fileIndices {
@@ -514,7 +483,6 @@ func computeFileStats(idx *FileIndex) *FileStats {
 			extMap[ext]++
 		}
 
-		// Check ownership: ContainedBy, EvidentFor, or LocationRefs
 		if !ownedFiles[i] {
 			if _, hasLocRef := idx.LocationRefs[f.Path]; !hasLocRef {
 				stats.UnownedFiles++
@@ -528,7 +496,6 @@ func computeFileStats(idx *FileIndex) *FileStats {
 	return stats
 }
 
-// topNTypeCounts converts a map to sorted []TypeCount, keeping at most n entries.
 func topNTypeCounts(m map[string]int, n int) []TypeCount {
 	counts := make([]TypeCount, 0, len(m))
 	for name, count := range m {
@@ -543,7 +510,6 @@ func topNTypeCounts(m map[string]int, n int) []TypeCount {
 	return counts
 }
 
-// buildLayerIndex builds the Layers and LayerToFiles index from the file entries.
 func buildLayerIndex(idx *FileIndex) {
 	layerOrder := make([]string, 0)
 	layerSeen := make(map[string]bool)
@@ -571,7 +537,6 @@ func buildLayerIndex(idx *FileIndex) {
 	}
 }
 
-// buildCompToFiles builds the CompToFiles reverse index from file relationships.
 func buildCompToFiles(idx *FileIndex) {
 	for i, f := range idx.Files {
 		for _, artID := range f.ContainedBy {
@@ -586,7 +551,6 @@ func buildCompToFiles(idx *FileIndex) {
 		}
 	}
 
-	// Also include LocationRefs
 	for filePath, compIndices := range idx.LocationRefs {
 		if fi, ok := idx.PathToIdx[filePath]; ok {
 			for _, compIdx := range compIndices {
@@ -595,7 +559,6 @@ func buildCompToFiles(idx *FileIndex) {
 		}
 	}
 
-	// Deduplicate file indices per component
 	for compIdx, fileIndices := range idx.CompToFiles {
 		seen := make(map[int]bool, len(fileIndices))
 		deduped := make([]int, 0, len(fileIndices))
@@ -609,7 +572,7 @@ func buildCompToFiles(idx *FileIndex) {
 	}
 }
 
-// handleFilesystem handles GET /api/filesystem?path=/&q=search&offset=0&limit=100&layer=ID&component=ID
+// handleFilesystem handles GET /api/filesystem
 func handleFilesystem(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -638,11 +601,9 @@ func handleFilesystem(w http.ResponseWriter, r *http.Request) {
 	var entries []FileBrowseEntry
 	var total int
 
-	// Determine which file indices to search based on filters
 	var filterSet map[int]bool
 
 	if componentFilter != "" {
-		// Look up component index
 		if compIdx, ok := state.CompIndex[componentFilter]; ok {
 			filterSet = make(map[int]bool)
 			for _, fi := range idx.CompToFiles[compIdx] {
@@ -673,7 +634,6 @@ func handleFilesystem(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if filterSet != nil || query != "" {
-		// Filtered or search mode: build flat list from matching files
 		var matches []FileBrowseEntry
 
 		if query != "" && isGlobPattern(query) {
@@ -744,7 +704,6 @@ func handleFilesystem(w http.ResponseWriter, r *http.Request) {
 			entries = matches[offset:end]
 		}
 	} else {
-		// Browse mode: list directory children
 		children := idx.DirEntries[dirPath]
 		total = len(children)
 		if offset < len(children) {
@@ -776,7 +735,6 @@ func handleFilesystem(w http.ResponseWriter, r *http.Request) {
 		entries = []FileBrowseEntry{}
 	}
 
-	// Build breadcrumbs
 	breadcrumbs := buildBreadcrumbs(dirPath)
 
 	resp := FileBrowseResponse{
@@ -786,7 +744,6 @@ func handleFilesystem(w http.ResponseWriter, r *http.Request) {
 		Breadcrumbs: breadcrumbs,
 	}
 
-	// Include layer info when available
 	if len(idx.Layers) > 0 {
 		resp.Layers = idx.Layers
 	}
@@ -795,7 +752,7 @@ func handleFilesystem(w http.ResponseWriter, r *http.Request) {
 	_ = json.NewEncoder(w).Encode(resp)
 }
 
-// handleFilesystemInfo handles GET /api/filesystem/info?path=...
+// handleFilesystemInfo handles GET /api/filesystem/info
 func handleFilesystemInfo(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -827,7 +784,6 @@ func handleFilesystemInfo(w http.ResponseWriter, r *http.Request) {
 	var compRefs []FileComponentRef
 	seen := make(map[int]bool)
 
-	// Resolve ContainedBy relationships
 	for _, artID := range file.ContainedBy {
 		if compIdx, ok := idx.SyftIDToCompIdx[artID]; ok && !seen[compIdx] {
 			seen[compIdx] = true
@@ -843,7 +799,6 @@ func handleFilesystemInfo(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	// Resolve EvidentFor relationships
 	for _, artID := range file.EvidentFor {
 		if compIdx, ok := idx.SyftIDToCompIdx[artID]; ok && !seen[compIdx] {
 			seen[compIdx] = true
@@ -859,7 +814,6 @@ func handleFilesystemInfo(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	// Resolve Location references
 	if refs, ok := idx.LocationRefs[filePath]; ok {
 		for _, compIdx := range refs {
 			if !seen[compIdx] {
@@ -888,15 +842,11 @@ func handleFilesystemInfo(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// isGlobPattern returns true if the query contains glob metacharacters.
 func isGlobPattern(q string) bool {
 	return strings.ContainsAny(q, "*?[")
 }
 
 // matchGlob matches a file path against a glob pattern.
-// If the pattern doesn't start with /, it matches against the base name.
-// If it starts with / and contains **, it uses doublestar matching.
-// Otherwise it uses path.Match against the full path.
 func matchGlob(pattern, filePath string) bool {
 	if !strings.HasPrefix(pattern, "/") {
 		// Match against base name only
@@ -912,7 +862,6 @@ func matchGlob(pattern, filePath string) bool {
 	return matched
 }
 
-// matchDoublestar handles ** glob patterns that match across path separators.
 func matchDoublestar(pattern, filePath string) bool {
 	// Split on ** to get segments
 	parts := strings.SplitN(pattern, "**", 2)

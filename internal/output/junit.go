@@ -8,8 +8,6 @@ import (
 	"github.com/rezmoss/sbomlyze/internal/policy"
 )
 
-// JUnit types for CI Test UI
-
 type JUnitTestSuites struct {
 	XMLName   xml.Name         `xml:"testsuites"`
 	Name      string           `xml:"name,attr"`
@@ -47,13 +45,12 @@ type JUnitSkipped struct {
 	Message string `xml:"message,attr,omitempty"`
 }
 
-// GenerateJUnit creates a JUnit test report from diff results and policy violations
+// GenerateJUnit creates a JUnit report.
 func GenerateJUnit(result analysis.DiffResult, violations []policy.Violation) JUnitTestSuites {
 	var testCases []JUnitTestCase
 	failures := 0
 	errors := 0
 
-	// Test: No integrity drift
 	integrityDrift := 0
 	if result.DriftSummary != nil {
 		integrityDrift = result.DriftSummary.IntegrityDrift
@@ -72,7 +69,6 @@ func GenerateJUnit(result analysis.DiffResult, violations []policy.Violation) JU
 	}
 	testCases = append(testCases, tc)
 
-	// Test: No deep dependencies
 	deepDeps := 0
 	if result.Dependencies != nil && result.Dependencies.DepthSummary != nil {
 		deepDeps = result.Dependencies.DepthSummary.Depth3Plus
@@ -91,7 +87,6 @@ func GenerateJUnit(result analysis.DiffResult, violations []policy.Violation) JU
 	}
 	testCases = append(testCases, tc)
 
-	// Test: Policy compliance
 	for _, v := range violations {
 		tc := JUnitTestCase{
 			Name:      fmt.Sprintf("Policy: %s", v.Rule),
@@ -108,13 +103,11 @@ func GenerateJUnit(result analysis.DiffResult, violations []policy.Violation) JU
 		testCases = append(testCases, tc)
 	}
 
-	// Test: Component changes summary
 	tc = JUnitTestCase{
 		Name:      "SBOM Diff Summary",
 		ClassName: "sbomlyze.diff",
 		Time:      0.001,
 	}
-	// This is informational, not a failure
 	testCases = append(testCases, tc)
 
 	return JUnitTestSuites{

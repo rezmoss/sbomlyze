@@ -5,7 +5,7 @@ import (
 	"sort"
 )
 
-// CompareComponents compares two components and returns a list of changes
+// CompareComponents returns a list of field changes.
 func CompareComponents(before, after Component) []string {
 	var changes []string
 	if before.Version != after.Version {
@@ -22,7 +22,6 @@ func CompareComponents(before, after Component) []string {
 	return changes
 }
 
-// equalSlices checks if two string slices have the same elements (order-independent)
 func equalSlices(a, b []string) bool {
 	if len(a) != len(b) {
 		return false

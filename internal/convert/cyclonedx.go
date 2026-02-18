@@ -45,7 +45,6 @@ func componentToCDX(c sbom.Component) cdx.Component {
 		comp.Supplier = &cdx.OrganizationalEntity{Name: c.Supplier}
 	}
 
-	// 1st CPE in field, rest as props
 	if len(c.CPEs) > 0 {
 		comp.CPE = c.CPEs[0]
 	}
@@ -241,7 +240,6 @@ func generateURNUUID() string {
 	return "urn:uuid:" + generateUUID()
 }
 
-// UUID v4
 func generateUUID() string {
 	var uuid [16]byte
 	_, _ = rand.Read(uuid[:])

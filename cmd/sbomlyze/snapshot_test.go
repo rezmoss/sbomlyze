@@ -11,7 +11,11 @@ import (
 	"testing"
 )
 
-var update = flag.Bool("update", false, "update snapshot files")
+var (
+	update         = flag.Bool("update", false, "update snapshot files")
+	snapshotFilter = flag.String("snapshot-filter", "", "comma-separated snapshot names to update (empty = all)")
+	diffMode       = flag.Bool("diff", false, "show unified diffs instead of updating or failing")
+)
 
 var (
 	goVersionRe = regexp.MustCompile(`go\d+\.\d+(\.\d+)?`)
@@ -42,6 +46,78 @@ func normalizeOutput(s string) string {
 	return s
 }
 
+func matchesFilter(name string) bool {
+	if *snapshotFilter == "" {
+		return true
+	}
+	for _, f := range strings.Split(*snapshotFilter, ",") {
+		if strings.TrimSpace(f) == name {
+			return true
+		}
+	}
+	return false
+}
+
+func unifiedDiff(label, expected, actual string) string {
+	if expected == actual {
+		return ""
+	}
+
+	expLines := strings.Split(expected, "\n")
+	actLines := strings.Split(actual, "\n")
+
+	var b strings.Builder
+	fmt.Fprintf(&b, "--- %s (expected)\n+++ %s (actual)\n", label, label)
+
+	maxLines := max(len(expLines), len(actLines))
+	for i := 0; i < maxLines; i++ {
+		var expLine, actLine string
+		if i < len(expLines) {
+			expLine = expLines[i]
+		}
+		if i < len(actLines) {
+			actLine = actLines[i]
+		}
+		if expLine == actLine {
+			fmt.Fprintf(&b, " %s\n", expLine)
+		} else {
+			if i < len(expLines) {
+				fmt.Fprintf(&b, "-%s\n", expLine)
+			}
+			if i < len(actLines) {
+				fmt.Fprintf(&b, "+%s\n", actLine)
+			}
+		}
+	}
+	return b.String()
+}
+
+func showDiffIfChanged(t *testing.T, name, file, actual, label string) {
+	t.Helper()
+
+	expected, err := os.ReadFile(file)
+	if os.IsNotExist(err) {
+		t.Logf("[NEW] %s %s — no existing snapshot", name, label)
+		lines := strings.Split(actual, "\n")
+		for _, l := range lines {
+			t.Logf("+%s", l)
+		}
+		return
+	}
+	if err != nil {
+		t.Logf("[ERROR] reading %s: %v", file, err)
+		return
+	}
+
+	exp := string(expected)
+	if exp == actual {
+		return
+	}
+
+	t.Logf("[CHANGED] %s %s", name, label)
+	t.Log(unifiedDiff(filepath.Base(file), exp, actual))
+}
+
 func compareOrUpdateSnapshot(t *testing.T, name, stdout, stderr string, exitCode int) {
 	t.Helper()
 
@@ -54,7 +130,18 @@ func compareOrUpdateSnapshot(t *testing.T, name, stdout, stderr string, exitCode
 	stderr = normalizeOutput(stderr)
 	exitCodeStr := strconv.Itoa(exitCode)
 
+	if *diffMode {
+		showDiffIfChanged(t, name, stdoutFile, stdout, "stdout")
+		showDiffIfChanged(t, name, stderrFile, stderr, "stderr")
+		showDiffIfChanged(t, name, exitcodeFile, exitCodeStr, "exitcode")
+		return
+	}
+
 	if *update {
+		if !matchesFilter(name) {
+			t.Logf("skipping %s (not in filter)", name)
+			return
+		}
 		if err := os.MkdirAll(dir, 0755); err != nil {
 			t.Fatalf("failed to create snapshot dir: %v", err)
 		}

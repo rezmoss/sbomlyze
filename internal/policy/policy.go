@@ -7,7 +7,7 @@ import (
 	"github.com/rezmoss/sbomlyze/internal/analysis"
 )
 
-// Policy defines rules for evaluating SBOM diffs
+// Policy defines SBOM diff rules.
 type Policy struct {
 	// Component count limits
 	MaxAdded   int `json:"max_added,omitempty"`
@@ -30,7 +30,6 @@ type Policy struct {
 	WarnNewTransitive  bool `json:"warn_new_transitive,omitempty"`  // Warn on any new transitive deps
 }
 
-// Severity represents the severity of a policy violation
 type Severity string
 
 const (
@@ -38,14 +37,14 @@ const (
 	SeverityWarning Severity = "warning"
 )
 
-// Violation represents a policy rule that was violated
+// Violation is a policy rule violation.
 type Violation struct {
 	Rule     string   `json:"rule"`
 	Message  string   `json:"message"`
 	Severity Severity `json:"severity"`
 }
 
-// Load parses a policy from JSON data
+// Load parses a policy from JSON.
 func Load(data []byte) (Policy, error) {
 	var policy Policy
 	if err := json.Unmarshal(data, &policy); err != nil {
@@ -54,38 +53,34 @@ func Load(data []byte) (Policy, error) {
 	return policy, nil
 }
 
-// Evaluate checks a diff result against a policy and returns violations
+// Evaluate checks a diff against policy rules.
 func Evaluate(policy Policy, result analysis.DiffResult) []Violation {
 	var violations []Violation
 
-	// Check max added
 	if policy.MaxAdded > 0 && len(result.Added) > policy.MaxAdded {
 		violations = append(violations, Violation{
 			Rule:     "max_added",
-			Message:  fmt.Sprintf("too many components added: %d > %d", len(result.Added), policy.MaxAdded),
+			Message:  fmt.Sprintf("added %d > max %d", len(result.Added), policy.MaxAdded),
 			Severity: SeverityError,
 		})
 	}
 
-	// Check max removed
 	if policy.MaxRemoved > 0 && len(result.Removed) > policy.MaxRemoved {
 		violations = append(violations, Violation{
 			Rule:     "max_removed",
-			Message:  fmt.Sprintf("too many components removed: %d > %d", len(result.Removed), policy.MaxRemoved),
+			Message:  fmt.Sprintf("removed %d > max %d", len(result.Removed), policy.MaxRemoved),
 			Severity: SeverityError,
 		})
 	}
 
-	// Check max changed
 	if policy.MaxChanged > 0 && len(result.Changed) > policy.MaxChanged {
 		violations = append(violations, Violation{
 			Rule:     "max_changed",
-			Message:  fmt.Sprintf("too many components changed: %d > %d", len(result.Changed), policy.MaxChanged),
+			Message:  fmt.Sprintf("changed %d > max %d", len(result.Changed), policy.MaxChanged),
 			Severity: SeverityError,
 		})
 	}
 
-	// Check denied licenses
 	if len(policy.DenyLicenses) > 0 {
 		denySet := make(map[string]bool)
 		for _, lic := range policy.DenyLicenses {
@@ -97,7 +92,7 @@ func Evaluate(policy Policy, result analysis.DiffResult) []Violation {
 				if denySet[lic] {
 					violations = append(violations, Violation{
 						Rule:     "deny_licenses",
-						Message:  fmt.Sprintf("component %s has denied license: %s", comp.Name, lic),
+						Message:  fmt.Sprintf("%s: denied license %s", comp.Name, lic),
 						Severity: SeverityError,
 					})
 				}
@@ -105,39 +100,35 @@ func Evaluate(policy Policy, result analysis.DiffResult) []Violation {
 		}
 	}
 
-	// Check required licenses
 	if policy.RequireLicenses {
 		for _, comp := range result.Added {
 			if len(comp.Licenses) == 0 {
 				violations = append(violations, Violation{
 					Rule:     "require_licenses",
-					Message:  fmt.Sprintf("component %s has no license", comp.Name),
+					Message:  fmt.Sprintf("%s: no license", comp.Name),
 					Severity: SeverityError,
 				})
 			}
 		}
 	}
 
-	// Check duplicates
 	if policy.DenyDuplicates && result.Duplicates != nil {
 		if len(result.Duplicates.After) > 0 {
 			violations = append(violations, Violation{
 				Rule:     "deny_duplicates",
-				Message:  fmt.Sprintf("found %d duplicate components in result", len(result.Duplicates.After)),
+				Message:  fmt.Sprintf("%d duplicates found", len(result.Duplicates.After)),
 				Severity: SeverityError,
 			})
 		}
 	}
 
-	// Check integrity drift
 	if policy.DenyIntegrityDrift && result.DriftSummary != nil {
 		if result.DriftSummary.IntegrityDrift > 0 {
-			// Find the components with integrity drift
 			for _, changed := range result.Changed {
 				if changed.Drift != nil && changed.Drift.Type == analysis.DriftTypeIntegrity {
 					violations = append(violations, Violation{
 						Rule:     "deny_integrity_drift",
-						Message:  fmt.Sprintf("component %s has hash change without version change (potential supply chain attack)", changed.Name),
+						Message:  fmt.Sprintf("%s: hash changed without version change", changed.Name),
 						Severity: SeverityError,
 					})
 				}
@@ -145,9 +136,7 @@ func Evaluate(policy Policy, result analysis.DiffResult) []Violation {
 		}
 	}
 
-	// Check max depth
 	if policy.MaxDepth > 0 && result.Dependencies != nil && result.Dependencies.DepthSummary != nil {
-		// Count violations at or above max depth
 		var violatingDeps []string
 		for _, td := range result.Dependencies.TransitiveNew {
 			if td.Depth >= policy.MaxDepth {
@@ -157,32 +146,30 @@ func Evaluate(policy Policy, result analysis.DiffResult) []Violation {
 		if len(violatingDeps) > 0 {
 			violations = append(violations, Violation{
 				Rule:     "max_depth",
-				Message:  fmt.Sprintf("new transitive dependencies at depth >= %d: %v", policy.MaxDepth, violatingDeps),
+				Message:  fmt.Sprintf("transitive deps at depth >= %d: %v", policy.MaxDepth, violatingDeps),
 				Severity: SeverityError,
 			})
 		}
 	}
 
-	// Warn on supplier change
 	if policy.WarnSupplierChange {
 		for _, changed := range result.Changed {
 			if changed.Before.Supplier != changed.After.Supplier &&
 				(changed.Before.Supplier != "" || changed.After.Supplier != "") {
 				violations = append(violations, Violation{
 					Rule:     "warn_supplier_change",
-					Message:  fmt.Sprintf("component %s supplier changed: %q -> %q", changed.Name, changed.Before.Supplier, changed.After.Supplier),
+					Message:  fmt.Sprintf("%s: supplier %q -> %q", changed.Name, changed.Before.Supplier, changed.After.Supplier),
 					Severity: SeverityWarning,
 				})
 			}
 		}
 	}
 
-	// Warn on new transitive deps
 	if policy.WarnNewTransitive && result.Dependencies != nil {
 		if len(result.Dependencies.TransitiveNew) > 0 {
 			violations = append(violations, Violation{
 				Rule:     "warn_new_transitive",
-				Message:  fmt.Sprintf("found %d new transitive dependencies", len(result.Dependencies.TransitiveNew)),
+				Message:  fmt.Sprintf("%d new transitive deps", len(result.Dependencies.TransitiveNew)),
 				Severity: SeverityWarning,
 			})
 		}
@@ -191,7 +178,6 @@ func Evaluate(policy Policy, result analysis.DiffResult) []Violation {
 	return violations
 }
 
-// HasErrors returns true if any violation is an error (not warning)
 func HasErrors(violations []Violation) bool {
 	for _, v := range violations {
 		if v.Severity == SeverityError {

@@ -17,7 +17,6 @@ import (
 	"github.com/rezmoss/sbomlyze/internal/sbom"
 )
 
-// View modes
 type viewMode int
 
 const (
@@ -30,7 +29,6 @@ const (
 	exportView
 )
 
-// ComponentItem represents a list item
 type ComponentItem struct {
 	component sbom.Component
 	index     int
@@ -49,9 +47,9 @@ func (i ComponentItem) Description() string {
 	if i.component.PURL != "" {
 		// Extract type from PURL
 		if strings.HasPrefix(i.component.PURL, "pkg:") {
-			parts := strings.SplitN(i.component.PURL[4:], "/", 2)
-			if len(parts) > 0 {
-				return fmt.Sprintf("Type: %s", parts[0])
+			purlParts := strings.SplitN(i.component.PURL[4:], "/", 2)
+			if len(purlParts) > 0 {
+				return fmt.Sprintf("Type: %s", purlParts[0])
 			}
 		}
 	}
@@ -71,7 +69,6 @@ func (i ComponentItem) FilterValue() string {
 	return i.component.Name + " " + i.component.PURL + " " + strings.Join(i.component.Licenses, " ")
 }
 
-// Model is the main TUI model
 type Model struct {
 	components    []sbom.Component
 	filteredComps []sbom.Component
@@ -92,7 +89,6 @@ type Model struct {
 	exportMsg     string // Message to show after export (success/error)
 }
 
-// Key bindings
 type keyMap struct {
 	Up       key.Binding
 	Down     key.Binding
@@ -149,25 +145,21 @@ var keys = keyMap{
 	),
 }
 
-// NewModel creates a new interactive model
+// NewModel creates the TUI model.
 func NewModel(comps []sbom.Component, stats analysis.Stats, info sbom.SBOMInfo) Model {
-	// Sort components by name
 	sorted := make([]sbom.Component, len(comps))
 	copy(sorted, comps)
 	sort.Slice(sorted, func(i, j int) bool {
 		return sorted[i].Name < sorted[j].Name
 	})
 
-	// Create list items
 	items := make([]list.Item, len(sorted))
 	for i, c := range sorted {
 		items[i] = ComponentItem{component: c, index: i}
 	}
 
-	// Create custom delegate with better styling
 	delegate := list.NewDefaultDelegate()
 
-	// Style the delegate for selected items
 	delegate.Styles.SelectedTitle = lipgloss.NewStyle().
 		Foreground(lipgloss.Color("#F5F5F5")).
 		Background(lipgloss.Color("#7C3AED")).
@@ -202,12 +194,10 @@ func NewModel(comps []sbom.Component, stats analysis.Stats, info sbom.SBOMInfo) 
 	l.SetShowHelp(false)
 	l.SetShowTitle(false)
 
-	// Style the list
 	l.Styles.NoItems = lipgloss.NewStyle().
 		Foreground(lipgloss.Color("#6C7086")).
 		Padding(1, 2)
 
-	// Create text input for search with better styling
 	ti := textinput.New()
 	ti.Placeholder = "Type to search..."
 	ti.CharLimit = 100
@@ -217,7 +207,6 @@ func NewModel(comps []sbom.Component, stats analysis.Stats, info sbom.SBOMInfo) 
 	ti.PlaceholderStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#6C7086"))
 	ti.Cursor.Style = lipgloss.NewStyle().Foreground(lipgloss.Color("#06B6D4"))
 
-	// Create viewport for details
 	vp := viewport.New(0, 0)
 
 	return Model{
@@ -245,7 +234,6 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.width = msg.Width
 		m.height = msg.Height
 
-		// Account for header (1-2 lines) and footer (1 line)
 		headerHeight := 1
 		if m.searchQuery != "" || m.filterType != "" {
 			headerHeight = 2 // Extra line for filter status
@@ -260,7 +248,6 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, nil
 
 	case tea.KeyMsg:
-		// Global keys
 		if key.Matches(msg, keys.Quit) && m.mode != searchView && m.mode != filterView {
 			m.quitting = true
 			return m, tea.Quit
@@ -329,17 +316,14 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.viewport.GotoTop()
 				return m, nil
 			case msg.String() == "d":
-				// Toggle back to detail view
 				m.mode = detailView
 				m.exportMsg = "" // Clear any export message
 				m.viewport.SetContent(m.renderComponentDetail(m.selectedComp))
 				m.viewport.GotoTop()
 				return m, nil
 			case key.Matches(msg, keys.Enter):
-				// Export JSON to file
 				m.mode = exportView
 				m.exportMsg = ""
-				// Suggest filename based on component name
 				suggestedName := strings.ReplaceAll(m.selectedComp.Name, "/", "_")
 				suggestedName = strings.ReplaceAll(suggestedName, ":", "_")
 				m.textInput.SetValue(suggestedName)
@@ -366,11 +350,9 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			case "enter":
 				filename := m.textInput.Value()
 				if filename != "" {
-					// Add .json extension if not present
 					if !strings.HasSuffix(strings.ToLower(filename), ".json") {
 						filename += ".json"
 					}
-					// Export the JSON
 					err := m.exportJSON(filename)
 					if err != nil {
 						m.exportMsg = "Error: " + err.Error()
@@ -456,7 +438,6 @@ func (m *Model) applyFilters() {
 
 	m.filteredComps = filtered
 
-	// Update list items
 	items := make([]list.Item, len(filtered))
 	for i, c := range filtered {
 		items[i] = ComponentItem{component: c, index: i}
@@ -466,20 +447,17 @@ func (m *Model) applyFilters() {
 
 func extractPkgType(purl string) string {
 	if strings.HasPrefix(purl, "pkg:") {
-		parts := strings.SplitN(purl[4:], "/", 2)
-		if len(parts) > 0 {
-			return parts[0]
+		if ptype, _, ok := strings.Cut(purl[4:], "/"); ok {
+			return ptype
 		}
 	}
 	return ""
 }
 
-// exportJSON exports the selected component's JSON to a file
 func (m *Model) exportJSON(filename string) error {
 	var jsonBytes []byte
 	var err error
 
-	// Use raw JSON if available (preserves all original fields)
 	if len(m.selectedComp.RawJSON) > 0 {
 		var raw interface{}
 		if err = json.Unmarshal(m.selectedComp.RawJSON, &raw); err == nil {
@@ -487,7 +465,6 @@ func (m *Model) exportJSON(filename string) error {
 		}
 	}
 
-	// Fallback to normalized component if no raw JSON
 	if len(jsonBytes) == 0 || err != nil {
 		jsonBytes, err = json.MarshalIndent(m.selectedComp, "", "  ")
 		if err != nil {
@@ -495,11 +472,10 @@ func (m *Model) exportJSON(filename string) error {
 		}
 	}
 
-	// Write to file
 	return os.WriteFile(filename, jsonBytes, 0644)
 }
 
-// Run starts the interactive TUI
+// Run starts the TUI.
 func Run(comps []sbom.Component, stats analysis.Stats, info sbom.SBOMInfo) error {
 	p := tea.NewProgram(
 		NewModel(comps, stats, info),
