@@ -16,6 +16,7 @@ var update = flag.Bool("update", false, "update snapshot files")
 var (
 	goVersionRe = regexp.MustCompile(`go\d+\.\d+(\.\d+)?`)
 	timestampRe = regexp.MustCompile(`\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z`)
+	uuidRe      = regexp.MustCompile(`[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}`)
 )
 
 func snapshotDir() string {
@@ -34,6 +35,9 @@ func normalizeOutput(s string) string {
 
 	// Replace RFC3339 timestamps (e.g., 2026-02-09T20:52:34Z → TIMESTAMP)
 	s = timestampRe.ReplaceAllString(s, "TIMESTAMP")
+
+	// Replace UUIDs (e.g., in CycloneDX serialNumber or SPDX documentNamespace)
+	s = uuidRe.ReplaceAllString(s, "UUID")
 
 	return s
 }
@@ -87,10 +91,7 @@ func compareSnapshot(t *testing.T, label, file, actual string) {
 	expLines := strings.Split(exp, "\n")
 	actLines := strings.Split(actual, "\n")
 
-	maxLines := len(expLines)
-	if len(actLines) > maxLines {
-		maxLines = len(actLines)
-	}
+	maxLines := max(len(expLines), len(actLines))
 
 	var diff strings.Builder
 	for i := 0; i < maxLines; i++ {
@@ -115,55 +116,53 @@ func TestSnapshot(t *testing.T) {
 		name string
 		args []string
 	}{
-		// Help/Version
 		{"version_long", []string{"--version"}},
 		{"version_short", []string{"-v"}},
 		{"help_long", []string{"--help"}},
 		{"no_args", nil},
 
-		// Single File Stats — Text
 		{"stats_cyclonedx_text", []string{td("cyclonedx-before.json")}},
 		{"stats_spdx_text", []string{td("spdx-sample.json")}},
 		{"stats_syft_text", []string{td("syft-sample.json")}},
 		{"stats_empty_components_text", []string{td("cyclonedx-empty-components.json")}},
 		{"stats_no_components_text", []string{td("cyclonedx-no-components.json")}},
 
-		// Single File Stats — JSON
 		{"stats_cyclonedx_json", []string{td("cyclonedx-before.json"), "--json"}},
 		{"stats_spdx_json", []string{td("spdx-sample.json"), "--json"}},
 		{"stats_syft_json", []string{td("syft-sample.json"), "--json"}},
 
-		// Two File Diff — Text
 		{"diff_text", []string{td("cyclonedx-before.json"), td("cyclonedx-after.json")}},
 		{"diff_no_differences", []string{td("cyclonedx-before.json"), td("cyclonedx-before.json")}},
 		{"diff_integrity_drift_text", []string{td("cyclonedx-before.json"), td("cyclonedx-integrity-drift.json")}},
 
-		// Two File Diff — JSON
 		{"diff_json", []string{td("cyclonedx-before.json"), td("cyclonedx-after.json"), "--json"}},
 		{"diff_integrity_drift_json", []string{td("cyclonedx-before.json"), td("cyclonedx-integrity-drift.json"), "--json"}},
 
-		// Output Formats
 		{"format_sarif", []string{td("cyclonedx-before.json"), td("cyclonedx-after.json"), "--format", "sarif"}},
 		{"format_junit", []string{td("cyclonedx-before.json"), td("cyclonedx-after.json"), "--format", "junit"}},
 		{"format_markdown", []string{td("cyclonedx-before.json"), td("cyclonedx-after.json"), "--format", "markdown"}},
 		{"format_patch", []string{td("cyclonedx-before.json"), td("cyclonedx-after.json"), "--format", "patch"}},
 
-		// Policy
 		{"policy_pass", []string{td("cyclonedx-before.json"), td("cyclonedx-after.json"), "--policy", td("test-policy.json")}},
 		{"policy_violation_text", []string{td("cyclonedx-before.json"), td("cyclonedx-after.json"), "--policy", td("strict-test-policy.json")}},
 		{"policy_violation_json", []string{td("cyclonedx-before.json"), td("cyclonedx-after.json"), "--policy", td("strict-test-policy.json"), "--json"}},
 		{"policy_all_rules", []string{td("cyclonedx-before.json"), td("cyclonedx-after.json"), "--policy", td("policy-all-rules.json")}},
 
-		// Strict/Tolerant
 		{"strict_invalid_file", []string{td("invalid.json"), "--strict"}},
 		{"tolerant_invalid_file", []string{td("invalid.json"), "--tolerant"}},
 
-		// Error Cases
 		{"nonexistent_file_strict", []string{"nonexistent.json", "--strict"}},
 		{"invalid_policy_file", []string{td("cyclonedx-before.json"), td("cyclonedx-after.json"), "--policy", td("malformed.json")}},
 
-		// Cross-format
 		{"cross_format_diff", []string{td("cyclonedx-before.json"), td("spdx-sample.json"), "--json"}},
+
+		{"convert_cdx_to_spdx", []string{"convert", td("cyclonedx-before.json"), "--to", "spdx"}},
+		{"convert_cdx_to_syft", []string{"convert", td("cyclonedx-before.json"), "--to", "syft"}},
+		{"convert_spdx_to_cdx", []string{"convert", td("spdx-sample.json"), "--to", "cyclonedx"}},
+		{"convert_syft_to_cdx", []string{"convert", td("syft-sample.json"), "--to", "cdx"}},
+		{"convert_no_target", []string{"convert", td("cyclonedx-before.json")}},
+		{"convert_no_input", []string{"convert", "--to", "spdx"}},
+		{"convert_invalid_format", []string{"convert", td("cyclonedx-before.json"), "--to", "bogus"}},
 	}
 
 	for _, tt := range tests {

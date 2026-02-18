@@ -5,13 +5,14 @@ import (
 	"os"
 )
 
-// PrintUsage displays the help message
 func PrintUsage() {
 	fmt.Fprintf(os.Stderr, "sbomlyze - A fast, reliable SBOM diff and analysis tool\n\n")
-	fmt.Fprintf(os.Stderr, "Usage: sbomlyze <sbom1> [sbom2] [options]\n\n")
+	fmt.Fprintf(os.Stderr, "Usage: sbomlyze <sbom1> [sbom2] [options]\n")
+	fmt.Fprintf(os.Stderr, "       sbomlyze convert <sbom> --to <format> [-o output]\n\n")
 	fmt.Fprintf(os.Stderr, "Modes:\n")
 	fmt.Fprintf(os.Stderr, "  Single file:  sbomlyze <sbom> [--json]        - Show statistics\n")
 	fmt.Fprintf(os.Stderr, "  Interactive:  sbomlyze <sbom> -i              - Interactive explorer\n")
+	fmt.Fprintf(os.Stderr, "  Convert:      sbomlyze convert <sbom> --to <fmt> - Convert SBOM format\n")
 	fmt.Fprintf(os.Stderr, "  Web server:   sbomlyze -web [--port 8080]     - Web UI explorer\n")
 	fmt.Fprintf(os.Stderr, "  Two files:    sbomlyze <sbom1> <sbom2> [...]  - Show diff\n\n")
 	fmt.Fprintf(os.Stderr, "Options:\n")
@@ -24,6 +25,8 @@ func PrintUsage() {
 	fmt.Fprintf(os.Stderr, "  --strict            Fail on parse warnings\n")
 	fmt.Fprintf(os.Stderr, "  --tolerant          Continue on parse warnings (default)\n")
 	fmt.Fprintf(os.Stderr, "  --no-pager          Disable automatic paging of output\n")
+	fmt.Fprintf(os.Stderr, "  --to <format>       Target format for convert: cyclonedx (cdx), spdx, syft\n")
+	fmt.Fprintf(os.Stderr, "  -o, --output <file> Output file for convert (default: stdout)\n")
 	fmt.Fprintf(os.Stderr, "  --version, -v       Show version information\n")
 	fmt.Fprintf(os.Stderr, "  --help, -h          Show this help message\n\n")
 	fmt.Fprintf(os.Stderr, "Output Formats:\n")
@@ -51,11 +54,12 @@ func PrintUsage() {
 	fmt.Fprintf(os.Stderr, "  sbomlyze before.json after.json            # Compare two SBOMs\n")
 	fmt.Fprintf(os.Stderr, "  sbomlyze a.json b.json --policy p.json     # Apply policy checks\n")
 	fmt.Fprintf(os.Stderr, "  sbomlyze a.json b.json --format sarif      # SARIF for GitHub\n")
-	fmt.Fprintf(os.Stderr, "  sbomlyze a.json b.json --format markdown   # Markdown for PR\n\n")
+	fmt.Fprintf(os.Stderr, "  sbomlyze a.json b.json --format markdown   # Markdown for PR\n")
+	fmt.Fprintf(os.Stderr, "  sbomlyze convert cdx.json --to spdx        # Convert CDX to SPDX\n")
+	fmt.Fprintf(os.Stderr, "  sbomlyze convert in.json --to syft -o out  # Convert to file\n\n")
 	fmt.Fprintf(os.Stderr, "Documentation: https://github.com/rezmoss/sbomlyze\n")
 }
 
-// PrintWarnings displays parse warnings
 func PrintWarnings(warnings []ParseWarning) {
 	if len(warnings) > 0 {
 		fmt.Printf("\n⚠️  Parse Warnings (%d):\n", len(warnings))

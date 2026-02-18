@@ -1,0 +1,86 @@
+{
+  "spdxVersion": "SPDX-2.3",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "name": "sbomlyze-converted",
+  "documentNamespace": "https://sbomlyze.dev/spdx/UUID",
+  "creationInfo": {
+    "creators": [
+      "Tool: sbomlyze-convert"
+    ],
+    "created": "TIMESTAMP"
+  },
+  "packages": [
+    {
+      "name": "lodash",
+      "SPDXID": "SPDXRef-lodash-4.17.20",
+      "versionInfo": "4.17.20",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "abc123def456"
+        }
+      ],
+      "licenseConcluded": "MIT",
+      "copyrightText": "NOASSERTION",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/lodash@4.17.20"
+        }
+      ]
+    },
+    {
+      "name": "express",
+      "SPDXID": "SPDXRef-express-4.18.0",
+      "versionInfo": "4.18.0",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "copyrightText": "NOASSERTION",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/express@4.18.0"
+        }
+      ]
+    },
+    {
+      "name": "old-package",
+      "SPDXID": "SPDXRef-old-package-1.0.0",
+      "versionInfo": "1.0.0",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/old-package@1.0.0"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "spdxElementId": "SPDXRef-DOCUMENT",
+      "relatedSpdxElement": "SPDXRef-lodash-4.17.20",
+      "relationshipType": "DESCRIBES"
+    },
+    {
+      "spdxElementId": "SPDXRef-DOCUMENT",
+      "relatedSpdxElement": "SPDXRef-express-4.18.0",
+      "relationshipType": "DESCRIBES"
+    },
+    {
+      "spdxElementId": "SPDXRef-DOCUMENT",
+      "relatedSpdxElement": "SPDXRef-old-package-1.0.0",
+      "relationshipType": "DESCRIBES"
+    }
+  ]
+}

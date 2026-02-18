@@ -1,0 +1,120 @@
+{
+  "$schema": "http://cyclonedx.org/schema/bom-1.6.schema.json",
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:UUID",
+  "version": 1,
+  "metadata": {
+    "timestamp": "TIMESTAMP",
+    "tools": {
+      "components": [
+        {
+          "type": "application",
+          "name": "sbomlyze",
+          "version": "convert"
+        }
+      ]
+    },
+    "properties": [
+      {
+        "name": "sbomlyze:source:type",
+        "value": "image"
+      },
+      {
+        "name": "sbomlyze:source:name",
+        "value": "alpine:latest"
+      }
+    ]
+  },
+  "components": [
+    {
+      "bom-ref": "pkg:apk/alpine/busybox@1.36.1-r15?arch=x86_64",
+      "type": "library",
+      "name": "busybox",
+      "version": "1.36.1-r15",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "abc123def456"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "GPL-2.0-only"
+          }
+        }
+      ],
+      "cpe": "cpe:2.3:a:busybox:busybox:1.36.1-r15:*:*:*:*:*:*:*",
+      "purl": "pkg:apk/alpine/busybox@1.36.1-r15?arch=x86_64",
+      "properties": [
+        {
+          "name": "sbomlyze:foundBy",
+          "value": "apkdb-cataloger"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/musl@1.2.4-r2?arch=x86_64",
+      "type": "library",
+      "name": "musl",
+      "version": "1.2.4-r2",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "deadbeef1234"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "cpe": "cpe:2.3:a:musl:musl:1.2.4-r2:*:*:*:*:*:*:*",
+      "purl": "pkg:apk/alpine/musl@1.2.4-r2?arch=x86_64",
+      "properties": [
+        {
+          "name": "sbomlyze:foundBy",
+          "value": "apkdb-cataloger"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/alpine-baselayout@3.4.3-r1?arch=x86_64",
+      "type": "library",
+      "name": "alpine-baselayout",
+      "version": "3.4.3-r1",
+      "licenses": [
+        {
+          "license": {
+            "id": "GPL-2.0-only"
+          }
+        }
+      ],
+      "purl": "pkg:apk/alpine/alpine-baselayout@3.4.3-r1?arch=x86_64",
+      "properties": [
+        {
+          "name": "sbomlyze:foundBy",
+          "value": "apkdb-cataloger"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "pkg:apk/alpine/busybox@1.36.1-r15?arch=x86_64",
+      "dependsOn": [
+        "pkg:apk/alpine/musl@1.2.4-r2?arch=x86_64",
+        "pkg:apk/alpine/alpine-baselayout@3.4.3-r1?arch=x86_64"
+      ]
+    },
+    {
+      "ref": "pkg:apk/alpine/musl@1.2.4-r2?arch=x86_64"
+    },
+    {
+      "ref": "pkg:apk/alpine/alpine-baselayout@3.4.3-r1?arch=x86_64"
+    }
+  ]
+}

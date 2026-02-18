@@ -1,0 +1,75 @@
+{
+  "$schema": "http://cyclonedx.org/schema/bom-1.6.schema.json",
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:UUID",
+  "version": 1,
+  "metadata": {
+    "timestamp": "TIMESTAMP",
+    "tools": {
+      "components": [
+        {
+          "type": "application",
+          "name": "sbomlyze",
+          "version": "convert"
+        }
+      ]
+    }
+  },
+  "components": [
+    {
+      "bom-ref": "pkg:npm/axios@1.6.0",
+      "type": "library",
+      "name": "axios",
+      "version": "1.6.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "abc123"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/axios@1.6.0",
+      "properties": [
+        {
+          "name": "sbomlyze:spdxid",
+          "value": "Package-axios"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/react@18.2.0",
+      "type": "library",
+      "name": "react",
+      "version": "18.2.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/react@18.2.0",
+      "properties": [
+        {
+          "name": "sbomlyze:spdxid",
+          "value": "Package-react"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "pkg:npm/axios@1.6.0"
+    },
+    {
+      "ref": "pkg:npm/react@18.2.0"
+    }
+  ]
+}

@@ -167,3 +167,72 @@ func TestAddWarning_Multiple(t *testing.T) {
 		t.Errorf("expected 2 warnings, got %d", len(opts.Warnings))
 	}
 }
+
+func TestParseArgs_ConvertMode(t *testing.T) {
+	args := []string{"sbomlyze", "convert", "input.json", "--to", "spdx"}
+	opts := ParseArgs(args)
+
+	if !opts.Convert {
+		t.Error("expected Convert=true")
+	}
+	if len(opts.Files) != 1 || opts.Files[0] != "input.json" {
+		t.Errorf("expected Files=[input.json], got %v", opts.Files)
+	}
+	if opts.TargetFormat != "spdx" {
+		t.Errorf("expected TargetFormat=spdx, got %s", opts.TargetFormat)
+	}
+}
+
+func TestParseArgs_ConvertWithOutput(t *testing.T) {
+	args := []string{"sbomlyze", "convert", "in.json", "--to", "cdx", "-o", "out.json"}
+	opts := ParseArgs(args)
+
+	if !opts.Convert {
+		t.Error("expected Convert=true")
+	}
+	if opts.OutputFile != "out.json" {
+		t.Errorf("expected OutputFile=out.json, got %s", opts.OutputFile)
+	}
+	if opts.TargetFormat != "cdx" {
+		t.Errorf("expected TargetFormat=cdx, got %s", opts.TargetFormat)
+	}
+}
+
+func TestParseArgs_ConvertOutputLongFlag(t *testing.T) {
+	args := []string{"sbomlyze", "convert", "in.json", "--to", "syft", "--output", "out.json"}
+	opts := ParseArgs(args)
+
+	if opts.OutputFile != "out.json" {
+		t.Errorf("expected OutputFile=out.json with --output, got %s", opts.OutputFile)
+	}
+}
+
+func TestParseArgs_ConvertNoTarget(t *testing.T) {
+	args := []string{"sbomlyze", "convert", "in.json"}
+	opts := ParseArgs(args)
+
+	if !opts.Convert {
+		t.Error("expected Convert=true")
+	}
+	if opts.TargetFormat != "" {
+		t.Errorf("expected empty TargetFormat, got %s", opts.TargetFormat)
+	}
+}
+
+func TestParseArgs_NonConvertModeUnchanged(t *testing.T) {
+	args := []string{"sbomlyze", "a.json", "b.json", "--json"}
+	opts := ParseArgs(args)
+
+	if opts.Convert {
+		t.Error("expected Convert=false for non-convert mode")
+	}
+	if opts.TargetFormat != "" {
+		t.Errorf("expected empty TargetFormat, got %s", opts.TargetFormat)
+	}
+	if opts.OutputFile != "" {
+		t.Errorf("expected empty OutputFile, got %s", opts.OutputFile)
+	}
+	if !opts.JSONOutput {
+		t.Error("expected JSONOutput=true")
+	}
+}

@@ -1,10 +1,12 @@
 sbomlyze - A fast, reliable SBOM diff and analysis tool
 
 Usage: sbomlyze <sbom1> [sbom2] [options]
+       sbomlyze convert <sbom> --to <format> [-o output]
 
 Modes:
   Single file:  sbomlyze <sbom> [--json]        - Show statistics
   Interactive:  sbomlyze <sbom> -i              - Interactive explorer
+  Convert:      sbomlyze convert <sbom> --to <fmt> - Convert SBOM format
   Web server:   sbomlyze -web [--port 8080]     - Web UI explorer
   Two files:    sbomlyze <sbom1> <sbom2> [...]  - Show diff
 
@@ -18,6 +20,8 @@ Options:
   --strict            Fail on parse warnings
   --tolerant          Continue on parse warnings (default)
   --no-pager          Disable automatic paging of output
+  --to <format>       Target format for convert: cyclonedx (cdx), spdx, syft
+  -o, --output <file> Output file for convert (default: stdout)
   --version, -v       Show version information
   --help, -h          Show this help message
 
@@ -49,5 +53,7 @@ Examples:
   sbomlyze a.json b.json --policy p.json     # Apply policy checks
   sbomlyze a.json b.json --format sarif      # SARIF for GitHub
   sbomlyze a.json b.json --format markdown   # Markdown for PR
+  sbomlyze convert cdx.json --to spdx        # Convert CDX to SPDX
+  sbomlyze convert in.json --to syft -o out  # Convert to file
 
 Documentation: https://github.com/rezmoss/sbomlyze

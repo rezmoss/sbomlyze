@@ -5,30 +5,30 @@ import (
 	"strings"
 )
 
-// ParseWarning represents a non-fatal issue found during parsing
 type ParseWarning struct {
 	File    string `json:"file"`
 	Message string `json:"message"`
 	Field   string `json:"field,omitempty"`
 }
 
-// ParseOptions controls parsing behavior
 type ParseOptions struct {
 	Strict   bool
 	Warnings []ParseWarning
 }
 
-// Options holds all command line options
 type Options struct {
-	Files       []string
-	JSONOutput  bool
-	PolicyFile  string
-	Strict      bool
-	Format      string // text, json, sarif, junit, markdown, patch
-	Interactive bool   // Interactive TUI mode
-	WebServer   bool   // Web server mode
-	WebPort     int    // Web server port (default 8080)
-	NoPager     bool   // Disable automatic paging
+	Files        []string
+	JSONOutput   bool
+	PolicyFile   string
+	Strict       bool
+	Format       string // text, json, sarif, junit, markdown, patch
+	Interactive  bool
+	WebServer    bool
+	WebPort      int
+	NoPager      bool
+	Convert      bool
+	TargetFormat string // cyclonedx, cdx, spdx, syft
+	OutputFile   string
 }
 
 func DefaultParseOptions() ParseOptions {
@@ -46,11 +46,15 @@ func (p *ParseOptions) AddWarning(file, message, field string) {
 	})
 }
 
-// ParseArgs parses command line arguments into Options
 func ParseArgs(args []string) Options {
 	opts := Options{
-		Strict: false,  // default is tolerant
-		Format: "text", // default is text
+		Strict: false,
+		Format: "text",
+	}
+
+	if len(args) > 1 && args[1] == "convert" {
+		opts.Convert = true
+		args = append(args[:1], args[2:]...) // remove "convert" from args
 	}
 
 	for i := 1; i < len(args); i++ {
@@ -73,6 +77,16 @@ func ParseArgs(args []string) Options {
 				if opts.Format == "json" {
 					opts.JSONOutput = true
 				}
+				i++
+			}
+		case "--to":
+			if i+1 < len(args) {
+				opts.TargetFormat = args[i+1]
+				i++
+			}
+		case "-o", "--output":
+			if i+1 < len(args) {
+				opts.OutputFile = args[i+1]
 				i++
 			}
 		case "--interactive", "-i":
