@@ -126,12 +126,13 @@ func main() {
 		p := pager.Start(opts.NoPager)
 		defer p.Stop()
 
-		if opts.JSONOutput {
+		switch opts.Format {
+		case "json":
 			out := struct {
-				Info     sbom.SBOMInfo      `json:"info"`
-				Findings analysis.KeyFindings `json:"findings"`
-				Stats    analysis.Stats     `json:"stats"`
-				Warnings []cli.ParseWarning `json:"warnings,omitempty"`
+				Info     sbom.SBOMInfo        `json:"info"`
+				Findings analysis.KeyFindings  `json:"findings"`
+				Stats    analysis.Stats        `json:"stats"`
+				Warnings []cli.ParseWarning    `json:"warnings,omitempty"`
 			}{
 				Info:     sbomInfo,
 				Findings: findings,
@@ -145,7 +146,9 @@ func main() {
 				fmt.Fprintf(os.Stderr, "err: encode JSON: %v\n", err)
 				os.Exit(1)
 			}
-		} else {
+		case "html":
+			fmt.Println(output.GenerateHTMLStats(stats, sbomInfo, findings))
+		default:
 			output.PrintSingleScanContext(sbomInfo)
 			output.PrintKeyFindings(findings)
 			analysis.PrintStats(stats)
@@ -252,6 +255,9 @@ func main() {
 
 	case "markdown", "md":
 		fmt.Println(output.GenerateMarkdownWithOverview(result, violations, overview, findings))
+
+	case "html":
+		fmt.Println(output.GenerateHTML(result, violations, overview, findings))
 
 	case "patch":
 		patch := output.GenerateJSONPatch(result)
