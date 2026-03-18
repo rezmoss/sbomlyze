@@ -5,24 +5,24 @@ Codename: stable
 Architectures: amd64 arm64 i386
 Components: main
 Description: sbomlyze package repository
-Date: Wed, 18 Feb 2026 02:26:12 +0000
+Date: Wed, 18 Mar 2026 23:26:18 +0000
 MD5Sum:
  d41d8cd98f00b204e9800998ecf8427e 0 main/binary-arm64/.gitkeep
- 0fa861ff6a3a7c72eab40d247c2edcc9 29 main/binary-arm64/Packages.gz
+ e5ea324a65e16b5e55dd8816934b23e1 29 main/binary-arm64/Packages.gz
  d41d8cd98f00b204e9800998ecf8427e 0 main/binary-arm64/Packages
  d41d8cd98f00b204e9800998ecf8427e 0 main/binary-amd64/.gitkeep
- 0fa861ff6a3a7c72eab40d247c2edcc9 29 main/binary-amd64/Packages.gz
+ e5ea324a65e16b5e55dd8816934b23e1 29 main/binary-amd64/Packages.gz
  d41d8cd98f00b204e9800998ecf8427e 0 main/binary-amd64/Packages
  d41d8cd98f00b204e9800998ecf8427e 0 main/binary-i386/.gitkeep
- 0fa861ff6a3a7c72eab40d247c2edcc9 29 main/binary-i386/Packages.gz
+ e5ea324a65e16b5e55dd8816934b23e1 29 main/binary-i386/Packages.gz
  d41d8cd98f00b204e9800998ecf8427e 0 main/binary-i386/Packages
 SHA256:
  e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 0 main/binary-arm64/.gitkeep
- a1cb947db9e4ef4b8c2441abe4180f53ec69451ce829b1718f40c57a8e34753e 29 main/binary-arm64/Packages.gz
+ 0943940f71da46472b6d50236d0692ffcdd3574b28868b8e00f312b693bb238f 29 main/binary-arm64/Packages.gz
  e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 0 main/binary-arm64/Packages
  e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 0 main/binary-amd64/.gitkeep
- a1cb947db9e4ef4b8c2441abe4180f53ec69451ce829b1718f40c57a8e34753e 29 main/binary-amd64/Packages.gz
+ 0943940f71da46472b6d50236d0692ffcdd3574b28868b8e00f312b693bb238f 29 main/binary-amd64/Packages.gz
  e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 0 main/binary-amd64/Packages
  e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 0 main/binary-i386/.gitkeep
- a1cb947db9e4ef4b8c2441abe4180f53ec69451ce829b1718f40c57a8e34753e 29 main/binary-i386/Packages.gz
+ 0943940f71da46472b6d50236d0692ffcdd3574b28868b8e00f312b693bb238f 29 main/binary-i386/Packages.gz
  e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 0 main/binary-i386/Packages
