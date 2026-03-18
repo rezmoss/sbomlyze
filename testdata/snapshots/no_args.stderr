@@ -15,7 +15,7 @@ Options:
   -web, --web         Start web UI server
   --port <port>       Web server port (default 8080)
   --json              Output in JSON format (shortcut for --format json)
-  --format <format>   Output format: text, json, sarif, junit, markdown, patch
+  --format <format>   Output format: text, json, sarif, junit, markdown, html, patch
   --policy <file>     Policy file for CI checks
   --strict            Fail on parse warnings
   --tolerant          Continue on parse warnings (default)
@@ -31,6 +31,7 @@ Output Formats:
   sarif     SARIF for GitHub Code Scanning
   junit     JUnit XML for CI test results
   markdown  Markdown for PR comments
+  html      Self-contained HTML for auditors and reports
   patch     JSON Patch (RFC 6902) for automation
 
 Interactive Mode Keys:
@@ -53,6 +54,7 @@ Examples:
   sbomlyze a.json b.json --policy p.json     # Apply policy checks
   sbomlyze a.json b.json --format sarif      # SARIF for GitHub
   sbomlyze a.json b.json --format markdown   # Markdown for PR
+  sbomlyze a.json b.json --format html       # HTML report for auditors
   sbomlyze convert cdx.json --to spdx        # Convert CDX to SPDX
   sbomlyze convert in.json --to syft -o out  # Convert to file
 

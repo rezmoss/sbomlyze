@@ -10,4 +10,5 @@ const (
 	FormatJUnit    Format = "junit"
 	FormatMarkdown Format = "markdown"
 	FormatPatch    Format = "patch"
+	FormatHTML     Format = "html"
 )
