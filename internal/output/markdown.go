@@ -7,11 +7,17 @@ import (
 	"time"
 
 	"github.com/rezmoss/sbomlyze/internal/analysis"
+	"github.com/rezmoss/sbomlyze/internal/compliance"
 	"github.com/rezmoss/sbomlyze/internal/policy"
 )
 
 // GenerateMarkdownWithOverview creates a Markdown diff report.
 func GenerateMarkdownWithOverview(result analysis.DiffResult, violations []policy.Violation, overview analysis.DiffOverview, findings analysis.KeyFindings) string {
+	return GenerateMarkdownWithOverviewAndCompliance(result, violations, overview, findings, nil)
+}
+
+// GenerateMarkdownWithOverviewAndCompliance creates a Markdown diff report with optional compliance scoring.
+func GenerateMarkdownWithOverviewAndCompliance(result analysis.DiffResult, violations []policy.Violation, overview analysis.DiffOverview, findings analysis.KeyFindings, complianceReport *compliance.Report) string {
 	var sb strings.Builder
 
 	sb.WriteString("## 📦 SBOM Diff Report\n\n")
@@ -62,6 +68,10 @@ func GenerateMarkdownWithOverview(result analysis.DiffResult, violations []polic
 			fmt.Fprintf(&sb, "- %s %s\n", f.Icon, f.Message)
 		}
 		sb.WriteString("\n")
+	}
+
+	if complianceReport != nil {
+		writeMarkdownCompliance(&sb, *complianceReport)
 	}
 
 	if len(result.AddedByType) > 0 {
@@ -121,6 +131,59 @@ func GenerateMarkdown(result analysis.DiffResult, violations []policy.Violation)
 	writeMarkdownDiffBody(&sb, result, violations)
 
 	return sb.String()
+}
+
+func writeMarkdownCompliance(sb *strings.Builder, report compliance.Report) {
+	sb.WriteString("### 📊 Compliance Scoring\n\n")
+
+	standards := []struct {
+		name   string
+		result *compliance.FrameworkResult
+	}{
+		{"NTIA Minimum Elements", report.NTIA},
+		{"CISA FSCT-3", report.CISA},
+		{"BSI TR-03183-2", report.BSI},
+	}
+
+	sb.WriteString("| Standard | Score | Passed | Checks |\n")
+	sb.WriteString("|----------|-------|--------|--------|\n")
+	for _, s := range standards {
+		if s.result != nil {
+			icon := "🔴"
+			switch {
+			case s.result.Score >= 90:
+				icon = "🟢"
+			case s.result.Score >= 70:
+				icon = "🟡"
+			case s.result.Score >= 50:
+				icon = "🟠"
+			}
+			fmt.Fprintf(sb, "| %s %s | %d/100 | %d | %d |\n", icon, s.name, s.result.Score, s.result.Passed, s.result.Total)
+		}
+	}
+	fmt.Fprintf(sb, "| **Overall** | **%d/100** | | |\n", report.Overall)
+	sb.WriteString("\n")
+
+	// Show failed checks for each framework
+	for _, s := range standards {
+		if s.result == nil {
+			continue
+		}
+		var failed []compliance.CheckResult
+		for _, c := range s.result.Checks {
+			if !c.Passed {
+				failed = append(failed, c)
+			}
+		}
+		if len(failed) > 0 {
+			sb.WriteString("<details>\n")
+			fmt.Fprintf(sb, "<summary>%s - %d failed checks</summary>\n\n", s.name, len(failed))
+			for _, c := range failed {
+				fmt.Fprintf(sb, "- **%s**: %s (%s)\n", c.Name, c.Details, c.Description)
+			}
+			sb.WriteString("\n</details>\n\n")
+		}
+	}
 }
 
 func writeMarkdownDiffBody(sb *strings.Builder, result analysis.DiffResult, violations []policy.Violation) {

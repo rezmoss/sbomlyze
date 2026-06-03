@@ -1,0 +1,12 @@
+{
+  "max_added": 20,
+  "max_removed": 10,
+  "deny_integrity_drift": true,
+  "require_licenses": true,
+  "max_depth": 4,
+  "min_ntia_score": 85,
+  "min_cisa_score": 70,
+  "min_overall_compliance": 75,
+  "warn_new_transitive": true,
+  "warn_supplier_change": true
+}

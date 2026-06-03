@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/rezmoss/sbomlyze/internal/analysis"
+	"github.com/rezmoss/sbomlyze/internal/compliance"
 	"github.com/rezmoss/sbomlyze/internal/sbom"
 )
 
@@ -33,6 +34,32 @@ func TestLoadPolicy(t *testing.T) {
 		}
 		if policy.MaxDepth != 3 {
 			t.Errorf("expected MaxDepth=3, got %d", policy.MaxDepth)
+		}
+	})
+
+	t.Run("loads compliance score fields from JSON", func(t *testing.T) {
+		jsonData := `{
+			"min_ntia_score": 80,
+			"min_cisa_score": 70,
+			"min_bsi_score": 50,
+			"min_overall_compliance": 75
+		}`
+
+		policy, err := Load([]byte(jsonData))
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if policy.MinNTIAScore != 80 {
+			t.Errorf("expected MinNTIAScore=80, got %d", policy.MinNTIAScore)
+		}
+		if policy.MinCISAScore != 70 {
+			t.Errorf("expected MinCISAScore=70, got %d", policy.MinCISAScore)
+		}
+		if policy.MinBSIScore != 50 {
+			t.Errorf("expected MinBSIScore=50, got %d", policy.MinBSIScore)
+		}
+		if policy.MinOverallCompliance != 75 {
+			t.Errorf("expected MinOverallCompliance=75, got %d", policy.MinOverallCompliance)
 		}
 	})
 
@@ -389,3 +416,141 @@ func TestHasErrors(t *testing.T) {
 	})
 }
 
+func TestEvaluateCompliance(t *testing.T) {
+	t.Run("no violations when scores meet thresholds", func(t *testing.T) {
+		pol := Policy{
+			MinNTIAScore:         80,
+			MinCISAScore:         70,
+			MinOverallCompliance: 75,
+		}
+		report := compliance.Report{
+			NTIA: &compliance.FrameworkResult{Score: 100, Passed: 7, Total: 7},
+			CISA: &compliance.FrameworkResult{Score: 100, Passed: 11, Total: 11},
+			BSI:  &compliance.FrameworkResult{Score: 90, Passed: 10, Total: 11},
+			Overall: 96,
+		}
+
+		violations := EvaluateCompliance(pol, report)
+		if len(violations) != 0 {
+			t.Errorf("expected no violations, got %d: %v", len(violations), violations)
+		}
+	})
+
+	t.Run("violates when NTIA score below threshold", func(t *testing.T) {
+		pol := Policy{MinNTIAScore: 80}
+		report := compliance.Report{
+			NTIA: &compliance.FrameworkResult{Score: 57, Passed: 4, Total: 7},
+			Overall: 57,
+		}
+
+		violations := EvaluateCompliance(pol, report)
+		if len(violations) != 1 {
+			t.Fatalf("expected 1 violation, got %d", len(violations))
+		}
+		if violations[0].Rule != "min_ntia_score" {
+			t.Errorf("expected rule min_ntia_score, got %s", violations[0].Rule)
+		}
+		if violations[0].Severity != SeverityError {
+			t.Error("expected severity error")
+		}
+	})
+
+	t.Run("violates when CISA score below threshold", func(t *testing.T) {
+		pol := Policy{MinCISAScore: 90}
+		report := compliance.Report{
+			CISA: &compliance.FrameworkResult{Score: 72, Passed: 8, Total: 11},
+			Overall: 72,
+		}
+
+		violations := EvaluateCompliance(pol, report)
+		if len(violations) != 1 {
+			t.Fatalf("expected 1 violation, got %d", len(violations))
+		}
+		if violations[0].Rule != "min_cisa_score" {
+			t.Errorf("expected rule min_cisa_score, got %s", violations[0].Rule)
+		}
+	})
+
+	t.Run("violates when BSI score below threshold", func(t *testing.T) {
+		pol := Policy{MinBSIScore: 80}
+		report := compliance.Report{
+			BSI: &compliance.FrameworkResult{Score: 54, Passed: 6, Total: 11},
+			Overall: 54,
+		}
+
+		violations := EvaluateCompliance(pol, report)
+		if len(violations) != 1 {
+			t.Fatalf("expected 1 violation, got %d", len(violations))
+		}
+		if violations[0].Rule != "min_bsi_score" {
+			t.Errorf("expected rule min_bsi_score, got %s", violations[0].Rule)
+		}
+	})
+
+	t.Run("violates when overall compliance below threshold", func(t *testing.T) {
+		pol := Policy{MinOverallCompliance: 80}
+		report := compliance.Report{
+			NTIA: &compliance.FrameworkResult{Score: 100, Passed: 7, Total: 7},
+			CISA: &compliance.FrameworkResult{Score: 50, Passed: 5, Total: 11},
+			Overall: 50,
+		}
+
+		violations := EvaluateCompliance(pol, report)
+		if len(violations) != 1 {
+			t.Fatalf("expected 1 violation, got %d", len(violations))
+		}
+		if violations[0].Rule != "min_overall_compliance" {
+			t.Errorf("expected rule min_overall_compliance, got %s", violations[0].Rule)
+		}
+	})
+
+	t.Run("multiple compliance violations", func(t *testing.T) {
+		pol := Policy{
+			MinNTIAScore:         80,
+			MinCISAScore:         80,
+			MinOverallCompliance: 80,
+		}
+		report := compliance.Report{
+			NTIA: &compliance.FrameworkResult{Score: 57, Passed: 4, Total: 7},
+			CISA: &compliance.FrameworkResult{Score: 45, Passed: 5, Total: 11},
+			Overall: 34,
+		}
+
+		violations := EvaluateCompliance(pol, report)
+		if len(violations) != 3 {
+			t.Errorf("expected 3 violations, got %d", len(violations))
+		}
+	})
+
+	t.Run("skips nil framework results", func(t *testing.T) {
+		pol := Policy{
+			MinNTIAScore: 80,
+			MinCISAScore: 80,
+			MinBSIScore:  80,
+		}
+		report := compliance.Report{
+			NTIA: nil, // empty SBOM = nil NTIA
+			Overall: 0,
+		}
+
+		violations := EvaluateCompliance(pol, report)
+		// Should only get min_overall_compliance (0 < 80 would trigger if set),
+		// but NTIA, CISA, BSI are nil so they're skipped
+		if len(violations) != 0 {
+			t.Errorf("expected 0 violations (nil frameworks are skipped), got %d", len(violations))
+		}
+	})
+
+	t.Run("zero thresholds are ignored", func(t *testing.T) {
+		pol := Policy{} // all zeros
+		report := compliance.Report{
+			NTIA: &compliance.FrameworkResult{Score: 10, Passed: 1, Total: 7},
+			Overall: 10,
+		}
+
+		violations := EvaluateCompliance(pol, report)
+		if len(violations) != 0 {
+			t.Errorf("expected no violations (zero thresholds = disabled), got %d", len(violations))
+		}
+	})
+}

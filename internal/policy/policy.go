@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/rezmoss/sbomlyze/internal/analysis"
+	"github.com/rezmoss/sbomlyze/internal/compliance"
 )
 
 // Policy defines SBOM diff rules.
@@ -28,6 +29,12 @@ type Policy struct {
 	// Warning rules - these produce warnings, not failures
 	WarnSupplierChange bool `json:"warn_supplier_change,omitempty"` // Warn if supplier/author changed
 	WarnNewTransitive  bool `json:"warn_new_transitive,omitempty"`  // Warn on any new transitive deps
+
+	// Compliance score rules - enforce minimum SBOM quality scores (0-100)
+	MinNTIAScore         int `json:"min_ntia_score,omitempty"`          // Fail if NTIA score < N
+	MinCISAScore         int `json:"min_cisa_score,omitempty"`          // Fail if CISA score < N
+	MinBSIScore          int `json:"min_bsi_score,omitempty"`           // Fail if BSI TR-03183 score < N
+	MinOverallCompliance int `json:"min_overall_compliance,omitempty"`  // Fail if overall compliance < N
 }
 
 type Severity string
@@ -173,6 +180,46 @@ func Evaluate(policy Policy, result analysis.DiffResult) []Violation {
 				Severity: SeverityWarning,
 			})
 		}
+	}
+
+	return violations
+}
+
+// EvaluateCompliance checks a compliance report against policy score thresholds.
+// This allows CI to enforce minimum SBOM quality levels per standard.
+func EvaluateCompliance(pol Policy, report compliance.Report) []Violation {
+	var violations []Violation
+
+	if pol.MinNTIAScore > 0 && report.NTIA != nil && report.NTIA.Score < pol.MinNTIAScore {
+		violations = append(violations, Violation{
+			Rule:     "min_ntia_score",
+			Message:  fmt.Sprintf("NTIA compliance score %d < minimum %d (%d/%d checks passed)", report.NTIA.Score, pol.MinNTIAScore, report.NTIA.Passed, report.NTIA.Total),
+			Severity: SeverityError,
+		})
+	}
+
+	if pol.MinCISAScore > 0 && report.CISA != nil && report.CISA.Score < pol.MinCISAScore {
+		violations = append(violations, Violation{
+			Rule:     "min_cisa_score",
+			Message:  fmt.Sprintf("CISA compliance score %d < minimum %d (%d/%d checks passed)", report.CISA.Score, pol.MinCISAScore, report.CISA.Passed, report.CISA.Total),
+			Severity: SeverityError,
+		})
+	}
+
+	if pol.MinBSIScore > 0 && report.BSI != nil && report.BSI.Score < pol.MinBSIScore {
+		violations = append(violations, Violation{
+			Rule:     "min_bsi_score",
+			Message:  fmt.Sprintf("BSI TR-03183 compliance score %d < minimum %d (%d/%d checks passed)", report.BSI.Score, pol.MinBSIScore, report.BSI.Passed, report.BSI.Total),
+			Severity: SeverityError,
+		})
+	}
+
+	if pol.MinOverallCompliance > 0 && report.Overall < pol.MinOverallCompliance {
+		violations = append(violations, Violation{
+			Rule:     "min_overall_compliance",
+			Message:  fmt.Sprintf("overall compliance score %d < minimum %d", report.Overall, pol.MinOverallCompliance),
+			Severity: SeverityError,
+		})
 	}
 
 	return violations

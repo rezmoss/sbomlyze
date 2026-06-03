@@ -8,6 +8,7 @@ import (
 
 	"github.com/rezmoss/sbomlyze/internal/analysis"
 	"github.com/rezmoss/sbomlyze/internal/cli"
+	"github.com/rezmoss/sbomlyze/internal/compliance"
 	"github.com/rezmoss/sbomlyze/internal/convert"
 	"github.com/rezmoss/sbomlyze/internal/output"
 	"github.com/rezmoss/sbomlyze/internal/pager"
@@ -126,18 +127,42 @@ func main() {
 		p := pager.Start(opts.NoPager)
 		defer p.Stop()
 
+		var complianceReport *compliance.Report
+		if opts.Compliance {
+			r := compliance.Evaluate(comps, sbomInfo)
+			complianceReport = &r
+		}
+
+		// Evaluate compliance policy thresholds in single-file mode
+		var complianceViolations []policy.Violation
+		if opts.PolicyFile != "" && complianceReport != nil {
+			policyData, err := os.ReadFile(opts.PolicyFile)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "err: read policy: %v\n", err)
+				os.Exit(1)
+			}
+			pol, err := policy.Load(policyData)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "err: parse policy: %v\n", err)
+				os.Exit(1)
+			}
+			complianceViolations = policy.EvaluateCompliance(pol, *complianceReport)
+		}
+
 		switch opts.Format {
 		case "json":
 			out := struct {
-				Info     sbom.SBOMInfo        `json:"info"`
-				Findings analysis.KeyFindings  `json:"findings"`
-				Stats    analysis.Stats        `json:"stats"`
-				Warnings []cli.ParseWarning    `json:"warnings,omitempty"`
+				Info       sbom.SBOMInfo         `json:"info"`
+				Findings   analysis.KeyFindings   `json:"findings"`
+				Stats      analysis.Stats         `json:"stats"`
+				Compliance *compliance.Report      `json:"compliance,omitempty"`
+				Warnings   []cli.ParseWarning     `json:"warnings,omitempty"`
 			}{
-				Info:     sbomInfo,
-				Findings: findings,
-				Stats:    stats,
-				Warnings: parseOpts.Warnings,
+				Info:       sbomInfo,
+				Findings:   findings,
+				Stats:      stats,
+				Compliance: complianceReport,
+				Warnings:   parseOpts.Warnings,
 			}
 			enc := json.NewEncoder(os.Stdout)
 			enc.SetIndent("", "  ")
@@ -148,12 +173,26 @@ func main() {
 			}
 		case "html":
 			fmt.Println(output.GenerateHTMLStats(stats, sbomInfo, findings))
+			if complianceReport != nil {
+				compliance.PrintReport(*complianceReport)
+			}
 		default:
 			output.PrintSingleScanContext(sbomInfo)
 			output.PrintKeyFindings(findings)
 			analysis.PrintStats(stats)
 			cli.PrintWarnings(parseOpts.Warnings)
+			if complianceReport != nil {
+				compliance.PrintReport(*complianceReport)
+			}
 		}
+
+		if len(complianceViolations) > 0 {
+			output.PrintViolations(complianceViolations)
+			if policy.HasErrors(complianceViolations) {
+				os.Exit(1)
+			}
+		}
+
 		return
 	}
 
@@ -189,13 +228,14 @@ func main() {
 	spin.Done("Done")
 
 	var violations []policy.Violation
+	var pol policy.Policy
 	if opts.PolicyFile != "" {
 		policyData, err := os.ReadFile(opts.PolicyFile)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "err: read policy: %v\n", err)
 			os.Exit(1)
 		}
-		pol, err := policy.Load(policyData)
+		pol, err = policy.Load(policyData)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "err: parse policy: %v\n", err)
 			os.Exit(1)
@@ -208,6 +248,19 @@ func main() {
 		sbomFile = opts.Files[1]
 	}
 
+	var complianceReport *compliance.Report
+	if opts.Compliance {
+		// Evaluate compliance on the "after" SBOM (second file)
+		r := compliance.Evaluate(comps2, info2)
+		complianceReport = &r
+	}
+
+	// When both --policy and --compliance are set, evaluate compliance thresholds
+	if opts.PolicyFile != "" && complianceReport != nil {
+		complianceViolations := policy.EvaluateCompliance(pol, *complianceReport)
+		violations = append(violations, complianceViolations...)
+	}
+
 	p := pager.Start(opts.NoPager)
 
 	switch opts.Format {
@@ -217,12 +270,14 @@ func main() {
 			Findings   analysis.KeyFindings  `json:"findings"`
 			Diff       analysis.DiffResult   `json:"diff"`
 			Violations []policy.Violation    `json:"violations,omitempty"`
+			Compliance *compliance.Report    `json:"compliance,omitempty"`
 			Warnings   []cli.ParseWarning    `json:"warnings,omitempty"`
 		}{
 			Overview:   overview,
 			Findings:   findings,
 			Diff:       result,
 			Violations: violations,
+			Compliance: complianceReport,
 			Warnings:   parseOpts.Warnings,
 		}
 		enc := json.NewEncoder(os.Stdout)
@@ -277,6 +332,9 @@ func main() {
 		output.PrintTextDiff(result)
 		output.PrintViolations(violations)
 		cli.PrintWarnings(parseOpts.Warnings)
+		if complianceReport != nil {
+			compliance.PrintReport(*complianceReport)
+		}
 	}
 
 	p.Stop()

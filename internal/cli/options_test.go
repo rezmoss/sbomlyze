@@ -236,3 +236,35 @@ func TestParseArgs_NonConvertModeUnchanged(t *testing.T) {
 		t.Error("expected JSONOutput=true")
 	}
 }
+
+func TestParseArgs_ComplianceFlag(t *testing.T) {
+	t.Run("parses --compliance flag", func(t *testing.T) {
+		args := []string{"sbomlyze", "a.json", "--compliance"}
+		opts := ParseArgs(args)
+
+		if !opts.Compliance {
+			t.Error("expected Compliance=true from --compliance flag")
+		}
+	})
+
+	t.Run("default is no compliance", func(t *testing.T) {
+		args := []string{"sbomlyze", "a.json"}
+		opts := ParseArgs(args)
+
+		if opts.Compliance {
+			t.Error("expected default Compliance=false")
+		}
+	})
+
+	t.Run("compliance with policy", func(t *testing.T) {
+		args := []string{"sbomlyze", "a.json", "b.json", "--compliance", "--policy", "pol.json"}
+		opts := ParseArgs(args)
+
+		if !opts.Compliance {
+			t.Error("expected Compliance=true")
+		}
+		if opts.PolicyFile != "pol.json" {
+			t.Errorf("expected PolicyFile=pol.json, got %s", opts.PolicyFile)
+		}
+	})
+}
