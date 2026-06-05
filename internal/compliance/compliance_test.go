@@ -15,7 +15,7 @@ func TestEvaluate_NTIABasic(t *testing.T) {
 			Dependencies: []string{"pkg:npm/some-dep"},
 		},
 	}
-	info := sbom.SBOMInfo{ToolName: "syft", SchemaVersion: "1.0.0"}
+	info := sbom.SBOMInfo{ToolName: "syft", SchemaVersion: "1.0.0", SBOMAuthor: "syft", SBOMTimestamp: "2025-01-01T00:00:00Z"}
 
 	report := Evaluate(comps, info)
 	if report.NTIA == nil {
@@ -64,7 +64,7 @@ func TestEvaluate_CISABasic(t *testing.T) {
 			Dependencies: []string{"pkg:npm/some-dep"},
 		},
 	}
-	info := sbom.SBOMInfo{ToolName: "syft", SchemaVersion: "1.0.0"}
+	info := sbom.SBOMInfo{ToolName: "syft", SchemaVersion: "1.0.0", SBOMAuthor: "syft", SBOMTimestamp: "2025-01-01T00:00:00Z"}
 
 	report := Evaluate(comps, info)
 	if report.CISA == nil {
@@ -83,7 +83,7 @@ func TestEvaluate_CISAMissingPURL(t *testing.T) {
 			Dependencies: []string{"b"},
 		},
 	}
-	info := sbom.SBOMInfo{ToolName: "syft", SchemaVersion: "1.0"}
+	info := sbom.SBOMInfo{ToolName: "syft", SchemaVersion: "1.0", SBOMAuthor: "syft", SBOMTimestamp: "2025-01-01T00:00:00Z"}
 
 	report := Evaluate(comps, info)
 	if report.CISA == nil {
@@ -114,7 +114,7 @@ func TestEvaluate_BSISHA512(t *testing.T) {
 			Dependencies: []string{"b"},
 		},
 	}
-	info := sbom.SBOMInfo{ToolName: "syft", SchemaVersion: "1.0"}
+	info := sbom.SBOMInfo{ToolName: "syft", SchemaVersion: "1.0", SBOMAuthor: "syft", SBOMTimestamp: "2025-01-01T00:00:00Z"}
 
 	report := Evaluate(comps, info)
 	if report.BSI == nil {
@@ -145,7 +145,7 @@ func TestEvaluate_BSINoSHA512(t *testing.T) {
 			Dependencies: []string{"b"},
 		},
 	}
-	info := sbom.SBOMInfo{ToolName: "syft", SchemaVersion: "1.0"}
+	info := sbom.SBOMInfo{ToolName: "syft", SchemaVersion: "1.0", SBOMAuthor: "syft", SBOMTimestamp: "2025-01-01T00:00:00Z"}
 
 	report := Evaluate(comps, info)
 
@@ -173,7 +173,7 @@ func TestEvaluate_OverallScore(t *testing.T) {
 			Dependencies: []string{"b"},
 		},
 	}
-	info := sbom.SBOMInfo{ToolName: "syft", SchemaVersion: "1.0"}
+	info := sbom.SBOMInfo{ToolName: "syft", SchemaVersion: "1.0", SBOMAuthor: "syft", SBOMTimestamp: "2025-01-01T00:00:00Z"}
 
 	report := Evaluate(comps, info)
 
@@ -190,7 +190,7 @@ func TestEvaluate_MultipleComponents(t *testing.T) {
 		{Name: "a", Version: "1.0", Supplier: "dev-a", PURL: "pkg:npm/a@1.0", Licenses: []string{"MIT"}},
 		{Name: "b", Version: "2.0"},
 	}
-	info := sbom.SBOMInfo{ToolName: "syft", SchemaVersion: "1.0"}
+	info := sbom.SBOMInfo{ToolName: "syft", SchemaVersion: "1.0", SBOMAuthor: "syft", SBOMTimestamp: "2025-01-01T00:00:00Z"}
 
 	report := Evaluate(comps, info)
 	if report.NTIA == nil {
@@ -205,7 +205,7 @@ func TestEvaluate_NTIAComponentChecksCount(t *testing.T) {
 	comps := []sbom.Component{
 		{Name: "a", Version: "1.0"},
 	}
-	info := sbom.SBOMInfo{ToolName: "test"}
+	info := sbom.SBOMInfo{ToolName: "test", SBOMAuthor: "test", SBOMTimestamp: "2025-01-01T00:00:00Z"}
 	report := Evaluate(comps, info)
 
 	if report.NTIA.Total != 7 {
@@ -217,7 +217,7 @@ func TestEvaluate_CISAComponentChecksCount(t *testing.T) {
 	comps := []sbom.Component{
 		{Name: "a", Version: "1.0"},
 	}
-	info := sbom.SBOMInfo{ToolName: "test"}
+	info := sbom.SBOMInfo{ToolName: "test", SBOMAuthor: "test", SBOMTimestamp: "2025-01-01T00:00:00Z"}
 	report := Evaluate(comps, info)
 
 	if report.CISA.Total != 11 {
@@ -229,7 +229,7 @@ func TestEvaluate_BSIComponentChecksCount(t *testing.T) {
 	comps := []sbom.Component{
 		{Name: "a", Version: "1.0"},
 	}
-	info := sbom.SBOMInfo{ToolName: "test"}
+	info := sbom.SBOMInfo{ToolName: "test", SBOMAuthor: "test", SBOMTimestamp: "2025-01-01T00:00:00Z"}
 	report := Evaluate(comps, info)
 
 	if report.BSI.Total != 11 {

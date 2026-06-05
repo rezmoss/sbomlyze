@@ -91,13 +91,9 @@ func evaluateNTIA(comps []sbom.Component, info sbom.SBOMInfo) *FrameworkResult {
 	withUniqueID := countWith(comps, func(c sbom.Component) bool {
 		return c.PURL != "" || len(c.CPEs) > 0 || c.BOMRef != "" || c.SPDXID != ""
 	})
-	withDeps := countWith(comps, func(c sbom.Component) bool {
-		return len(c.Dependencies) > 0 || total <= 1
-	})
-
 	// SBOM-level checks (boolean)
-	hasAuthor := info.ToolName != ""
-	hasTimestamp := info.SchemaVersion != ""
+	hasAuthor := info.SBOMAuthor != "" || info.ToolName != ""
+	hasTimestamp := info.SBOMTimestamp != ""
 
 	checks := []CheckResult{
 		componentCheck("ntia-name", "Component Name",
@@ -112,15 +108,15 @@ func evaluateNTIA(comps []sbom.Component, info sbom.SBOMInfo) *FrameworkResult {
 		componentCheck("ntia-unique-id", "Other Unique Identifiers",
 			"NTIA requires additional identifiers (PURL, CPE, etc.) for lookups (NTIA Minimum Elements §2.4)",
 			withUniqueID, total),
-		componentCheck("ntia-dep-relation", "Dependency Relationship",
+		sbomCheck("ntia-dep-relation", "Dependency Relationship",
 			"NTIA requires dependency relationships to be described (NTIA Minimum Elements §2.5)",
-			withDeps, total),
+			hasAnyDependency(comps), sbomDepSummary(comps)),
 		sbomCheck("ntia-author", "SBOM Author",
 			"NTIA requires identifying the entity that created the SBOM (NTIA Minimum Elements §2.6)",
-			hasAuthor, info.ToolName),
+			hasAuthor, authorValue(info)),
 		sbomCheck("ntia-timestamp", "SBOM Timestamp",
 			"NTIA requires a timestamp for when the SBOM was assembled (NTIA Minimum Elements §2.7)",
-			hasTimestamp, info.SchemaVersion),
+			hasTimestamp, info.SBOMTimestamp),
 	}
 
 	return buildFrameworkResult(StandardNTIA, checks)
@@ -143,17 +139,13 @@ func evaluateCISA(comps []sbom.Component, info sbom.SBOMInfo) *FrameworkResult {
 	withUniqueID := countWith(comps, func(c sbom.Component) bool {
 		return c.PURL != "" || len(c.CPEs) > 0 || c.BOMRef != "" || c.SPDXID != ""
 	})
-	withDeps := countWith(comps, func(c sbom.Component) bool {
-		return len(c.Dependencies) > 0 || total <= 1
-	})
-
 	withPURL := countWith(comps, func(c sbom.Component) bool { return c.PURL != "" })
 	withLicense := countWith(comps, func(c sbom.Component) bool { return len(c.Licenses) > 0 })
 	withHash := countWith(comps, func(c sbom.Component) bool { return len(c.Hashes) > 0 })
 	withCPE := countWith(comps, func(c sbom.Component) bool { return len(c.CPEs) > 0 })
 
-	hasAuthor := info.ToolName != ""
-	hasTimestamp := info.SchemaVersion != ""
+	hasAuthor := info.SBOMAuthor != "" || info.ToolName != ""
+	hasTimestamp := info.SBOMTimestamp != ""
 
 	checks := []CheckResult{
 		componentCheck("cisa-name", "Component Name",
@@ -168,9 +160,9 @@ func evaluateCISA(comps []sbom.Component, info sbom.SBOMInfo) *FrameworkResult {
 		componentCheck("cisa-unique-id", "Unique Identifiers",
 			"CISA requires additional identifiers for vulnerability lookups",
 			withUniqueID, total),
-		componentCheck("cisa-dep-relation", "Dependency Relationship",
+		sbomCheck("cisa-dep-relation", "Dependency Relationship",
 			"CISA requires dependency relationships to be described",
-			withDeps, total),
+			hasAnyDependency(comps), sbomDepSummary(comps)),
 		componentCheck("cisa-purl", "Package URL (PURL)",
 			"CISA strongly recommends PURLs for precise component identification (CISA 2025 §3.1)",
 			withPURL, total),
@@ -185,10 +177,10 @@ func evaluateCISA(comps []sbom.Component, info sbom.SBOMInfo) *FrameworkResult {
 			withCPE, total),
 		sbomCheck("cisa-author", "SBOM Author",
 			"CISA requires identifying the entity that created the SBOM",
-			hasAuthor, info.ToolName),
+			hasAuthor, authorValue(info)),
 		sbomCheck("cisa-timestamp", "SBOM Timestamp",
 			"CISA requires a timestamp for SBOM assembly",
-			hasTimestamp, info.SchemaVersion),
+			hasTimestamp, info.SBOMTimestamp),
 	}
 
 	return buildFrameworkResult(StandardCISA, checks)
@@ -223,12 +215,8 @@ func evaluateBSI(comps []sbom.Component, info sbom.SBOMInfo) *FrameworkResult {
 		}
 		return false
 	})
-	withDeps := countWith(comps, func(c sbom.Component) bool {
-		return len(c.Dependencies) > 0 || total <= 1
-	})
-
-	hasAuthor := info.ToolName != ""
-	hasTimestamp := info.SchemaVersion != ""
+	hasAuthor := info.SBOMAuthor != "" || info.ToolName != ""
+	hasTimestamp := info.SBOMTimestamp != ""
 
 	checks := []CheckResult{
 		componentCheck("bsi-name", "Component Name",
@@ -255,21 +243,59 @@ func evaluateBSI(comps []sbom.Component, info sbom.SBOMInfo) *FrameworkResult {
 		componentCheck("bsi-sha512", "SHA-512 Hash",
 			"BSI TR-03183-2 §5.2.2 specifically requires SHA-512 checksums",
 			withSHA512, total),
-		componentCheck("bsi-dep-relation", "Dependency Relationship",
+		sbomCheck("bsi-dep-relation", "Dependency Relationship",
 			"BSI TR-03183-2 §5.2.2 requires dependency enumeration with completeness indication",
-			withDeps, total),
+			hasAnyDependency(comps), sbomDepSummary(comps)),
 		sbomCheck("bsi-author", "SBOM Author/Creator",
 			"BSI TR-03183-2 §5.2.1 requires the email/URL of the SBOM creator",
-			hasAuthor, info.ToolName),
+			hasAuthor, authorValue(info)),
 		sbomCheck("bsi-timestamp", "SBOM Timestamp",
 			"BSI TR-03183-2 §5.2.1 requires the date/time of SBOM compilation",
-			hasTimestamp, info.SchemaVersion),
+			hasTimestamp, info.SBOMTimestamp),
 	}
 
 	return buildFrameworkResult(StandardBSI, checks)
 }
 
 // --- Helpers ---
+
+
+// authorValue returns the best author identifier for display.
+func authorValue(info sbom.SBOMInfo) string {
+	if info.SBOMAuthor != "" {
+		return info.SBOMAuthor
+	}
+	return info.ToolName
+}
+
+
+// hasAnyDependency reports whether the SBOM carries any dependency information
+// at all (a single component with a dependency list, or any component depending
+// on another). This is an SBOM-level check — leaf components without deps do
+// not fail it.
+func hasAnyDependency(comps []sbom.Component) bool {
+	for _, c := range comps {
+		if len(c.Dependencies) > 0 {
+			return true
+		}
+	}
+	return false
+}
+
+// sbomDepSummary renders a short human-readable summary of dependency coverage
+// for the compliance report.
+func sbomDepSummary(comps []sbom.Component) string {
+	withDeps := 0
+	for _, c := range comps {
+		if len(c.Dependencies) > 0 {
+			withDeps++
+		}
+	}
+	if withDeps == 0 {
+		return "no dependency relationships declared"
+	}
+	return fmt.Sprintf("%d/%d components declare dependencies", withDeps, len(comps))
+}
 
 func countWith(comps []sbom.Component, pred func(sbom.Component) bool) int {
 	n := 0

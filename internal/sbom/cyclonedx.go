@@ -40,6 +40,22 @@ func ParseCycloneDXWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 				info.SourceType = string(mc.Type)
 			}
 		}
+		// Real author/email/contact info, not just the tool name.
+		if bom.Metadata.Authors != nil {
+			for _, a := range *bom.Metadata.Authors {
+				if a.Name != "" {
+					info.SBOMAuthor = a.Name
+					break
+				}
+			}
+		}
+		if info.SBOMAuthor == "" && bom.Metadata.Supplier != nil && bom.Metadata.Supplier.Name != "" {
+			info.SBOMAuthor = bom.Metadata.Supplier.Name
+		}
+		// ISO-8601 timestamp captured at SBOM compilation time.
+		if bom.Metadata.Timestamp != "" {
+			info.SBOMTimestamp = bom.Metadata.Timestamp
+		}
 		if bom.Metadata.Properties != nil {
 			for _, prop := range *bom.Metadata.Properties {
 				switch strings.ToLower(prop.Name) {

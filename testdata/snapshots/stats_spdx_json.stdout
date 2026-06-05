@@ -1,5 +1,8 @@
 {
-  "info": {},
+  "info": {
+    "sbom_timestamp": "TIMESTAMP",
+    "sbom_author": "test"
+  },
   "findings": {
     "findings": [
       {

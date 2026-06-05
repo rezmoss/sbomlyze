@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"os"
 
+	"strings"
 	"github.com/rezmoss/sbomlyze/internal/identity"
 	spdxjson "github.com/spdx/tools-golang/json"
 	"github.com/spdx/tools-golang/spdx"
@@ -28,25 +29,56 @@ func ParseSPDXFromBytes(data []byte) ([]Component, error) {
 
 // ParseSPDX parses an SPDX file.
 func ParseSPDX(path string) ([]Component, error) {
+	comps, _, err := ParseSPDXWithInfo(path)
+	return comps, err
+}
+
+// ParseSPDXWithInfo parses an SPDX file and extracts SBOM-level metadata
+// (author from creationInfo.creators, timestamp from creationInfo.created).
+func ParseSPDXWithInfo(path string) ([]Component, SBOMInfo, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
-		return nil, err
+		return nil, SBOMInfo{}, err
 	}
 
 	var rawDoc struct {
 		Packages []json.RawMessage `json:"packages"`
+		CreationInfo struct {
+			Created  string   `json:"created"`
+			Creators []string `json:"creators"`
+		} `json:"creationInfo"`
 	}
 	_ = json.Unmarshal(data, &rawDoc) // Ignore error, may not have packages array
 
 	f, err := os.Open(path)
 	if err != nil {
-		return nil, err
+		return nil, SBOMInfo{}, err
 	}
 	defer func() { _ = f.Close() }()
 
 	doc, err := spdxjson.Read(f)
 	if err != nil {
-		return nil, err
+		return nil, SBOMInfo{}, err
+	}
+
+	var info SBOMInfo
+	// SPDX 2.x puts author/timestamp in creationInfo at the document level.
+	if doc.CreationInfo != nil {
+		info.SBOMTimestamp = doc.CreationInfo.Created
+		for _, creator := range doc.CreationInfo.Creators {
+			// Creator is a struct; Creator field is "Tool: name" / "Person: name" etc.
+			name := strings.TrimSpace(creator.Creator)
+			if name == "" {
+				continue
+			}
+			if idx := strings.Index(name, ":"); idx != -1 {
+				name = strings.TrimSpace(name[idx+1:])
+			}
+			if name != "" {
+				info.SBOMAuthor = name
+				break
+			}
+		}
 	}
 
 	var comps []Component
@@ -77,5 +109,5 @@ func ParseSPDX(path string) ([]Component, error) {
 		comp.ID = identity.ComputeID(comp.ToIdentity())
 		comps = append(comps, comp)
 	}
-	return comps, nil
+	return comps, info, nil
 }

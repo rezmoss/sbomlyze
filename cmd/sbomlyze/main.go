@@ -172,10 +172,7 @@ func main() {
 				os.Exit(1)
 			}
 		case "html":
-			fmt.Println(output.GenerateHTMLStats(stats, sbomInfo, findings))
-			if complianceReport != nil {
-				compliance.PrintReport(*complianceReport)
-			}
+			fmt.Println(output.GenerateHTMLStatsWithCompliance(stats, sbomInfo, findings, complianceReport))
 		default:
 			output.PrintSingleScanContext(sbomInfo)
 			output.PrintKeyFindings(findings)
@@ -187,7 +184,13 @@ func main() {
 		}
 
 		if len(complianceViolations) > 0 {
-			output.PrintViolations(complianceViolations)
+			// Policy violations go to stderr (single-file mode). For non-text
+			// formats, printing to stdout would corrupt the JSON/HTML output.
+			w := os.Stdout
+			if opts.Format == "json" || opts.Format == "html" {
+				w = os.Stderr
+			}
+			output.PrintViolationsTo(w, complianceViolations)
 			if policy.HasErrors(complianceViolations) {
 				os.Exit(1)
 			}
@@ -309,10 +312,10 @@ func main() {
 		fmt.Println(xml.Header + string(out))
 
 	case "markdown", "md":
-		fmt.Println(output.GenerateMarkdownWithOverview(result, violations, overview, findings))
+		fmt.Println(output.GenerateMarkdownWithOverviewAndCompliance(result, violations, overview, findings, complianceReport))
 
 	case "html":
-		fmt.Println(output.GenerateHTML(result, violations, overview, findings))
+		fmt.Println(output.GenerateHTMLWithCompliance(result, violations, overview, findings, complianceReport))
 
 	case "patch":
 		patch := output.GenerateJSONPatch(result)

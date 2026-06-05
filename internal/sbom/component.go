@@ -19,6 +19,8 @@ type SBOMInfo struct {
 	ToolName           string         `json:"tool_name,omitempty"`
 	ToolVersion        string         `json:"tool_version,omitempty"`
 	SchemaVersion      string         `json:"schema_version,omitempty"`
+	SBOMTimestamp      string         `json:"sbom_timestamp,omitempty"`
+	SBOMAuthor         string         `json:"sbom_author,omitempty"`
 	SearchScope        string         `json:"search_scope,omitempty"`
 	FilesCount         int            `json:"files_count,omitempty"`
 }

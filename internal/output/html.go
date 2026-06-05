@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/rezmoss/sbomlyze/internal/analysis"
+	"github.com/rezmoss/sbomlyze/internal/compliance"
 	"github.com/rezmoss/sbomlyze/internal/policy"
 	"github.com/rezmoss/sbomlyze/internal/sbom"
 )
@@ -46,6 +47,9 @@ const htmlStyles = `
   details { margin: 0.5rem 0; }
   summary { cursor: pointer; font-weight: 600; padding: 0.4rem 0; }
   footer { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); font-size: 0.8rem; color: #999; }
+  span.ok { color: var(--green); font-weight: 600; }
+  span.warn { color: var(--yellow); font-weight: 600; }
+  span.err { color: var(--red); font-weight: 600; }
 </style>`
 
 // GenerateHTML creates a self-contained HTML diff report.
@@ -105,6 +109,19 @@ func GenerateHTML(result analysis.DiffResult, violations []policy.Violation, ove
 	return sb.String()
 }
 
+// GenerateHTMLWithCompliance adds an optional compliance section to the diff report.
+func GenerateHTMLWithCompliance(result analysis.DiffResult, violations []policy.Violation, overview analysis.DiffOverview, findings analysis.KeyFindings, report *compliance.Report) string {
+	body := GenerateHTML(result, violations, overview, findings)
+	if report == nil {
+		return body
+	}
+	section := &strings.Builder{}
+	writeHTMLCompliance(section, *report)
+	return strings.Replace(body,
+		"<footer>Report produced by",
+		section.String()+"<footer>Report produced by", 1)
+}
+
 // GenerateHTMLStats creates a self-contained HTML statistics report for a single SBOM.
 func GenerateHTMLStats(stats analysis.Stats, info sbom.SBOMInfo, findings analysis.KeyFindings) string {
 	var sb strings.Builder
@@ -161,7 +178,7 @@ func GenerateHTMLStats(stats analysis.Stats, info sbom.SBOMInfo, findings analys
 		shown := 0
 		for _, lic := range sorted {
 			if shown >= 15 {
-				fmt.Fprintf(&sb, "<tr><td colspan=\"2\"><em>…and %d more</em></td></tr>\n", len(sorted)-15)
+				fmt.Fprintf(&sb, "<tr><td colspan=\"2\"><em>...and %d more</em></td></tr>\n", len(sorted)-15)
 				break
 			}
 			writeHTMLRow(&sb, lic, fmt.Sprintf("%d", stats.ByLicense[lic]))
@@ -196,6 +213,53 @@ func GenerateHTMLStats(stats analysis.Stats, info sbom.SBOMInfo, findings analys
 	sb.WriteString("</body>\n</html>\n")
 
 	return sb.String()
+}
+
+// GenerateHTMLStatsWithCompliance adds an optional compliance section to the stats report.
+func GenerateHTMLStatsWithCompliance(stats analysis.Stats, info sbom.SBOMInfo, findings analysis.KeyFindings, report *compliance.Report) string {
+	body := GenerateHTMLStats(stats, info, findings)
+	if report == nil {
+		return body
+	}
+	section := &strings.Builder{}
+	writeHTMLCompliance(section, *report)
+	return strings.Replace(body,
+		"<footer>Report produced by",
+		section.String()+"<footer>Report produced by", 1)
+}
+
+// writeHTMLCompliance writes a compliance report as HTML.
+func writeHTMLCompliance(sb *strings.Builder, report compliance.Report) {
+	sb.WriteString("<h2>📋 Compliance Report</h2>\n")
+	sb.WriteString(fmt.Sprintf("<p><strong>Overall Score:</strong> %d/100</p>\n", report.Overall))
+
+	frameworks := []*compliance.FrameworkResult{report.NTIA, report.CISA, report.BSI}
+	for _, fw := range frameworks {
+		if fw == nil {
+			continue
+		}
+		scoreClass := "ok"
+		switch {
+		case fw.Score >= 90:
+			scoreClass = "ok"
+		case fw.Score >= 70:
+			scoreClass = "warn"
+		default:
+			scoreClass = "err"
+		}
+		sb.WriteString(fmt.Sprintf("<h3>%s — <span class=\"%s\">%d/100</span> (%d/%d passed)</h3>\n",
+			html.EscapeString(string(fw.Standard)), scoreClass, fw.Score, fw.Passed, fw.Total))
+		sb.WriteString("<table>\n<tr><th>Check</th><th>Status</th><th>Details</th></tr>\n")
+		for _, c := range fw.Checks {
+			status := "✅"
+			if !c.Passed {
+				status = "❌"
+			}
+			sb.WriteString(fmt.Sprintf("<tr><td>%s</td><td>%s</td><td>%s</td></tr>\n",
+				html.EscapeString(c.Name), status, html.EscapeString(c.Details)))
+		}
+		sb.WriteString("</table>\n")
+	}
 }
 
 func writeHTMLOverview(sb *strings.Builder, overview analysis.DiffOverview) {

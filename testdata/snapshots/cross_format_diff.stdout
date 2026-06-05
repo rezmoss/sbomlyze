@@ -33,7 +33,10 @@
     "after": {
       "file_name": "TESTDATA/spdx-sample.json",
       "file_size": 1474,
-      "info": {},
+      "info": {
+        "sbom_timestamp": "TIMESTAMP",
+        "sbom_author": "test"
+      },
       "stats": {
         "total_components": 2,
         "by_type": {
