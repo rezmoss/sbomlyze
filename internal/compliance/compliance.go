@@ -187,9 +187,11 @@ func evaluateCISA(comps []sbom.Component, info sbom.SBOMInfo) *FrameworkResult {
 }
 
 // --- BSI TR-03183-2 ---
-// Strictest standard: requires SHA-512 hashes, SPDX license identifiers,
-// component creator contact, filename, dependency completeness flag,
-// and binary properties (executable, archive, structured).
+// Checks: component name, version, creator/supplier, unique identifiers,
+// PURL, SPDX licenses, integrity hashes, SHA-512 hashes, dependency
+// relationships, SBOM author, and SBOM timestamp.
+// Not yet implemented: creator contact details, SBOM filename,
+// dependency completeness flags, and binary properties.
 
 func evaluateBSI(comps []sbom.Component, info sbom.SBOMInfo) *FrameworkResult {
 	if len(comps) == 0 {
