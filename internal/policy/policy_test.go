@@ -1,6 +1,7 @@
 package policy
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/rezmoss/sbomlyze/internal/analysis"
@@ -522,22 +523,35 @@ func TestEvaluateCompliance(t *testing.T) {
 		}
 	})
 
-	t.Run("skips nil framework results", func(t *testing.T) {
+	t.Run("nil framework result fails closed", func(t *testing.T) {
 		pol := Policy{
 			MinNTIAScore: 80,
 			MinCISAScore: 80,
 			MinBSIScore:  80,
 		}
 		report := compliance.Report{
-			NTIA: nil, // empty SBOM = nil NTIA
+			NTIA: nil, // empty/invalid SBOM = nil NTIA
 			Overall: 0,
 		}
 
 		violations := EvaluateCompliance(pol, report)
-		// Should only get min_overall_compliance (0 < 80 would trigger if set),
-		// but NTIA, CISA, BSI are nil so they're skipped
-		if len(violations) != 0 {
-			t.Errorf("expected 0 violations (nil frameworks are skipped), got %d", len(violations))
+		if len(violations) != 3 {
+			t.Fatalf("expected 3 violations (fail-closed for nil frameworks), got %d: %v", len(violations), violations)
+		}
+		seen := map[string]bool{}
+		for _, v := range violations {
+			seen[v.Rule] = true
+			if v.Severity != SeverityError {
+				t.Errorf("%s: expected severity error, got %s", v.Rule, v.Severity)
+			}
+			if !strings.Contains(v.Message, "not evaluated") {
+				t.Errorf("%s: expected 'not evaluated' in message, got %q", v.Rule, v.Message)
+			}
+		}
+		for _, rule := range []string{"min_ntia_score", "min_cisa_score", "min_bsi_score"} {
+			if !seen[rule] {
+				t.Errorf("expected violation for %s", rule)
+			}
 		}
 	})
 
@@ -551,6 +565,22 @@ func TestEvaluateCompliance(t *testing.T) {
 		violations := EvaluateCompliance(pol, report)
 		if len(violations) != 0 {
 			t.Errorf("expected no violations (zero thresholds = disabled), got %d", len(violations))
+		}
+	})
+
+	t.Run("single nil framework fails closed for that framework only", func(t *testing.T) {
+		pol := Policy{MinNTIAScore: 80, MinCISAScore: 80}
+		report := compliance.Report{
+			NTIA: nil, // NTIA fails closed
+			CISA: &compliance.FrameworkResult{Score: 90, Passed: 10, Total: 11}, // CISA passes
+		}
+
+		violations := EvaluateCompliance(pol, report)
+		if len(violations) != 1 {
+			t.Fatalf("expected 1 violation (NTIA only), got %d", len(violations))
+		}
+		if violations[0].Rule != "min_ntia_score" {
+			t.Errorf("expected rule min_ntia_score, got %s", violations[0].Rule)
 		}
 	})
 }
