@@ -57,9 +57,9 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 
 	if len(doc.Source) > 0 {
 		var sourceInfo struct {
-			ID   string `json:"id"`
-			Name string `json:"name"`
-			Type string `json:"type"`
+			ID     string `json:"id"`
+			Name   string `json:"name"`
+			Type   string `json:"type"`
 			Target struct {
 				UserInput string `json:"userInput"`
 			} `json:"target"`

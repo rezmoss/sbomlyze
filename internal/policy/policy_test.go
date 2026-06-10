@@ -425,9 +425,9 @@ func TestEvaluateCompliance(t *testing.T) {
 			MinOverallCompliance: 75,
 		}
 		report := compliance.Report{
-			NTIA: &compliance.FrameworkResult{Score: 100, Passed: 7, Total: 7},
-			CISA: &compliance.FrameworkResult{Score: 100, Passed: 11, Total: 11},
-			BSI:  &compliance.FrameworkResult{Score: 90, Passed: 10, Total: 11},
+			NTIA:    &compliance.FrameworkResult{Score: 100, Passed: 7, Total: 7},
+			CISA:    &compliance.FrameworkResult{Score: 100, Passed: 11, Total: 11},
+			BSI:     &compliance.FrameworkResult{Score: 90, Passed: 10, Total: 11},
 			Overall: 96,
 		}
 
@@ -440,7 +440,7 @@ func TestEvaluateCompliance(t *testing.T) {
 	t.Run("violates when NTIA score below threshold", func(t *testing.T) {
 		pol := Policy{MinNTIAScore: 80}
 		report := compliance.Report{
-			NTIA: &compliance.FrameworkResult{Score: 57, Passed: 4, Total: 7},
+			NTIA:    &compliance.FrameworkResult{Score: 57, Passed: 4, Total: 7},
 			Overall: 57,
 		}
 
@@ -459,7 +459,7 @@ func TestEvaluateCompliance(t *testing.T) {
 	t.Run("violates when CISA score below threshold", func(t *testing.T) {
 		pol := Policy{MinCISAScore: 90}
 		report := compliance.Report{
-			CISA: &compliance.FrameworkResult{Score: 72, Passed: 8, Total: 11},
+			CISA:    &compliance.FrameworkResult{Score: 72, Passed: 8, Total: 11},
 			Overall: 72,
 		}
 
@@ -475,7 +475,7 @@ func TestEvaluateCompliance(t *testing.T) {
 	t.Run("violates when BSI score below threshold", func(t *testing.T) {
 		pol := Policy{MinBSIScore: 80}
 		report := compliance.Report{
-			BSI: &compliance.FrameworkResult{Score: 54, Passed: 6, Total: 11},
+			BSI:     &compliance.FrameworkResult{Score: 54, Passed: 6, Total: 11},
 			Overall: 54,
 		}
 
@@ -491,8 +491,8 @@ func TestEvaluateCompliance(t *testing.T) {
 	t.Run("violates when overall compliance below threshold", func(t *testing.T) {
 		pol := Policy{MinOverallCompliance: 80}
 		report := compliance.Report{
-			NTIA: &compliance.FrameworkResult{Score: 100, Passed: 7, Total: 7},
-			CISA: &compliance.FrameworkResult{Score: 50, Passed: 5, Total: 11},
+			NTIA:    &compliance.FrameworkResult{Score: 100, Passed: 7, Total: 7},
+			CISA:    &compliance.FrameworkResult{Score: 50, Passed: 5, Total: 11},
 			Overall: 50,
 		}
 
@@ -512,8 +512,8 @@ func TestEvaluateCompliance(t *testing.T) {
 			MinOverallCompliance: 80,
 		}
 		report := compliance.Report{
-			NTIA: &compliance.FrameworkResult{Score: 57, Passed: 4, Total: 7},
-			CISA: &compliance.FrameworkResult{Score: 45, Passed: 5, Total: 11},
+			NTIA:    &compliance.FrameworkResult{Score: 57, Passed: 4, Total: 7},
+			CISA:    &compliance.FrameworkResult{Score: 45, Passed: 5, Total: 11},
 			Overall: 34,
 		}
 
@@ -530,7 +530,7 @@ func TestEvaluateCompliance(t *testing.T) {
 			MinBSIScore:  80,
 		}
 		report := compliance.Report{
-			NTIA: nil, // empty/invalid SBOM = nil NTIA
+			NTIA:    nil, // empty/invalid SBOM = nil NTIA
 			Overall: 0,
 		}
 
@@ -558,7 +558,7 @@ func TestEvaluateCompliance(t *testing.T) {
 	t.Run("zero thresholds are ignored", func(t *testing.T) {
 		pol := Policy{} // all zeros
 		report := compliance.Report{
-			NTIA: &compliance.FrameworkResult{Score: 10, Passed: 1, Total: 7},
+			NTIA:    &compliance.FrameworkResult{Score: 10, Passed: 1, Total: 7},
 			Overall: 10,
 		}
 
@@ -571,7 +571,7 @@ func TestEvaluateCompliance(t *testing.T) {
 	t.Run("single nil framework fails closed for that framework only", func(t *testing.T) {
 		pol := Policy{MinNTIAScore: 80, MinCISAScore: 80}
 		report := compliance.Report{
-			NTIA: nil, // NTIA fails closed
+			NTIA: nil,                                                           // NTIA fails closed
 			CISA: &compliance.FrameworkResult{Score: 90, Passed: 10, Total: 11}, // CISA passes
 		}
 

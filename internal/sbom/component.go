@@ -40,10 +40,10 @@ type Component struct {
 	Namespace    string            `json:"namespace,omitempty"`
 	Supplier     string            `json:"supplier,omitempty"`
 	Language     string            `json:"language,omitempty"`  // lang
-	FoundBy      string            `json:"foundBy,omitempty"`  // scanner
-	Type         string            `json:"type,omitempty"`     // pkg type
+	FoundBy      string            `json:"foundBy,omitempty"`   // scanner
+	Type         string            `json:"type,omitempty"`      // pkg type
 	Locations    []string          `json:"locations,omitempty"` // file paths
-	RawJSON      json.RawMessage   `json:"-"`                  // original JSON, excluded from output
+	RawJSON      json.RawMessage   `json:"-"`                   // original JSON, excluded from output
 }
 
 // ToIdentity converts to ComponentIdentity.

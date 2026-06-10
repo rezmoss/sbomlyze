@@ -60,7 +60,7 @@ func TestEvaluate_CISABasic(t *testing.T) {
 			ID: "pkg:npm/lodash@4.17.21", Name: "lodash", Version: "4.17.21",
 			PURL: "pkg:npm/lodash@4.17.21", Supplier: "lodash-dev",
 			Licenses: []string{"MIT"}, Hashes: map[string]string{"SHA-256": "abc123"},
-			CPEs:      []string{"cpe:2.3:a:lodash:lodash:4.17.21:*:*:*:*:*:*:*"},
+			CPEs:         []string{"cpe:2.3:a:lodash:lodash:4.17.21:*:*:*:*:*:*:*"},
 			Dependencies: []string{"pkg:npm/some-dep"},
 		},
 	}
@@ -110,7 +110,7 @@ func TestEvaluate_BSISHA512(t *testing.T) {
 		{
 			Name: "a", Version: "1.0", Supplier: "dev",
 			PURL: "pkg:npm/a@1.0", Licenses: []string{"MIT"},
-			Hashes:      map[string]string{"SHA-512": "abc123def456"},
+			Hashes:       map[string]string{"SHA-512": "abc123def456"},
 			Dependencies: []string{"b"},
 		},
 	}
@@ -141,7 +141,7 @@ func TestEvaluate_BSINoSHA512(t *testing.T) {
 		{
 			Name: "a", Version: "1.0", Supplier: "dev",
 			PURL: "pkg:npm/a@1.0", Licenses: []string{"MIT"},
-			Hashes:      map[string]string{"SHA-256": "abc123"},
+			Hashes:       map[string]string{"SHA-256": "abc123"},
 			Dependencies: []string{"b"},
 		},
 	}
@@ -169,7 +169,7 @@ func TestEvaluate_OverallScore(t *testing.T) {
 		{
 			Name: "a", Version: "1.0", Supplier: "dev",
 			PURL: "pkg:npm/a@1.0", Licenses: []string{"MIT"},
-			Hashes:      map[string]string{"SHA-256": "abc123"},
+			Hashes:       map[string]string{"SHA-256": "abc123"},
 			Dependencies: []string{"b"},
 		},
 	}

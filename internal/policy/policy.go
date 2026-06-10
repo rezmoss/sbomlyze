@@ -31,10 +31,10 @@ type Policy struct {
 	WarnNewTransitive  bool `json:"warn_new_transitive,omitempty"`  // Warn on any new transitive deps
 
 	// Compliance score rules - enforce minimum SBOM quality scores (0-100)
-	MinNTIAScore         int `json:"min_ntia_score,omitempty"`          // Fail if NTIA score < N
-	MinCISAScore         int `json:"min_cisa_score,omitempty"`          // Fail if CISA score < N
-	MinBSIScore          int `json:"min_bsi_score,omitempty"`           // Fail if BSI TR-03183 score < N
-	MinOverallCompliance int `json:"min_overall_compliance,omitempty"`  // Fail if overall compliance < N
+	MinNTIAScore         int `json:"min_ntia_score,omitempty"`         // Fail if NTIA score < N
+	MinCISAScore         int `json:"min_cisa_score,omitempty"`         // Fail if CISA score < N
+	MinBSIScore          int `json:"min_bsi_score,omitempty"`          // Fail if BSI TR-03183 score < N
+	MinOverallCompliance int `json:"min_overall_compliance,omitempty"` // Fail if overall compliance < N
 }
 
 type Severity string

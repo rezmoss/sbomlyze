@@ -1,10 +1,11 @@
 package sbom
 
 import (
+	"bytes"
 	"encoding/json"
 	"os"
-
 	"strings"
+
 	"github.com/rezmoss/sbomlyze/internal/identity"
 	spdxjson "github.com/spdx/tools-golang/json"
 	"github.com/spdx/tools-golang/spdx"
@@ -12,19 +13,8 @@ import (
 
 // ParseSPDXFromBytes parses SPDX from bytes.
 func ParseSPDXFromBytes(data []byte) ([]Component, error) {
-	tmpFile, err := os.CreateTemp("", "sbom-*.json")
-	if err != nil {
-		return nil, err
-	}
-	defer func() { _ = os.Remove(tmpFile.Name()) }()
-	defer func() { _ = tmpFile.Close() }()
-
-	if _, err := tmpFile.Write(data); err != nil {
-		return nil, err
-	}
-	_ = tmpFile.Close()
-
-	return ParseSPDX(tmpFile.Name())
+	comps, _, err := parseSPDXData(data)
+	return comps, err
 }
 
 // ParseSPDX parses an SPDX file.
@@ -40,19 +30,16 @@ func ParseSPDXWithInfo(path string) ([]Component, SBOMInfo, error) {
 	if err != nil {
 		return nil, SBOMInfo{}, err
 	}
+	return parseSPDXData(data)
+}
 
+func parseSPDXData(data []byte) ([]Component, SBOMInfo, error) {
 	var rawDoc struct {
 		Packages []json.RawMessage `json:"packages"`
 	}
-	_ = json.Unmarshal(data, &rawDoc) // Ignore error, may not have packages array
+	_ = json.Unmarshal(data, &rawDoc) // may not have packages array
 
-	f, err := os.Open(path)
-	if err != nil {
-		return nil, SBOMInfo{}, err
-	}
-	defer func() { _ = f.Close() }()
-
-	doc, err := spdxjson.Read(f)
+	doc, err := spdxjson.Read(bytes.NewReader(data))
 	if err != nil {
 		return nil, SBOMInfo{}, err
 	}

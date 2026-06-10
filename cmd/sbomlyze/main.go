@@ -160,11 +160,11 @@ func main() {
 		switch opts.Format {
 		case "json":
 			out := struct {
-				Info       sbom.SBOMInfo         `json:"info"`
-				Findings   analysis.KeyFindings   `json:"findings"`
-				Stats      analysis.Stats         `json:"stats"`
-				Compliance *compliance.Report      `json:"compliance,omitempty"`
-				Warnings   []cli.ParseWarning     `json:"warnings,omitempty"`
+				Info       sbom.SBOMInfo        `json:"info"`
+				Findings   analysis.KeyFindings `json:"findings"`
+				Stats      analysis.Stats       `json:"stats"`
+				Compliance *compliance.Report   `json:"compliance,omitempty"`
+				Warnings   []cli.ParseWarning   `json:"warnings,omitempty"`
 			}{
 				Info:       sbomInfo,
 				Findings:   findings,

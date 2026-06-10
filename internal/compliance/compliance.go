@@ -248,7 +248,6 @@ func evaluateBSI(comps []sbom.Component, info sbom.SBOMInfo) *FrameworkResult {
 
 // --- Helpers ---
 
-
 // authorValue returns the best author identifier for display.
 func authorValue(info sbom.SBOMInfo) string {
 	if info.SBOMAuthor != "" {
@@ -262,7 +261,6 @@ func authorValue(info sbom.SBOMInfo) string {
 func hasLookupIdentifier(c sbom.Component) bool {
 	return c.PURL != "" || len(c.CPEs) > 0
 }
-
 
 // hasAnyDependency reports whether the SBOM carries any dependency information
 // at all (a single component with a dependency list, or any component depending
@@ -398,4 +396,3 @@ func frameworkIcon(score int) rune {
 		return '🔴'
 	}
 }
-
