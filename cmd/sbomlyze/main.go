@@ -127,26 +127,34 @@ func main() {
 		p := pager.Start(opts.NoPager)
 		defer p.Stop()
 
-		var complianceReport *compliance.Report
-		if opts.Compliance {
-			r := compliance.Evaluate(comps, sbomInfo)
-			complianceReport = &r
-		}
-
-		// Evaluate compliance policy thresholds in single-file mode
-		var complianceViolations []policy.Violation
-		if opts.PolicyFile != "" && complianceReport != nil {
+		// Load policy when given so path/parse errors surface
+		var pol policy.Policy
+		havePolicy := opts.PolicyFile != ""
+		if havePolicy {
 			policyData, err := os.ReadFile(opts.PolicyFile)
 			if err != nil {
 				fmt.Fprintf(os.Stderr, "err: read policy: %v\n", err)
 				os.Exit(1)
 			}
-			pol, err := policy.Load(policyData)
+			pol, err = policy.Load(policyData)
 			if err != nil {
 				fmt.Fprintf(os.Stderr, "err: parse policy: %v\n", err)
 				os.Exit(1)
 			}
-			complianceViolations = policy.EvaluateCompliance(pol, *complianceReport)
+		}
+
+		// Evaluate on --compliance, or when policy has score thresholds (so
+		// they can't be skipped by omitting the flag). Shown only on --compliance.
+		var complianceReport *compliance.Report
+		var complianceViolations []policy.Violation
+		if opts.Compliance || (havePolicy && policy.HasComplianceRules(pol)) {
+			r := compliance.Evaluate(comps, sbomInfo)
+			if opts.Compliance {
+				complianceReport = &r
+			}
+			if havePolicy {
+				complianceViolations = policy.EvaluateCompliance(pol, r)
+			}
 		}
 
 		switch opts.Format {
@@ -251,17 +259,17 @@ func main() {
 		sbomFile = opts.Files[1]
 	}
 
+	// Evaluate on "after" SBOM (2nd file) on --compliance, or when policy has
+	// score thresholds (can't skip via no flag). Shown only on --compliance.
 	var complianceReport *compliance.Report
-	if opts.Compliance {
-		// Evaluate compliance on the "after" SBOM (second file)
+	if opts.Compliance || (opts.PolicyFile != "" && policy.HasComplianceRules(pol)) {
 		r := compliance.Evaluate(comps2, info2)
-		complianceReport = &r
-	}
-
-	// When both --policy and --compliance are set, evaluate compliance thresholds
-	if opts.PolicyFile != "" && complianceReport != nil {
-		complianceViolations := policy.EvaluateCompliance(pol, *complianceReport)
-		violations = append(violations, complianceViolations...)
+		if opts.Compliance {
+			complianceReport = &r
+		}
+		if opts.PolicyFile != "" {
+			violations = append(violations, policy.EvaluateCompliance(pol, r)...)
+		}
 	}
 
 	p := pager.Start(opts.NoPager)

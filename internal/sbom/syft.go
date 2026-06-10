@@ -47,12 +47,6 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 	info.ToolVersion = doc.Descriptor.Version
 	info.SchemaVersion = doc.Schema.Version
 	info.SearchScope = doc.Descriptor.Configuration.Search.Scope
-	// Syft JSON doesn't carry an explicit compilation timestamp or named
-	// SBOM author today — the descriptor IS the author. Keep ToolName as a
-	// fallback so consumers can still see "who made this SBOM".
-	if info.SBOMAuthor == "" && info.ToolName != "" {
-		info.SBOMAuthor = info.ToolName
-	}
 
 	if len(doc.Files) > 2 {
 		var filesArr []json.RawMessage

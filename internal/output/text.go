@@ -416,16 +416,16 @@ func PrintViolationsTo(w io.Writer, violations []policy.Violation) {
 	}
 
 	if len(errors) > 0 {
-		fmt.Fprintf(w, "\n❌ Policy Errors (%d):\n", len(errors))
+		_, _ = fmt.Fprintf(w, "\n❌ Policy Errors (%d):\n", len(errors))
 		for _, v := range errors {
-			fmt.Fprintf(w, "  [%s] %s\n", v.Rule, v.Message)
+			_, _ = fmt.Fprintf(w, "  [%s] %s\n", v.Rule, v.Message)
 		}
 	}
 	if len(warnings) > 0 {
-		fmt.Fprintf(w, "\n⚠️  Policy Warnings (%d):\n", len(warnings))
+		_, _ = fmt.Fprintf(w, "\n⚠️  Policy Warnings (%d):\n", len(warnings))
 		for _, v := range warnings {
-			fmt.Fprintf(w, "  [%s] %s\n", v.Rule, v.Message)
+			_, _ = fmt.Fprintf(w, "  [%s] %s\n", v.Rule, v.Message)
 		}
 	}
-	fmt.Fprintln(w)
+	_, _ = fmt.Fprintln(w)
 }

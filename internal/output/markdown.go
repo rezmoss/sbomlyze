@@ -141,7 +141,7 @@ func writeMarkdownCompliance(sb *strings.Builder, report compliance.Report) {
 		result *compliance.FrameworkResult
 	}{
 		{"NTIA Minimum Elements", report.NTIA},
-		{"CISA FSCT-3", report.CISA},
+		{"CISA 2025 Minimum Elements", report.CISA},
 		{"BSI TR-03183-2", report.BSI},
 	}
 

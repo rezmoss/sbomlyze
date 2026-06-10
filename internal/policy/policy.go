@@ -185,6 +185,12 @@ func Evaluate(policy Policy, result analysis.DiffResult) []Violation {
 	return violations
 }
 
+// HasComplianceRules: any score threshold set. Auto-enables eval so thresholds
+// hold without the --compliance flag.
+func HasComplianceRules(p Policy) bool {
+	return p.MinNTIAScore > 0 || p.MinCISAScore > 0 || p.MinBSIScore > 0 || p.MinOverallCompliance > 0
+}
+
 // EvaluateCompliance checks a compliance report against policy score thresholds.
 // This allows CI to enforce minimum SBOM quality levels per standard.
 // Fail-closed: a nil framework result is treated as score 0, so thresholds

@@ -584,3 +584,22 @@ func TestEvaluateCompliance(t *testing.T) {
 		}
 	})
 }
+
+func TestHasComplianceRules(t *testing.T) {
+	if HasComplianceRules(Policy{}) {
+		t.Error("expected false for empty policy")
+	}
+	if HasComplianceRules(Policy{MaxAdded: 5, DenyIntegrityDrift: true}) {
+		t.Error("expected false for policy with only diff rules")
+	}
+	for name, p := range map[string]Policy{
+		"min_ntia_score":         {MinNTIAScore: 1},
+		"min_cisa_score":         {MinCISAScore: 50},
+		"min_bsi_score":          {MinBSIScore: 100},
+		"min_overall_compliance": {MinOverallCompliance: 75},
+	} {
+		if !HasComplianceRules(p) {
+			t.Errorf("expected true when %s is set", name)
+		}
+	}
+}

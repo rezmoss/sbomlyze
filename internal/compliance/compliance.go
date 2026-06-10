@@ -1,9 +1,10 @@
-// Package compliance evaluates SBOM completeness against recognized standards:
-// NTIA Minimum Elements, CISA FSCT-3, and BSI TR-03183-2.
+// Package compliance scores SBOM completeness vs NTIA Minimum Elements (2021),
+// CISA 2025 Minimum Elements (draft), and BSI TR-03183-2 (v2.1.0).
 package compliance
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/rezmoss/sbomlyze/internal/sbom"
 )
@@ -74,8 +75,8 @@ func Evaluate(comps []sbom.Component, info sbom.SBOMInfo) Report {
 }
 
 // --- NTIA Minimum Elements (2021) ---
-// 7 required fields: Supplier, Component Name, Version, Other Unique Identifiers,
-// Dependency Relationship, Author of SBOM Data, Timestamp.
+// 7 data fields: supplier name, component name, version, other unique IDs,
+// dependency relationship, SBOM author, timestamp. Report has no § numbers.
 
 func evaluateNTIA(comps []sbom.Component, info sbom.SBOMInfo) *FrameworkResult {
 	if len(comps) == 0 {
@@ -84,47 +85,45 @@ func evaluateNTIA(comps []sbom.Component, info sbom.SBOMInfo) *FrameworkResult {
 
 	total := len(comps)
 
-	// Component-level checks (percentage of components passing)
 	withName := countWith(comps, func(c sbom.Component) bool { return c.Name != "" })
 	withVersion := countWith(comps, func(c sbom.Component) bool { return c.Version != "" })
 	withSupplier := countWith(comps, func(c sbom.Component) bool { return c.Supplier != "" })
-	withUniqueID := countWith(comps, func(c sbom.Component) bool {
-		return c.PURL != "" || len(c.CPEs) > 0 || c.BOMRef != "" || c.SPDXID != ""
-	})
-	// SBOM-level checks (boolean)
+	withUniqueID := countWith(comps, hasLookupIdentifier)
+	// NTIA allows the author to be a tool, so ToolName qualifies
 	hasAuthor := info.SBOMAuthor != "" || info.ToolName != ""
 	hasTimestamp := info.SBOMTimestamp != ""
 
 	checks := []CheckResult{
 		componentCheck("ntia-name", "Component Name",
-			"NTIA requires a component name for each entry (NTIA Minimum Elements §2.2)",
+			"NTIA Minimum Elements (2021) requires the name assigned to each component by its supplier",
 			withName, total),
 		componentCheck("ntia-version", "Component Version",
-			"NTIA requires a version identifier for each component (NTIA Minimum Elements §2.3)",
+			"NTIA Minimum Elements (2021) requires a version identifier for each component",
 			withVersion, total),
 		componentCheck("ntia-supplier", "Supplier Name",
-			"NTIA requires the supplier/author name for each component (NTIA Minimum Elements §2.1)",
+			"NTIA Minimum Elements (2021) requires the name of the entity that creates and identifies each component",
 			withSupplier, total),
 		componentCheck("ntia-unique-id", "Other Unique Identifiers",
-			"NTIA requires additional identifiers (PURL, CPE, etc.) for lookups (NTIA Minimum Elements §2.4)",
+			"NTIA Minimum Elements (2021) lists lookup identifiers (PURL, CPE, SWID) to include where they exist",
 			withUniqueID, total),
 		sbomCheck("ntia-dep-relation", "Dependency Relationship",
-			"NTIA requires dependency relationships to be described (NTIA Minimum Elements §2.5)",
+			"NTIA Minimum Elements (2021) requires dependency relationships covering at least all top-level dependencies",
 			hasAnyDependency(comps), sbomDepSummary(comps)),
 		sbomCheck("ntia-author", "SBOM Author",
-			"NTIA requires identifying the entity that created the SBOM (NTIA Minimum Elements §2.6)",
+			"NTIA Minimum Elements (2021) requires the entity (or tool) that created the SBOM data",
 			hasAuthor, authorValue(info)),
 		sbomCheck("ntia-timestamp", "SBOM Timestamp",
-			"NTIA requires a timestamp for when the SBOM was assembled (NTIA Minimum Elements §2.7)",
+			"NTIA Minimum Elements (2021) requires the date and time of SBOM data assembly",
 			hasTimestamp, info.SBOMTimestamp),
 	}
 
 	return buildFrameworkResult(StandardNTIA, checks)
 }
 
-// --- CISA FSCT-3 / 2025 Minimum Elements ---
-// Builds on NTIA with tighter requirements: richer identity (PURL preferred),
-// license information, hashes for integrity, and SBOM-level metadata.
+// --- CISA 2025 Minimum Elements (Aug 2025 draft) ---
+// NTIA + component hash, license, tool name, generation context. Needs >=1
+// software ID per component (PURL/CPE preferred, neither mandated). 10 of 11
+// elements checked; generation context (lifecycle phase) not parsed.
 
 func evaluateCISA(comps []sbom.Component, info sbom.SBOMInfo) *FrameworkResult {
 	if len(comps) == 0 {
@@ -136,62 +135,57 @@ func evaluateCISA(comps []sbom.Component, info sbom.SBOMInfo) *FrameworkResult {
 	withName := countWith(comps, func(c sbom.Component) bool { return c.Name != "" })
 	withVersion := countWith(comps, func(c sbom.Component) bool { return c.Version != "" })
 	withSupplier := countWith(comps, func(c sbom.Component) bool { return c.Supplier != "" })
-	withUniqueID := countWith(comps, func(c sbom.Component) bool {
-		return c.PURL != "" || len(c.CPEs) > 0 || c.BOMRef != "" || c.SPDXID != ""
-	})
-	withPURL := countWith(comps, func(c sbom.Component) bool { return c.PURL != "" })
+	withUniqueID := countWith(comps, hasLookupIdentifier)
 	withLicense := countWith(comps, func(c sbom.Component) bool { return len(c.Licenses) > 0 })
 	withHash := countWith(comps, func(c sbom.Component) bool { return len(c.Hashes) > 0 })
-	withCPE := countWith(comps, func(c sbom.Component) bool { return len(c.CPEs) > 0 })
 
-	hasAuthor := info.SBOMAuthor != "" || info.ToolName != ""
+	// CISA 2025: author and tool are separate; author is not the tool
+	hasAuthor := info.SBOMAuthor != ""
+	hasTool := info.ToolName != ""
 	hasTimestamp := info.SBOMTimestamp != ""
 
 	checks := []CheckResult{
 		componentCheck("cisa-name", "Component Name",
-			"CISA requires a component name for each entry",
+			"CISA 2025 Minimum Elements requires a component name for each entry",
 			withName, total),
 		componentCheck("cisa-version", "Component Version",
-			"CISA requires a version identifier for each component",
+			"CISA 2025 Minimum Elements requires a version identifier for each component",
 			withVersion, total),
-		componentCheck("cisa-supplier", "Supplier Name",
-			"CISA requires supplier identification for each component",
+		componentCheck("cisa-supplier", "Software Producer",
+			"CISA 2025 Minimum Elements requires identifying the producer of each component",
 			withSupplier, total),
-		componentCheck("cisa-unique-id", "Unique Identifiers",
-			"CISA requires additional identifiers for vulnerability lookups",
+		componentCheck("cisa-unique-id", "Software Identifiers",
+			"CISA 2025 Minimum Elements requires at least one software identifier per component (PURL and CPE preferred)",
 			withUniqueID, total),
 		sbomCheck("cisa-dep-relation", "Dependency Relationship",
-			"CISA requires dependency relationships to be described",
+			"CISA 2025 Minimum Elements requires a dependency graph covering components and their dependencies",
 			hasAnyDependency(comps), sbomDepSummary(comps)),
-		componentCheck("cisa-purl", "Package URL (PURL)",
-			"CISA strongly recommends PURLs for precise component identification (CISA 2025 §3.1)",
-			withPURL, total),
 		componentCheck("cisa-license", "License Information",
-			"CISA recommends license data for compliance and risk assessment (CISA 2025 §3.2)",
+			"CISA 2025 Minimum Elements adds license data per component (an explicit 'unknown' is permitted)",
 			withLicense, total),
-		componentCheck("cisa-hash", "Integrity Hashes",
-			"CISA recommends cryptographic hashes for tamper detection (CISA 2025 §3.3)",
+		componentCheck("cisa-hash", "Component Hash",
+			"CISA 2025 Minimum Elements adds a cryptographic hash per component where the artifact is available",
 			withHash, total),
-		componentCheck("cisa-cpe", "CPE Identifiers",
-			"CISA recommends CPEs for vulnerability database correlation (CISA 2025 §3.4)",
-			withCPE, total),
+		sbomCheck("cisa-tool", "Tool Name",
+			"CISA 2025 Minimum Elements adds the name of the tool(s) used to generate the SBOM",
+			hasTool, info.ToolName),
 		sbomCheck("cisa-author", "SBOM Author",
-			"CISA requires identifying the entity that created the SBOM",
-			hasAuthor, authorValue(info)),
+			"CISA 2025 Minimum Elements requires the person or organization that created the SBOM (distinct from the tool)",
+			hasAuthor, info.SBOMAuthor),
 		sbomCheck("cisa-timestamp", "SBOM Timestamp",
-			"CISA requires a timestamp for SBOM assembly",
+			"CISA 2025 Minimum Elements requires an ISO 8601 timestamp of SBOM creation",
 			hasTimestamp, info.SBOMTimestamp),
 	}
 
 	return buildFrameworkResult(StandardCISA, checks)
 }
 
-// --- BSI TR-03183-2 ---
-// Checks: component name, version, creator/supplier, unique identifiers,
-// PURL, SPDX licenses, integrity hashes, SHA-512 hashes, dependency
-// relationships, SBOM author, and SBOM timestamp.
-// Not yet implemented: creator contact details, SBOM filename,
-// dependency completeness flags, and binary properties.
+// --- BSI TR-03183-2 (v2.1.0, 2025) ---
+// §5.2.1: SBOM creator (email/URL), timestamp. §5.2.2: component creator,
+// name, version, deps w/ completeness, SPDX licences (§6.1), SHA-512 hash.
+// §5.2.4: CPE/PURL if they exist.
+// Not parsed, so unchecked: filename, exec/archive/structured props, dep
+// completeness flags, SPDX ID validity, source/deployable URIs.
 
 func evaluateBSI(comps []sbom.Component, info sbom.SBOMInfo) *FrameworkResult {
 	if len(comps) == 0 {
@@ -203,12 +197,8 @@ func evaluateBSI(comps []sbom.Component, info sbom.SBOMInfo) *FrameworkResult {
 	withName := countWith(comps, func(c sbom.Component) bool { return c.Name != "" })
 	withVersion := countWith(comps, func(c sbom.Component) bool { return c.Version != "" })
 	withSupplier := countWith(comps, func(c sbom.Component) bool { return c.Supplier != "" })
-	withUniqueID := countWith(comps, func(c sbom.Component) bool {
-		return c.PURL != "" || len(c.CPEs) > 0 || c.BOMRef != "" || c.SPDXID != ""
-	})
-	withPURL := countWith(comps, func(c sbom.Component) bool { return c.PURL != "" })
+	withUniqueID := countWith(comps, hasLookupIdentifier)
 	withLicense := countWith(comps, func(c sbom.Component) bool { return len(c.Licenses) > 0 })
-	withHash := countWith(comps, func(c sbom.Component) bool { return len(c.Hashes) > 0 })
 	withSHA512 := countWith(comps, func(c sbom.Component) bool {
 		for algo := range c.Hashes {
 			if algo == "SHA-512" || algo == "SHA512" {
@@ -217,40 +207,37 @@ func evaluateBSI(comps []sbom.Component, info sbom.SBOMInfo) *FrameworkResult {
 		}
 		return false
 	})
-	hasAuthor := info.SBOMAuthor != "" || info.ToolName != ""
+	// §5.2.1 needs creator email (or URL); a bare name/tool fails
+	hasCreatorContact := strings.Contains(info.SBOMAuthor, "@") ||
+		strings.HasPrefix(info.SBOMAuthor, "http://") ||
+		strings.HasPrefix(info.SBOMAuthor, "https://")
 	hasTimestamp := info.SBOMTimestamp != ""
 
 	checks := []CheckResult{
 		componentCheck("bsi-name", "Component Name",
-			"BSI TR-03183-2 §5.2.2 requires a component name",
+			"BSI TR-03183-2 §5.2.2 requires a component name (or the actual filename if unnamed)",
 			withName, total),
 		componentCheck("bsi-version", "Component Version",
 			"BSI TR-03183-2 §5.2.2 requires a version identifier",
 			withVersion, total),
 		componentCheck("bsi-creator", "Component Creator",
-			"BSI TR-03183-2 §5.2.2 requires the component creator (supplier) contact",
+			"BSI TR-03183-2 §5.2.2 requires the creator of each component (email or URL contact)",
 			withSupplier, total),
 		componentCheck("bsi-unique-id", "Unique Identifiers",
-			"BSI TR-03183-2 §5.2.2 requires additional identifiers (CPE, PURL, SWID, etc.)",
+			"BSI TR-03183-2 §5.2.4 requires identifiers such as CPE or PURL where they exist",
 			withUniqueID, total),
-		componentCheck("bsi-purl", "Package URL (PURL)",
-			"BSI TR-03183-2 recommends PURLs for unambiguous package identification",
-			withPURL, total),
-		componentCheck("bsi-license", "Distribution Licenses",
-			"BSI TR-03183-2 §5.2.2 requires SPDX license identifiers for each component",
+		componentCheck("bsi-license", "Distribution Licences",
+			"BSI TR-03183-2 §5.2.2 requires distribution licences, expressed as SPDX identifiers per §6.1",
 			withLicense, total),
-		componentCheck("bsi-hash", "Integrity Hash",
-			"BSI TR-03183-2 §5.2.2 recommends cryptographic hashes for integrity",
-			withHash, total),
 		componentCheck("bsi-sha512", "SHA-512 Hash",
-			"BSI TR-03183-2 §5.2.2 specifically requires SHA-512 checksums",
+			"BSI TR-03183-2 §5.2.2 requires a SHA-512 checksum of each deployable component",
 			withSHA512, total),
 		sbomCheck("bsi-dep-relation", "Dependency Relationship",
-			"BSI TR-03183-2 §5.2.2 requires dependency enumeration with completeness indication",
+			"BSI TR-03183-2 §5.2.2 requires per-component dependency enumeration with completeness indication",
 			hasAnyDependency(comps), sbomDepSummary(comps)),
-		sbomCheck("bsi-author", "SBOM Author/Creator",
-			"BSI TR-03183-2 §5.2.1 requires the email/URL of the SBOM creator",
-			hasAuthor, authorValue(info)),
+		sbomCheck("bsi-author", "SBOM Creator Contact",
+			"BSI TR-03183-2 §5.2.1 requires the email address (or URL) of the SBOM creator — a tool name does not qualify",
+			hasCreatorContact, info.SBOMAuthor),
 		sbomCheck("bsi-timestamp", "SBOM Timestamp",
 			"BSI TR-03183-2 §5.2.1 requires the date/time of SBOM compilation",
 			hasTimestamp, info.SBOMTimestamp),
@@ -268,6 +255,12 @@ func authorValue(info sbom.SBOMInfo) string {
 		return info.SBOMAuthor
 	}
 	return info.ToolName
+}
+
+// hasLookupIdentifier: external lookup key (PURL/CPE). bom-ref/SPDXID excluded
+// on purpose — every doc has them, so they'd make the check always pass.
+func hasLookupIdentifier(c sbom.Component) bool {
+	return c.PURL != "" || len(c.CPEs) > 0
 }
 
 
@@ -378,7 +371,7 @@ func printFrameworkReport(fr *FrameworkResult) {
 	}
 
 	fmt.Printf("\n%c %s Compliance\n", frameworkIcon(fr.Score), fr.Standard)
-	fmt.Printf("%s\n", repeat("=", 40))
+	fmt.Printf("%s\n", strings.Repeat("=", 40))
 	fmt.Printf("Score: %d/%d (%d/%d checks passed)\n\n", fr.Score, fr.MaxScore, fr.Passed, fr.Total)
 
 	for _, c := range fr.Checks {
@@ -406,10 +399,3 @@ func frameworkIcon(score int) rune {
 	}
 }
 
-func repeat(s string, n int) string {
-	result := ""
-	for i := 0; i < n; i++ {
-		result += s
-	}
-	return result
-}

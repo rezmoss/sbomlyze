@@ -43,10 +43,6 @@ func ParseSPDXWithInfo(path string) ([]Component, SBOMInfo, error) {
 
 	var rawDoc struct {
 		Packages []json.RawMessage `json:"packages"`
-		CreationInfo struct {
-			Created  string   `json:"created"`
-			Creators []string `json:"creators"`
-		} `json:"creationInfo"`
 	}
 	_ = json.Unmarshal(data, &rawDoc) // Ignore error, may not have packages array
 
@@ -71,8 +67,8 @@ func ParseSPDXWithInfo(path string) ([]Component, SBOMInfo, error) {
 			if name == "" {
 				continue
 			}
-			if idx := strings.Index(name, ":"); idx != -1 {
-				name = strings.TrimSpace(name[idx+1:])
+			if _, after, ok := strings.Cut(name, ":"); ok {
+				name = strings.TrimSpace(after)
 			}
 			if name != "" {
 				info.SBOMAuthor = name

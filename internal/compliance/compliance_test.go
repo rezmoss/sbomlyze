@@ -90,18 +90,18 @@ func TestEvaluate_CISAMissingPURL(t *testing.T) {
 		t.Fatal("expected CISA report")
 	}
 
-	var purlCheck *CheckResult
+	var idCheck *CheckResult
 	for i := range report.CISA.Checks {
-		if report.CISA.Checks[i].ID == "cisa-purl" {
-			purlCheck = &report.CISA.Checks[i]
+		if report.CISA.Checks[i].ID == "cisa-unique-id" {
+			idCheck = &report.CISA.Checks[i]
 			break
 		}
 	}
-	if purlCheck == nil {
-		t.Fatal("expected CISA PURL check")
+	if idCheck == nil {
+		t.Fatal("expected CISA software identifier check")
 	}
-	if purlCheck.Passed {
-		t.Error("expected CISA PURL check to fail when no PURLs are present")
+	if idCheck.Passed {
+		t.Error("expected CISA software identifier check to fail when no PURL/CPE is present")
 	}
 }
 
@@ -220,8 +220,8 @@ func TestEvaluate_CISAComponentChecksCount(t *testing.T) {
 	info := sbom.SBOMInfo{ToolName: "test", SBOMAuthor: "test", SBOMTimestamp: "2025-01-01T00:00:00Z"}
 	report := Evaluate(comps, info)
 
-	if report.CISA.Total != 11 {
-		t.Errorf("expected 11 CISA checks, got %d", report.CISA.Total)
+	if report.CISA.Total != 10 {
+		t.Errorf("expected 10 CISA checks, got %d", report.CISA.Total)
 	}
 }
 
@@ -232,8 +232,71 @@ func TestEvaluate_BSIComponentChecksCount(t *testing.T) {
 	info := sbom.SBOMInfo{ToolName: "test", SBOMAuthor: "test", SBOMTimestamp: "2025-01-01T00:00:00Z"}
 	report := Evaluate(comps, info)
 
-	if report.BSI.Total != 11 {
-		t.Errorf("expected 11 BSI checks, got %d", report.BSI.Total)
+	if report.BSI.Total != 9 {
+		t.Errorf("expected 9 BSI checks, got %d", report.BSI.Total)
+	}
+}
+
+func TestEvaluate_IdentifierChecksIgnoreInternalRefs(t *testing.T) {
+	// bom-ref/SPDXID are internal refs, must not satisfy unique-id checks
+	comps := []sbom.Component{
+		{Name: "a", Version: "1.0", BOMRef: "ref-1", SPDXID: "SPDXRef-a"},
+	}
+	info := sbom.SBOMInfo{ToolName: "test", SBOMAuthor: "test", SBOMTimestamp: "2025-01-01T00:00:00Z"}
+	report := Evaluate(comps, info)
+
+	for _, fw := range []*FrameworkResult{report.NTIA, report.CISA, report.BSI} {
+		for _, c := range fw.Checks {
+			if (c.ID == "ntia-unique-id" || c.ID == "cisa-unique-id" || c.ID == "bsi-unique-id") && c.Passed {
+				t.Errorf("%s: expected fail when only bom-ref/SPDXID are present", c.ID)
+			}
+		}
+	}
+}
+
+func TestEvaluate_CISAAuthorDistinctFromTool(t *testing.T) {
+	comps := []sbom.Component{{Name: "a", Version: "1.0"}}
+	// tool only, no author: cisa-tool passes, cisa-author fails
+	report := Evaluate(comps, sbom.SBOMInfo{ToolName: "syft", SBOMTimestamp: "2025-01-01T00:00:00Z"})
+
+	got := map[string]bool{}
+	for _, c := range report.CISA.Checks {
+		got[c.ID] = c.Passed
+	}
+	if !got["cisa-tool"] {
+		t.Error("expected cisa-tool to pass when ToolName is set")
+	}
+	if got["cisa-author"] {
+		t.Error("expected cisa-author to fail when only the tool name is known")
+	}
+	// NTIA allows a tool as author
+	for _, c := range report.NTIA.Checks {
+		if c.ID == "ntia-author" && !c.Passed {
+			t.Error("expected ntia-author to pass via tool name")
+		}
+	}
+}
+
+func TestEvaluate_BSICreatorContact(t *testing.T) {
+	comps := []sbom.Component{{Name: "a", Version: "1.0"}}
+
+	cases := []struct {
+		author string
+		want   bool
+	}{
+		{"sbom@example.com", true},
+		{"https://example.com/sbom", true},
+		{"Anchore, Inc", false}, // bare name: §5.2.1 needs email/URL
+		{"syft", false},
+		{"", false},
+	}
+	for _, tc := range cases {
+		report := Evaluate(comps, sbom.SBOMInfo{SBOMAuthor: tc.author, SBOMTimestamp: "2025-01-01T00:00:00Z"})
+		for _, c := range report.BSI.Checks {
+			if c.ID == "bsi-author" && c.Passed != tc.want {
+				t.Errorf("bsi-author with author %q: passed=%v, want %v", tc.author, c.Passed, tc.want)
+			}
+		}
 	}
 }
 
