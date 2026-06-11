@@ -113,6 +113,10 @@ func ParseCycloneDXWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 				if lic.License != nil && lic.License.ID != "" {
 					comp.Licenses = append(comp.Licenses, lic.License.ID)
 				}
+				// SPDX expr, e.g. "MIT AND BSD-2-Clause"
+				if lic.Expression != "" {
+					comp.Licenses = append(comp.Licenses, lic.Expression)
+				}
 			}
 		}
 		if c.Hashes != nil {

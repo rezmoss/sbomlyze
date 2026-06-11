@@ -292,9 +292,9 @@ func TestParseCycloneDX_ComplexLicenses(t *testing.T) {
 	for _, c := range comps {
 		switch c.Name {
 		case "multi-license-pkg":
-			// Has license IDs: MIT, Apache-2.0 (expression is not extracted as ID)
-			if len(c.Licenses) != 2 {
-				t.Errorf("expected 2 license IDs for multi-license-pkg, got %d: %v", len(c.Licenses), c.Licenses)
+			// IDs MIT, Apache-2.0 + expression "MIT OR Apache-2.0"
+			if len(c.Licenses) != 3 {
+				t.Errorf("expected 3 licenses for multi-license-pkg, got %d: %v", len(c.Licenses), c.Licenses)
 			}
 		case "no-id-license-pkg":
 			// license.name without license.id should not be extracted
@@ -460,5 +460,31 @@ func TestParseCycloneDX_SupplierProvenanceFallback(t *testing.T) {
 		if got := c.Supplier; got != want[c.Name] {
 			t.Errorf("%s: supplier=%q, want %q", c.Name, got, want[c.Name])
 		}
+	}
+}
+
+func TestParseCycloneDX_LicenseExpressions(t *testing.T) {
+	data := []byte(`{
+		"bomFormat": "CycloneDX", "specVersion": "1.5", "version": 1,
+		"components": [
+			{"type": "library", "bom-ref": "r1", "name": "expr-only", "version": "1",
+			 "licenses": [{"expression": "MIT AND BSD-2-Clause"}]},
+			{"type": "library", "bom-ref": "r2", "name": "mixed", "version": "1",
+			 "licenses": [{"license": {"id": "MIT"}}, {"expression": "Apache-2.0 OR GPL-2.0-only"}]}
+		]
+	}`)
+	comps, _, err := ParseCycloneDXWithInfo(data)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	got := map[string][]string{}
+	for _, c := range comps {
+		got[c.Name] = c.Licenses
+	}
+	if len(got["expr-only"]) != 1 || got["expr-only"][0] != "MIT AND BSD-2-Clause" {
+		t.Errorf("expr-only: licenses=%v, want [MIT AND BSD-2-Clause]", got["expr-only"])
+	}
+	if len(got["mixed"]) != 2 {
+		t.Errorf("mixed: expected id + expression = 2 licenses, got %v", got["mixed"])
 	}
 }
