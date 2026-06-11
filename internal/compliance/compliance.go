@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/github/go-spdx/v2/spdxexp"
 	"github.com/rezmoss/sbomlyze/internal/sbom"
 )
 
@@ -89,6 +90,7 @@ func evaluateNTIA(comps []sbom.Component, info sbom.SBOMInfo) *FrameworkResult {
 	withVersion := countWith(comps, func(c sbom.Component) bool { return c.Version != "" })
 	withSupplier := countWith(comps, func(c sbom.Component) bool { return c.Supplier != "" })
 	withUniqueID := countWith(comps, hasLookupIdentifier)
+	depCoverage := depGraphCoverage(comps)
 	// NTIA allows the author to be a tool, so ToolName qualifies
 	hasAuthor := info.SBOMAuthor != "" || info.ToolName != ""
 	hasTimestamp := info.SBOMTimestamp != ""
@@ -106,9 +108,9 @@ func evaluateNTIA(comps []sbom.Component, info sbom.SBOMInfo) *FrameworkResult {
 		componentCheck("ntia-unique-id", "Other Unique Identifiers",
 			"NTIA Minimum Elements (2021) lists lookup identifiers (PURL, CPE, SWID) to include where they exist",
 			withUniqueID, total),
-		sbomCheck("ntia-dep-relation", "Dependency Relationship",
+		componentCheck("ntia-dep-relation", "Dependency Relationship",
 			"NTIA Minimum Elements (2021) requires dependency relationships covering at least all top-level dependencies",
-			hasAnyDependency(comps), sbomDepSummary(comps)),
+			depCoverage, total),
 		sbomCheck("ntia-author", "SBOM Author",
 			"NTIA Minimum Elements (2021) requires the entity (or tool) that created the SBOM data",
 			hasAuthor, authorValue(info)),
@@ -138,6 +140,7 @@ func evaluateCISA(comps []sbom.Component, info sbom.SBOMInfo) *FrameworkResult {
 	withUniqueID := countWith(comps, hasLookupIdentifier)
 	withLicense := countWith(comps, func(c sbom.Component) bool { return len(c.Licenses) > 0 })
 	withHash := countWith(comps, func(c sbom.Component) bool { return len(c.Hashes) > 0 })
+	depCoverage := depGraphCoverage(comps)
 
 	// CISA 2025: author and tool are separate; author is not the tool
 	hasAuthor := info.SBOMAuthor != ""
@@ -157,9 +160,9 @@ func evaluateCISA(comps []sbom.Component, info sbom.SBOMInfo) *FrameworkResult {
 		componentCheck("cisa-unique-id", "Software Identifiers",
 			"CISA 2025 Minimum Elements requires at least one software identifier per component (PURL and CPE preferred)",
 			withUniqueID, total),
-		sbomCheck("cisa-dep-relation", "Dependency Relationship",
+		componentCheck("cisa-dep-relation", "Dependency Relationship",
 			"CISA 2025 Minimum Elements requires a dependency graph covering components and their dependencies",
-			hasAnyDependency(comps), sbomDepSummary(comps)),
+			depCoverage, total),
 		componentCheck("cisa-license", "License Information",
 			"CISA 2025 Minimum Elements adds license data per component (an explicit 'unknown' is permitted)",
 			withLicense, total),
@@ -185,7 +188,7 @@ func evaluateCISA(comps []sbom.Component, info sbom.SBOMInfo) *FrameworkResult {
 // name, version, deps w/ completeness, SPDX licences (§6.1), SHA-512 hash.
 // §5.2.4: CPE/PURL if they exist.
 // Not parsed, so unchecked: filename, exec/archive/structured props, dep
-// completeness flags, SPDX ID validity, source/deployable URIs.
+// completeness flags, source/deployable URIs.
 
 func evaluateBSI(comps []sbom.Component, info sbom.SBOMInfo) *FrameworkResult {
 	if len(comps) == 0 {
@@ -198,7 +201,7 @@ func evaluateBSI(comps []sbom.Component, info sbom.SBOMInfo) *FrameworkResult {
 	withVersion := countWith(comps, func(c sbom.Component) bool { return c.Version != "" })
 	withSupplier := countWith(comps, func(c sbom.Component) bool { return c.Supplier != "" })
 	withUniqueID := countWith(comps, hasLookupIdentifier)
-	withLicense := countWith(comps, func(c sbom.Component) bool { return len(c.Licenses) > 0 })
+	withLicense := countWith(comps, hasValidSPDXLicenses)
 	withSHA512 := countWith(comps, func(c sbom.Component) bool {
 		for algo := range c.Hashes {
 			if algo == "SHA-512" || algo == "SHA512" {
@@ -207,6 +210,7 @@ func evaluateBSI(comps []sbom.Component, info sbom.SBOMInfo) *FrameworkResult {
 		}
 		return false
 	})
+	depCoverage := depGraphCoverage(comps)
 	// §5.2.1 needs creator email (or URL); a bare name/tool fails
 	hasCreatorContact := strings.Contains(info.SBOMAuthor, "@") ||
 		strings.HasPrefix(info.SBOMAuthor, "http://") ||
@@ -232,9 +236,9 @@ func evaluateBSI(comps []sbom.Component, info sbom.SBOMInfo) *FrameworkResult {
 		componentCheck("bsi-sha512", "SHA-512 Hash",
 			"BSI TR-03183-2 §5.2.2 requires a SHA-512 checksum of each deployable component",
 			withSHA512, total),
-		sbomCheck("bsi-dep-relation", "Dependency Relationship",
+		componentCheck("bsi-dep-relation", "Dependency Relationship",
 			"BSI TR-03183-2 §5.2.2 requires per-component dependency enumeration with completeness indication",
-			hasAnyDependency(comps), sbomDepSummary(comps)),
+			depCoverage, total),
 		sbomCheck("bsi-author", "SBOM Creator Contact",
 			"BSI TR-03183-2 §5.2.1 requires the email address (or URL) of the SBOM creator — a tool name does not qualify",
 			hasCreatorContact, info.SBOMAuthor),
@@ -262,32 +266,32 @@ func hasLookupIdentifier(c sbom.Component) bool {
 	return c.PURL != "" || len(c.CPEs) > 0
 }
 
-// hasAnyDependency reports whether the SBOM carries any dependency information
-// at all (a single component with a dependency list, or any component depending
-// on another). This is an SBOM-level check — leaf components without deps do
-// not fail it.
-func hasAnyDependency(comps []sbom.Component) bool {
-	for _, c := range comps {
-		if len(c.Dependencies) > 0 {
-			return true
-		}
+// hasValidSPDXLicenses: all licences are valid SPDX exprs (§6.1).
+// NONE/NOASSERTION/free-text fail.
+func hasValidSPDXLicenses(c sbom.Component) bool {
+	if len(c.Licenses) == 0 {
+		return false
 	}
-	return false
+	valid, _ := spdxexp.ValidateLicenses(c.Licenses)
+	return valid
 }
 
-// sbomDepSummary renders a short human-readable summary of dependency coverage
-// for the compliance report.
-func sbomDepSummary(comps []sbom.Component) string {
-	withDeps := 0
+// depGraphCoverage counts components in the dep graph (declare deps or are
+// a dep of another). One stray edge isn't enough — all must be covered.
+func depGraphCoverage(comps []sbom.Component) int {
+	children := make(map[string]bool)
 	for _, c := range comps {
-		if len(c.Dependencies) > 0 {
-			withDeps++
+		for _, d := range c.Dependencies {
+			children[d] = true
 		}
 	}
-	if withDeps == 0 {
-		return "no dependency relationships declared"
+	n := 0
+	for _, c := range comps {
+		if len(c.Dependencies) > 0 || children[c.ID] {
+			n++
+		}
 	}
-	return fmt.Sprintf("%d/%d components declare dependencies", withDeps, len(comps))
+	return n
 }
 
 func countWith(comps []sbom.Component, pred func(sbom.Component) bool) int {

@@ -321,3 +321,66 @@ func TestEvaluate_FrameworkIcon(t *testing.T) {
 		}
 	}
 }
+
+func TestEvaluate_BSILicenseRequiresValidSPDXExpression(t *testing.T) {
+	cases := []struct {
+		licenses []string
+		want     bool
+	}{
+		{[]string{"MIT"}, true},
+		{[]string{"Apache-2.0 OR MIT"}, true},
+		{[]string{"NOT-A-REAL-LICENSE"}, false},
+		{[]string{"NOASSERTION"}, false},
+	}
+	for _, tc := range cases {
+		comps := []sbom.Component{
+			{Name: "a", Version: "1.0", Licenses: tc.licenses},
+		}
+		info := sbom.SBOMInfo{SBOMAuthor: "sbom@example.com", SBOMTimestamp: "2025-01-01T00:00:00Z"}
+		report := Evaluate(comps, info)
+		for _, c := range report.BSI.Checks {
+			if c.ID == "bsi-license" && c.Passed != tc.want {
+				t.Errorf("bsi-license with licenses %v: passed=%v, want %v", tc.licenses, c.Passed, tc.want)
+			}
+		}
+	}
+}
+
+func TestEvaluate_DependencyChecksRequireGraphCoverage(t *testing.T) {
+	// one isolated component (c) not covered by the dependency graph at all:
+	// the dep-relation checks must not pass on a single stray edge
+	comps := []sbom.Component{
+		{ID: "id-a", Name: "a", Version: "1.0", Dependencies: []string{"id-b"}},
+		{ID: "id-b", Name: "b", Version: "2.0"},
+		{ID: "id-c", Name: "c", Version: "3.0"},
+	}
+	info := sbom.SBOMInfo{ToolName: "test", SBOMAuthor: "test", SBOMTimestamp: "2025-01-01T00:00:00Z"}
+	report := Evaluate(comps, info)
+
+	for _, fw := range []*FrameworkResult{report.NTIA, report.CISA, report.BSI} {
+		for _, c := range fw.Checks {
+			if (c.ID == "ntia-dep-relation" || c.ID == "cisa-dep-relation" || c.ID == "bsi-dep-relation") && c.Passed {
+				t.Errorf("%s: expected fail when a component is absent from the dependency graph (c is isolated)", c.ID)
+			}
+		}
+	}
+}
+
+func TestEvaluate_DependencyChecksPassWithFullCoverage(t *testing.T) {
+	// a -> b -> c: every component appears in the graph (as parent or child)
+	comps := []sbom.Component{
+		{ID: "id-a", Name: "a", Version: "1.0", Dependencies: []string{"id-b"}},
+		{ID: "id-b", Name: "b", Version: "2.0", Dependencies: []string{"id-c"}},
+		{ID: "id-c", Name: "c", Version: "3.0"},
+	}
+	info := sbom.SBOMInfo{ToolName: "test", SBOMAuthor: "test", SBOMTimestamp: "2025-01-01T00:00:00Z"}
+	report := Evaluate(comps, info)
+
+	for _, fw := range []*FrameworkResult{report.NTIA, report.CISA, report.BSI} {
+		for _, c := range fw.Checks {
+			if (c.ID == "ntia-dep-relation" || c.ID == "cisa-dep-relation" || c.ID == "bsi-dep-relation") && !c.Passed {
+				t.Errorf("%s: expected pass when all components are covered by the dependency graph", c.ID)
+			}
+		}
+	}
+}

@@ -56,6 +56,18 @@ func ParseCycloneDXWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 		if bom.Metadata.Timestamp != "" {
 			info.SBOMTimestamp = bom.Metadata.Timestamp
 		}
+		// metadata.tools: components list (1.5+) or legacy array
+		if bom.Metadata.Tools != nil {
+			tools := bom.Metadata.Tools
+			switch {
+			case tools.Components != nil && len(*tools.Components) > 0:
+				info.ToolName = (*tools.Components)[0].Name
+				info.ToolVersion = (*tools.Components)[0].Version
+			case tools.Tools != nil && len(*tools.Tools) > 0:
+				info.ToolName = (*tools.Tools)[0].Name
+				info.ToolVersion = (*tools.Tools)[0].Version
+			}
+		}
 		if bom.Metadata.Properties != nil {
 			for _, prop := range *bom.Metadata.Properties {
 				switch strings.ToLower(prop.Name) {
@@ -115,6 +127,27 @@ func ParseCycloneDXWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 		}
 		comp.ID = identity.ComputeID(comp.ToIdentity())
 		comps = append(comps, comp)
+	}
+
+	// resolve top-level dep bom-refs to component IDs
+	if bom.Dependencies != nil && len(comps) > 0 {
+		refToIdx := make(map[string]int, len(comps))
+		for i, c := range comps {
+			if c.BOMRef != "" {
+				refToIdx[c.BOMRef] = i
+			}
+		}
+		for _, d := range *bom.Dependencies {
+			parentIdx, ok := refToIdx[d.Ref]
+			if !ok || d.Dependencies == nil {
+				continue
+			}
+			for _, childRef := range *d.Dependencies {
+				if childIdx, ok := refToIdx[childRef]; ok {
+					comps[parentIdx].Dependencies = append(comps[parentIdx].Dependencies, comps[childIdx].ID)
+				}
+			}
+		}
 	}
 	return comps, info, nil
 }

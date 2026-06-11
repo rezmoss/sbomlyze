@@ -308,3 +308,79 @@ func TestParseCycloneDX_ComplexLicenses(t *testing.T) {
 		}
 	}
 }
+
+func TestParseCycloneDX_TopLevelDependencies(t *testing.T) {
+	data := []byte(`{
+		"bomFormat": "CycloneDX", "specVersion": "1.5", "version": 1,
+		"components": [
+			{"type": "library", "bom-ref": "ref-a", "name": "a", "version": "1.0"},
+			{"type": "library", "bom-ref": "ref-b", "name": "b", "version": "2.0"}
+		],
+		"dependencies": [
+			{"ref": "ref-a", "dependsOn": ["ref-b"]},
+			{"ref": "ref-b", "dependsOn": []}
+		]
+	}`)
+	comps, _, err := ParseCycloneDXWithInfo(data)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	var a, b *Component
+	for i := range comps {
+		switch comps[i].Name {
+		case "a":
+			a = &comps[i]
+		case "b":
+			b = &comps[i]
+		}
+	}
+	if a == nil || b == nil {
+		t.Fatal("expected components a and b")
+	}
+	if len(a.Dependencies) != 1 {
+		t.Fatalf("expected a to have 1 dependency from top-level dependencies, got %d", len(a.Dependencies))
+	}
+	if a.Dependencies[0] != b.ID {
+		t.Errorf("expected a's dependency to be b's ID %q, got %q", b.ID, a.Dependencies[0])
+	}
+}
+
+func TestParseCycloneDX_MetadataToolsModern(t *testing.T) {
+	data := []byte(`{
+		"bomFormat": "CycloneDX", "specVersion": "1.5", "version": 1,
+		"metadata": {
+			"tools": {"components": [{"type": "application", "name": "syft", "version": "1.40.1"}]}
+		},
+		"components": [{"type": "library", "bom-ref": "r1", "name": "a", "version": "1.0"}]
+	}`)
+	_, info, err := ParseCycloneDXWithInfo(data)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if info.ToolName != "syft" {
+		t.Errorf("expected ToolName syft from metadata.tools.components, got %q", info.ToolName)
+	}
+	if info.ToolVersion != "1.40.1" {
+		t.Errorf("expected ToolVersion 1.40.1, got %q", info.ToolVersion)
+	}
+}
+
+func TestParseCycloneDX_MetadataToolsLegacy(t *testing.T) {
+	data := []byte(`{
+		"bomFormat": "CycloneDX", "specVersion": "1.4", "version": 1,
+		"metadata": {
+			"tools": [{"vendor": "anchore", "name": "syft", "version": "0.90.0"}]
+		},
+		"components": [{"type": "library", "bom-ref": "r1", "name": "a", "version": "1.0"}]
+	}`)
+	_, info, err := ParseCycloneDXWithInfo(data)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if info.ToolName != "syft" {
+		t.Errorf("expected ToolName syft from legacy metadata.tools array, got %q", info.ToolName)
+	}
+	if info.ToolVersion != "0.90.0" {
+		t.Errorf("expected ToolVersion 0.90.0, got %q", info.ToolVersion)
+	}
+}

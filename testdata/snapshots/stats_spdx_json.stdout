@@ -1,7 +1,7 @@
 {
   "info": {
-    "sbom_timestamp": "TIMESTAMP",
-    "sbom_author": "test"
+    "tool_name": "test",
+    "sbom_timestamp": "TIMESTAMP"
   },
   "findings": {
     "findings": [

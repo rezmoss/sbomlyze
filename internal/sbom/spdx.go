@@ -33,6 +33,16 @@ func ParseSPDXWithInfo(path string) ([]Component, SBOMInfo, error) {
 	return parseSPDXData(data)
 }
 
+// splitToolNameVersion splits "name-version" (e.g. "syft-1.40.1"); version must start w/ digit.
+func splitToolNameVersion(s string) (string, string) {
+	if i := strings.LastIndex(s, "-"); i > 0 && i < len(s)-1 {
+		if v := s[i+1:]; v[0] >= '0' && v[0] <= '9' {
+			return s[:i], v
+		}
+	}
+	return s, ""
+}
+
 func parseSPDXData(data []byte) ([]Component, SBOMInfo, error) {
 	var rawDoc struct {
 		Packages []json.RawMessage `json:"packages"`
@@ -45,21 +55,23 @@ func parseSPDXData(data []byte) ([]Component, SBOMInfo, error) {
 	}
 
 	var info SBOMInfo
-	// SPDX 2.x puts author/timestamp in creationInfo at the document level.
+	// creationInfo: Tool -> tool meta, Person/Org -> author
 	if doc.CreationInfo != nil {
 		info.SBOMTimestamp = doc.CreationInfo.Created
 		for _, creator := range doc.CreationInfo.Creators {
-			// Creator is a struct; Creator field is "Tool: name" / "Person: name" etc.
 			name := strings.TrimSpace(creator.Creator)
 			if name == "" {
 				continue
 			}
-			if _, after, ok := strings.Cut(name, ":"); ok {
-				name = strings.TrimSpace(after)
-			}
-			if name != "" {
-				info.SBOMAuthor = name
-				break
+			switch creator.CreatorType {
+			case "Tool":
+				if info.ToolName == "" {
+					info.ToolName, info.ToolVersion = splitToolNameVersion(name)
+				}
+			default:
+				if info.SBOMAuthor == "" {
+					info.SBOMAuthor = name
+				}
 			}
 		}
 	}
@@ -86,11 +98,43 @@ func parseSPDXData(data []byte) ([]Component, SBOMInfo, error) {
 		for _, cs := range pkg.PackageChecksums {
 			comp.Hashes[string(cs.Algorithm)] = cs.Value
 		}
+		// supplier first, originator fallback; NOASSERTION = absent
+		if s := pkg.PackageSupplier; s != nil && s.Supplier != "" && s.Supplier != "NOASSERTION" {
+			comp.Supplier = s.Supplier
+		}
+		if o := pkg.PackageOriginator; comp.Supplier == "" && o != nil && o.Originator != "" && o.Originator != "NOASSERTION" {
+			comp.Supplier = o.Originator
+		}
 		if i < len(rawDoc.Packages) {
 			comp.RawJSON = rawDoc.Packages[i]
 		}
 		comp.ID = identity.ComputeID(comp.ToIdentity())
 		comps = append(comps, comp)
+	}
+
+	// relationships -> dep edges. DEPENDS_ON: A dep B; DEPENDENCY_OF: A is dep of B
+	idToIdx := make(map[string]int, len(comps))
+	for i, c := range comps {
+		idToIdx[c.SPDXID] = i
+	}
+	for _, rel := range doc.Relationships {
+		if rel == nil {
+			continue
+		}
+		var parentRef, childRef string
+		switch rel.Relationship {
+		case "DEPENDS_ON":
+			parentRef, childRef = string(rel.RefA.ElementRefID), string(rel.RefB.ElementRefID)
+		case "DEPENDENCY_OF":
+			parentRef, childRef = string(rel.RefB.ElementRefID), string(rel.RefA.ElementRefID)
+		default:
+			continue
+		}
+		parentIdx, pok := idToIdx[parentRef]
+		childIdx, cok := idToIdx[childRef]
+		if pok && cok {
+			comps[parentIdx].Dependencies = append(comps[parentIdx].Dependencies, comps[childIdx].ID)
+		}
 	}
 	return comps, info, nil
 }
