@@ -95,8 +95,8 @@ func TestWriteCycloneDX_RequiredFields(t *testing.T) {
 	if v, ok := raw["bomFormat"].(string); !ok || v != "CycloneDX" {
 		t.Errorf("bomFormat = %v, want \"CycloneDX\"", raw["bomFormat"])
 	}
-	if v, ok := raw["specVersion"].(string); !ok || v != "1.5" {
-		t.Errorf("specVersion = %v, want \"1.5\"", raw["specVersion"])
+	if v, ok := raw["specVersion"].(string); !ok || v != "1.6" {
+		t.Errorf("specVersion = %v, want \"1.6\"", raw["specVersion"])
 	}
 	if v, ok := raw["serialNumber"].(string); !ok {
 		t.Error("serialNumber is missing")
