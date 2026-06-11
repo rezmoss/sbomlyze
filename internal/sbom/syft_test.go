@@ -387,3 +387,33 @@ func TestParseSyft_Language(t *testing.T) {
 	}
 }
 
+
+func TestParseSyft_MaintainerAsSupplier(t *testing.T) {
+	data := []byte(`{
+		"artifacts": [
+			{"id": "a1", "name": "musl", "version": "1.2.5", "type": "apk",
+			 "metadataType": "apk-db-entry",
+			 "metadata": {"maintainer": "Natanael Copa <ncopa@alpinelinux.org>"}},
+			{"id": "a2", "name": "libc6", "version": "2.41", "type": "deb",
+			 "metadataType": "dpkg-db-entry",
+			 "metadata": {"maintainer": "GNU Libc Maintainers <debian-glibc@lists.debian.org>"}},
+			{"id": "a3", "name": "no-meta", "version": "1.0", "type": "npm"}
+		],
+		"descriptor": {"name": "syft", "version": "1.44.0"},
+		"schema": {"version": "16.0.0"}
+	}`)
+	comps, _, err := ParseSyftWithInfo(data)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	want := map[string]string{
+		"musl":    "Natanael Copa <ncopa@alpinelinux.org>",
+		"libc6":   "GNU Libc Maintainers <debian-glibc@lists.debian.org>",
+		"no-meta": "",
+	}
+	for _, c := range comps {
+		if got := c.Supplier; got != want[c.Name] {
+			t.Errorf("%s: supplier=%q, want %q", c.Name, got, want[c.Name])
+		}
+	}
+}

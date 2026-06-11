@@ -165,6 +165,7 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 		}
 
 		extractSyftHashes(a.MetadataType, a.Metadata, comp.Hashes)
+		comp.Supplier = extractSyftMaintainer(a.Metadata)
 
 		comp.ID = identity.ComputeID(comp.ToIdentity())
 
@@ -196,6 +197,20 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 	}
 
 	return comps, info, nil
+}
+
+// extractSyftMaintainer: metadata.maintainer (apk/dpkg etc.) -> supplier
+func extractSyftMaintainer(metadata json.RawMessage) string {
+	if len(metadata) == 0 {
+		return ""
+	}
+	var md struct {
+		Maintainer string `json:"maintainer"`
+	}
+	if json.Unmarshal(metadata, &md) != nil {
+		return ""
+	}
+	return strings.TrimSpace(md.Maintainer)
 }
 
 // extractSyftHashes extracts hashes from Syft metadata.
