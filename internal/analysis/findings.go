@@ -27,13 +27,19 @@ type KeyFindings struct {
 func ComputeSingleFindings(stats Stats, info sbom.SBOMInfo, comps []sbom.Component) KeyFindings {
 	var findings []Finding
 
+	// pkg-quality findings exclude file/os comps
+	pkgStats := stats
+	if pkg := sbom.PackageComponents(comps); len(pkg) != len(comps) {
+		pkgStats = ComputeStats(pkg)
+	}
+
 	findings = append(findings, detectSingleOS(info)...)
-	findings = append(findings, detectDominantType(stats)...)
+	findings = append(findings, detectDominantType(pkgStats)...)
 	findings = append(findings, detectFilesystemFootprint(info)...)
 	findings = append(findings, detectRelationshipDensity(info, stats)...)
 	findings = append(findings, detectLocationHotspots(comps)...)
-	findings = append(findings, detectLicenseRiskProfile(stats)...)
-	findings = append(findings, detectDataQuality(stats)...)
+	findings = append(findings, detectLicenseRiskProfile(pkgStats)...)
+	findings = append(findings, detectDataQuality(pkgStats)...)
 	findings = append(findings, detectDuplicateWarning(stats)...)
 	findings = append(findings, detectCatalogerBreakdown(stats)...)
 

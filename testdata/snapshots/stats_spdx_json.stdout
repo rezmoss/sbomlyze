@@ -1,5 +1,8 @@
 {
-  "info": {},
+  "info": {
+    "tool_name": "test",
+    "sbom_timestamp": "TIMESTAMP"
+  },
   "findings": {
     "findings": [
       {

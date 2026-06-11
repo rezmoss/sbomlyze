@@ -34,6 +34,7 @@ func NormalizeComponent(c Component) Component {
 		PURL:         strings.TrimSpace(c.PURL),
 		Hashes:       c.Hashes,
 		Dependencies: c.Dependencies,
+		DepsDeclared: c.DepsDeclared,
 		CPEs:         c.CPEs,
 		BOMRef:       strings.TrimSpace(c.BOMRef),
 		SPDXID:       strings.TrimSpace(c.SPDXID),

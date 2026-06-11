@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/rezmoss/sbomlyze/internal/analysis"
+	"github.com/rezmoss/sbomlyze/internal/compliance"
 )
 
 // Policy defines SBOM diff rules.
@@ -28,6 +29,12 @@ type Policy struct {
 	// Warning rules - these produce warnings, not failures
 	WarnSupplierChange bool `json:"warn_supplier_change,omitempty"` // Warn if supplier/author changed
 	WarnNewTransitive  bool `json:"warn_new_transitive,omitempty"`  // Warn on any new transitive deps
+
+	// Compliance score rules - enforce minimum SBOM quality scores (0-100)
+	MinNTIAScore         int `json:"min_ntia_score,omitempty"`         // Fail if NTIA score < N
+	MinCISAScore         int `json:"min_cisa_score,omitempty"`         // Fail if CISA score < N
+	MinBSIScore          int `json:"min_bsi_score,omitempty"`          // Fail if BSI TR-03183 score < N
+	MinOverallCompliance int `json:"min_overall_compliance,omitempty"` // Fail if overall compliance < N
 }
 
 type Severity string
@@ -176,6 +183,74 @@ func Evaluate(policy Policy, result analysis.DiffResult) []Violation {
 	}
 
 	return violations
+}
+
+// HasComplianceRules: any score threshold set. Auto-enables eval so thresholds
+// hold without the --compliance flag.
+func HasComplianceRules(p Policy) bool {
+	return p.MinNTIAScore > 0 || p.MinCISAScore > 0 || p.MinBSIScore > 0 || p.MinOverallCompliance > 0
+}
+
+// EvaluateCompliance checks a compliance report against policy score thresholds.
+// This allows CI to enforce minimum SBOM quality levels per standard.
+// Fail-closed: a nil framework result is treated as score 0, so thresholds
+// cannot be bypassed by feeding an SBOM that fails to parse.
+func EvaluateCompliance(pol Policy, report compliance.Report) []Violation {
+	var violations []Violation
+
+	if pol.MinNTIAScore > 0 && scoreOf(report.NTIA) < pol.MinNTIAScore {
+		violations = append(violations, newScoreViolation(
+			"min_ntia_score", "NTIA", scoreOf(report.NTIA), pol.MinNTIAScore, report.NTIA,
+		))
+	}
+
+	if pol.MinCISAScore > 0 && scoreOf(report.CISA) < pol.MinCISAScore {
+		violations = append(violations, newScoreViolation(
+			"min_cisa_score", "CISA", scoreOf(report.CISA), pol.MinCISAScore, report.CISA,
+		))
+	}
+
+	if pol.MinBSIScore > 0 && scoreOf(report.BSI) < pol.MinBSIScore {
+		violations = append(violations, newScoreViolation(
+			"min_bsi_score", "BSI TR-03183", scoreOf(report.BSI), pol.MinBSIScore, report.BSI,
+		))
+	}
+
+	if pol.MinOverallCompliance > 0 && report.Overall < pol.MinOverallCompliance {
+		violations = append(violations, Violation{
+			Rule:     "min_overall_compliance",
+			Message:  fmt.Sprintf("overall compliance score %d < minimum %d", report.Overall, pol.MinOverallCompliance),
+			Severity: SeverityError,
+		})
+	}
+
+	return violations
+}
+
+// scoreOf returns the framework score, or 0 if the framework result is nil.
+func scoreOf(r *compliance.FrameworkResult) int {
+	if r == nil {
+		return 0
+	}
+	return r.Score
+}
+
+// newScoreViolation builds a Violation for a threshold breach. When the
+// framework result is nil it emits an explicit "not evaluated" message so CI
+// logs make the reason obvious.
+func newScoreViolation(rule, framework string, got, want int, r *compliance.FrameworkResult) Violation {
+	if r == nil {
+		return Violation{
+			Rule:     rule,
+			Message:  fmt.Sprintf("%s compliance not evaluated (score 0) < minimum %d", framework, want),
+			Severity: SeverityError,
+		}
+	}
+	return Violation{
+		Rule:     rule,
+		Message:  fmt.Sprintf("%s compliance score %d < minimum %d (%d/%d checks passed)", framework, got, want, r.Passed, r.Total),
+		Severity: SeverityError,
+	}
 }
 
 func HasErrors(violations []Violation) bool {

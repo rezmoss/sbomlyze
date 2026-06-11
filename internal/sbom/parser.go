@@ -24,8 +24,7 @@ func ParseFileWithInfo(path string) ([]Component, SBOMInfo, error) {
 		return ParseCycloneDXWithInfo(data)
 	}
 	if IsSPDX(data) {
-		comps, err := ParseSPDX(path)
-		return comps, SBOMInfo{}, err
+		return ParseSPDXWithInfo(path)
 	}
 	if IsSyft(data) {
 		return ParseSyftWithInfo(data)

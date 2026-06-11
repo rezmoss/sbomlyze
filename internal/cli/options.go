@@ -26,6 +26,7 @@ type Options struct {
 	WebServer    bool
 	WebPort      int
 	NoPager      bool
+	Compliance   bool // show NTIA/CISA/BSI compliance score
 	Convert      bool
 	TargetFormat string // cyclonedx, cdx, spdx, syft
 	OutputFile   string
@@ -54,7 +55,7 @@ func ParseArgs(args []string) Options {
 
 	if len(args) > 1 && args[1] == "convert" {
 		opts.Convert = true
-		args = append(args[:1], args[2:]...) // remove "convert" from args
+		args = append(args[:1], args[2:]...)
 	}
 
 	for i := 1; i < len(args); i++ {
@@ -93,6 +94,8 @@ func ParseArgs(args []string) Options {
 			opts.Interactive = true
 		case "--no-pager":
 			opts.NoPager = true
+		case "--compliance":
+			opts.Compliance = true
 		case "-web", "--web":
 			opts.WebServer = true
 		case "--port":

@@ -56,6 +56,10 @@ func ComputeStats(comps []sbom.Component) Stats {
 		if ptype == "unknown" && c.PURL == "" {
 			ptype = ExtractPURLType(c.ID)
 		}
+		// no PURL type: fall back to component type (file, os, ...)
+		if ptype == "unknown" && c.Type != "" {
+			ptype = c.Type
+		}
 		stats.ByType[ptype]++
 
 		if c.Language != "" {

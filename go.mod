@@ -1,12 +1,13 @@
 module github.com/rezmoss/sbomlyze
 
-go 1.24.2
+go 1.25.0
 
 require (
 	github.com/CycloneDX/cyclonedx-go v0.10.0
 	github.com/charmbracelet/bubbles v1.0.0
 	github.com/charmbracelet/bubbletea v1.3.10
 	github.com/charmbracelet/lipgloss v1.1.0
+	github.com/github/go-spdx/v2 v2.7.0
 	github.com/mattn/go-isatty v0.0.21
 	github.com/spdx/tools-golang v0.5.7
 )
@@ -32,6 +33,6 @@ require (
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/sahilm/fuzzy v0.1.1 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
-	golang.org/x/sys v0.38.0 // indirect
+	golang.org/x/sys v0.46.0 // indirect
 	golang.org/x/text v0.3.8 // indirect
 )

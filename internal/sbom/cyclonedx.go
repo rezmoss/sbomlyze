@@ -40,6 +40,34 @@ func ParseCycloneDXWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 				info.SourceType = string(mc.Type)
 			}
 		}
+		// Real author/email/contact info, not just the tool name.
+		if bom.Metadata.Authors != nil {
+			for _, a := range *bom.Metadata.Authors {
+				if a.Name != "" {
+					info.SBOMAuthor = a.Name
+					break
+				}
+			}
+		}
+		if info.SBOMAuthor == "" && bom.Metadata.Supplier != nil && bom.Metadata.Supplier.Name != "" {
+			info.SBOMAuthor = bom.Metadata.Supplier.Name
+		}
+		// ISO-8601 timestamp captured at SBOM compilation time.
+		if bom.Metadata.Timestamp != "" {
+			info.SBOMTimestamp = bom.Metadata.Timestamp
+		}
+		// metadata.tools: components list (1.5+) or legacy array
+		if bom.Metadata.Tools != nil {
+			tools := bom.Metadata.Tools
+			switch {
+			case tools.Components != nil && len(*tools.Components) > 0:
+				info.ToolName = (*tools.Components)[0].Name
+				info.ToolVersion = (*tools.Components)[0].Version
+			case tools.Tools != nil && len(*tools.Tools) > 0:
+				info.ToolName = (*tools.Tools)[0].Name
+				info.ToolVersion = (*tools.Tools)[0].Version
+			}
+		}
 		if bom.Metadata.Properties != nil {
 			for _, prop := range *bom.Metadata.Properties {
 				switch strings.ToLower(prop.Name) {
@@ -72,6 +100,7 @@ func ParseCycloneDXWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 			Hashes:    make(map[string]string),
 			BOMRef:    c.BOMRef,
 			Namespace: c.Group,
+			Type:      string(c.Type),
 		}
 		if c.PackageURL != "" {
 			comp.PURL = c.PackageURL
@@ -84,6 +113,10 @@ func ParseCycloneDXWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 				if lic.License != nil && lic.License.ID != "" {
 					comp.Licenses = append(comp.Licenses, lic.License.ID)
 				}
+				// SPDX expr, e.g. "MIT AND BSD-2-Clause"
+				if lic.Expression != "" {
+					comp.Licenses = append(comp.Licenses, lic.Expression)
+				}
 			}
 		}
 		if c.Hashes != nil {
@@ -91,14 +124,50 @@ func ParseCycloneDXWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 				comp.Hashes[string(h.Algorithm)] = h.Value
 			}
 		}
-		if c.Supplier != nil && c.Supplier.Name != "" {
+		// supplier, else provenance fallback (syft uses publisher for maintainer)
+		switch {
+		case c.Supplier != nil && c.Supplier.Name != "":
 			comp.Supplier = c.Supplier.Name
+		case c.Publisher != "":
+			comp.Supplier = c.Publisher
+		case c.Manufacturer != nil && c.Manufacturer.Name != "":
+			comp.Supplier = c.Manufacturer.Name
+		case c.Authors != nil && len(*c.Authors) > 0 && (*c.Authors)[0].Name != "":
+			comp.Supplier = (*c.Authors)[0].Name
+		case c.Author != "":
+			comp.Supplier = c.Author
 		}
 		if i < len(rawDoc.Components) {
 			comp.RawJSON = rawDoc.Components[i]
 		}
 		comp.ID = identity.ComputeID(comp.ToIdentity())
 		comps = append(comps, comp)
+	}
+
+	// resolve top-level dep bom-refs to component IDs
+	if bom.Dependencies != nil && len(comps) > 0 {
+		refToIdx := make(map[string]int, len(comps))
+		for i, c := range comps {
+			if c.BOMRef != "" {
+				refToIdx[c.BOMRef] = i
+			}
+		}
+		for _, d := range *bom.Dependencies {
+			parentIdx, ok := refToIdx[d.Ref]
+			if !ok {
+				continue
+			}
+			// entry presence = declaration, even w/ empty dependsOn (leaf)
+			comps[parentIdx].DepsDeclared = true
+			if d.Dependencies == nil {
+				continue
+			}
+			for _, childRef := range *d.Dependencies {
+				if childIdx, ok := refToIdx[childRef]; ok {
+					comps[parentIdx].Dependencies = append(comps[parentIdx].Dependencies, comps[childIdx].ID)
+				}
+			}
+		}
 	}
 	return comps, info, nil
 }

@@ -2,6 +2,7 @@ package output
 
 import (
 	"fmt"
+	"io"
 	"path/filepath"
 	"strings"
 
@@ -396,4 +397,35 @@ func PrintViolations(violations []policy.Violation) {
 		}
 	}
 	fmt.Println()
+}
+
+// PrintViolationsTo writes policy violations to the given writer (use os.Stderr
+// to avoid corrupting structured output formats like JSON/HTML on stdout).
+func PrintViolationsTo(w io.Writer, violations []policy.Violation) {
+	if len(violations) == 0 {
+		return
+	}
+
+	var errors, warnings []policy.Violation
+	for _, v := range violations {
+		if v.Severity == policy.SeverityWarning {
+			warnings = append(warnings, v)
+		} else {
+			errors = append(errors, v)
+		}
+	}
+
+	if len(errors) > 0 {
+		_, _ = fmt.Fprintf(w, "\n❌ Policy Errors (%d):\n", len(errors))
+		for _, v := range errors {
+			_, _ = fmt.Fprintf(w, "  [%s] %s\n", v.Rule, v.Message)
+		}
+	}
+	if len(warnings) > 0 {
+		_, _ = fmt.Fprintf(w, "\n⚠️  Policy Warnings (%d):\n", len(warnings))
+		for _, v := range warnings {
+			_, _ = fmt.Fprintf(w, "  [%s] %s\n", v.Rule, v.Message)
+		}
+	}
+	_, _ = fmt.Fprintln(w)
 }

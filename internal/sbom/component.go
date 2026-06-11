@@ -19,6 +19,8 @@ type SBOMInfo struct {
 	ToolName           string         `json:"tool_name,omitempty"`
 	ToolVersion        string         `json:"tool_version,omitempty"`
 	SchemaVersion      string         `json:"schema_version,omitempty"`
+	SBOMTimestamp      string         `json:"sbom_timestamp,omitempty"`
+	SBOMAuthor         string         `json:"sbom_author,omitempty"`
 	SearchScope        string         `json:"search_scope,omitempty"`
 	FilesCount         int            `json:"files_count,omitempty"`
 }
@@ -33,15 +35,28 @@ type Component struct {
 	CPEs         []string          `json:"cpes,omitempty"`
 	Hashes       map[string]string `json:"hashes,omitempty"`
 	Dependencies []string          `json:"dependencies,omitempty"`
+	DepsDeclared bool              `json:"-"` // deps declared by format, even if empty
 	BOMRef       string            `json:"bom-ref,omitempty"`
 	SPDXID       string            `json:"spdxid,omitempty"`
 	Namespace    string            `json:"namespace,omitempty"`
 	Supplier     string            `json:"supplier,omitempty"`
 	Language     string            `json:"language,omitempty"`  // lang
-	FoundBy      string            `json:"foundBy,omitempty"`  // scanner
-	Type         string            `json:"type,omitempty"`     // pkg type
+	FoundBy      string            `json:"foundBy,omitempty"`   // scanner
+	Type         string            `json:"type,omitempty"`      // pkg type
 	Locations    []string          `json:"locations,omitempty"` // file paths
-	RawJSON      json.RawMessage   `json:"-"`                  // original JSON, excluded from output
+	RawJSON      json.RawMessage   `json:"-"`                   // original JSON, excluded from output
+}
+
+// PackageComponents drops file/os entries — they're evidence, not packages.
+func PackageComponents(comps []Component) []Component {
+	out := make([]Component, 0, len(comps))
+	for _, c := range comps {
+		if c.Type == "file" || c.Type == "operating-system" {
+			continue
+		}
+		out = append(out, c)
+	}
+	return out
 }
 
 // ToIdentity converts to ComponentIdentity.

@@ -292,9 +292,9 @@ func TestParseCycloneDX_ComplexLicenses(t *testing.T) {
 	for _, c := range comps {
 		switch c.Name {
 		case "multi-license-pkg":
-			// Has license IDs: MIT, Apache-2.0 (expression is not extracted as ID)
-			if len(c.Licenses) != 2 {
-				t.Errorf("expected 2 license IDs for multi-license-pkg, got %d: %v", len(c.Licenses), c.Licenses)
+			// IDs MIT, Apache-2.0 + expression "MIT OR Apache-2.0"
+			if len(c.Licenses) != 3 {
+				t.Errorf("expected 3 licenses for multi-license-pkg, got %d: %v", len(c.Licenses), c.Licenses)
 			}
 		case "no-id-license-pkg":
 			// license.name without license.id should not be extracted
@@ -306,5 +306,185 @@ func TestParseCycloneDX_ComplexLicenses(t *testing.T) {
 				t.Errorf("expected 0 licenses for no-license-pkg, got %v", c.Licenses)
 			}
 		}
+	}
+}
+
+func TestParseCycloneDX_TopLevelDependencies(t *testing.T) {
+	data := []byte(`{
+		"bomFormat": "CycloneDX", "specVersion": "1.5", "version": 1,
+		"components": [
+			{"type": "library", "bom-ref": "ref-a", "name": "a", "version": "1.0"},
+			{"type": "library", "bom-ref": "ref-b", "name": "b", "version": "2.0"}
+		],
+		"dependencies": [
+			{"ref": "ref-a", "dependsOn": ["ref-b"]},
+			{"ref": "ref-b", "dependsOn": []}
+		]
+	}`)
+	comps, _, err := ParseCycloneDXWithInfo(data)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	var a, b *Component
+	for i := range comps {
+		switch comps[i].Name {
+		case "a":
+			a = &comps[i]
+		case "b":
+			b = &comps[i]
+		}
+	}
+	if a == nil || b == nil {
+		t.Fatal("expected components a and b")
+	}
+	if len(a.Dependencies) != 1 {
+		t.Fatalf("expected a to have 1 dependency from top-level dependencies, got %d", len(a.Dependencies))
+	}
+	if a.Dependencies[0] != b.ID {
+		t.Errorf("expected a's dependency to be b's ID %q, got %q", b.ID, a.Dependencies[0])
+	}
+}
+
+func TestParseCycloneDX_MetadataToolsModern(t *testing.T) {
+	data := []byte(`{
+		"bomFormat": "CycloneDX", "specVersion": "1.5", "version": 1,
+		"metadata": {
+			"tools": {"components": [{"type": "application", "name": "syft", "version": "1.40.1"}]}
+		},
+		"components": [{"type": "library", "bom-ref": "r1", "name": "a", "version": "1.0"}]
+	}`)
+	_, info, err := ParseCycloneDXWithInfo(data)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if info.ToolName != "syft" {
+		t.Errorf("expected ToolName syft from metadata.tools.components, got %q", info.ToolName)
+	}
+	if info.ToolVersion != "1.40.1" {
+		t.Errorf("expected ToolVersion 1.40.1, got %q", info.ToolVersion)
+	}
+}
+
+func TestParseCycloneDX_MetadataToolsLegacy(t *testing.T) {
+	data := []byte(`{
+		"bomFormat": "CycloneDX", "specVersion": "1.4", "version": 1,
+		"metadata": {
+			"tools": [{"vendor": "anchore", "name": "syft", "version": "0.90.0"}]
+		},
+		"components": [{"type": "library", "bom-ref": "r1", "name": "a", "version": "1.0"}]
+	}`)
+	_, info, err := ParseCycloneDXWithInfo(data)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if info.ToolName != "syft" {
+		t.Errorf("expected ToolName syft from legacy metadata.tools array, got %q", info.ToolName)
+	}
+	if info.ToolVersion != "0.90.0" {
+		t.Errorf("expected ToolVersion 0.90.0, got %q", info.ToolVersion)
+	}
+}
+
+func TestParseCycloneDX_EmptyDependsOnIsDeclared(t *testing.T) {
+	data := []byte(`{
+		"bomFormat": "CycloneDX", "specVersion": "1.5", "version": 1,
+		"components": [
+			{"type": "library", "bom-ref": "ref-a", "name": "a", "version": "1.0"},
+			{"type": "library", "bom-ref": "ref-b", "name": "b", "version": "2.0"}
+		],
+		"dependencies": [
+			{"ref": "ref-a", "dependsOn": ["ref-b"]},
+			{"ref": "ref-b", "dependsOn": []}
+		]
+	}`)
+	comps, _, err := ParseCycloneDXWithInfo(data)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	for _, c := range comps {
+		if c.Name == "b" && !c.DepsDeclared {
+			t.Error("expected b.DepsDeclared=true: empty dependsOn is an explicit leaf declaration")
+		}
+	}
+}
+
+func TestParseCycloneDX_ComponentType(t *testing.T) {
+	data := []byte(`{
+		"bomFormat": "CycloneDX", "specVersion": "1.5", "version": 1,
+		"components": [
+			{"type": "library", "bom-ref": "r1", "name": "a", "version": "1.0"},
+			{"type": "file", "bom-ref": "r2", "name": "/etc/motd"}
+		]
+	}`)
+	comps, _, err := ParseCycloneDXWithInfo(data)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	types := map[string]string{}
+	for _, c := range comps {
+		types[c.Name] = c.Type
+	}
+	if types["a"] != "library" {
+		t.Errorf("expected type 'library' for a, got %q", types["a"])
+	}
+	if types["/etc/motd"] != "file" {
+		t.Errorf("expected type 'file' for /etc/motd, got %q", types["/etc/motd"])
+	}
+}
+
+func TestParseCycloneDX_SupplierProvenanceFallback(t *testing.T) {
+	data := []byte(`{
+		"bomFormat": "CycloneDX", "specVersion": "1.5", "version": 1,
+		"components": [
+			{"type": "library", "bom-ref": "r1", "name": "explicit", "version": "1",
+			 "supplier": {"name": "Real Supplier"}, "publisher": "Some Publisher"},
+			{"type": "library", "bom-ref": "r2", "name": "pub-only", "version": "1",
+			 "publisher": "Natanael Copa <ncopa@alpinelinux.org>"},
+			{"type": "library", "bom-ref": "r3", "name": "mfr-only", "version": "1",
+			 "manufacturer": {"name": "Acme Mfr"}},
+			{"type": "library", "bom-ref": "r4", "name": "authors-only", "version": "1",
+			 "authors": [{"name": "Jane Doe"}]}
+		]
+	}`)
+	comps, _, err := ParseCycloneDXWithInfo(data)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	want := map[string]string{
+		"explicit":     "Real Supplier", // supplier wins over publisher
+		"pub-only":     "Natanael Copa <ncopa@alpinelinux.org>",
+		"mfr-only":     "Acme Mfr",
+		"authors-only": "Jane Doe",
+	}
+	for _, c := range comps {
+		if got := c.Supplier; got != want[c.Name] {
+			t.Errorf("%s: supplier=%q, want %q", c.Name, got, want[c.Name])
+		}
+	}
+}
+
+func TestParseCycloneDX_LicenseExpressions(t *testing.T) {
+	data := []byte(`{
+		"bomFormat": "CycloneDX", "specVersion": "1.5", "version": 1,
+		"components": [
+			{"type": "library", "bom-ref": "r1", "name": "expr-only", "version": "1",
+			 "licenses": [{"expression": "MIT AND BSD-2-Clause"}]},
+			{"type": "library", "bom-ref": "r2", "name": "mixed", "version": "1",
+			 "licenses": [{"license": {"id": "MIT"}}, {"expression": "Apache-2.0 OR GPL-2.0-only"}]}
+		]
+	}`)
+	comps, _, err := ParseCycloneDXWithInfo(data)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	got := map[string][]string{}
+	for _, c := range comps {
+		got[c.Name] = c.Licenses
+	}
+	if len(got["expr-only"]) != 1 || got["expr-only"][0] != "MIT AND BSD-2-Clause" {
+		t.Errorf("expr-only: licenses=%v, want [MIT AND BSD-2-Clause]", got["expr-only"])
+	}
+	if len(got["mixed"]) != 2 {
+		t.Errorf("mixed: expected id + expression = 2 licenses, got %v", got["mixed"])
 	}
 }
