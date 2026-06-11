@@ -407,3 +407,27 @@ func TestParseCycloneDX_EmptyDependsOnIsDeclared(t *testing.T) {
 		}
 	}
 }
+
+func TestParseCycloneDX_ComponentType(t *testing.T) {
+	data := []byte(`{
+		"bomFormat": "CycloneDX", "specVersion": "1.5", "version": 1,
+		"components": [
+			{"type": "library", "bom-ref": "r1", "name": "a", "version": "1.0"},
+			{"type": "file", "bom-ref": "r2", "name": "/etc/motd"}
+		]
+	}`)
+	comps, _, err := ParseCycloneDXWithInfo(data)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	types := map[string]string{}
+	for _, c := range comps {
+		types[c.Name] = c.Type
+	}
+	if types["a"] != "library" {
+		t.Errorf("expected type 'library' for a, got %q", types["a"])
+	}
+	if types["/etc/motd"] != "file" {
+		t.Errorf("expected type 'file' for /etc/motd, got %q", types["/etc/motd"])
+	}
+}

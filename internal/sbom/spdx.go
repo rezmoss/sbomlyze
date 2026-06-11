@@ -33,6 +33,15 @@ func ParseSPDXWithInfo(path string) ([]Component, SBOMInfo, error) {
 	return parseSPDXData(data)
 }
 
+// spdxLicenseValue: licence string, or "" if NONE/NOASSERTION/blank
+func spdxLicenseValue(s string) string {
+	s = strings.TrimSpace(s)
+	if s == "NONE" || s == "NOASSERTION" {
+		return ""
+	}
+	return s
+}
+
 // splitToolNameVersion splits "name-version" (e.g. "syft-1.40.1"); version must start w/ digit.
 func splitToolNameVersion(s string) (string, string) {
 	if i := strings.LastIndex(s, "-"); i > 0 && i < len(s)-1 {
@@ -92,8 +101,11 @@ func parseSPDXData(data []byte) ([]Component, SBOMInfo, error) {
 				comp.CPEs = append(comp.CPEs, ref.Locator)
 			}
 		}
-		if pkg.PackageLicenseConcluded != "" {
-			comp.Licenses = append(comp.Licenses, pkg.PackageLicenseConcluded)
+		// concluded if meaningful, else declared; NONE/NOASSERTION = absent
+		if lic := spdxLicenseValue(pkg.PackageLicenseConcluded); lic != "" {
+			comp.Licenses = append(comp.Licenses, lic)
+		} else if lic := spdxLicenseValue(pkg.PackageLicenseDeclared); lic != "" {
+			comp.Licenses = append(comp.Licenses, lic)
 		}
 		for _, cs := range pkg.PackageChecksums {
 			comp.Hashes[string(cs.Algorithm)] = cs.Value

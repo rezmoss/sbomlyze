@@ -100,6 +100,7 @@ func ParseCycloneDXWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 			Hashes:    make(map[string]string),
 			BOMRef:    c.BOMRef,
 			Namespace: c.Group,
+			Type:      string(c.Type),
 		}
 		if c.PackageURL != "" {
 			comp.PURL = c.PackageURL

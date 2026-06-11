@@ -319,3 +319,21 @@ func TestComputeStats_CompoundLicenses(t *testing.T) {
 	}
 }
 
+
+func TestComputeStats_ByTypeFallsBackToComponentType(t *testing.T) {
+	comps := []sbom.Component{
+		{ID: "id-1", Name: "lib", Version: "1", PURL: "pkg:npm/lib@1"},
+		{ID: "id-2", Name: "/etc/motd", Type: "file"},
+		{ID: "id-3", Name: "alpine", Version: "3.22", Type: "operating-system"},
+	}
+	stats := ComputeStats(comps)
+	if stats.ByType["npm"] != 1 {
+		t.Errorf("expected ByType[npm]=1, got %d", stats.ByType["npm"])
+	}
+	if stats.ByType["file"] != 1 {
+		t.Errorf("expected ByType[file]=1 (component type fallback), got %d (unknown=%d)", stats.ByType["file"], stats.ByType["unknown"])
+	}
+	if stats.ByType["operating-system"] != 1 {
+		t.Errorf("expected ByType[operating-system]=1, got %d", stats.ByType["operating-system"])
+	}
+}

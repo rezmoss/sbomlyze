@@ -107,3 +107,11 @@ func TestNormalizeComponent_IDRecomputed(t *testing.T) {
 	}
 }
 
+
+func TestNormalizeComponent_PreservesDepsDeclared(t *testing.T) {
+	c := Component{ID: "x", Name: "a", Version: "1.0", DepsDeclared: true}
+	got := NormalizeComponent(c)
+	if !got.DepsDeclared {
+		t.Error("expected DepsDeclared to survive normalization")
+	}
+}

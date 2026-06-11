@@ -10,7 +10,8 @@
       "licenses": [
         "Apache-2.0"
       ],
-      "bom-ref": "new-package@2.0.0"
+      "bom-ref": "new-package@2.0.0",
+      "type": "library"
     }
   },
   {

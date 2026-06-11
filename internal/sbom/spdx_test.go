@@ -338,3 +338,41 @@ func TestParseSPDX_DependsOnNoneAndNoassertion(t *testing.T) {
 		t.Error("expected b.DepsDeclared=false for DEPENDS_ON NOASSERTION")
 	}
 }
+
+func TestParseSPDX_LicenseDeclaredFallback(t *testing.T) {
+	mk := func(concluded, declared string) string {
+		pkg := `{"name": "a", "SPDXID": "SPDXRef-Package-a", "versionInfo": "1.0",
+			 "downloadLocation": "NOASSERTION"`
+		if concluded != "" {
+			pkg += `, "licenseConcluded": "` + concluded + `"`
+		}
+		if declared != "" {
+			pkg += `, "licenseDeclared": "` + declared + `"`
+		}
+		pkg += `}`
+		return `{"spdxVersion": "SPDX-2.3", "dataLicense": "CC0-1.0",
+			"SPDXID": "SPDXRef-DOCUMENT", "name": "t",
+			"documentNamespace": "https://example.com/t",
+			"creationInfo": {"created": "2025-01-01T00:00:00Z", "creators": ["Tool: test"]},
+			"packages": [` + pkg + `]}`
+	}
+	cases := []struct {
+		concluded, declared string
+		want                []string
+	}{
+		{"NOASSERTION", "MIT", []string{"MIT"}},   // declared fallback
+		{"Apache-2.0", "MIT", []string{"Apache-2.0"}}, // concluded wins
+		{"NOASSERTION", "NOASSERTION", nil},       // neither meaningful
+		{"NONE", "", nil},
+	}
+	for _, tc := range cases {
+		comps, _, err := parseSPDXData([]byte(mk(tc.concluded, tc.declared)))
+		if err != nil {
+			t.Fatalf("concluded=%q declared=%q: %v", tc.concluded, tc.declared, err)
+		}
+		got := comps[0].Licenses
+		if len(got) != len(tc.want) || (len(got) > 0 && got[0] != tc.want[0]) {
+			t.Errorf("concluded=%q declared=%q: licenses=%v, want %v", tc.concluded, tc.declared, got, tc.want)
+		}
+	}
+}
