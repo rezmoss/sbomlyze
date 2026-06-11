@@ -296,3 +296,45 @@ func TestParseSPDX_ToolOnlyCreatorIsNotAuthor(t *testing.T) {
 		t.Errorf("expected ToolName 'test' from Tool creator, got %q", info.ToolName)
 	}
 }
+
+func TestParseSPDX_DependsOnNoneAndNoassertion(t *testing.T) {
+	doc := `{
+		"spdxVersion": "SPDX-2.3",
+		"dataLicense": "CC0-1.0",
+		"SPDXID": "SPDXRef-DOCUMENT",
+		"name": "test-doc",
+		"documentNamespace": "https://example.com/test",
+		"creationInfo": {
+			"created": "2025-01-01T00:00:00Z",
+			"creators": ["Organization: Acme Corp"]
+		},
+		"packages": [
+			{"name": "a", "SPDXID": "SPDXRef-Package-a", "versionInfo": "1.0",
+			 "downloadLocation": "NOASSERTION"},
+			{"name": "b", "SPDXID": "SPDXRef-Package-b", "versionInfo": "2.0",
+			 "downloadLocation": "NOASSERTION"}
+		],
+		"relationships": [
+			{"spdxElementId": "SPDXRef-Package-a", "relationshipType": "DEPENDS_ON",
+			 "relatedSpdxElement": "NONE"},
+			{"spdxElementId": "SPDXRef-Package-b", "relationshipType": "DEPENDS_ON",
+			 "relatedSpdxElement": "NOASSERTION"}
+		]
+	}`
+	comps, _, err := parseSPDXData([]byte(doc))
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	byName := map[string]Component{}
+	for _, c := range comps {
+		byName[c.Name] = c
+	}
+	// DEPENDS_ON NONE = affirmative "no dependencies" -> declared
+	if !byName["a"].DepsDeclared {
+		t.Error("expected a.DepsDeclared=true for DEPENDS_ON NONE")
+	}
+	// DEPENDS_ON NOASSERTION = unknown -> NOT declared (known-unknowns)
+	if byName["b"].DepsDeclared {
+		t.Error("expected b.DepsDeclared=false for DEPENDS_ON NOASSERTION")
+	}
+}

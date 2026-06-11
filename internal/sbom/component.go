@@ -35,6 +35,7 @@ type Component struct {
 	CPEs         []string          `json:"cpes,omitempty"`
 	Hashes       map[string]string `json:"hashes,omitempty"`
 	Dependencies []string          `json:"dependencies,omitempty"`
+	DepsDeclared bool              `json:"-"` // deps declared by format, even if empty
 	BOMRef       string            `json:"bom-ref,omitempty"`
 	SPDXID       string            `json:"spdxid,omitempty"`
 	Namespace    string            `json:"namespace,omitempty"`

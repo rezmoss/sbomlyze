@@ -139,7 +139,12 @@ func ParseCycloneDXWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 		}
 		for _, d := range *bom.Dependencies {
 			parentIdx, ok := refToIdx[d.Ref]
-			if !ok || d.Dependencies == nil {
+			if !ok {
+				continue
+			}
+			// entry presence = declaration, even w/ empty dependsOn (leaf)
+			comps[parentIdx].DepsDeclared = true
+			if d.Dependencies == nil {
 				continue
 			}
 			for _, childRef := range *d.Dependencies {

@@ -384,3 +384,26 @@ func TestParseCycloneDX_MetadataToolsLegacy(t *testing.T) {
 		t.Errorf("expected ToolVersion 0.90.0, got %q", info.ToolVersion)
 	}
 }
+
+func TestParseCycloneDX_EmptyDependsOnIsDeclared(t *testing.T) {
+	data := []byte(`{
+		"bomFormat": "CycloneDX", "specVersion": "1.5", "version": 1,
+		"components": [
+			{"type": "library", "bom-ref": "ref-a", "name": "a", "version": "1.0"},
+			{"type": "library", "bom-ref": "ref-b", "name": "b", "version": "2.0"}
+		],
+		"dependencies": [
+			{"ref": "ref-a", "dependsOn": ["ref-b"]},
+			{"ref": "ref-b", "dependsOn": []}
+		]
+	}`)
+	comps, _, err := ParseCycloneDXWithInfo(data)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	for _, c := range comps {
+		if c.Name == "b" && !c.DepsDeclared {
+			t.Error("expected b.DepsDeclared=true: empty dependsOn is an explicit leaf declaration")
+		}
+	}
+}

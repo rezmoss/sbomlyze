@@ -287,7 +287,7 @@ func depGraphCoverage(comps []sbom.Component) int {
 	}
 	n := 0
 	for _, c := range comps {
-		if len(c.Dependencies) > 0 || children[c.ID] {
+		if c.DepsDeclared || len(c.Dependencies) > 0 || children[c.ID] {
 			n++
 		}
 	}

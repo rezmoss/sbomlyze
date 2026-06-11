@@ -124,6 +124,16 @@ func parseSPDXData(data []byte) ([]Component, SBOMInfo, error) {
 		var parentRef, childRef string
 		switch rel.Relationship {
 		case "DEPENDS_ON":
+			// NONE = declared leaf; NOASSERTION = unknown (not declared)
+			if rel.RefB.SpecialID == "NONE" {
+				if idx, ok := idToIdx[string(rel.RefA.ElementRefID)]; ok {
+					comps[idx].DepsDeclared = true
+				}
+				continue
+			}
+			if rel.RefB.SpecialID == "NOASSERTION" {
+				continue
+			}
 			parentRef, childRef = string(rel.RefA.ElementRefID), string(rel.RefB.ElementRefID)
 		case "DEPENDENCY_OF":
 			parentRef, childRef = string(rel.RefB.ElementRefID), string(rel.RefA.ElementRefID)

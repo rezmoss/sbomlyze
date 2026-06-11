@@ -384,3 +384,23 @@ func TestEvaluate_DependencyChecksPassWithFullCoverage(t *testing.T) {
 		}
 	}
 }
+
+func TestEvaluate_ExplicitEmptyDepsCountAsCovered(t *testing.T) {
+	// leaf with explicit empty declaration (DepsDeclared) is covered even
+	// though it has no edges and is nobody's child
+	comps := []sbom.Component{
+		{ID: "id-a", Name: "a", Version: "1.0", Dependencies: []string{"id-b"}},
+		{ID: "id-b", Name: "b", Version: "2.0"},
+		{ID: "id-c", Name: "c", Version: "3.0", DepsDeclared: true},
+	}
+	info := sbom.SBOMInfo{ToolName: "test", SBOMAuthor: "test", SBOMTimestamp: "2025-01-01T00:00:00Z"}
+	report := Evaluate(comps, info)
+
+	for _, fw := range []*FrameworkResult{report.NTIA, report.CISA, report.BSI} {
+		for _, c := range fw.Checks {
+			if (c.ID == "ntia-dep-relation" || c.ID == "cisa-dep-relation" || c.ID == "bsi-dep-relation") && !c.Passed {
+				t.Errorf("%s: expected pass when every component declares deps, is a child, or declares explicit-empty", c.ID)
+			}
+		}
+	}
+}
