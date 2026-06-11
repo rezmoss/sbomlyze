@@ -47,6 +47,18 @@ type Component struct {
 	RawJSON      json.RawMessage   `json:"-"`                   // original JSON, excluded from output
 }
 
+// PackageComponents drops file/os entries — they're evidence, not packages.
+func PackageComponents(comps []Component) []Component {
+	out := make([]Component, 0, len(comps))
+	for _, c := range comps {
+		if c.Type == "file" || c.Type == "operating-system" {
+			continue
+		}
+		out = append(out, c)
+	}
+	return out
+}
+
 // ToIdentity converts to ComponentIdentity.
 func (c Component) ToIdentity() identity.ComponentIdentity {
 	return identity.ComponentIdentity{

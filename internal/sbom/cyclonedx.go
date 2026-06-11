@@ -120,8 +120,18 @@ func ParseCycloneDXWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 				comp.Hashes[string(h.Algorithm)] = h.Value
 			}
 		}
-		if c.Supplier != nil && c.Supplier.Name != "" {
+		// supplier, else provenance fallback (syft uses publisher for maintainer)
+		switch {
+		case c.Supplier != nil && c.Supplier.Name != "":
 			comp.Supplier = c.Supplier.Name
+		case c.Publisher != "":
+			comp.Supplier = c.Publisher
+		case c.Manufacturer != nil && c.Manufacturer.Name != "":
+			comp.Supplier = c.Manufacturer.Name
+		case c.Authors != nil && len(*c.Authors) > 0 && (*c.Authors)[0].Name != "":
+			comp.Supplier = (*c.Authors)[0].Name
+		case c.Author != "":
+			comp.Supplier = c.Author
 		}
 		if i < len(rawDoc.Components) {
 			comp.RawJSON = rawDoc.Components[i]

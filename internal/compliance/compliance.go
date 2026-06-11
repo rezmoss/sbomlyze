@@ -46,8 +46,9 @@ type Report struct {
 	Overall int              `json:"overall_score"` // average across evaluated standards
 }
 
-// Evaluate checks SBOM completeness against all three standards and returns a Report.
+// Evaluate scores SBOM completeness vs all standards. file/os comps excluded.
 func Evaluate(comps []sbom.Component, info sbom.SBOMInfo) Report {
+	comps = sbom.PackageComponents(comps)
 	report := Report{
 		NTIA: evaluateNTIA(comps, info),
 		CISA: evaluateCISA(comps, info),
@@ -199,7 +200,8 @@ func evaluateBSI(comps []sbom.Component, info sbom.SBOMInfo) *FrameworkResult {
 
 	withName := countWith(comps, func(c sbom.Component) bool { return c.Name != "" })
 	withVersion := countWith(comps, func(c sbom.Component) bool { return c.Version != "" })
-	withSupplier := countWith(comps, func(c sbom.Component) bool { return c.Supplier != "" })
+	// §5.2.2 creator needs email/URL, not just a name
+	withCreatorContact := countWith(comps, func(c sbom.Component) bool { return hasContact(c.Supplier) })
 	withUniqueID := countWith(comps, hasLookupIdentifier)
 	withLicense := countWith(comps, hasValidSPDXLicenses)
 	withSHA512 := countWith(comps, func(c sbom.Component) bool {
@@ -212,9 +214,7 @@ func evaluateBSI(comps []sbom.Component, info sbom.SBOMInfo) *FrameworkResult {
 	})
 	depCoverage := depGraphCoverage(comps)
 	// §5.2.1 needs creator email (or URL); a bare name/tool fails
-	hasCreatorContact := strings.Contains(info.SBOMAuthor, "@") ||
-		strings.HasPrefix(info.SBOMAuthor, "http://") ||
-		strings.HasPrefix(info.SBOMAuthor, "https://")
+	hasCreatorContact := hasContact(info.SBOMAuthor)
 	hasTimestamp := info.SBOMTimestamp != ""
 
 	checks := []CheckResult{
@@ -226,7 +226,7 @@ func evaluateBSI(comps []sbom.Component, info sbom.SBOMInfo) *FrameworkResult {
 			withVersion, total),
 		componentCheck("bsi-creator", "Component Creator",
 			"BSI TR-03183-2 §5.2.2 requires the creator of each component (email or URL contact)",
-			withSupplier, total),
+			withCreatorContact, total),
 		componentCheck("bsi-unique-id", "Unique Identifiers",
 			"BSI TR-03183-2 §5.2.4 requires identifiers such as CPE or PURL where they exist",
 			withUniqueID, total),
@@ -258,6 +258,13 @@ func authorValue(info sbom.SBOMInfo) string {
 		return info.SBOMAuthor
 	}
 	return info.ToolName
+}
+
+// hasContact: has email or URL
+func hasContact(s string) bool {
+	return strings.Contains(s, "@") ||
+		strings.HasPrefix(s, "http://") ||
+		strings.HasPrefix(s, "https://")
 }
 
 // hasLookupIdentifier: external lookup key (PURL/CPE). bom-ref/SPDXID excluded

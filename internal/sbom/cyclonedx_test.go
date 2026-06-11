@@ -431,3 +431,34 @@ func TestParseCycloneDX_ComponentType(t *testing.T) {
 		t.Errorf("expected type 'file' for /etc/motd, got %q", types["/etc/motd"])
 	}
 }
+
+func TestParseCycloneDX_SupplierProvenanceFallback(t *testing.T) {
+	data := []byte(`{
+		"bomFormat": "CycloneDX", "specVersion": "1.5", "version": 1,
+		"components": [
+			{"type": "library", "bom-ref": "r1", "name": "explicit", "version": "1",
+			 "supplier": {"name": "Real Supplier"}, "publisher": "Some Publisher"},
+			{"type": "library", "bom-ref": "r2", "name": "pub-only", "version": "1",
+			 "publisher": "Natanael Copa <ncopa@alpinelinux.org>"},
+			{"type": "library", "bom-ref": "r3", "name": "mfr-only", "version": "1",
+			 "manufacturer": {"name": "Acme Mfr"}},
+			{"type": "library", "bom-ref": "r4", "name": "authors-only", "version": "1",
+			 "authors": [{"name": "Jane Doe"}]}
+		]
+	}`)
+	comps, _, err := ParseCycloneDXWithInfo(data)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	want := map[string]string{
+		"explicit":     "Real Supplier", // supplier wins over publisher
+		"pub-only":     "Natanael Copa <ncopa@alpinelinux.org>",
+		"mfr-only":     "Acme Mfr",
+		"authors-only": "Jane Doe",
+	}
+	for _, c := range comps {
+		if got := c.Supplier; got != want[c.Name] {
+			t.Errorf("%s: supplier=%q, want %q", c.Name, got, want[c.Name])
+		}
+	}
+}

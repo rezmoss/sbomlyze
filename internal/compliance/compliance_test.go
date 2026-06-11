@@ -404,3 +404,47 @@ func TestEvaluate_ExplicitEmptyDepsCountAsCovered(t *testing.T) {
 		}
 	}
 }
+
+func TestEvaluate_FileAndOSComponentsExcluded(t *testing.T) {
+	comps := []sbom.Component{
+		{ID: "id-a", Name: "a", Version: "1.0", Type: "library", Supplier: "dev",
+			PURL: "pkg:apk/a@1.0", Licenses: []string{"MIT"}, Dependencies: []string{"id-a"}},
+		{ID: "id-f", Name: "/etc/motd", Type: "file"},
+		{ID: "id-os", Name: "alpine", Type: "operating-system"},
+	}
+	info := sbom.SBOMInfo{ToolName: "syft", SBOMAuthor: "qa", SBOMTimestamp: "2025-01-01T00:00:00Z"}
+	report := Evaluate(comps, info)
+
+	for _, c := range report.NTIA.Checks {
+		if c.ID == "ntia-version" && !c.Passed {
+			t.Errorf("ntia-version: expected pass — file/os components must not count in package denominators (details: %s)", c.Details)
+		}
+	}
+
+	// all-file SBOM = nothing scoreable
+	onlyFiles := []sbom.Component{{ID: "f", Name: "/x", Type: "file"}}
+	if r := Evaluate(onlyFiles, info); r.NTIA != nil {
+		t.Error("expected nil NTIA when SBOM has no package components")
+	}
+}
+
+func TestEvaluate_BSICreatorRequiresContact(t *testing.T) {
+	cases := []struct {
+		supplier string
+		want     bool
+	}{
+		{"Natanael Copa <ncopa@alpinelinux.org>", true},
+		{"https://alpinelinux.org", true},
+		{"Example Supplier", false}, // name only, no contact
+		{"", false},
+	}
+	for _, tc := range cases {
+		comps := []sbom.Component{{Name: "a", Version: "1.0", Supplier: tc.supplier}}
+		report := Evaluate(comps, sbom.SBOMInfo{SBOMTimestamp: "2025-01-01T00:00:00Z"})
+		for _, c := range report.BSI.Checks {
+			if c.ID == "bsi-creator" && c.Passed != tc.want {
+				t.Errorf("bsi-creator with supplier %q: passed=%v, want %v", tc.supplier, c.Passed, tc.want)
+			}
+		}
+	}
+}
