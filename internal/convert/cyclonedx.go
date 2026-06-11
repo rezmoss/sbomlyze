@@ -12,10 +12,9 @@ import (
 	"github.com/rezmoss/sbomlyze/internal/sbom"
 )
 
-// CDX 1.5 JSON output
+// CDX 1.6 JSON output
 func WriteCycloneDX(w io.Writer, comps []sbom.Component, info sbom.SBOMInfo) error {
 	bom := cdx.NewBOM()
-	bom.SpecVersion = cdx.SpecVersion1_5
 	bom.SerialNumber = generateURNUUID()
 	bom.Metadata = buildCDXMetadata(info)
 
@@ -28,7 +27,8 @@ func WriteCycloneDX(w io.Writer, comps []sbom.Component, info sbom.SBOMInfo) err
 
 	enc := cdx.NewBOMEncoder(w, cdx.BOMFileFormatJSON)
 	enc.SetPretty(true)
-	return enc.Encode(bom)
+	// Pin the spec version so library upgrades don't silently change output.
+	return enc.EncodeVersion(bom, cdx.SpecVersion1_6)
 }
 
 func componentToCDX(c sbom.Component) cdx.Component {
