@@ -1,40 +1,63 @@
 # sbomlyze
 
-A fast, reliable SBOM diff and analysis tool. Compare Software Bill of Materials across versions, detect changes, and enforce policies in CI/CD pipelines.
+**`git diff` for your SBOM.** Compare two Software Bills of Materials and see exactly what changed between builds, versions, and releases.
+
+The only SBOM diff that **checks hashes, not just versions** — catching supply-chain tampering (a package swapped without a version bump) that generators and vulnerability scanners miss.
 
 [![CI][ci-img]][ci]
 [![GitHub Release][release-img]][release]
 [![Go Report Card][go-report-img]][go-report]
-[![Go Doc][go-doc-img]][go-doc]
-[![License: Apache-2.0][license-img]][license]
-[![Go version][gover-img]][gover]
-[![CodeQL][codeql-img]][codeql]
 [![OpenSSF Scorecard][scorecard-img]][scorecard]
+[![License: Apache-2.0][license-img]][license]
 [![Downloads][download-img]][download]
 
 
 ![demo](https://github.com/user-attachments/assets/b21996fc-41e8-4d79-9ca2-e4291f8dd2f5)
 
 
+> **Generators make SBOMs. Scanners find CVEs. sbomlyze tells you what changed — and whether to trust it.**
+> It slots in right after your generator: `syft image:tag -o cyclonedx-json` → **sbomlyze diffs the output**, classifies the drift, scores compliance, and gates your pipeline.
+
+## Why sbomlyze?
+
+SBOM *generation* is a solved, crowded problem. **Comparing** two SBOMs — and knowing whether a change is routine or a supply-chain red flag — is not. That's the gap sbomlyze fills.
+
+| Capability | **sbomlyze** | cyclonedx-cli | sbomqs | syft / trivy |
+|---|:---:|:---:|:---:|:---:|
+| SBOM-to-SBOM **diff** | ✅ | basic | ❌ | ❌ |
+| **Integrity / tamper** drift (hash changed without version) | ✅ | ❌ | ❌ | ❌ |
+| Dependency-graph diff + transitive depth risk | ✅ | ❌ | ❌ | ❌ |
+| **NTIA / CISA / BSI** compliance scoring | ✅ | ❌ | ✅ | ❌ |
+| Format conversion (Syft / CycloneDX / SPDX) | ✅ | ✅ | ❌ | partial |
+| **TUI + Web UI** explorers | ✅ | ❌ | ❌ | ❌ |
+| Policy gate + SARIF / JUnit / Markdown / HTML / Patch | ✅ | partial | partial | partial |
 
 ## Features
 
+- **SBOM diffing**: Compare two SBOMs and see added, removed, and changed components at a glance
+- **Drift classification**: Distinguish version drift from **integrity drift** (hash changed without version — a tamper signal) and metadata drift
+- **Compliance scoring**: Score any SBOM against **NTIA**, **CISA 2025**, and **BSI TR-03183** minimum elements
+- **Dependency graph diff**: Track transitive dependencies and supply-chain depth
 - **Multi-format support**: Syft, CycloneDX, SPDX (JSON)
 - **Format conversion**: Convert between CycloneDX, SPDX, and Syft formats
 - **Strong identity matching**: PURL → CPE → BOM-ref → namespace/name precedence
-- **Drift detection**: Classify changes as version, integrity, or metadata drift
-- **Dependency graph diff**: Track transitive dependencies and supply-chain depth
 - **Statistics mode**: Analyze single SBOMs for license, dependency, and integrity metrics
 - **Interactive TUI mode**: Explore SBOMs with keyboard navigation and search
 - **Web UI mode**: Browser-based SBOM explorer with drag-and-drop upload
-- **Policy engine**: Enforce rules in CI pipelines
+- **Policy engine**: Enforce drift, license, and compliance-score rules in CI pipelines
 - **Duplicate & collision detection**: Find multiple versions of the same package and ambiguous identity matches
-- **Multiple output formats**: Text, JSON, SARIF, JUnit XML, Markdown, JSON Patch
+- **Multiple output formats**: Text, JSON, SARIF, JUnit XML, Markdown, HTML, JSON Patch
 - **Tolerant parsing**: Continue on errors with structured warnings
 
 ## Installation
 
-### Installer Script (Recommended)
+### Homebrew (macOS/Linux)
+
+```bash
+brew install rezmoss/sbomlyze/sbomlyze
+```
+
+### Installer Script
 
 The installer script downloads the correct binary for your OS/architecture:
 
@@ -92,12 +115,6 @@ wget https://github.com/rezmoss/sbomlyze/releases/latest/download/sbomlyze_VERSI
 sudo apk add --allow-untrusted sbomlyze_*_linux_amd64.apk
 ```
 
-### Homebrew (macOS/Linux)
-
-```bash
-brew install rezmoss/sbomlyze/sbomlyze
-```
-
 ### Go Install
 
 ```bash
@@ -126,11 +143,14 @@ go build -o sbomlyze ./cmd/sbomlyze
 ## Quick Start
 
 ```bash
+# Compare two SBOMs — the headline use case
+sbomlyze before.json after.json
+
 # Analyze a single SBOM
 sbomlyze image.json
 
-# Compare two SBOMs
-sbomlyze before.json after.json
+# Score an SBOM against NTIA / CISA / BSI minimum elements
+sbomlyze image.json --compliance
 
 # Interactive TUI explorer
 sbomlyze image.json -i
@@ -173,7 +193,8 @@ Options:
   -web, --web         Start web UI server
   --port <port>       Web server port (default 8080)
   --json              Output in JSON format (shortcut for --format json)
-  --format <format>   Output format: text, json, sarif, junit, markdown, patch
+  --format <format>   Output format: text, json, sarif, junit, markdown, html, patch
+  --compliance        Show NTIA/CISA/BSI compliance scoring
   --policy <file>     Policy file for CI checks
   --strict            Fail on parse warnings
   --tolerant          Continue on parse warnings (default)
@@ -386,6 +407,59 @@ In diff mode, sbomlyze auto-generates richer insights comparing both SBOMs:
 #### Package Samples by Type
 
 Added and removed components are grouped by package type with sample listings, making it easy to see what changed in each ecosystem.
+
+## Compliance Scoring
+
+Score any SBOM against the three major minimum-element frameworks to answer the question auditors and procurement teams keep asking: **"Is this SBOM complete enough?"**
+
+```bash
+# Score a single SBOM
+sbomlyze image.json --compliance
+
+# Score alongside a diff
+sbomlyze before.json after.json --compliance
+
+# As JSON for CI
+sbomlyze image.json --compliance --json
+```
+
+### Frameworks Evaluated
+
+| Framework | Checks | Notable requirements |
+|-----------|--------|----------------------|
+| **NTIA Minimum Elements** (2021) | 7 | name, version, supplier, unique IDs (PURL/CPE), dependency relationships, SBOM author, timestamp |
+| **CISA 2025 Minimum Elements** (Aug 2025 draft) | 10 | adds software producer, license info, **component hash**, and tool name on top of NTIA |
+| **BSI TR-03183-2** (v2.1.0, 2025) | 9 | requires component creator contact, **SHA-512 hash**, SPDX-format licenses, and SBOM creator contact |
+
+### Score Presentation
+
+Each framework reports a percentage (passed checks / total checks) plus an overall score (average across frameworks), with status indicators:
+
+| Indicator | Score |
+|-----------|-------|
+| 🟢 | ≥ 90% |
+| 🟡 | 70–89% |
+| 🟠 | 50–69% |
+| 🔴 | < 50% |
+
+JSON output (`--compliance --json`) includes the full report with per-check pass/fail detail; the HTML format embeds the compliance report into the report page.
+
+### Gating Compliance in CI
+
+Compliance thresholds can be enforced through the [policy engine](#policy-engine). Setting any threshold automatically triggers compliance evaluation — no `--compliance` flag needed:
+
+```json
+{
+  "min_ntia_score": 85,
+  "min_cisa_score": 70,
+  "min_bsi_score": 80,
+  "min_overall_compliance": 75
+}
+```
+
+```bash
+sbomlyze image.json --policy compliance-policy.json
+```
 
 ## Dependency Graph Diff
 
@@ -711,9 +785,18 @@ sbomlyze -web --port 3000
 
 The web UI provides drag-and-drop upload, interactive tree view, deep search, and statistics dashboard.
 
+### `--compliance`
+
+Score the SBOM against NTIA, CISA 2025, and BSI TR-03183 minimum-element frameworks. See [Compliance Scoring](#compliance-scoring).
+
+```bash
+sbomlyze image.json --compliance
+sbomlyze image.json --compliance --json
+```
+
 ### `--format` / `-f`
 
-Select the output format. Six formats are available:
+Select the output format. Seven formats are available:
 
 | Format | Flag | Description | Best For |
 |--------|------|-------------|----------|
@@ -722,6 +805,7 @@ Select the output format. Six formats are available:
 | **sarif** | `--format sarif` | SARIF 2.1.0 for GitHub Code Scanning | GitHub integration |
 | **junit** | `--format junit` | JUnit XML test results | CI test dashboards |
 | **markdown** | `--format markdown` | PR-comment-ready Markdown report | Pull request comments |
+| **html** | `--format html` | Self-contained HTML report (inline CSS/JS) | Auditors, sharable reports |
 | **patch** | `--format patch` | RFC 6902 JSON Patch operations | Programmatic patching |
 
 ```bash
@@ -733,6 +817,9 @@ sbomlyze before.json after.json --format junit > results.xml
 
 # Markdown report for PR comments
 sbomlyze before.json after.json --format markdown > report.md
+
+# Self-contained HTML report
+sbomlyze before.json after.json --format html > report.html
 
 # JSON Patch operations
 sbomlyze before.json after.json --format patch > changes.json
@@ -764,6 +851,10 @@ Generates a Markdown report with:
 - Key findings
 - Added/removed packages grouped by type (in collapsible sections)
 - Drift summary, dependency depth, and policy violations
+
+#### HTML Format
+
+Generates a single self-contained HTML file (inline CSS and JavaScript, no external assets) suitable for emailing to auditors or attaching to a release. Includes the statistics dashboard, dependency tree, drift summary, and — when `--compliance` is set — the embedded compliance report.
 
 #### Patch Format
 
@@ -873,7 +964,11 @@ Create policies to enforce rules in CI/CD pipelines. sbomlyze exits with code 1 
   "deny_integrity_drift": true,
   "max_depth": 3,
   "warn_supplier_change": true,
-  "warn_new_transitive": true
+  "warn_new_transitive": true,
+  "min_ntia_score": 85,
+  "min_cisa_score": 70,
+  "min_bsi_score": 80,
+  "min_overall_compliance": 75
 }
 ```
 
@@ -891,6 +986,12 @@ Create policies to enforce rules in CI/CD pipelines. sbomlyze exits with code 1 
 | `max_depth` | int | Fail if new transitive dependencies at depth >= N (0 = unlimited) |
 | `warn_supplier_change` | bool | Warn (not fail) if component supplier/author changed |
 | `warn_new_transitive` | bool | Warn (not fail) on any new transitive dependencies |
+| `min_ntia_score` | int | Fail if NTIA compliance score is below this (0-100, 0 = disabled) |
+| `min_cisa_score` | int | Fail if CISA compliance score is below this (0-100, 0 = disabled) |
+| `min_bsi_score` | int | Fail if BSI compliance score is below this (0-100, 0 = disabled) |
+| `min_overall_compliance` | int | Fail if overall compliance score is below this (0-100, 0 = disabled) |
+
+> Setting any `min_*_score` threshold automatically triggers compliance evaluation, even without the `--compliance` flag.
 
 ### Example: Strict Policy
 
@@ -905,7 +1006,8 @@ Create policies to enforce rules in CI/CD pipelines. sbomlyze exits with code 1 
   "deny_integrity_drift": true,
   "max_depth": 3,
   "warn_supplier_change": true,
-  "warn_new_transitive": true
+  "warn_new_transitive": true,
+  "min_overall_compliance": 80
 }
 ```
 
@@ -1054,6 +1156,14 @@ if sbomlyze baseline.json current.json --json | jq -e '.diff.dependencies.depth_
 fi
 ```
 
+### Compliance Gate
+
+```bash
+# Fail the build if the SBOM doesn't meet minimum-element requirements
+sbomlyze current.json --policy compliance-policy.json
+# where compliance-policy.json sets min_overall_compliance / min_ntia_score / etc.
+```
+
 ## Exit Codes
 
 | Code | Meaning |
@@ -1103,6 +1213,22 @@ cat > no-drift.json << EOF
 EOF
 
 sbomlyze baseline.json current.json --policy no-drift.json
+```
+
+### Compliance Check
+
+```bash
+# Score an SBOM and enforce a minimum
+sbomlyze image.json --compliance
+
+cat > compliance-policy.json << EOF
+{
+  "min_ntia_score": 90,
+  "min_overall_compliance": 80
+}
+EOF
+
+sbomlyze image.json --policy compliance-policy.json
 ```
 
 ### Convert SBOM Formats
@@ -1179,6 +1305,14 @@ make update-snapshot # Update snapshot golden files
 make clean          # Remove build artifacts
 ```
 
+## Contributing
+
+Contributions are welcome! Good first issues are labeled [`good first issue`](https://github.com/rezmoss/sbomlyze/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22). See [CONTRIBUTING.md](CONTRIBUTING.md) if present, and feel free to open an issue or discussion to propose changes.
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=rezmoss/sbomlyze&type=Date)](https://star-history.com/#rezmoss/sbomlyze&Date)
+
 
 [ci]: https://github.com/rezmoss/sbomlyze/actions/workflows/ci.yml
 [ci-img]: https://github.com/rezmoss/sbomlyze/actions/workflows/ci.yml/badge.svg
@@ -1188,13 +1322,7 @@ make clean          # Remove build artifacts
 [go-report-img]: https://goreportcard.com/badge/github.com/rezmoss/sbomlyze
 [license]: https://github.com/rezmoss/sbomlyze/blob/main/LICENSE
 [license-img]: https://img.shields.io/badge/License-Apache%202.0-blue.svg
-[gover]: https://github.com/rezmoss/sbomlyze
-[gover-img]: https://img.shields.io/github/go-mod/go-version/rezmoss/sbomlyze.svg
 [download]: https://github.com/rezmoss/sbomlyze/releases
 [download-img]: https://img.shields.io/github/downloads/rezmoss/sbomlyze/total
-[go-doc]: https://pkg.go.dev/github.com/rezmoss/sbomlyze
-[go-doc-img]: https://pkg.go.dev/badge/github.com/rezmoss/sbomlyze.svg
-[codeql]: https://github.com/rezmoss/sbomlyze/actions/workflows/github-code-scanning/codeql
-[codeql-img]: https://github.com/rezmoss/sbomlyze/actions/workflows/github-code-scanning/codeql/badge.svg
 [scorecard]: https://scorecard.dev/viewer/?uri=github.com/rezmoss/sbomlyze
 [scorecard-img]: https://api.scorecard.dev/projects/github.com/rezmoss/sbomlyze/badge
