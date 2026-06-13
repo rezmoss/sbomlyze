@@ -1,8 +1,8 @@
 # sbomlyze
 
-**`git diff` for your SBOM.** Compare two Software Bills of Materials and see exactly what changed between builds, versions, and releases.
+**`git diff` for your SBOM.** Compare two Software Bills of Materials and see what changed between builds, versions, and releases.
 
-The only SBOM diff that **checks hashes, not just versions** — catching supply-chain tampering (a package swapped without a version bump) that generators and vulnerability scanners miss.
+sbomlyze compares component hashes, not only version strings. When an attacker swaps a package without bumping its version, sbomlyze flags it. Generators and vulnerability scanners miss this.
 
 [![CI][ci-img]][ci]
 [![GitHub Release][release-img]][release]
@@ -15,12 +15,12 @@ The only SBOM diff that **checks hashes, not just versions** — catching supply
 ![demo](https://github.com/user-attachments/assets/b21996fc-41e8-4d79-9ca2-e4291f8dd2f5)
 
 
-> **Generators make SBOMs. Scanners find CVEs. sbomlyze tells you what changed — and whether to trust it.**
-> It slots in right after your generator: `syft image:tag -o cyclonedx-json` → **sbomlyze diffs the output**, classifies the drift, scores compliance, and gates your pipeline.
+> Generators make SBOMs and scanners find CVEs. sbomlyze tells you what changed between two SBOMs and whether to trust it.
+> Run it after your generator: pipe `syft image:tag -o cyclonedx-json` into `sbomlyze`, which classifies the drift, scores compliance, and gates your pipeline.
 
 ## Why sbomlyze?
 
-SBOM *generation* is a solved, crowded problem. **Comparing** two SBOMs — and knowing whether a change is routine or a supply-chain red flag — is not. That's the gap sbomlyze fills.
+Many tools generate SBOMs. Few compare them, and fewer tell you whether a change is routine or a supply-chain red flag. sbomlyze fills that gap.
 
 | Capability | **sbomlyze** | cyclonedx-cli | sbomqs | syft / trivy |
 |---|:---:|:---:|:---:|:---:|
@@ -35,7 +35,7 @@ SBOM *generation* is a solved, crowded problem. **Comparing** two SBOMs — and 
 ## Features
 
 - **SBOM diffing**: Compare two SBOMs and see added, removed, and changed components at a glance
-- **Drift classification**: Distinguish version drift from **integrity drift** (hash changed without version — a tamper signal) and metadata drift
+- **Drift classification**: Distinguish version drift from **integrity drift** (a hash changed without a version change, signaling tampering) and metadata drift
 - **Compliance scoring**: Score any SBOM against **NTIA**, **CISA 2025**, and **BSI TR-03183** minimum elements
 - **Dependency graph diff**: Track transitive dependencies and supply-chain depth
 - **Multi-format support**: Syft, CycloneDX, SPDX (JSON)
@@ -143,7 +143,7 @@ go build -o sbomlyze ./cmd/sbomlyze
 ## Quick Start
 
 ```bash
-# Compare two SBOMs — the headline use case
+# Compare two SBOMs (the headline use case)
 sbomlyze before.json after.json
 
 # Analyze a single SBOM
@@ -446,7 +446,7 @@ JSON output (`--compliance --json`) includes the full report with per-check pass
 
 ### Gating Compliance in CI
 
-Compliance thresholds can be enforced through the [policy engine](#policy-engine). Setting any threshold automatically triggers compliance evaluation — no `--compliance` flag needed:
+Enforce compliance thresholds through the [policy engine](#policy-engine). Setting any threshold triggers compliance evaluation without the `--compliance` flag:
 
 ```json
 {
@@ -829,11 +829,11 @@ sbomlyze before.json after.json --format patch > changes.json
 
 Generates a [SARIF 2.1.0](https://sarifweb.azurewebsites.net/) report suitable for GitHub Code Scanning. Detected rules include:
 
-- `integrity-drift` (error) — hash changed without version change
-- `deep-dependency` (warning) — new dependency at depth 3+
-- `new-component` / `removed-component` (note) — component additions/removals
-- `version-change` (note) — component version updates
-- `policy-violation` (error/warning) — policy rule violations
+- `integrity-drift` (error): hash changed without version change
+- `deep-dependency` (warning): new dependency at depth 3+
+- `new-component` / `removed-component` (note): component additions/removals
+- `version-change` (note): component version updates
+- `policy-violation` (error/warning): policy rule violations
 
 #### JUnit Format
 
@@ -854,7 +854,7 @@ Generates a Markdown report with:
 
 #### HTML Format
 
-Generates a single self-contained HTML file (inline CSS and JavaScript, no external assets) suitable for emailing to auditors or attaching to a release. Includes the statistics dashboard, dependency tree, drift summary, and — when `--compliance` is set — the embedded compliance report.
+Generates a single self-contained HTML file (inline CSS and JavaScript, no external assets) suitable for emailing to auditors or attaching to a release. It includes the statistics dashboard, dependency tree, drift summary, and the embedded compliance report when `--compliance` is set.
 
 #### Patch Format
 
