@@ -149,6 +149,29 @@ func TestParseFile_CycloneDX(t *testing.T) {
 	}
 }
 
+func TestParseFile_CycloneDXXML(t *testing.T) {
+	comps, err := ParseFile(testdataPath("cyclonedx-before.xml"))
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if len(comps) != 3 {
+		t.Errorf("expected 3 components, got %d", len(comps))
+	}
+}
+
+func TestParseFileWithInfo_CycloneDXXML(t *testing.T) {
+	comps, info, err := ParseFileWithInfo(testdataPath("cyclonedx-with-metadata.xml"))
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if len(comps) != 2 {
+		t.Errorf("expected 2 components, got %d", len(comps))
+	}
+	if info.OSName != "alpine" {
+		t.Errorf("expected OSName=alpine, got %q", info.OSName)
+	}
+}
+
 func TestParseFile_SPDX(t *testing.T) {
 	comps, err := ParseFile(testdataPath("spdx-sample.json"))
 	if err != nil {

@@ -65,6 +65,8 @@ func handleUpload(w http.ResponseWriter, r *http.Request) {
 
 	if sbom.IsCycloneDX(data) {
 		comps, info, err = sbom.ParseCycloneDXWithInfo(data)
+	} else if sbom.IsCycloneDXXML(data) {
+		comps, info, err = sbom.ParseCycloneDXXMLWithInfo(data)
 	} else if sbom.IsSyft(data) {
 		comps, info, err = sbom.ParseSyftWithInfo(data)
 	} else if sbom.IsSPDX(data) {

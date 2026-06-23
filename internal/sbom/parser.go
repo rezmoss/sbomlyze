@@ -1,7 +1,9 @@
 package sbom
 
 import (
+	"bytes"
 	"encoding/json"
+	"encoding/xml"
 	"fmt"
 	"os"
 	"strings"
@@ -22,6 +24,9 @@ func ParseFileWithInfo(path string) ([]Component, SBOMInfo, error) {
 
 	if IsCycloneDX(data) {
 		return ParseCycloneDXWithInfo(data)
+	}
+	if IsCycloneDXXML(data) {
+		return ParseCycloneDXXMLWithInfo(data)
 	}
 	if IsSPDX(data) {
 		return ParseSPDXWithInfo(path)
@@ -63,6 +68,45 @@ func IsCycloneDX(data []byte) bool {
 		return true
 	}
 	return false
+}
+
+// IsCycloneDXXML detects CycloneDX XML format.
+// CycloneDX XML BOMs use namespace http://cyclonedx.org/schema/bom/<version>.
+func IsCycloneDXXML(data []byte) bool {
+	// Quick check: must start with XML prolog or <bom root element
+	trimmed := bytes.TrimLeft(data, " \t\r\n")
+	if len(trimmed) == 0 {
+		return false
+	}
+	// Must look like XML (prolog or <bom element)
+	if trimmed[0] != '<' {
+		return false
+	}
+	// Decode just enough to read root element name + namespace
+	dec := xml.NewDecoder(bytes.NewReader(trimmed))
+	for {
+		tok, err := dec.Token()
+		if err != nil {
+			return false
+		}
+		if se, ok := tok.(xml.StartElement); ok {
+			// Root element must be <bom>
+			if se.Name.Local != "bom" {
+				return false
+			}
+			// Must carry the CycloneDX XML namespace
+			for _, attr := range se.Attr {
+				if attr.Name.Space == "xmlns" && strings.HasPrefix(attr.Value, "http://cyclonedx.org/schema/bom/") {
+					return true
+				}
+			}
+			// Default namespace
+			if strings.HasPrefix(se.Name.Space, "http://cyclonedx.org/schema/bom/") {
+				return true
+			}
+			return false
+		}
+	}
 }
 
 // IsSPDX detects SPDX JSON format.
