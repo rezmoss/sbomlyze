@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bom xmlns="http://cyclonedx.org/schema/bom/1.4" version="1">
+  <metadata>
+    <component type="operating-system">
+      <name>alpine</name>
+      <version>3.19.0</version>
+    </component>
+    <properties>
+      <property name="syft:distro:name">Alpine Linux</property>
+      <property name="syft:distro:version">3.19.0</property>
+      <property name="syft:image:tag">alpine:3.19</property>
+    </properties>
+  </metadata>
+  <components>
+    <component type="library" bom-ref="mylib@1.0.0">
+      <name>mylib</name>
+      <version>1.0.0</version>
+      <group>com.example</group>
+      <purl>pkg:maven/com.example/mylib@1.0.0</purl>
+      <supplier>
+        <name>Example Corp</name>
+      </supplier>
+      <licenses>
+        <license>
+          <id>MIT</id>
+        </license>
+      </licenses>
+    </component>
+    <component type="library" bom-ref="otherlib@2.0.0">
+      <name>otherlib</name>
+      <version>2.0.0</version>
+      <purl>pkg:npm/otherlib@2.0.0</purl>
+    </component>
+  </components>
+</bom>
