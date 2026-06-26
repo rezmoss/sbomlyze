@@ -75,6 +75,7 @@ func IsCycloneDX(data []byte) bool {
 func IsCycloneDXXML(data []byte) bool {
 	// Quick check: must start with XML prolog or <bom root element
 	trimmed := bytes.TrimLeft(data, " \t\r\n")
+	trimmed = bytes.TrimPrefix(trimmed, []byte{0xEF, 0xBB, 0xBF})
 	if len(trimmed) == 0 {
 		return false
 	}
