@@ -58,8 +58,9 @@ The web server is intended for **local use only** (binds to localhost). It is no
 
 ### Supply Chain
 
-- Dependencies are vendored in the `vendor/` directory for reproducible builds
+- Dependencies are locked by `go.mod` and `go.sum`; release builds verify the downloaded module content before compiling
 - Releases are built with [GoReleaser](https://goreleaser.com/) and include SHA256 checksums
+- The installer verifies release archives against the published SHA256 checksums before extracting them
 - CI runs [CodeQL](https://github.com/rezmoss/sbomlyze/actions/workflows/github-code-scanning/codeql) analysis on every push
 - All tests run with Go's race detector enabled (`-race`)
 
