@@ -1,0 +1,64 @@
+name: Monthly Maintenance
+
+on:
+  schedule:
+    - cron: "0 8 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  go-patch-update:
+    name: Update Go patch release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Read supported Go series
+        id: go-series
+        run: |
+          SERIES=$(awk '/^go / {split($2, v, "."); print v[1] "." v[2] ".x"}' go.mod)
+          echo "series=$SERIES" >> "$GITHUB_OUTPUT"
+
+      - name: Set up latest Go patch release
+        id: setup-go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version: ${{ steps.go-series.outputs.series }}
+          check-latest: true
+
+      - name: Update Go version metadata
+        env:
+          GO_VERSION: ${{ steps.setup-go.outputs.go-version }}
+        run: |
+          go mod edit -go="$GO_VERSION"
+          go mod tidy
+
+      - name: Run race tests
+        run: go test -race -count=1 ./...
+
+      - name: Run govulncheck
+        uses: golang/govulncheck-action@032d45514ae346b1db93c04b0c90b841c370344f # v1.1.0
+        with:
+          repo-checkout: false
+          go-version-input: ${{ steps.setup-go.outputs.go-version }}
+          go-package: ./...
+
+      - name: Create or update maintenance PR
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        with:
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN || github.token }}
+          branch: automation/go-patch
+          delete-branch: true
+          commit-message: "build(deps): update Go patch toolchain"
+          title: "build(deps): update Go patch toolchain"
+          body: |
+            Automated monthly maintenance update for the currently supported Go
+            minor series. The race-enabled test suite and govulncheck passed before
+            this PR was created.
+          labels: dependencies

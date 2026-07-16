@@ -146,6 +146,40 @@ get_latest_version() {
     echo "$LATEST"
 }
 
+sha256_file() {
+    if command -v sha256sum >/dev/null 2>&1; then
+        sha256sum "$1" | awk '{print $1}'
+    elif command -v shasum >/dev/null 2>&1; then
+        shasum -a 256 "$1" | awk '{print $1}'
+    elif command -v openssl >/dev/null 2>&1; then
+        openssl dgst -sha256 "$1" | awk '{print $NF}'
+    else
+        log_error "No SHA256 tool found (tried sha256sum, shasum, and openssl)"
+        return 1
+    fi
+}
+
+verify_checksum() {
+    ARCHIVE=$1
+    CHECKSUMS=$2
+    EXPECTED=$(awk -v file="$FILENAME" '$2 == file {print $1; exit}' "$CHECKSUMS")
+
+    if [ -z "$EXPECTED" ]; then
+        log_error "No checksum found for ${FILENAME}"
+        return 1
+    fi
+
+    ACTUAL=$(sha256_file "$ARCHIVE")
+    if [ "$ACTUAL" != "$EXPECTED" ]; then
+        log_error "Checksum verification failed for ${FILENAME}"
+        log_error "Expected: $EXPECTED"
+        log_error "Actual:   $ACTUAL"
+        return 1
+    fi
+
+    log_info "Checksum verified"
+}
+
 # Download and install
 install() {
     OS=$(detect_os)
@@ -194,6 +228,11 @@ install() {
         log_error "Available releases: https://github.com/${GITHUB_REPO}/releases"
         exit 1
     fi
+
+    CHECKSUMS_URL="https://github.com/${GITHUB_REPO}/releases/download/${VERSION}/checksums.txt"
+    log_info "Verifying SHA256 checksum..."
+    curl -sSfL -o "${TMP_DIR}/checksums.txt" "$CHECKSUMS_URL"
+    verify_checksum "${TMP_DIR}/${FILENAME}" "${TMP_DIR}/checksums.txt"
 
     # Extract
     log_info "Extracting..."

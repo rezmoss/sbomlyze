@@ -4,9 +4,19 @@ on:
   push:
     tags:
       - "v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release (for example, v0.3.4)"
+        required: true
+        type: string
+
+concurrency:
+  group: release
+  cancel-in-progress: false
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   test:
@@ -14,72 +24,75 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           fetch-depth: 0
 
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           go-version-file: go.mod
 
+      - name: Validate requested version
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          if [[ ! "$VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$ ]]; then
+            echo "Version must be a semantic version beginning with v (for example, v0.3.4)" >&2
+            exit 1
+          fi
+          if git rev-parse --verify --quiet "refs/tags/$VERSION" >/dev/null; then
+            echo "Tag $VERSION already exists" >&2
+            exit 1
+          fi
+
       - name: Run tests
         run: go test -v -race ./...
+
+      - name: Run govulncheck
+        uses: golang/govulncheck-action@032d45514ae346b1db93c04b0c90b841c370344f # v1.1.0
+        with:
+          repo-checkout: false
+          go-version-file: go.mod
+          go-package: ./...
 
   release:
     name: Release
     runs-on: ubuntu-latest
     needs: test
+    permissions:
+      contents: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           fetch-depth: 0
 
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           go-version-file: go.mod
 
-      - name: Get version info
-        id: version
+      - name: Create release tag
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          VERSION: ${{ inputs.version }}
         run: |
-          # Extract version from tag (remove 'v' prefix)
-          VERSION=${GITHUB_REF_NAME#v}
-          COMMIT=$(git rev-parse --short HEAD)
-          DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "commit=$COMMIT" >> $GITHUB_OUTPUT
-          echo "date=$DATE" >> $GITHUB_OUTPUT
-          echo "Version: $VERSION, Commit: $COMMIT, Date: $DATE"
-
-      - name: Update version.go
-        run: |
-          VERSION="${{ steps.version.outputs.version }}"
-          COMMIT="${{ steps.version.outputs.commit }}"
-          DATE="${{ steps.version.outputs.date }}"
-
-          # Update version.go with release values
-          sed -i "s/Version     = \"dev\"/Version     = \"$VERSION\"/" internal/version/version.go
-          sed -i "s/Commit      = \"none\"/Commit      = \"$COMMIT\"/" internal/version/version.go
-          sed -i "s/Date        = \"unknown\"/Date        = \"$DATE\"/" internal/version/version.go
-          sed -i "s/BuildSource = \"source\"/BuildSource = \"release\"/" internal/version/version.go
-
-          echo "Updated version.go:"
-          cat internal/version/version.go
-
-      - name: Vendor dependencies
-        run: go mod vendor
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$VERSION" -m "Release $VERSION"
+          git push origin "$VERSION"
 
       - name: Install Syft
-        uses: anchore/sbom-action/download-syft@v0
+        uses: anchore/sbom-action/download-syft@e22c389904149dbc22b58101806040fa8d37a610 # v0.24.0
 
       - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v6
+        uses: goreleaser/goreleaser-action@f06c13b6b1a9625abc9e6e439d9c05a8f2190e94 # v7.2.3
         with:
           distribution: goreleaser
           version: "~> v2"
-          args: release --clean --skip=validate
+          args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           HOMEBREW_TAP_GITHUB_TOKEN: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}

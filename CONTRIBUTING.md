@@ -8,8 +8,8 @@ Thank you for your interest in contributing to sbomlyze! This guide covers every
 
 | Tool | Version | Install |
 |------|---------|---------|
-| Go | 1.24+ | https://go.dev/dl/ |
-| golangci-lint | v1.64+ | `go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.64.8` |
+| Go | 1.25.12+ | https://go.dev/dl/ |
+| golangci-lint | v2.11+ | `go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.11.3` |
 | goreleaser (optional) | v2 | `go install github.com/goreleaser/goreleaser/v2@latest` |
 
 ### Clone and Build
@@ -182,6 +182,23 @@ Include:
 2. At least one maintainer review
 3. Address review feedback
 4. Squash-merge into `main`
+
+## Release Process
+
+Release Please maintains a release PR from Conventional Commit messages. It updates
+`CHANGELOG.md` and the recorded version, but it does not publish a release.
+
+1. Review and merge the `chore(main): release ...` PR.
+2. Open **Actions → Release → Run workflow**.
+3. Enter the version from the merged release PR, including the `v` prefix.
+4. The workflow runs tests and `govulncheck`, creates the tag, and lets GoReleaser
+   publish binaries, packages, checksums, SBOMs, and the Homebrew update.
+
+Tags pushed manually still trigger the same GoReleaser workflow.
+
+The monthly maintenance workflow keeps the current Go minor series on its latest
+security patch and opens a tested PR when the version changes. Dependabot handles
+Go module updates weekly and GitHub Actions updates monthly.
 
 ## Writing Tests
 
