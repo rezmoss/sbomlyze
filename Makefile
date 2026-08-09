@@ -1,4 +1,4 @@
-.PHONY: all test lint vulncheck build build-quick clean snapshot-test update-snapshot snapshot-diff snapshot-review help
+.PHONY: all test test-go test-action lint vulncheck build build-quick clean snapshot-test update-snapshot snapshot-diff snapshot-review help
 
 # The project does not vendor dependencies. Force module mode so an ignored,
 # stale local vendor/ directory cannot change build or test behavior.
@@ -7,8 +7,13 @@ export GOFLAGS
 
 all: test lint build ## Run test, lint, and build (full CI check)
 
-test: ## Run all tests with race detector
+test: test-go test-action ## Run all Go and Action tests
+
+test-go: ## Run Go tests with race detector
 	go test -v -race -count=1 ./...
+
+test-action: ## Run the dependency-free GitHub Action acceptance tests
+	node --test action/test/*.test.js
 
 lint: ## Run vet, golangci-lint, and staticcheck
 	go vet ./...

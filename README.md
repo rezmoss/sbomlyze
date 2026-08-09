@@ -1061,53 +1061,41 @@ Components are matched using a precedence-based identity system:
 
 ### GitHub Actions
 
+SBOMlyze ships as a dependency-free JavaScript Action. It compares a checked-in
+or separately generated head SBOM with the file at the pull request's git base,
+publishes a Job Summary, and optionally produces SARIF or updates one PR comment.
+
 ```yaml
 name: SBOM Check
-on: [pull_request]
+on:
+  pull_request:
+
+permissions:
+  contents: read
 
 jobs:
   sbom-diff:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Generate SBOM
-        run: syft . -o json > current.json
-
-      - name: Download baseline SBOM
-        run: curl -o baseline.json ${{ vars.BASELINE_SBOM_URL }}
-
-      - name: Compare SBOMs
-        run: |
-          go install github.com/rezmoss/sbomlyze@latest
-          sbomlyze baseline.json current.json --policy policy.json
-```
-
-#### GitHub Code Scanning (SARIF)
-
-```yaml
-      - name: SBOM Diff (SARIF)
-        run: sbomlyze baseline.json current.json --format sarif > results.sarif
-        continue-on-error: true
-
-      - name: Upload SARIF
-        uses: github/codeql-action/upload-sarif@v3
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          sarif_file: results.sarif
-```
+          fetch-depth: 0
 
-#### PR Comment with Markdown Report
-
-```yaml
-      - name: Generate Markdown Report
-        run: sbomlyze baseline.json current.json --format markdown > report.md
-        continue-on-error: true
-
-      - name: Comment on PR
-        uses: marocchino/sticky-pull-request-comment@v2
+      - id: sbomlyze
+        # Replace this placeholder with the full commit SHA containing the Action.
+        # The binary defaults to the published v0.3.7 release.
+        uses: rezmoss/sbomlyze@FULL_40_CHARACTER_ACTION_SHA
         with:
-          path: report.md
+          sbom-path: build/sbom.cdx.json
+          policy: .github/sbom-policy.json
+          fail-on: policy
 ```
+
+The Action never runs generator commands. Generate the head SBOM in a separate,
+reviewed step or commit it to the repository. `comment` and `sarif` both default
+to `false`; forked PRs still receive the complete Job Summary when comment
+permission is unavailable. See [the Action reference](ACTION.md) for every
+input/output, SHA-pinning, SARIF upload, permissions, and security behavior.
 
 ### GitLab CI
 
