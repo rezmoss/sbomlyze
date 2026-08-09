@@ -1,0 +1,40 @@
+name: GitHub Action beta feedback
+description: Report a 10-minute SBOMlyze Diff installation and review test.
+title: "[Action beta]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for testing the SBOMlyze Diff Action. Please answer these four questions candidly; short answers are useful.
+  - type: textarea
+    id: install
+    attributes:
+      label: Could you install it without help?
+      description: Say where you stopped or what was unclear if the answer is no.
+      placeholder: Yes, using the Node demo README; or no, because...
+    validations:
+      required: true
+  - type: textarea
+    id: review
+    attributes:
+      label: Did the pull-request result tell you what needed review?
+      description: Mention the scenario you tried and the decision you took from the Job Summary.
+      placeholder: The integrity drift result made it clear that...
+    validations:
+      required: true
+  - type: textarea
+    id: noise
+    attributes:
+      label: Which finding was noisy or misleading?
+      description: Write "none" if every finding was relevant and accurate.
+      placeholder: The depth warning was unclear because...
+    validations:
+      required: true
+  - type: textarea
+    id: required-check
+    attributes:
+      label: Would you make this a required check?
+      description: Explain the main reason for your answer.
+      placeholder: Yes/no, because...
+    validations:
+      required: true
