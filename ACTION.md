@@ -8,7 +8,7 @@ run an SBOM generator or execute repository-provided commands.
 ## Recommended workflow
 
 Pin all Actions to full commit SHAs. The SBOMlyze SHA below is the published
-`v0.4.0` Action. The binary version defaults to the same release.
+`v0.5.0` Action. The binary version defaults to the same release.
 
 ```yaml
 name: SBOM drift
@@ -31,7 +31,7 @@ jobs:
       # Generate or commit the head SBOM in a separate, reviewed step. SBOMlyze
       # deliberately does not accept or execute generator commands.
       - id: sbomlyze
-        uses: rezmoss/sbomlyze@38e8c3616f56e3748c06fe26bbe68c80b4763ebc # v0.4.0
+        uses: rezmoss/sbomlyze@8aca73bfd9d51a1634d6e897984f4e2702206dde # v0.5.0
         with:
           sbom-path: build/sbom.cdx.json
           policy: .github/sbom-policy.json
@@ -66,7 +66,7 @@ the SBOMlyze Job Summary remains available.
 | `github-token` | no | `github.token` | Token used for provenance, comments, release assets, and workflow artifacts. |
 | `sarif` | no | `false` | Generate `report-sarif`. |
 | `fail-on` | no | `policy` | `policy`, `integrity-drift`, `any-change`, or `never`. |
-| `version` | no | `v0.4.0` | Exact binary release; floating values such as `latest` are rejected. |
+| `version` | no | `v0.5.0` | Exact binary release; floating values such as `latest` are rejected. |
 
 ## Baseline providers
 
@@ -164,7 +164,7 @@ permissions:
 
 steps:
   - id: sbomlyze
-    uses: rezmoss/sbomlyze@38e8c3616f56e3748c06fe26bbe68c80b4763ebc # v0.4.0
+    uses: rezmoss/sbomlyze@8aca73bfd9d51a1634d6e897984f4e2702206dde # v0.5.0
     with:
       sbom-path: build/sbom.cdx.json
       comment: true
