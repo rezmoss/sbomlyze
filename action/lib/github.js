@@ -15,7 +15,7 @@ function apiRequest(method, pathname, token, body) {
       path: pathname,
       headers: {
         accept: 'application/vnd.github+json',
-        authorization: `Bearer ${token}`,
+        ...(token ? { authorization: `Bearer ${token}` } : {}),
         'user-agent': 'sbomlyze-action',
         'x-github-api-version': '2022-11-28',
         ...(data ? { 'content-type': 'application/json', 'content-length': data.length } : {}),

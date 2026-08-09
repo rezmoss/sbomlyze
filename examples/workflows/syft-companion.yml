@@ -1,0 +1,57 @@
+# Copy this file to .github/workflows/sbom-review.yml in the consuming repository.
+# Replace FULL_40_CHARACTER_SBOMLYZE_RELEASE_SHA after the provider release is published.
+name: Generate and review SBOM
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  actions: read
+  contents: read
+  security-events: write
+
+jobs:
+  sbom:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      # Generation is a separate, pinned companion step. SBOMlyze never accepts
+      # or executes generator commands from pull-request inputs.
+      - name: Generate CycloneDX SBOM with Syft
+        uses: anchore/sbom-action@e22c389904149dbc22b58101806040fa8d37a610 # v0.24.0
+        with:
+          path: .
+          format: cyclonedx-json
+          output-file: sbom.cdx.json
+          artifact-name: baseline-sbom
+          upload-artifact: true
+          upload-release-assets: false
+          dependency-snapshot: false
+
+      - name: Review SBOM against latest successful main artifact
+        if: github.event_name == 'pull_request'
+        id: sbomlyze
+        uses: rezmoss/sbomlyze@FULL_40_CHARACTER_SBOMLYZE_RELEASE_SHA
+        with:
+          sbom-path: sbom.cdx.json
+          baseline: workflow-artifact
+          baseline-artifact: baseline-sbom
+          baseline-artifact-path: sbom.cdx.json
+          fail-on: integrity-drift
+          sarif: true
+
+      - name: Upload SARIF
+        if: >-
+          always() &&
+          github.event_name == 'pull_request' &&
+          steps.sbomlyze.outputs.report-sarif != '' &&
+          github.event.pull_request.head.repo.full_name == github.repository
+        uses: github/codeql-action/upload-sarif@e4fba868fa4b1b91e1fdab776edc8cfbe6e9fb81 # v4.37.3
+        with:
+          sarif_file: ${{ steps.sbomlyze.outputs.report-sarif }}

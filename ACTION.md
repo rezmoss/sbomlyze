@@ -1,8 +1,9 @@
 # SBOMlyze GitHub Action
 
 The root `action.yml` compares an SBOM in the checked-out pull request or commit
-with the same file (or `base-sbom-path`) from the git baseline. It does not run an
-SBOM generator or execute repository-provided commands.
+with a baseline from git, the latest GitHub release, a successful default-branch
+workflow artifact, an explicit HTTPS URL, or a local workspace file. It does not
+run an SBOM generator or execute repository-provided commands.
 
 ## Recommended workflow
 
@@ -53,16 +54,87 @@ the SBOMlyze Job Summary remains available.
 |---|---:|---|---|
 | `sbom-path` | yes | — | Repository-relative head SBOM path. |
 | `base-sbom-path` | no | `sbom-path` | Different repository-relative path at the baseline revision. |
-| `baseline` | no | `git` | Baseline source. Only `git` is accepted by the MVP. |
+| `baseline` | no | `git` | `git`, `release`, `workflow-artifact`, `url`, or `file`. |
+| `baseline-repository` | no | current repository | `OWNER/REPO` for release or artifact lookup. |
+| `baseline-asset` | for `release` | — | Exact asset name in the latest non-draft, non-prerelease GitHub release. |
+| `baseline-artifact` | for `workflow-artifact` | — | Exact artifact name from the newest successful default-branch run containing it. |
+| `baseline-artifact-path` | no | `base-sbom-path` | Exact SBOM path inside the artifact ZIP. |
+| `baseline-url` | for `url` | — | Public HTTPS URL; credentials and the GitHub token are never forwarded. |
+| `baseline-path` | no | `base-sbom-path` | Repository-relative workspace file used by `baseline: file`. |
 | `policy` | no | — | Repository-relative SBOMlyze JSON policy. |
 | `comment` | no | `false` | Create or update one PR comment. |
-| `github-token` | no | `github.token` | Token used for provenance and an optional comment. |
+| `github-token` | no | `github.token` | Token used for provenance, comments, release assets, and workflow artifacts. |
 | `sarif` | no | `false` | Generate `report-sarif`. |
 | `fail-on` | no | `policy` | `policy`, `integrity-drift`, `any-change`, or `never`. |
 | `version` | no | `v0.4.0` | Exact binary release; floating values such as `latest` are rejected. |
 
-`baseline: release`, `artifact`, `url`, and `file` are reserved for later
-versions and currently fail with an explicit error.
+## Baseline providers
+
+### Git pull-request base
+
+`baseline: git` remains the default. It reads `base-sbom-path` directly from the
+pull request base SHA without checking out or executing base-branch code. Use
+`fetch-depth: 0` so the commit is available.
+
+### Latest GitHub release
+
+```yaml
+with:
+  sbom-path: build/application.cdx.json
+  baseline: release
+  baseline-asset: application.cdx.json
+```
+
+The latest-release endpoint excludes drafts and prereleases. No release is
+treated as a visible first run with an empty baseline; an existing latest
+release that lacks the exact asset name fails as configuration error. For a
+different repository, set `baseline-repository: OWNER/REPO`; private
+cross-repository access requires a token that can read that repository.
+
+### Successful default-branch workflow artifact
+
+```yaml
+permissions:
+  actions: read
+  contents: read
+
+steps:
+  - id: sbomlyze
+    uses: rezmoss/sbomlyze@FULL_40_CHARACTER_RELEASE_SHA
+    with:
+      sbom-path: sbom.cdx.json
+      baseline: workflow-artifact
+      baseline-artifact: baseline-sbom
+      baseline-artifact-path: sbom.cdx.json
+```
+
+SBOMlyze asks GitHub for successful trusted runs on the repository's default
+branch, excludes pull-request runs, searches newest first, ignores expired
+artifacts, and extracts only the exact requested file. No matching successful
+artifact is a visible first run. An
+artifact ZIP with traversal, symlinks, duplicate target paths, encryption,
+invalid checksums, or oversized content fails closed. See the
+[pinned Syft companion workflow](examples/workflows/syft-companion.yml).
+
+### Explicit URL or local file
+
+```yaml
+# Public HTTPS URL. No token or URL credentials are accepted.
+with:
+  sbom-path: build/application.cdx.json
+  baseline: url
+  baseline-url: https://downloads.example.org/application.cdx.json
+
+# A file produced or downloaded by an earlier reviewed step.
+with:
+  sbom-path: build/application.cdx.json
+  baseline: file
+  baseline-path: downloaded/baseline.cdx.json
+```
+
+URL downloads reject HTTP, credentials, non-default ports, private/local
+addresses, unsafe redirects, and responses above 50 MiB. Local paths receive
+the same traversal, symlink-escape, and size checks as other Action inputs.
 
 ## Outputs
 
@@ -117,4 +189,11 @@ failures, and the Job Summary remains available. Do not use
   checks out baseline code. A missing baseline path is treated as an empty
   first-run baseline. A missing baseline commit fails with instructions to use
   `fetch-depth: 0`.
+- Release and workflow-artifact API calls use exact repository, asset, artifact,
+  and archive-path matches. `actions: read` is required for private workflow
+  artifacts. GitHub tokens are sent only to `api.github.com` and are removed on
+  redirects.
+- Explicit URL baselines resolve only public HTTPS hosts and never receive the
+  GitHub token. For authenticated non-GitHub downloads, use a reviewed download
+  step followed by `baseline: file`.
 - Parsing uses SBOMlyze strict mode. Malformed and oversized inputs fail closed.

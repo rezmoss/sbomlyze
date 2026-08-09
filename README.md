@@ -44,6 +44,12 @@ and security guidance. See the
 for a passing dependency update and a blocked same-version hash change, with
 public workflow runs and SARIF evidence.
 
+Generated SBOMs do not need to be committed: `baseline: workflow-artifact`
+retrieves the most recent matching artifact from a successful default-branch
+run. A [pinned Syft companion workflow](examples/workflows/syft-companion.yml)
+shows generation and baseline publication while SBOMlyze remains responsible
+for review and policy.
+
 ## Why sbomlyze?
 
 Many tools generate SBOMs. Few compare them, and fewer tell you whether a change is routine or a supply-chain red flag. sbomlyze fills that gap.

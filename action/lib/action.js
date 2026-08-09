@@ -1,18 +1,25 @@
 'use strict';
 
 const crypto = require('node:crypto');
+const { constants: fsConstants } = require('node:fs');
 const fsp = require('node:fs/promises');
 const os = require('node:os');
 const path = require('node:path');
 const { installBinary } = require('./download');
 const { upsertComment } = require('./github');
 const { runProcess } = require('./process');
+const {
+  EMPTY_CYCLONEDX,
+  resolveReleaseBaseline,
+  resolveURLBaseline,
+  resolveWorkflowArtifactBaseline,
+} = require('./baseline');
 
 const MAX_INPUT_BYTES = 50 * 1024 * 1024;
 const MAX_SUMMARY_CHARS = 900_000;
 const DEFAULT_VERSION = 'v0.4.0'; // x-release-please-version
-const EMPTY_CYCLONEDX = '{"bomFormat":"CycloneDX","specVersion":"1.5","version":1,"components":[]}\n';
 const FAIL_ON_VALUES = new Set(['policy', 'integrity-drift', 'any-change', 'never']);
+const BASELINE_VALUES = new Set(['git', 'release', 'workflow-artifact', 'url', 'file']);
 
 function workflowEscape(value) {
   return String(value).replace(/%/g, '%25').replace(/\r/g, '%0D').replace(/\n/g, '%0A');
@@ -93,7 +100,7 @@ async function resolveGitBaseline({ workspace, basePath, outputPath, env, event,
   const revision = baselineRevision(env, event);
   if (revision === null) {
     await fsp.writeFile(outputPath, EMPTY_CYCLONEDX, { mode: 0o600 });
-    return { firstRun: true, revision: null };
+    return { firstRun: true, provider: 'git', source: 'new branch or repository', revision: null };
   }
   const commit = await run('git', ['cat-file', '-e', `${revision}^{commit}`], { cwd: workspace, env, maxOutput: 1024 * 1024 });
   if (commit.code !== 0) {
@@ -102,14 +109,20 @@ async function resolveGitBaseline({ workspace, basePath, outputPath, env, event,
   const object = await run('git', ['cat-file', '-e', `${revision}:${basePath}`], { cwd: workspace, env, maxOutput: 1024 * 1024 });
   if (object.code !== 0) {
     await fsp.writeFile(outputPath, EMPTY_CYCLONEDX, { mode: 0o600 });
-    return { firstRun: true, revision };
+    return { firstRun: true, provider: 'git', source: `${revision}:${basePath} (missing)`, revision };
   }
   const shown = await run('git', ['show', `${revision}:${basePath}`], { cwd: workspace, env, maxOutput: MAX_INPUT_BYTES + 1 });
   if (shown.code !== 0) throw new Error(`could not read ${basePath} from git baseline ${revision}: ${shown.stderr.trim()}`);
   const bytes = Buffer.byteLength(shown.stdout);
   if (bytes > MAX_INPUT_BYTES) throw new Error(`baseline SBOM exceeds the ${MAX_INPUT_BYTES}-byte limit`);
   await fsp.writeFile(outputPath, shown.stdout, { mode: 0o600 });
-  return { firstRun: false, revision };
+  return { firstRun: false, provider: 'git', source: `${revision}:${basePath}`, revision };
+}
+
+async function resolveFileBaseline({ workspace, value, outputPath }) {
+  const source = await workspaceFile(workspace, value, 'baseline-path');
+  await fsp.copyFile(source.absolute, outputPath, fsConstants.COPYFILE_EXCL);
+  return { firstRun: false, provider: 'file', source: source.relative };
 }
 
 async function runSBOMlyze(binary, baseline, head, policy, format, env) {
@@ -162,10 +175,13 @@ async function setOutputs(env, values) {
 
 function summaryPreamble(verdict, counts, baseline) {
   const icon = verdict === 'pass' ? '✅' : '❌';
+  const source = String(baseline.source || baseline.revision || 'first run')
+    .replace(/[\r\n|]/g, ' ').replace(/`/g, 'ˋ').slice(0, 1000);
   return `# ${icon} SBOMlyze: ${verdict.toUpperCase()}\n\n` +
     `| Added | Removed | Changed | Integrity drift |\n|---:|---:|---:|---:|\n` +
     `| ${counts.added} | ${counts.removed} | ${counts.changed} | ${counts.integrity} |\n\n` +
-    (baseline.firstRun ? '> No baseline SBOM existed at the selected git revision; this run used an empty baseline.\n\n' : '');
+    `> Baseline: \`${baseline.provider || 'git'}\` — ${source}\n\n` +
+    (baseline.firstRun ? '> No baseline was available; this run used an empty baseline.\n\n' : '');
 }
 
 async function writeSummary(env, text, log) {
@@ -190,13 +206,19 @@ async function runAction(env, dependencies = {}) {
   const sbomValue = input(env, 'sbom-path');
   const baseValue = input(env, 'base-sbom-path') || sbomValue;
   const baselineType = input(env, 'baseline', 'git');
+  const baselineRepository = input(env, 'baseline-repository') || env.GITHUB_REPOSITORY || '';
+  const baselineAsset = input(env, 'baseline-asset');
+  const baselineArtifact = input(env, 'baseline-artifact');
+  const baselineArtifactPath = input(env, 'baseline-artifact-path') || baseValue;
+  const baselineURL = input(env, 'baseline-url');
+  const baselineFile = input(env, 'baseline-path') || baseValue;
   const policyValue = input(env, 'policy');
   const comment = booleanInput(input(env, 'comment', 'false'), 'comment');
   const githubToken = input(env, 'github-token') || env.GITHUB_TOKEN || '';
   const sarif = booleanInput(input(env, 'sarif', 'false'), 'sarif');
   const failOn = input(env, 'fail-on', 'policy');
   const version = input(env, 'version', DEFAULT_VERSION);
-  if (baselineType !== 'git') throw new Error(`baseline ${JSON.stringify(baselineType)} is not supported yet; this MVP supports git`);
+  if (!BASELINE_VALUES.has(baselineType)) throw new Error('baseline must be git, release, workflow-artifact, url, or file');
   if (!FAIL_ON_VALUES.has(failOn)) throw new Error('fail-on must be policy, integrity-drift, any-change, or never');
 
   const head = await workspaceFile(workspace, sbomValue, 'sbom-path');
@@ -206,8 +228,21 @@ async function runAction(env, dependencies = {}) {
   const tempRoot = env.RUNNER_TEMP || os.tmpdir();
   const runDirectory = await fsp.mkdtemp(path.join(tempRoot, 'sbomlyze-action-'));
   const baselinePath = path.join(runDirectory, 'baseline.json');
-  const baseline = await (dependencies.resolveBaseline || resolveGitBaseline)({
-    workspace, basePath, outputPath: baselinePath, env, event,
+  let resolver = dependencies.resolveBaseline;
+  if (!resolver) {
+    resolver = {
+      git: resolveGitBaseline,
+      release: resolveReleaseBaseline,
+      'workflow-artifact': resolveWorkflowArtifactBaseline,
+      url: resolveURLBaseline,
+      file: resolveFileBaseline,
+    }[baselineType];
+  }
+  const baseline = await resolver({
+    workspace, basePath, outputPath: baselinePath, archivePath: path.join(runDirectory, 'baseline-artifact.zip'),
+    env, event, repository: baselineRepository, assetName: baselineAsset,
+    artifactName: baselineArtifact, artifactPath: baselineArtifactPath, url: baselineURL,
+    value: baselineFile, token: githubToken,
   });
 
   const commandEnv = githubToken && !env.GH_TOKEN ? { ...env, GH_TOKEN: githubToken } : env;
@@ -280,6 +315,7 @@ module.exports = {
   emitError,
   input,
   relativeRepositoryPath,
+  resolveFileBaseline,
   resolveGitBaseline,
   runAction,
   runSBOMlyze,
