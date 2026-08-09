@@ -117,7 +117,10 @@
                 }
               }
             }
-          ]
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "05dacea5fc026861ce74e93011f6e3f3:1"
+          }
         },
         {
           "ruleId": "removed-component",
@@ -133,7 +136,10 @@
                 }
               }
             }
-          ]
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "cfb182d8477036a476162d06c66abb7c:1"
+          }
         },
         {
           "ruleId": "version-change",
@@ -149,7 +155,10 @@
                 }
               }
             }
-          ]
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "84b6ddf616d52698d7c27390c5a13c98:1"
+          }
         }
       ]
     }

@@ -1,10 +1,12 @@
 package output
 
 import (
+	"crypto/sha256"
 	"fmt"
 
 	"github.com/rezmoss/sbomlyze/internal/analysis"
 	"github.com/rezmoss/sbomlyze/internal/policy"
+	"github.com/rezmoss/sbomlyze/internal/sbom"
 	"github.com/rezmoss/sbomlyze/internal/version"
 )
 
@@ -53,10 +55,11 @@ type SARIFProperties struct {
 }
 
 type SARIFResult struct {
-	RuleID    string          `json:"ruleId"`
-	Level     string          `json:"level"`
-	Message   SARIFMessage    `json:"message"`
-	Locations []SARIFLocation `json:"locations,omitempty"`
+	RuleID              string            `json:"ruleId"`
+	Level               string            `json:"level"`
+	Message             SARIFMessage      `json:"message"`
+	Locations           []SARIFLocation   `json:"locations,omitempty"`
+	PartialFingerprints map[string]string `json:"partialFingerprints"`
 }
 
 type SARIFLocation struct {
@@ -69,6 +72,35 @@ type SARIFPhysicalLocation struct {
 
 type SARIFArtifactLocation struct {
 	URI string `json:"uri"`
+}
+
+// sarifFingerprint gives GitHub a stable identity for one logical finding.
+// Every SBOM result points at the same JSON file without a source region, so
+// upload-sarif cannot otherwise distinguish components or policy rules. The
+// version suffix follows GitHub's primaryLocationLineHash convention and lets
+// us deliberately change the fingerprint algorithm in a future release.
+func sarifFingerprint(kind, identity string) map[string]string {
+	sum := sha256.Sum256([]byte(kind + "\x00" + identity))
+	return map[string]string{
+		"primaryLocationLineHash": fmt.Sprintf("%x:1", sum[:16]),
+	}
+}
+
+func changedIdentity(changed analysis.ChangedComponent) string {
+	if changed.ID != "" {
+		return changed.ID
+	}
+	return changed.Name
+}
+
+func componentIdentity(component sbom.Component) string {
+	if component.ID != "" {
+		return component.ID
+	}
+	if component.PURL != "" {
+		return component.PURL
+	}
+	return component.Name
 }
 
 // GenerateSARIF creates a SARIF report.
@@ -119,9 +151,10 @@ func GenerateSARIF(result analysis.DiffResult, violations []policy.Violation, sb
 	for _, changed := range result.Changed {
 		if changed.Drift != nil && changed.Drift.Type == analysis.DriftTypeIntegrity {
 			results = append(results, SARIFResult{
-				RuleID:  "integrity-drift",
-				Level:   "error",
-				Message: SARIFMessage{Text: fmt.Sprintf("Component %s has hash change without version change (potential supply chain attack)", changed.Name)},
+				RuleID:              "integrity-drift",
+				Level:               "error",
+				Message:             SARIFMessage{Text: fmt.Sprintf("Component %s has hash change without version change (potential supply chain attack)", changed.Name)},
+				PartialFingerprints: sarifFingerprint("integrity-drift", changedIdentity(changed)),
 				Locations: []SARIFLocation{{
 					PhysicalLocation: SARIFPhysicalLocation{
 						ArtifactLocation: SARIFArtifactLocation{URI: sbomFile},
@@ -135,9 +168,10 @@ func GenerateSARIF(result analysis.DiffResult, violations []policy.Violation, sb
 		for _, td := range result.Dependencies.TransitiveNew {
 			if td.Depth >= 3 {
 				results = append(results, SARIFResult{
-					RuleID:  "deep-dependency",
-					Level:   "warning",
-					Message: SARIFMessage{Text: fmt.Sprintf("New transitive dependency %s at depth %d", td.Target, td.Depth)},
+					RuleID:              "deep-dependency",
+					Level:               "warning",
+					Message:             SARIFMessage{Text: fmt.Sprintf("New transitive dependency %s at depth %d", td.Target, td.Depth)},
+					PartialFingerprints: sarifFingerprint("deep-dependency", td.Target),
 					Locations: []SARIFLocation{{
 						PhysicalLocation: SARIFPhysicalLocation{
 							ArtifactLocation: SARIFArtifactLocation{URI: sbomFile},
@@ -150,9 +184,10 @@ func GenerateSARIF(result analysis.DiffResult, violations []policy.Violation, sb
 
 	for _, added := range result.Added {
 		results = append(results, SARIFResult{
-			RuleID:  "new-component",
-			Level:   "note",
-			Message: SARIFMessage{Text: fmt.Sprintf("New component added: %s %s", added.Name, added.Version)},
+			RuleID:              "new-component",
+			Level:               "note",
+			Message:             SARIFMessage{Text: fmt.Sprintf("New component added: %s %s", added.Name, added.Version)},
+			PartialFingerprints: sarifFingerprint("new-component", componentIdentity(added)),
 			Locations: []SARIFLocation{{
 				PhysicalLocation: SARIFPhysicalLocation{
 					ArtifactLocation: SARIFArtifactLocation{URI: sbomFile},
@@ -163,9 +198,10 @@ func GenerateSARIF(result analysis.DiffResult, violations []policy.Violation, sb
 
 	for _, removed := range result.Removed {
 		results = append(results, SARIFResult{
-			RuleID:  "removed-component",
-			Level:   "note",
-			Message: SARIFMessage{Text: fmt.Sprintf("Component removed: %s %s", removed.Name, removed.Version)},
+			RuleID:              "removed-component",
+			Level:               "note",
+			Message:             SARIFMessage{Text: fmt.Sprintf("Component removed: %s %s", removed.Name, removed.Version)},
+			PartialFingerprints: sarifFingerprint("removed-component", componentIdentity(removed)),
 			Locations: []SARIFLocation{{
 				PhysicalLocation: SARIFPhysicalLocation{
 					ArtifactLocation: SARIFArtifactLocation{URI: sbomFile},
@@ -177,9 +213,10 @@ func GenerateSARIF(result analysis.DiffResult, violations []policy.Violation, sb
 	for _, changed := range result.Changed {
 		if changed.Before.Version != changed.After.Version {
 			results = append(results, SARIFResult{
-				RuleID:  "version-change",
-				Level:   "note",
-				Message: SARIFMessage{Text: fmt.Sprintf("Component %s version changed: %s -> %s", changed.Name, changed.Before.Version, changed.After.Version)},
+				RuleID:              "version-change",
+				Level:               "note",
+				Message:             SARIFMessage{Text: fmt.Sprintf("Component %s version changed: %s -> %s", changed.Name, changed.Before.Version, changed.After.Version)},
+				PartialFingerprints: sarifFingerprint("version-change", changedIdentity(changed)),
 				Locations: []SARIFLocation{{
 					PhysicalLocation: SARIFPhysicalLocation{
 						ArtifactLocation: SARIFArtifactLocation{URI: sbomFile},
@@ -195,9 +232,10 @@ func GenerateSARIF(result analysis.DiffResult, violations []policy.Violation, sb
 			level = "warning"
 		}
 		results = append(results, SARIFResult{
-			RuleID:  "policy-violation",
-			Level:   level,
-			Message: SARIFMessage{Text: fmt.Sprintf("[%s] %s", v.Rule, v.Message)},
+			RuleID:              "policy-violation",
+			Level:               level,
+			Message:             SARIFMessage{Text: fmt.Sprintf("[%s] %s", v.Rule, v.Message)},
+			PartialFingerprints: sarifFingerprint("policy-violation", v.Rule+"\x00"+v.Message),
 			Locations: []SARIFLocation{{
 				PhysicalLocation: SARIFPhysicalLocation{
 					ArtifactLocation: SARIFArtifactLocation{URI: sbomFile},
