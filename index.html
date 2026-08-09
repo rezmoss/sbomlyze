@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>sbomlyze Package Repository</title>
+  <title>Install sbomlyze</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
     h1 { color: #333; }
@@ -12,46 +12,18 @@
   </style>
 </head>
 <body>
-  <h1>sbomlyze Package Repository</h1>
+  <h1>Install sbomlyze</h1>
   <p>A fast, reliable SBOM diff and analysis tool.</p>
 
-  <h2>Debian / Ubuntu (apt)</h2>
-  <pre>
-# Add repository
-echo "deb [trusted=yes] https://rezmoss.github.io/sbomlyze/deb stable main" | sudo tee /etc/apt/sources.list.d/sbomlyze.list
-
-# Install
-sudo apt update
-sudo apt install sbomlyze</pre>
-
-  <h2>RHEL / Fedora / CentOS (dnf/yum)</h2>
-  <pre>
-# Add repository
-sudo tee /etc/yum.repos.d/sbomlyze.repo << REPO
-[sbomlyze]
-name=sbomlyze
-baseurl=https://rezmoss.github.io/sbomlyze/rpm/packages
-enabled=1
-gpgcheck=0
-REPO
-
-# Install
-sudo dnf install sbomlyze</pre>
-
-  <h2>Alpine (apk)</h2>
-  <pre>
-# Download and install directly
-wget https://github.com/rezmoss/sbomlyze/releases/latest/download/sbomlyze_VERSION_linux_amd64.apk
-sudo apk add --allow-untrusted sbomlyze_VERSION_linux_amd64.apk</pre>
-  <p class="note">Note: Alpine repository requires signed packages. Use direct download for now.</p>
-
-  <h2>Other Installation Methods</h2>
+  <h2>Verified Installation Methods</h2>
   <pre>
 # Install script (recommended)
 curl -sSfL https://raw.githubusercontent.com/rezmoss/sbomlyze/main/install.sh | sh
 
 # Go install
 go install github.com/rezmoss/sbomlyze/cmd/sbomlyze@latest</pre>
+
+  <p class="note">Unsigned apt, rpm, and apk repository instructions are not published. They will return after package-manager-native signing is available.</p>
 
   <p>See <a href="https://github.com/rezmoss/sbomlyze">GitHub repository</a> for more information.</p>
 </body>
