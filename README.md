@@ -5,6 +5,7 @@
 sbomlyze compares component hashes, not only version strings. When an attacker swaps a package without bumping its version, sbomlyze flags it. Generators and vulnerability scanners miss this.
 
 [![CI][ci-img]][ci]
+[![GitHub Marketplace][marketplace-img]][marketplace]
 [![GitHub Release][release-img]][release]
 [![Go Report Card][go-report-img]][go-report]
 [![OpenSSF Scorecard][scorecard-img]][scorecard]
@@ -17,6 +18,28 @@ sbomlyze compares component hashes, not only version strings. When an attacker s
 
 > Generators make SBOMs and scanners find CVEs. sbomlyze tells you what changed between two SBOMs and whether to trust it.
 > Run it after your generator: `syft image:tag -o cyclonedx-json | sbomlyze - --compliance` analyzes and scores the generated SBOM without a temporary file. Compare it with a baseline to classify drift and gate your pipeline.
+
+## GitHub Action quickstart
+
+Add [SBOMlyze Diff from GitHub Marketplace][marketplace] to compare a checked-in
+or separately generated SBOM with its git baseline. The immutable SHA below is
+the published `v0.4.0` Action:
+
+```yaml
+steps:
+  - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+    with:
+      fetch-depth: 0
+
+  - uses: rezmoss/sbomlyze@38e8c3616f56e3748c06fe26bbe68c80b4763ebc # v0.4.0
+    with:
+      sbom-path: build/sbom.cdx.json
+```
+
+The Action writes a Job Summary by default and can enforce policy, report
+integrity drift, upload SARIF, or maintain a single pull-request comment. See
+[the complete Action reference](ACTION.md) for inputs, outputs, permissions,
+and security guidance.
 
 ## Why sbomlyze?
 
@@ -45,6 +68,7 @@ Many tools generate SBOMs. Few compare them, and fewer tell you whether a change
 - **Interactive TUI mode**: Explore SBOMs with keyboard navigation and search
 - **Web UI mode**: Browser-based SBOM explorer with drag-and-drop upload
 - **Policy engine**: Enforce drift, license, and compliance-score rules in CI pipelines
+- **GitHub Marketplace Action**: Gate pull requests on SBOM drift with Job Summary, SARIF, and optional comment output
 - **Duplicate & collision detection**: Find multiple versions of the same package and ambiguous identity matches
 - **Multiple output formats**: Text, JSON, SARIF, JUnit XML, Markdown, HTML, JSON Patch
 - **Tolerant parsing**: Continue on errors with structured warnings
@@ -69,7 +93,7 @@ curl -sSfL https://raw.githubusercontent.com/rezmoss/sbomlyze/main/install.sh | 
 curl -sSfL https://raw.githubusercontent.com/rezmoss/sbomlyze/main/install.sh | sudo sh -s -- -b /usr/local/bin
 
 # Install specific version
-curl -sSfL https://raw.githubusercontent.com/rezmoss/sbomlyze/main/install.sh | sh -s -- -v 0.3.7
+curl -sSfL https://raw.githubusercontent.com/rezmoss/sbomlyze/main/install.sh | sh -s -- -v 0.4.0
 ```
 
 **Installer options:**
@@ -98,7 +122,7 @@ Starting with v0.3.7, release archives are published with GitHub artifact
 attestations. Verify a download independently with:
 
 ```bash
-gh attestation verify ./sbomlyze_0.3.7_Linux_x86_64.tar.gz \
+gh attestation verify ./sbomlyze_0.4.0_Linux_x86_64.tar.gz \
   --repo rezmoss/sbomlyze \
   --signer-workflow rezmoss/sbomlyze/.github/workflows/release.yml
 ```
@@ -1082,9 +1106,7 @@ jobs:
           fetch-depth: 0
 
       - id: sbomlyze
-        # Replace this placeholder with the full commit SHA containing the Action.
-        # The binary defaults to the published v0.3.7 release.
-        uses: rezmoss/sbomlyze@FULL_40_CHARACTER_ACTION_SHA
+        uses: rezmoss/sbomlyze@38e8c3616f56e3748c06fe26bbe68c80b4763ebc # v0.4.0
         with:
           sbom-path: build/sbom.cdx.json
           policy: .github/sbom-policy.json
@@ -1290,6 +1312,8 @@ Contributions are welcome! Good first issues are labeled [`good first issue`](ht
 
 [ci]: https://github.com/rezmoss/sbomlyze/actions/workflows/ci.yml
 [ci-img]: https://github.com/rezmoss/sbomlyze/actions/workflows/ci.yml/badge.svg
+[marketplace]: https://github.com/marketplace/actions/sbomlyze-diff
+[marketplace-img]: https://img.shields.io/badge/Marketplace-SBOMlyze%20Diff-blue?logo=github
 [release]: https://github.com/rezmoss/sbomlyze/releases
 [release-img]: https://img.shields.io/github/v/release/rezmoss/sbomlyze
 [go-report]: https://goreportcard.com/report/github.com/rezmoss/sbomlyze

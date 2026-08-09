@@ -6,10 +6,8 @@ SBOM generator or execute repository-provided commands.
 
 ## Recommended workflow
 
-Pin both Actions to full commit SHAs. Replace `FULL_40_CHARACTER_ACTION_SHA`
-with the future commit that contains this Action before enabling the workflow.
-The already-published `v0.3.7` tag contains the binary release but predates the
-Action, so its commit SHA is not a valid Action pin.
+Pin all Actions to full commit SHAs. The SBOMlyze SHA below is the published
+`v0.4.0` Action. The binary version defaults to the same release.
 
 ```yaml
 name: SBOM drift
@@ -19,6 +17,7 @@ on:
 
 permissions:
   contents: read
+  security-events: write
 
 jobs:
   sbom-diff:
@@ -31,21 +30,22 @@ jobs:
       # Generate or commit the head SBOM in a separate, reviewed step. SBOMlyze
       # deliberately does not accept or execute generator commands.
       - id: sbomlyze
-        uses: rezmoss/sbomlyze@FULL_40_CHARACTER_ACTION_SHA # binary defaults to v0.3.7
+        uses: rezmoss/sbomlyze@38e8c3616f56e3748c06fe26bbe68c80b4763ebc # v0.4.0
         with:
           sbom-path: build/sbom.cdx.json
           policy: .github/sbom-policy.json
           fail-on: policy
+          sarif: true
 
-      - uses: github/codeql-action/upload-sarif@v3
+      - uses: github/codeql-action/upload-sarif@e4fba868fa4b1b91e1fdab776edc8cfbe6e9fb81 # v4.37.3
         if: always() && steps.sbomlyze.outputs.report-sarif != ''
         with:
           sarif_file: ${{ steps.sbomlyze.outputs.report-sarif }}
 ```
 
-Set `sarif: true` on the SBOMlyze step and grant `security-events: write` if the
-SARIF upload is required. Pin `upload-sarif` to a reviewed full SHA in production
-as well.
+Remove `security-events: write`, `sarif: true`, and the upload step if SARIF is
+not required. Forked pull requests may not receive permission to upload SARIF;
+the SBOMlyze Job Summary remains available.
 
 ## Inputs
 
@@ -59,7 +59,7 @@ as well.
 | `github-token` | no | `github.token` | Token used for provenance and an optional comment. |
 | `sarif` | no | `false` | Generate `report-sarif`. |
 | `fail-on` | no | `policy` | `policy`, `integrity-drift`, `any-change`, or `never`. |
-| `version` | no | `v0.3.7` | Exact binary release; floating values such as `latest` are rejected. |
+| `version` | no | `v0.4.0` | Exact binary release; floating values such as `latest` are rejected. |
 
 `baseline: release`, `artifact`, `url`, and `file` are reserved for later
 versions and currently fail with an explicit error.
@@ -88,7 +88,7 @@ permissions:
 
 steps:
   - id: sbomlyze
-    uses: rezmoss/sbomlyze@FULL_40_CHARACTER_ACTION_SHA # binary defaults to v0.3.7
+    uses: rezmoss/sbomlyze@38e8c3616f56e3748c06fe26bbe68c80b4763ebc # v0.4.0
     with:
       sbom-path: build/sbom.cdx.json
       comment: true
