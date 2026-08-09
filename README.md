@@ -39,7 +39,10 @@ steps:
 The Action writes a Job Summary by default and can enforce policy, report
 integrity drift, upload SARIF, or maintain a single pull-request comment. See
 [the complete Action reference](ACTION.md) for inputs, outputs, permissions,
-and security guidance.
+and security guidance. See the
+[live demonstration repository](https://github.com/rezmoss/sbomlyze-action-demo)
+for a passing dependency update and a blocked same-version hash change, with
+public workflow runs and SARIF evidence.
 
 ## Why sbomlyze?
 
