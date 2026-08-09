@@ -19,7 +19,7 @@ jobs:
 
       - name: Test successful comparison
         id: sbomlyze
-        uses: rezmoss/sbomlyze@v0.4.0 # x-release-please-version
+        uses: rezmoss/sbomlyze@v0.5.0 # x-release-please-version
         with:
           sbom-path: testdata/cyclonedx-after.json
           base-sbom-path: testdata/cyclonedx-before.json
@@ -53,7 +53,7 @@ jobs:
       - name: Test expected integrity gate failure
         id: integrity
         continue-on-error: true
-        uses: rezmoss/sbomlyze@v0.4.0 # x-release-please-version
+        uses: rezmoss/sbomlyze@v0.5.0 # x-release-please-version
         with:
           sbom-path: testdata/cyclonedx-integrity-drift.json
           base-sbom-path: testdata/cyclonedx-before.json
