@@ -13,7 +13,10 @@ sbomlyze compares component hashes, not only version strings. When an attacker s
 [![Downloads][download-img]][download]
 
 
-![demo](https://github.com/user-attachments/assets/b21996fc-41e8-4d79-9ca2-e4291f8dd2f5)
+[![SBOMlyze blocks a same-version hash change in a real pull request](docs/assets/tamper-drift-demo.gif)](https://github.com/rezmoss/sbomlyze-go-spdx-demo/pull/2)
+
+See why this signal is different from a manifest or ordinary component diff in
+[Manifest diff vs. SBOM diff vs. integrity drift](docs/manifest-vs-sbom-vs-integrity-drift.md).
 
 
 > Generators make SBOMs and scanners find CVEs. sbomlyze tells you what changed between two SBOMs and whether to trust it.
@@ -23,7 +26,7 @@ sbomlyze compares component hashes, not only version strings. When an attacker s
 
 Add [SBOMlyze Diff from GitHub Marketplace][marketplace] to compare a checked-in
 or separately generated SBOM with its git baseline. The immutable SHA below is
-the published `v0.5.0` Action:
+the published `v0.5.1` Action:
 
 ```yaml
 steps:
@@ -31,7 +34,7 @@ steps:
     with:
       fetch-depth: 0
 
-  - uses: rezmoss/sbomlyze@8aca73bfd9d51a1634d6e897984f4e2702206dde # v0.5.0
+  - uses: rezmoss/sbomlyze@31503690611fda8ebba4ed2bd186eda000442594 # v0.5.1
     with:
       sbom-path: build/sbom.cdx.json
 ```
@@ -1123,7 +1126,7 @@ jobs:
           fetch-depth: 0
 
       - id: sbomlyze
-        uses: rezmoss/sbomlyze@8aca73bfd9d51a1634d6e897984f4e2702206dde # v0.5.0
+        uses: rezmoss/sbomlyze@31503690611fda8ebba4ed2bd186eda000442594 # v0.5.1
         with:
           sbom-path: build/sbom.cdx.json
           policy: .github/sbom-policy.json
