@@ -5,7 +5,17 @@
       "release-type": "simple",
       "package-name": "sbomlyze",
       "include-component-in-tag": false,
-      "changelog-path": "CHANGELOG.md"
+      "changelog-path": "CHANGELOG.md",
+      "extra-files": [
+        {
+          "type": "generic",
+          "path": "action.yml"
+        },
+        {
+          "type": "generic",
+          "path": "action/lib/action.js"
+        }
+      ]
     }
   }
 }
