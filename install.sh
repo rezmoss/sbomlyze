@@ -75,7 +75,7 @@ while getopts "b:dv:h" opt; do
             echo "  curl -sSfL https://raw.githubusercontent.com/rezmoss/sbomlyze/main/install.sh | sudo sh -s -- -b /usr/local/bin"
             echo ""
             echo "  # Install specific version"
-            echo "  curl -sSfL https://raw.githubusercontent.com/rezmoss/sbomlyze/main/install.sh | sh -s -- -v 0.2.0"
+            echo "  curl -sSfL https://raw.githubusercontent.com/rezmoss/sbomlyze/main/install.sh | sh -s -- -v 0.3.7"
             exit 0
             ;;
         \?)
@@ -180,6 +180,31 @@ verify_checksum() {
     log_info "Checksum verified"
 }
 
+verify_provenance() {
+    ARCHIVE=$1
+
+    if ! command -v gh >/dev/null 2>&1; then
+        log_warn "GitHub CLI not found; provenance verification skipped"
+        log_warn "SHA256 verification succeeded. Install gh to verify release provenance."
+        return 0
+    fi
+
+    if ! gh attestation verify --help >/dev/null 2>&1; then
+        log_warn "Installed GitHub CLI does not support attestation verification"
+        log_warn "SHA256 verification succeeded. Upgrade gh to verify release provenance."
+        return 0
+    fi
+
+    log_info "Verifying GitHub build provenance..."
+    if ! gh attestation verify "$ARCHIVE" \
+        --repo "$GITHUB_REPO" \
+        --signer-workflow "$GITHUB_REPO/.github/workflows/release.yml"; then
+        log_error "Build provenance verification failed for ${FILENAME}"
+        return 1
+    fi
+    log_info "Build provenance verified"
+}
+
 # Download and install
 install() {
     OS=$(detect_os)
@@ -233,6 +258,8 @@ install() {
     log_info "Verifying SHA256 checksum..."
     curl -sSfL -o "${TMP_DIR}/checksums.txt" "$CHECKSUMS_URL"
     verify_checksum "${TMP_DIR}/${FILENAME}" "${TMP_DIR}/checksums.txt"
+
+    verify_provenance "${TMP_DIR}/${FILENAME}"
 
     # Extract
     log_info "Extracting..."

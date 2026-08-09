@@ -1,7 +1,7 @@
 sbomlyze - A fast, reliable SBOM diff and analysis tool
 
-Usage: sbomlyze <sbom1> [sbom2] [options]
-       sbomlyze convert <sbom> --to <format> [-o output]
+Usage: sbomlyze <sbom1|-> [sbom2|-] [options]
+       sbomlyze convert <sbom|-> --to <format> [-o output]
 
 Modes:
   Single file:  sbomlyze <sbom> [--json]        - Show statistics
@@ -9,6 +9,8 @@ Modes:
   Convert:      sbomlyze convert <sbom> --to <fmt> - Convert SBOM format
   Web server:   sbomlyze -web [--port 8080]     - Web UI explorer
   Two files:    sbomlyze <sbom1> <sbom2> [...]  - Show diff
+
+Use - in place of one SBOM path to read it from standard input.
 
 Options:
   -i, --interactive   Interactive TUI explorer
@@ -47,6 +49,8 @@ Interactive Mode Keys:
 
 Examples:
   sbomlyze image.json                        # Show SBOM statistics
+  syft . -o cyclonedx-json | sbomlyze -      # Analyze from standard input
+  syft . -o cyclonedx-json | sbomlyze old -  # Diff stdin against a file
   sbomlyze image.json -i                     # Interactive explorer
   sbomlyze -web                              # Start web UI at localhost:8080
   sbomlyze -web --port 3000                  # Start web UI at localhost:3000

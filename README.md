@@ -16,7 +16,7 @@ sbomlyze compares component hashes, not only version strings. When an attacker s
 
 
 > Generators make SBOMs and scanners find CVEs. sbomlyze tells you what changed between two SBOMs and whether to trust it.
-> Run it after your generator: pipe `syft image:tag -o cyclonedx-json` into `sbomlyze`, which classifies the drift, scores compliance, and gates your pipeline.
+> Run it after your generator: `syft image:tag -o cyclonedx-json | sbomlyze - --compliance` analyzes and scores the generated SBOM without a temporary file. Compare it with a baseline to classify drift and gate your pipeline.
 
 ## Why sbomlyze?
 
@@ -69,7 +69,7 @@ curl -sSfL https://raw.githubusercontent.com/rezmoss/sbomlyze/main/install.sh | 
 curl -sSfL https://raw.githubusercontent.com/rezmoss/sbomlyze/main/install.sh | sudo sh -s -- -b /usr/local/bin
 
 # Install specific version
-curl -sSfL https://raw.githubusercontent.com/rezmoss/sbomlyze/main/install.sh | sh -s -- -v 0.2.0
+curl -sSfL https://raw.githubusercontent.com/rezmoss/sbomlyze/main/install.sh | sh -s -- -v 0.3.7
 ```
 
 **Installer options:**
@@ -80,40 +80,9 @@ curl -sSfL https://raw.githubusercontent.com/rezmoss/sbomlyze/main/install.sh | 
 | `-d` | Enable debug output |
 | `-v <ver>` | Install specific version (default: latest) |
 
-### Debian / Ubuntu (apt)
-
-```bash
-# Add repository
-echo "deb [trusted=yes] https://rezmoss.github.io/sbomlyze/deb stable main" | sudo tee /etc/apt/sources.list.d/sbomlyze.list
-
-# Install
-sudo apt update
-sudo apt install sbomlyze
-```
-
-### RHEL / Fedora / CentOS (dnf/yum)
-
-```bash
-# Add repository
-sudo tee /etc/yum.repos.d/sbomlyze.repo << 'EOF'
-[sbomlyze]
-name=sbomlyze
-baseurl=https://rezmoss.github.io/sbomlyze/rpm/packages
-enabled=1
-gpgcheck=0
-EOF
-
-# Install
-sudo dnf install sbomlyze   # or: sudo yum install sbomlyze
-```
-
-### Alpine (apk)
-
-```bash
-# Download and install
-wget https://github.com/rezmoss/sbomlyze/releases/latest/download/sbomlyze_VERSION_linux_amd64.apk
-sudo apk add --allow-untrusted sbomlyze_*_linux_amd64.apk
-```
+The installer always verifies the release checksum. When a compatible GitHub CLI
+is installed, it also verifies the release's build provenance and fails closed if
+that verification does not succeed.
 
 ### Go Install
 
@@ -124,6 +93,18 @@ go install github.com/rezmoss/sbomlyze/cmd/sbomlyze@latest
 ### From Binary Release
 
 Download the latest binary from [GitHub Releases](https://github.com/rezmoss/sbomlyze/releases).
+
+Starting with v0.3.7, release archives are published with GitHub artifact
+attestations. Verify a download independently with:
+
+```bash
+gh attestation verify ./sbomlyze_0.3.7_Linux_x86_64.tar.gz \
+  --repo rezmoss/sbomlyze \
+  --signer-workflow rezmoss/sbomlyze/.github/workflows/release.yml
+```
+
+Unsigned apt, rpm, and apk repository instructions have been removed until the
+repositories support package-manager-native signature verification.
 
 **macOS users:** Remove the quarantine flag after downloading:
 
@@ -148,6 +129,12 @@ sbomlyze before.json after.json
 
 # Analyze a single SBOM
 sbomlyze image.json
+
+# Read an SBOM from standard input
+syft image:tag -o cyclonedx-json | sbomlyze -
+
+# Use standard input on either side of a diff
+syft image:tag -o cyclonedx-json | sbomlyze baseline.json -
 
 # Score an SBOM against NTIA / CISA / BSI minimum elements
 sbomlyze image.json --compliance
@@ -178,8 +165,8 @@ sbomlyze before.json after.json --policy policy.json
 ## Usage
 
 ```
-sbomlyze <sbom1> [sbom2] [options]
-sbomlyze convert <sbom> --to <format> [-o output]
+sbomlyze <sbom1|-> [sbom2|-] [options]
+sbomlyze convert <sbom|-> --to <format> [-o output]
 
 Modes:
   Single file:  sbomlyze <sbom> [--json]            Show statistics
@@ -187,6 +174,8 @@ Modes:
   Convert:      sbomlyze convert <sbom> --to <fmt>  Convert SBOM format
   Web server:   sbomlyze -web [--port 8080]         Web UI explorer
   Two files:    sbomlyze <sbom1> <sbom2> [...]      Show diff
+
+Use `-` in place of one SBOM path to read it from standard input.
 
 Options:
   -i, --interactive   Interactive TUI explorer
@@ -1309,9 +1298,6 @@ make clean          # Remove build artifacts
 
 Contributions are welcome! Good first issues are labeled [`good first issue`](https://github.com/rezmoss/sbomlyze/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22). See [CONTRIBUTING.md](CONTRIBUTING.md) if present, and feel free to open an issue or discussion to propose changes.
 
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=rezmoss/sbomlyze&type=Date)](https://star-history.com/#rezmoss/sbomlyze&Date)
 
 
 [ci]: https://github.com/rezmoss/sbomlyze/actions/workflows/ci.yml

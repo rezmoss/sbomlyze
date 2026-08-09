@@ -1,5 +1,10 @@
 .PHONY: all test lint vulncheck build build-quick clean snapshot-test update-snapshot snapshot-diff snapshot-review help
 
+# The project does not vendor dependencies. Force module mode so an ignored,
+# stale local vendor/ directory cannot change build or test behavior.
+GOFLAGS ?= -mod=mod
+export GOFLAGS
+
 all: test lint build ## Run test, lint, and build (full CI check)
 
 test: ## Run all tests with race detector

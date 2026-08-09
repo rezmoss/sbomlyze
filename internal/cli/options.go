@@ -105,7 +105,7 @@ func ParseArgs(args []string) Options {
 				i++
 			}
 		default:
-			if !strings.HasPrefix(args[i], "-") {
+			if args[i] == "-" || !strings.HasPrefix(args[i], "-") {
 				opts.Files = append(opts.Files, args[i])
 			}
 		}

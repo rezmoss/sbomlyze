@@ -39,6 +39,17 @@ func main() {
 
 	opts := cli.ParseArgs(os.Args)
 
+	stdinInputs := 0
+	for _, path := range opts.Files {
+		if path == "-" {
+			stdinInputs++
+		}
+	}
+	if stdinInputs > 1 {
+		fmt.Fprintln(os.Stderr, "err: standard input ('-') may only be used once")
+		os.Exit(1)
+	}
+
 	if opts.WebServer {
 		port := opts.WebPort
 		if port == 0 {
@@ -66,7 +77,7 @@ func main() {
 			fmt.Fprintf(os.Stderr, "err: %v\n", err)
 			os.Exit(1)
 		}
-		comps, info, err := sbom.ParseFileWithInfo(opts.Files[0])
+		comps, info, err := parseInputWithInfo(opts.Files[0])
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "err: parse %s: %v\n", opts.Files[0], err)
 			os.Exit(1)
@@ -358,7 +369,7 @@ func main() {
 }
 
 func parseFileWithOptionsAndInfo(path string, opts *cli.ParseOptions) ([]sbom.Component, sbom.SBOMInfo, error) {
-	comps, info, err := sbom.ParseFileWithInfo(path)
+	comps, info, err := parseInputWithInfo(path)
 	if err != nil {
 		if opts.Strict {
 			return nil, sbom.SBOMInfo{}, err
@@ -367,4 +378,11 @@ func parseFileWithOptionsAndInfo(path string, opts *cli.ParseOptions) ([]sbom.Co
 		return []sbom.Component{}, sbom.SBOMInfo{}, nil
 	}
 	return comps, info, nil
+}
+
+func parseInputWithInfo(path string) ([]sbom.Component, sbom.SBOMInfo, error) {
+	if path == "-" {
+		return sbom.ParseReaderWithInfo(os.Stdin)
+	}
+	return sbom.ParseFileWithInfo(path)
 }
