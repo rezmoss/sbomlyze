@@ -44,6 +44,14 @@ and security guidance. See the
 for a passing dependency update and a blocked same-version hash change, with
 public workflow runs and SARIF evidence.
 
+For format-specific dogfood, use the public
+[Go + SPDX](https://github.com/rezmoss/sbomlyze-go-spdx-demo),
+[Node + CycloneDX](https://github.com/rezmoss/sbomlyze-node-cyclonedx-demo), or
+[container](https://github.com/rezmoss/sbomlyze-container-demo) example. Each
+contains five reproducible review scenarios. The
+[10-minute beta guide](BETA.md) collects four focused activation and signal
+quality questions.
+
 Generated SBOMs do not need to be committed: `baseline: workflow-artifact`
 retrieves the most recent matching artifact from a successful default-branch
 run. A [pinned Syft companion workflow](examples/workflows/syft-companion.yml)
