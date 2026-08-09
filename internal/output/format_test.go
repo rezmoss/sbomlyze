@@ -392,6 +392,56 @@ func TestGenerateSARIF_PolicyViolationSeverity(t *testing.T) {
 	}
 }
 
+func TestGenerateSARIF_StableDistinctFingerprints(t *testing.T) {
+	result := analysis.DiffResult{
+		Added: []sbom.Component{
+			{ID: "pkg:npm/one", Name: "one", Version: "1.0.0"},
+			{ID: "pkg:npm/two", Name: "two", Version: "1.0.0"},
+		},
+	}
+	violations := []policy.Violation{
+		{Rule: "deny_licenses", Message: "one: denied license GPL-3.0-only", Severity: policy.SeverityError},
+		{Rule: "warn_new_transitive", Message: "2 new transitive deps", Severity: policy.SeverityWarning},
+	}
+
+	first := GenerateSARIF(result, violations, "sbom.json")
+	second := GenerateSARIF(result, violations, "renamed-sbom.json")
+	if len(first.Runs[0].Results) != len(second.Runs[0].Results) {
+		t.Fatalf("result counts differ: %d != %d", len(first.Runs[0].Results), len(second.Runs[0].Results))
+	}
+
+	seen := make(map[string]bool)
+	for i, got := range first.Runs[0].Results {
+		fingerprint := got.PartialFingerprints["primaryLocationLineHash"]
+		if fingerprint == "" {
+			t.Fatalf("result %d (%s) has no primary fingerprint", i, got.Message.Text)
+		}
+		if seen[fingerprint] {
+			t.Fatalf("result %d (%s) reused fingerprint %q", i, got.Message.Text, fingerprint)
+		}
+		seen[fingerprint] = true
+
+		if want := second.Runs[0].Results[i].PartialFingerprints["primaryLocationLineHash"]; fingerprint != want {
+			t.Errorf("result %d fingerprint is not stable across SBOM paths: %q != %q", i, fingerprint, want)
+		}
+	}
+}
+
+func TestGenerateSARIF_FingerprintTracksLogicalComponent(t *testing.T) {
+	before := GenerateSARIF(analysis.DiffResult{
+		Added: []sbom.Component{{ID: "pkg:npm/example", Name: "example", Version: "1.0.0"}},
+	}, nil, "sbom.json")
+	after := GenerateSARIF(analysis.DiffResult{
+		Added: []sbom.Component{{ID: "pkg:npm/example", Name: "example", Version: "2.0.0"}},
+	}, nil, "sbom.json")
+
+	got := before.Runs[0].Results[0].PartialFingerprints["primaryLocationLineHash"]
+	want := after.Runs[0].Results[0].PartialFingerprints["primaryLocationLineHash"]
+	if got != want {
+		t.Errorf("same logical component should retain its fingerprint: %q != %q", got, want)
+	}
+}
+
 func TestGenerateSARIF_RemovedComponents(t *testing.T) {
 	result := analysis.DiffResult{
 		Removed: []sbom.Component{{Name: "old-lib", Version: "1.0"}},
