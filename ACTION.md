@@ -105,7 +105,7 @@ steps:
       sbom-path: sbom.cdx.json
       baseline: workflow-artifact
       baseline-artifact: baseline-sbom
-      baseline-artifact-path: sbom.cdx.json
+      baseline-artifact-path: baseline-sbom
 ```
 
 SBOMlyze asks GitHub for successful trusted runs on the repository's default
@@ -114,7 +114,11 @@ artifacts, and extracts only the exact requested file. No matching successful
 artifact is a visible first run. An
 artifact ZIP with traversal, symlinks, duplicate target paths, encryption,
 invalid checksums, or oversized content fails closed. See the
-[pinned Syft companion workflow](examples/workflows/syft-companion.yml).
+[pinned Syft companion workflow](examples/workflows/syft-companion.yml). The
+companion disables Syft file metadata components so routine source or manifest
+edits are reviewed as dependency changes rather than same-version file
+integrity drift. Remove that setting when file-level drift is intentionally
+part of the policy.
 
 ### Explicit URL or local file
 
