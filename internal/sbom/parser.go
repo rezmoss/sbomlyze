@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
+	"io"
 	"os"
 	"strings"
 )
@@ -21,7 +22,20 @@ func ParseFileWithInfo(path string) ([]Component, SBOMInfo, error) {
 	if err != nil {
 		return nil, SBOMInfo{}, err
 	}
+	return ParseDataWithInfo(data)
+}
 
+// ParseReaderWithInfo parses an SBOM from a stream.
+func ParseReaderWithInfo(r io.Reader) ([]Component, SBOMInfo, error) {
+	data, err := io.ReadAll(r)
+	if err != nil {
+		return nil, SBOMInfo{}, err
+	}
+	return ParseDataWithInfo(data)
+}
+
+// ParseDataWithInfo detects and parses an SBOM from bytes.
+func ParseDataWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 	if IsCycloneDX(data) {
 		return ParseCycloneDXWithInfo(data)
 	}
@@ -29,7 +43,7 @@ func ParseFileWithInfo(path string) ([]Component, SBOMInfo, error) {
 		return ParseCycloneDXXMLWithInfo(data)
 	}
 	if IsSPDX(data) {
-		return ParseSPDXWithInfo(path)
+		return parseSPDXData(data)
 	}
 	if IsSyft(data) {
 		return ParseSyftWithInfo(data)

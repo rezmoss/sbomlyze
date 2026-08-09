@@ -80,6 +80,15 @@ func TestParseArgs(t *testing.T) {
 			t.Errorf("unexpected files: %v", opts.Files)
 		}
 	})
+
+	t.Run("collects standard input marker", func(t *testing.T) {
+		args := []string{"sbomlyze", "-", "baseline.json"}
+		opts := ParseArgs(args)
+
+		if len(opts.Files) != 2 || opts.Files[0] != "-" || opts.Files[1] != "baseline.json" {
+			t.Errorf("expected stdin marker and file, got %v", opts.Files)
+		}
+	})
 }
 
 func TestParseArgs_WebFlag(t *testing.T) {

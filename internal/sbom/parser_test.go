@@ -4,11 +4,42 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
 func testdataPath(name string) string {
 	return filepath.Join("..", "..", "testdata", name)
+}
+
+func TestParseReaderWithInfo(t *testing.T) {
+	tests := []struct {
+		name       string
+		file       string
+		components int
+	}{
+		{name: "CycloneDX JSON", file: "cyclonedx-before.json", components: 3},
+		{name: "CycloneDX XML", file: "cyclonedx-before.xml", components: 3},
+		{name: "SPDX JSON", file: "spdx-sample.json", components: 2},
+		{name: "Syft JSON", file: "syft-sample.json", components: 3},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			data, err := os.ReadFile(testdataPath(tt.file))
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			components, _, err := ParseReaderWithInfo(strings.NewReader(string(data)))
+			if err != nil {
+				t.Fatalf("ParseReaderWithInfo returned an error: %v", err)
+			}
+			if len(components) != tt.components {
+				t.Fatalf("expected %d components, got %d", tt.components, len(components))
+			}
+		})
+	}
 }
 
 func TestIsCycloneDX_BomFormat(t *testing.T) {
@@ -359,11 +390,11 @@ func TestParse_SpecialCharsInPURL(t *testing.T) {
 // False positive prevention: format keywords in string values should NOT trigger detection
 func TestFormatDetection_FalsePositivePrevention(t *testing.T) {
 	tests := []struct {
-		name     string
-		data     string
-		isCDX    bool
-		isSPDX   bool
-		isSyft   bool
+		name   string
+		data   string
+		isCDX  bool
+		isSPDX bool
+		isSyft bool
 	}{
 		{
 			name:   "bomFormat in description value",

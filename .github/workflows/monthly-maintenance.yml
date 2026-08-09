@@ -40,7 +40,7 @@ jobs:
           go mod tidy
 
       - name: Run race tests
-        run: go test -race -count=1 ./...
+        run: go test -mod=mod -race -count=1 ./...
 
       - name: Run govulncheck
         uses: golang/govulncheck-action@032d45514ae346b1db93c04b0c90b841c370344f # v1.1.0

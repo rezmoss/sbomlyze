@@ -36,8 +36,13 @@ func TestMain(m *testing.M) {
 }
 
 func runCLI(args ...string) (stdout, stderr string, exitCode int) {
+	return runCLIWithStdin("", args...)
+}
+
+func runCLIWithStdin(stdin string, args ...string) (stdout, stderr string, exitCode int) {
 	cmd := exec.Command(binaryPath, args...)
 	var outBuf, errBuf bytes.Buffer
+	cmd.Stdin = strings.NewReader(stdin)
 	cmd.Stdout = &outBuf
 	cmd.Stderr = &errBuf
 
@@ -154,6 +159,30 @@ func TestStatsModeJSON(t *testing.T) {
 	}
 }
 
+func TestStatsModeFromStdin(t *testing.T) {
+	data, err := os.ReadFile(testdataPath("cyclonedx-before.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	stdout, stderr, exitCode := runCLIWithStdin(string(data), "-", "--json")
+	if exitCode != 0 {
+		t.Fatalf("expected exit code 0, got %d: %s", exitCode, stderr)
+	}
+
+	var result struct {
+		Stats struct {
+			TotalComponents int `json:"total_components"`
+		} `json:"stats"`
+	}
+	if err := json.Unmarshal([]byte(stdout), &result); err != nil {
+		t.Fatalf("failed to parse JSON output: %v", err)
+	}
+	if result.Stats.TotalComponents != 3 {
+		t.Errorf("expected 3 components, got %d", result.Stats.TotalComponents)
+	}
+}
+
 func TestStatsModeWithDifferentFormats(t *testing.T) {
 	tests := []struct {
 		name     string
@@ -245,6 +274,36 @@ func TestDiffModeJSON(t *testing.T) {
 	}
 	if len(result.Diff.Changed) != 1 {
 		t.Errorf("expected 1 changed, got %d", len(result.Diff.Changed))
+	}
+}
+
+func TestDiffModeWithStdin(t *testing.T) {
+	data, err := os.ReadFile(testdataPath("cyclonedx-before.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	for _, args := range [][]string{
+		{"-", testdataPath("cyclonedx-after.json"), "--json"},
+		{testdataPath("cyclonedx-after.json"), "-", "--json"},
+	} {
+		stdout, stderr, exitCode := runCLIWithStdin(string(data), args...)
+		if exitCode != 1 {
+			t.Fatalf("expected diff exit code 1, got %d: %s", exitCode, stderr)
+		}
+		if !json.Valid([]byte(stdout)) {
+			t.Fatalf("expected valid JSON diff, got: %s", stdout)
+		}
+	}
+}
+
+func TestRejectsMultipleStdinInputs(t *testing.T) {
+	_, stderr, exitCode := runCLIWithStdin("{}", "-", "-")
+	if exitCode != 1 {
+		t.Fatalf("expected exit code 1, got %d", exitCode)
+	}
+	if !strings.Contains(stderr, "may only be used once") {
+		t.Fatalf("expected duplicate stdin error, got: %s", stderr)
 	}
 }
 
@@ -603,6 +662,25 @@ func TestConvertCycloneDXToSPDX(t *testing.T) {
 	}
 	if result["dataLicense"] != "CC0-1.0" {
 		t.Errorf("expected dataLicense CC0-1.0, got %v", result["dataLicense"])
+	}
+}
+
+func TestConvertFromStdin(t *testing.T) {
+	data, err := os.ReadFile(testdataPath("cyclonedx-before.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	stdout, stderr, exitCode := runCLIWithStdin(string(data), "convert", "-", "--to", "spdx")
+	if exitCode != 0 {
+		t.Fatalf("expected exit code 0, got %d: %s", exitCode, stderr)
+	}
+	var result map[string]interface{}
+	if err := json.Unmarshal([]byte(stdout), &result); err != nil {
+		t.Fatalf("output is not valid JSON: %v", err)
+	}
+	if result["spdxVersion"] != "SPDX-2.3" {
+		t.Errorf("expected spdxVersion SPDX-2.3, got %v", result["spdxVersion"])
 	}
 }
 

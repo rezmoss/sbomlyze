@@ -55,8 +55,11 @@ make test
 This runs the full test suite with the race detector:
 
 ```bash
-go test -v -race -count=1 ./...
+go test -mod=mod -v -race -count=1 ./...
 ```
+
+The explicit module mode prevents an ignored, stale local `vendor/` directory
+from changing dependency resolution.
 
 If you changed output formatting, update snapshots:
 
