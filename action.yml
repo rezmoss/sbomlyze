@@ -1,0 +1,64 @@
+name: SBOMlyze Diff
+description: Compare a repository SBOM with its git baseline, enforce policy, and publish CI-native reports.
+author: rezmoss
+
+inputs:
+  sbom-path:
+    description: Repository-relative path to the head SBOM.
+    required: true
+  base-sbom-path:
+    description: Optional repository-relative path to the SBOM in the baseline revision.
+    required: false
+  baseline:
+    description: Baseline source. The MVP supports git; release, artifact, URL, and file sources are planned.
+    required: false
+    default: git
+  policy:
+    description: Optional repository-relative SBOMlyze policy file.
+    required: false
+  comment:
+    description: Create or update one pull-request comment. Requires pull-requests write permission.
+    required: false
+    default: 'false'
+  github-token:
+    description: GitHub token used only for provenance lookup and comment=true.
+    required: false
+    default: ${{ github.token }}
+  sarif:
+    description: Generate a SARIF report for a later upload-sarif step.
+    required: false
+    default: 'false'
+  fail-on:
+    description: Failure condition; one of policy, integrity-drift, any-change, or never.
+    required: false
+    default: policy
+  version:
+    description: Exact SBOMlyze release to download.
+    required: false
+    default: v0.3.7 # x-release-please-version
+
+outputs:
+  verdict:
+    description: pass or fail according to fail-on.
+  added-count:
+    description: Number of added components.
+  removed-count:
+    description: Number of removed components.
+  changed-count:
+    description: Number of changed components.
+  integrity-drift-count:
+    description: Number of integrity-drift changes.
+  report-json:
+    description: Absolute path to the JSON report.
+  report-markdown:
+    description: Absolute path to the Markdown report.
+  report-sarif:
+    description: Absolute path to the SARIF report, or empty when sarif is false.
+
+runs:
+  using: node24
+  main: action/index.js
+
+branding:
+  icon: shield
+  color: blue
