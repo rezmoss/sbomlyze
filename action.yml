@@ -1,5 +1,5 @@
 name: SBOMlyze Diff
-description: Compare a repository SBOM with its git baseline, enforce policy, and publish CI-native reports.
+description: Compare an SBOM with a git, release, workflow-artifact, URL, or file baseline and gate CI.
 author: rezmoss
 
 inputs:
@@ -10,9 +10,27 @@ inputs:
     description: Optional repository-relative path to the SBOM in the baseline revision.
     required: false
   baseline:
-    description: Baseline source. The MVP supports git; release, artifact, URL, and file sources are planned.
+    description: Baseline source; git, release, workflow-artifact, url, or file.
     required: false
     default: git
+  baseline-repository:
+    description: OWNER/REPO used by release or workflow-artifact; defaults to the current repository.
+    required: false
+  baseline-asset:
+    description: Exact asset name in the latest GitHub release when baseline is release.
+    required: false
+  baseline-artifact:
+    description: Exact artifact name from a successful default-branch run when baseline is workflow-artifact.
+    required: false
+  baseline-artifact-path:
+    description: Exact SBOM path inside the workflow artifact; defaults to base-sbom-path or sbom-path.
+    required: false
+  baseline-url:
+    description: Public HTTPS SBOM URL when baseline is url. Credentials are not forwarded.
+    required: false
+  baseline-path:
+    description: Repository-relative workspace path when baseline is file.
+    required: false
   policy:
     description: Optional repository-relative SBOMlyze policy file.
     required: false
@@ -21,7 +39,7 @@ inputs:
     required: false
     default: 'false'
   github-token:
-    description: GitHub token used only for provenance lookup and comment=true.
+    description: Token for provenance, comments, release assets, and workflow artifacts.
     required: false
     default: ${{ github.token }}
   sarif:
