@@ -1,0 +1,55 @@
+{
+  "$schema": "https://cyclonedx.org/schema/tool-center-v2.tool.schema.json",
+  "specVersion": "2.0",
+  "tool": {
+    "name": "SBOMlyze",
+    "publisher": "rezmoss",
+    "description": "Open-source CLI and GitHub Action that compares CycloneDX, SPDX, and Syft SBOMs; detects same-version hash drift, dependency-graph, license, and compliance regressions; and gates pull requests with policy and SARIF.",
+    "repository_url": "https://github.com/rezmoss/sbomlyze",
+    "website_url": "https://rezmoss.github.io/sbomlyze/",
+    "capabilities": [
+      "SBOM"
+    ],
+    "availability": [
+      "OPEN_SOURCE",
+      "OSI_APPROVED"
+    ],
+    "functions": [
+      "ANALYSIS",
+      "TRANSFORM"
+    ],
+    "analysis": [
+      "LICENSE_REPORTING",
+      "POLICY_EVALUATION"
+    ],
+    "transform": [
+      "BOM_SERIALIZATION_FORMAT",
+      "BOM_STANDARD"
+    ],
+    "packaging": [
+      "APPLICATION",
+      "COMMAND_LINE_UTILITY",
+      "GITHUB_ACTION"
+    ],
+    "platform": [
+      "LINUX",
+      "MAC",
+      "WINDOWS"
+    ],
+    "lifecycle": [
+      "BUILD",
+      "POST-BUILD"
+    ],
+    "supportedStandards": [
+      "CPE",
+      "CYCLONEDX",
+      "PACKAGE_URL",
+      "SPDX"
+    ],
+    "cycloneDxVersion": [
+      "CYCLONEDX_V1.6",
+      "CYCLONEDX_V1.5",
+      "CYCLONEDX_V1.4"
+    ]
+  }
+}
