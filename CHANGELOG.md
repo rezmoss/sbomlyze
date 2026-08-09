@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.1](https://github.com/rezmoss/sbomlyze/compare/v0.5.0...v0.5.1) (2026-08-09)
+
+
+### Bug Fixes
+
+* **sarif:** prevent cross-PR alert collisions ([#47](https://github.com/rezmoss/sbomlyze/issues/47)) ([4ade8dd](https://github.com/rezmoss/sbomlyze/commit/4ade8ddd3302ea3e247282f4ce2239d6625b6e5d))
+
 ## [0.5.0](https://github.com/rezmoss/sbomlyze/compare/v0.4.0...v0.5.0) (2026-08-09)
 
 
