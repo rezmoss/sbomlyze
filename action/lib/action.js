@@ -10,7 +10,7 @@ const { runProcess } = require('./process');
 
 const MAX_INPUT_BYTES = 50 * 1024 * 1024;
 const MAX_SUMMARY_CHARS = 900_000;
-const DEFAULT_VERSION = 'v0.3.7'; // x-release-please-version
+const DEFAULT_VERSION = 'v0.4.0'; // x-release-please-version
 const EMPTY_CYCLONEDX = '{"bomFormat":"CycloneDX","specVersion":"1.5","version":1,"components":[]}\n';
 const FAIL_ON_VALUES = new Set(['policy', 'integrity-drift', 'any-change', 'never']);
 
