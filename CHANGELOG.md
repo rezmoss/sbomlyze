@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.5.0](https://github.com/rezmoss/sbomlyze/compare/v0.4.0...v0.5.0) (2026-08-09)
+
+
+### Features
+
+* **action:** add generated SBOM baseline providers ([02b36c3](https://github.com/rezmoss/sbomlyze/commit/02b36c355ccc967caa8aec364172f4724e9e8df0))
+* **action:** add generated SBOM baseline providers ([1fcf995](https://github.com/rezmoss/sbomlyze/commit/1fcf9956e881bce60f9870aa484973fc766210b1))
+
+
+### Bug Fixes
+
+* **action:** correct Syft artifact baseline workflow ([3910c02](https://github.com/rezmoss/sbomlyze/commit/3910c0226072bc9cfbd4694bfb512763d5e36edb))
+* **action:** correct Syft artifact baseline workflow ([4f81bdf](https://github.com/rezmoss/sbomlyze/commit/4f81bdfca566d57448489b85dd58d3a2300487ff))
+
 ## [0.4.0](https://github.com/rezmoss/sbomlyze/compare/v0.3.7...v0.4.0) (2026-08-09)
 
 
