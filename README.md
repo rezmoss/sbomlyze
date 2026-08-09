@@ -23,7 +23,7 @@ sbomlyze compares component hashes, not only version strings. When an attacker s
 
 Add [SBOMlyze Diff from GitHub Marketplace][marketplace] to compare a checked-in
 or separately generated SBOM with its git baseline. The immutable SHA below is
-the published `v0.4.0` Action:
+the published `v0.5.0` Action:
 
 ```yaml
 steps:
@@ -31,7 +31,7 @@ steps:
     with:
       fetch-depth: 0
 
-  - uses: rezmoss/sbomlyze@38e8c3616f56e3748c06fe26bbe68c80b4763ebc # v0.4.0
+  - uses: rezmoss/sbomlyze@8aca73bfd9d51a1634d6e897984f4e2702206dde # v0.5.0
     with:
       sbom-path: build/sbom.cdx.json
 ```
@@ -1115,7 +1115,7 @@ jobs:
           fetch-depth: 0
 
       - id: sbomlyze
-        uses: rezmoss/sbomlyze@38e8c3616f56e3748c06fe26bbe68c80b4763ebc # v0.4.0
+        uses: rezmoss/sbomlyze@8aca73bfd9d51a1634d6e897984f4e2702206dde # v0.5.0
         with:
           sbom-path: build/sbom.cdx.json
           policy: .github/sbom-policy.json
