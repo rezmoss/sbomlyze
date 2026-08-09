@@ -1,0 +1,71 @@
+name: Marketplace Action Smoke Test
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout with history
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Test successful comparison
+        id: sbomlyze
+        uses: rezmoss/sbomlyze@v0.4.0
+        with:
+          sbom-path: testdata/cyclonedx-after.json
+          base-sbom-path: testdata/cyclonedx-before.json
+          fail-on: never
+          sarif: true
+
+      - name: Validate outputs and reports
+        env:
+          VERDICT: ${{ steps.sbomlyze.outputs.verdict }}
+          ADDED: ${{ steps.sbomlyze.outputs['added-count'] }}
+          REMOVED: ${{ steps.sbomlyze.outputs['removed-count'] }}
+          CHANGED: ${{ steps.sbomlyze.outputs['changed-count'] }}
+          INTEGRITY: ${{ steps.sbomlyze.outputs['integrity-drift-count'] }}
+          JSON_REPORT: ${{ steps.sbomlyze.outputs['report-json'] }}
+          MARKDOWN_REPORT: ${{ steps.sbomlyze.outputs['report-markdown'] }}
+          SARIF_REPORT: ${{ steps.sbomlyze.outputs['report-sarif'] }}
+        run: |
+          test "$VERDICT" = "pass"
+          test "$ADDED" = "1"
+          test "$REMOVED" = "1"
+          test "$CHANGED" = "1"
+          test "$INTEGRITY" = "0"
+
+          test -s "$JSON_REPORT"
+          test -s "$MARKDOWN_REPORT"
+          test -s "$SARIF_REPORT"
+
+          jq -e '.diff.added | length == 1' "$JSON_REPORT"
+          jq -e '.version == "2.1.0"' "$SARIF_REPORT"
+
+      - name: Test expected integrity gate failure
+        id: integrity
+        continue-on-error: true
+        uses: rezmoss/sbomlyze@v0.4.0
+        with:
+          sbom-path: testdata/cyclonedx-integrity-drift.json
+          base-sbom-path: testdata/cyclonedx-before.json
+          fail-on: integrity-drift
+
+      - name: Validate integrity gate
+        if: always()
+        env:
+          OUTCOME: ${{ steps.integrity.outcome }}
+          VERDICT: ${{ steps.integrity.outputs.verdict }}
+          INTEGRITY: ${{ steps.integrity.outputs['integrity-drift-count'] }}
+        run: |
+          test "$OUTCOME" = "failure"
+          test "$VERDICT" = "fail"
+          test "$INTEGRITY" = "1"
