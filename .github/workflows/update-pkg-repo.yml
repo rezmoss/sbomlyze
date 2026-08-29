@@ -169,40 +169,9 @@ jobs:
 
           echo "APK repository updated"
 
-      - name: Create index page
-        run: |
-          cat > index.html << 'EOF'
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <title>Install sbomlyze</title>
-            <style>
-              body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
-              h1 { color: #333; }
-              h2 { color: #666; margin-top: 30px; }
-              pre { background: #f5f5f5; padding: 15px; border-radius: 5px; overflow-x: auto; }
-              code { background: #f0f0f0; padding: 2px 6px; border-radius: 3px; }
-              .note { background: #fff3cd; padding: 10px; border-radius: 5px; margin: 10px 0; }
-            </style>
-          </head>
-          <body>
-            <h1>Install sbomlyze</h1>
-            <p>A fast, reliable SBOM diff and analysis tool.</p>
-
-            <h2>Verified Installation Methods</h2>
-            <pre>
-          # Install script (recommended)
-          curl -sSfL https://raw.githubusercontent.com/rezmoss/sbomlyze/main/install.sh | sh
-
-          # Go install
-          go install github.com/rezmoss/sbomlyze/cmd/sbomlyze@latest</pre>
-
-            <p class="note">Unsigned apt, rpm, and apk repository instructions are not published. They will return after package-manager-native signing is available.</p>
-
-            <p>See <a href="https://github.com/rezmoss/sbomlyze">GitHub repository</a> for more information.</p>
-          </body>
-          </html>
-          EOF
+      # index.html and all other site files on gh-pages are owned by the
+      # Deploy Website workflow (Hugo build from site/ on main). This job
+      # only touches the package repository directories.
 
       - name: Commit and push
         run: |

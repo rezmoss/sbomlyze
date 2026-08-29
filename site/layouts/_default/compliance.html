@@ -1,0 +1,60 @@
+{{ define "main" }}
+
+<section class="section-hero bb">
+  <div class="container-md">
+    <div class="eyebrow">Scoring</div>
+    <h1 class="h-page" style="max-width:24ch">Is this SBOM complete enough?</h1>
+    <p class="lead-md" style="max-width:66ch;margin:22px 0 0">Score any SBOM against the three major minimum-element frameworks — the question auditors and procurement teams keep asking. Each framework reports passed checks over total checks, plus an overall average.</p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:28px">
+      <code class="inline-cmd">sbomlyze image.json --compliance</code>
+      <code class="inline-cmd">sbomlyze before.json after.json --compliance</code>
+    </div>
+  </div>
+</section>
+
+<section class="section-md">
+  <div class="container-md grid-3">
+    {{ range site.Data.compliance.frameworks }}
+    <div class="card fw-card">
+      <div class="fw-head">
+        <span class="fw-year">{{ .year }}</span>
+        <span class="fw-checks">{{ .checks }}</span>
+      </div>
+      <div class="fw-name">{{ .name }}</div>
+      <div class="fw-label">{{ .checksLabel }}</div>
+      <div class="fw-req">{{ .req }}</div>
+    </div>
+    {{ end }}
+  </div>
+</section>
+
+<section class="section-md bt alt">
+  <div class="container-md split" style="grid-template-columns:minmax(0,1fr) minmax(0,1.15fr)">
+    <div>
+      <h2 class="h-block" style="margin-bottom:22px">Score presentation</h2>
+      <div style="display:grid;gap:10px">
+        <div class="score-row"><span class="score-dot" style="background:var(--green)"></span><span class="score-range">≥ 90%</span><span class="score-label">Complete</span></div>
+        <div class="score-row"><span class="score-dot" style="background:oklch(0.86 0.16 100)"></span><span class="score-range">70–89%</span><span class="score-label">Minor gaps</span></div>
+        <div class="score-row"><span class="score-dot" style="background:oklch(0.75 0.15 55)"></span><span class="score-range">50–69%</span><span class="score-label">Material gaps</span></div>
+        <div class="score-row"><span class="score-dot" style="background:var(--red)"></span><span class="score-range">&lt; 50%</span><span class="score-label">Not fit for audit</span></div>
+      </div>
+      <p class="note-xs" style="margin-top:20px"><code>--compliance --json</code> includes the full report with per-check pass/fail detail; the HTML format embeds the compliance report into the report page.</p>
+    </div>
+    <div>
+      <h2 class="h-block" style="margin-bottom:22px">Gating compliance in CI</h2>
+      <div class="codebox">
+        <div class="codebox-head">compliance-policy.json</div>
+        <pre class="codebox-pre" style="line-height:1.9">{
+  "min_ntia_score": 85,
+  "min_cisa_score": 70,
+  "min_bsi_score": 80,
+  "min_overall_compliance": 75
+}</pre>
+      </div>
+      <div class="mono-line" style="margin-top:16px">$ sbomlyze image.json --policy compliance-policy.json</div>
+      <p class="note-xs" style="margin-top:16px">Setting any threshold triggers compliance evaluation without the <code>--compliance</code> flag, so a single policy file covers drift, licences, and completeness.</p>
+    </div>
+  </div>
+</section>
+
+{{ end }}

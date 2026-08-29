@@ -1,0 +1,125 @@
+{{ define "main" }}
+
+<section class="section-hero bb">
+  <div class="container-md">
+    <div class="eyebrow">Reference</div>
+    <h1 class="h-page">SBOMlyze GitHub Action</h1>
+    <p class="lead-md" style="max-width:70ch;margin:22px 0 0">Compares an SBOM in the checked-out pull request or commit with a baseline from git, the latest GitHub release, a successful default-branch workflow artifact, an explicit HTTPS URL, or a local workspace file. It does not run an SBOM generator or execute repository-provided commands.</p>
+  </div>
+</section>
+
+<section class="section-md">
+  <div class="container-md">
+    <h2 class="h-block" style="margin-bottom:8px">Recommended workflow</h2>
+    <p class="note" style="max-width:70ch;margin:0 0 22px">Pin all Actions to full commit SHAs. The SHA below is the published {{ site.Params.version }} Action; the binary version defaults to the same release.</p>
+    <div class="codebox">
+      <div class="codebox-head">.github/workflows/sbom-review.yml</div>
+      <pre class="codebox-pre codebox-pre-lg">name: SBOM review
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  sbom-diff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      <span class="c-gray"># Generate or commit the head SBOM in a separate, reviewed step.
+      # SBOMlyze deliberately does not accept or execute generator commands.</span>
+      - id: sbomlyze
+        uses: rezmoss/sbomlyze@{{ site.Params.actionSha }} # {{ site.Params.version }}
+        with:
+          sbom-path: build/sbom.cdx.json
+          policy: .github/sbom-policy.json
+          fail-on: policy
+          sarif: true
+
+      - uses: github/codeql-action/upload-sarif@e4fba868fa4b1b91e1fdab776edc8cfbe6e9fb81 # v4.37.3
+        if: always() &amp;&amp; steps.sbomlyze.outputs.report-sarif != ''
+        with:
+          sarif_file: {{ `${{ steps.sbomlyze.outputs.report-sarif }}` }}</pre>
+    </div>
+    <p class="note-sm" style="max-width:70ch;margin:18px 0 0">Remove <code>security-events: write</code>, <code>sarif: true</code>, and the upload step if SARIF is not required. Forked pull requests may not receive permission to upload SARIF; the Job Summary remains available.</p>
+  </div>
+</section>
+
+<section class="section-md bt alt">
+  <div class="container-md">
+    <h2 class="h-block" style="margin-bottom:26px">Inputs</h2>
+    <div class="table-scroll">
+      <table class="table">
+        <thead>
+          <tr>
+            <th style="width:24%">Input</th>
+            <th style="width:16%">Required</th>
+            <th style="width:18%">Default</th>
+            <th>Meaning</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ range site.Data.action.inputs }}
+          <tr>
+            <td class="mono-strong">{{ .k }}</td>
+            <td class="mono" style="font-size:13px">{{ .r }}</td>
+            <td class="mono" style="font-size:13px">{{ .v }}</td>
+            <td class="body-cell">{{ .m }}</td>
+          </tr>
+          {{ end }}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section-md bt">
+  <div class="container-md">
+    <h2 class="h-block" style="margin-bottom:8px">Baseline providers</h2>
+    <p class="note" style="max-width:70ch;margin:0 0 26px">Five ways to answer &ldquo;what should this build be compared against?&rdquo;</p>
+    <div class="grid-2" style="gap:16px">
+      {{ range site.Data.action.baselines }}
+      <div class="card baseline-card">
+        <code class="baseline-k">{{ .k }}</code>
+        <div class="baseline-t">{{ .t }}</div>
+        <div class="baseline-d">{{ .d }}</div>
+      </div>
+      {{ end }}
+    </div>
+  </div>
+</section>
+
+<section class="section-md bt alt">
+  <div class="container-md split">
+    <div>
+      <h2 class="h-block" style="margin-bottom:20px">Outputs</h2>
+      <div class="cellgrid cellgrid-tight">
+        {{ range site.Data.action.outputs }}
+        <div class="kv-cell">
+          <code class="kv-k">{{ .k }}</code>
+          <div class="kv-d">{{ .d }}</div>
+        </div>
+        {{ end }}
+      </div>
+      <p class="note-xs" style="margin-top:18px">Outputs and the Job Summary are written before a configured gate fails, so use <code>if: always()</code> when consuming reports from a later step.</p>
+    </div>
+    <div>
+      <h2 class="h-block" style="margin-bottom:20px">Security behaviour</h2>
+      <div class="dotlist">
+        {{ range site.Data.action.security }}
+        <div class="dotlist-row">
+          <span class="dotlist-dot"></span>
+          <span class="dotlist-d">{{ . }}</span>
+        </div>
+        {{ end }}
+      </div>
+    </div>
+  </div>
+</section>
+
+{{ end }}

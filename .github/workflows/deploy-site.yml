@@ -1,0 +1,66 @@
+name: Deploy Website
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'site/**'
+      - '.github/workflows/deploy-site.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-site
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@75d2e84710de30f6ff7268e08f310b60ef14033f # v3.0.0
+        with:
+          hugo-version: '0.123.8'
+          extended: true
+
+      - name: Build site
+        run: hugo --minify --source site --destination "$GITHUB_WORKSPACE/public"
+
+      - name: Checkout gh-pages
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      - name: Sync site into gh-pages (preserve package repositories)
+        run: |
+          cd gh-pages
+          # Replace previously deployed site files, but keep the Linux
+          # package repositories and the Go vendor mirror served from
+          # this branch (apk/, deb/, rpm/, vendor/).
+          find . -mindepth 1 -maxdepth 1 \
+            ! -name '.git' \
+            ! -name '.nojekyll' \
+            ! -name 'apk' \
+            ! -name 'deb' \
+            ! -name 'rpm' \
+            ! -name 'vendor' \
+            -exec rm -rf {} +
+          cp -R "$GITHUB_WORKSPACE/public/." .
+          touch .nojekyll
+
+      - name: Commit and push
+        run: |
+          cd gh-pages
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --staged --quiet || git commit -m "Deploy website from ${GITHUB_SHA::7}"
+          git push

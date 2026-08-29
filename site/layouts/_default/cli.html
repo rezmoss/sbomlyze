@@ -1,0 +1,159 @@
+{{ define "main" }}
+
+<section class="section-hero bb">
+  <div class="container-md">
+    <div class="eyebrow">Reference</div>
+    <h1 class="h-page">CLI reference</h1>
+    <p class="lead-md" style="max-width:66ch;margin:22px 0 0">Four modes: statistics for one document, diff for two, convert between formats, and a local web server. Use <code>-</code> in place of either path to read from standard input.</p>
+  </div>
+</section>
+
+<section class="section-md">
+  <div class="container-md grid-2">
+    <div class="codebox">
+      <div class="codebox-head">Usage</div>
+      <pre class="codebox-pre" style="line-height:1.9">sbomlyze &lt;sbom1|-&gt; [sbom2|-] [options]
+sbomlyze convert &lt;sbom|-&gt; --to &lt;format&gt; [-o out]
+
+Modes:
+  Single file:  sbomlyze &lt;sbom&gt; [--json]
+  Interactive:  sbomlyze &lt;sbom&gt; -i
+  Convert:      sbomlyze convert &lt;sbom&gt; --to &lt;fmt&gt;
+  Web server:   sbomlyze -web [--port 8080]
+  Two files:    sbomlyze &lt;sbom1&gt; &lt;sbom2&gt; [...]</pre>
+    </div>
+    <div class="codebox">
+      <div class="codebox-head">Quick start</div>
+      <pre class="codebox-pre" style="line-height:1.9">sbomlyze before.json after.json
+sbomlyze image.json
+sbomlyze image.json --compliance
+sbomlyze image.json -i
+sbomlyze -web
+sbomlyze convert syft.json --to spdx
+sbomlyze before.json after.json --format sarif
+sbomlyze before.json after.json --policy policy.json</pre>
+    </div>
+  </div>
+</section>
+
+<section style="padding:0 32px 56px">
+  <div class="container-md">
+    <h2 class="h-block" style="margin:24px 0 24px">Options</h2>
+    <div class="cellgrid cellgrid-2 cellgrid-tight on-dark">
+      {{ range site.Data.cli.options }}
+      <div class="opt-row">
+        <code class="opt-k">{{ .k }}</code>
+        <span class="opt-d">{{ .d }}</span>
+      </div>
+      {{ end }}
+    </div>
+  </div>
+</section>
+
+<section class="section-md bt alt">
+  <div class="container-md">
+    <h2 class="h-block" style="margin-bottom:8px">Output formats</h2>
+    <p class="note" style="max-width:68ch;margin:0 0 26px">Seven formats, all produced from the same analysis.</p>
+    <div class="table-scroll">
+      <table class="table">
+        <thead>
+          <tr>
+            <th style="width:14%">Format</th>
+            <th style="width:24%">Flag</th>
+            <th>Description</th>
+            <th style="width:22%">Best for</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ range site.Data.cli.outFormats }}
+          <tr>
+            <td style="font:600 14px/1.5 var(--sans)">{{ .n }}</td>
+            <td class="mono" style="font-size:13px;color:var(--violet-bright)">{{ .f }}</td>
+            <td class="body-cell">{{ .d }}</td>
+            <td class="dim-cell">{{ .b }}</td>
+          </tr>
+          {{ end }}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section-md bt">
+  <div class="container-md">
+    <h2 class="h-block" style="margin-bottom:8px">Policy engine</h2>
+    <p class="note" style="max-width:68ch;margin:0 0 26px">sbomlyze exits with code 1 when violations occur. Setting any <code>min_*_score</code> threshold automatically triggers compliance evaluation, even without <code>--compliance</code>.</p>
+    <div class="split" style="grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:24px">
+      <div class="codebox">
+        <div class="codebox-head">policy.json</div>
+        <pre class="codebox-pre" style="font-size:12.5px">{
+  "max_added": 10,
+  "max_removed": 5,
+  "max_changed": 100,
+  "deny_licenses": ["GPL-3.0", "AGPL-3.0"],
+  "require_licenses": true,
+  "deny_duplicates": true,
+  "deny_integrity_drift": true,
+  "max_depth": 3,
+  "warn_supplier_change": true,
+  "warn_new_transitive": true,
+  "min_ntia_score": 85,
+  "min_cisa_score": 70,
+  "min_bsi_score": 80,
+  "min_overall_compliance": 75
+}</pre>
+      </div>
+      <div class="cellgrid cellgrid-tight on-dark">
+        {{ range site.Data.cli.rules }}
+        <div class="rule-row">
+          <code class="rule-k">{{ .k }}</code>
+          <span class="rule-d">{{ .d }}</span>
+        </div>
+        {{ end }}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-md bt alt">
+  <div class="container-md split">
+    <div>
+      <h2 class="h-block" style="margin-bottom:8px">Component identity matching</h2>
+      <p class="note" style="margin:0 0 22px">Components are matched by precedence, so cross-format comparison works without identical document layouts.</p>
+      <div class="cellgrid cellgrid-tight">
+        {{ range site.Data.cli.identity }}
+        <div class="id-row">
+          <span class="id-p">{{ .p }}</span>
+          <span class="id-n">{{ .n }}</span>
+          <code class="id-e">{{ .e }}</code>
+        </div>
+        {{ end }}
+      </div>
+    </div>
+    <div>
+      <h2 class="h-block" style="margin-bottom:22px">Exit codes</h2>
+      <div style="display:grid;gap:12px">
+        <div class="exit-card card edge-green" style="background:var(--bg-raised)">
+          <code class="exit-code c-green">0</code>
+          <div class="exit-desc">Success. No differences or violations.</div>
+        </div>
+        <div class="exit-card card edge-red" style="background:var(--bg-raised)">
+          <code class="exit-code c-red">1</code>
+          <div class="exit-desc">Differences found, policy violations, or errors. In diff mode, any component change returns 1 — usable as a plain &ldquo;did anything change?&rdquo; gate.</div>
+        </div>
+      </div>
+      <h2 class="h-block" style="margin:40px 0 22px">Supported formats</h2>
+      <div class="cellgrid cellgrid-tight">
+        {{ range site.Data.cli.sbomFormats }}
+        <div class="fmt-cell">
+          <div class="fmt-n">{{ .n }}</div>
+          <code class="fmt-d">{{ .d }}</code>
+        </div>
+        {{ end }}
+      </div>
+      <p style="font:400 13.5px/1.6 var(--sans);color:oklch(0.58 0.008 80);margin-top:14px">All formats must be JSON. XML support is not currently available.</p>
+    </div>
+  </div>
+</section>
+
+{{ end }}

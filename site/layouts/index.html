@@ -1,0 +1,232 @@
+{{ define "main" }}
+
+<section class="section-hero" style="padding:88px 32px 76px">
+  <div class="container hero-grid">
+    <div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:26px">
+        <span class="pill pill-green">Apache-2.0</span>
+        <span class="pill">Single Go binary</span>
+        <span class="pill">CycloneDX · SPDX · Syft</span>
+      </div>
+      <h1 class="h-hero"><span style="font-family:var(--mono);font-weight:500;color:var(--green)">git diff</span> for your SBOM.</h1>
+      <p class="lead" style="max-width:56ch;margin:26px 0 0">Compare two Software Bills of Materials and see what changed between builds, versions, and releases.</p>
+      <p style="font:400 17px/1.65 var(--sans);color:oklch(0.66 0.008 80);max-width:56ch;margin:16px 0 0">sbomlyze compares component hashes, not only version strings. When an attacker swaps a package without bumping its version, sbomlyze flags it. Generators and vulnerability scanners miss this.</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:34px">
+        <a class="btn btn-primary" href="{{ "install" | relURL }}">Install sbomlyze</a>
+        <a class="btn btn-outline" href="{{ "action" | relURL }}">Gate a pull request</a>
+      </div>
+      <div class="mono-line" style="margin-top:22px">$ brew install rezmoss/sbomlyze/sbomlyze</div>
+    </div>
+
+    <div class="term term-shadow">
+      <div class="term-bar">
+        <span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span>
+        <span class="term-title">sbomlyze baseline.json build.json</span>
+      </div>
+      <pre class="term-pre">Drift Summary:
+  Version drift:   58 components
+  Integrity drift: <span class="c-red">1 component  (hash changed, version did not)</span>
+  Metadata drift:  2 components
+
+Key Findings:
+  Attack surface: +5 packages (7.0%), +120 files (3.2%)
+  <span class="c-amber">2 version downgrades: openssl 3.1.4→3.0.2, curl 8.5.0→8.4.0</span>
+  56 upgrades (2 major, 12 minor, 42 patch) of 65 shared
+  New ecosystem: golang (8 packages)
+
+~ Changed (58):
+  ~ nginx
+      version: 1.29.4-r1 -> 1.27.3-r1
+  <span class="c-red">~ suspicious-pkg  [INTEGRITY]
+      hash[SHA256]: abc123 -> def456</span>
+
+<span class="c-red">!! Policy Violations (1):
+  [deny_integrity_drift] hash changed without version change</span>
+<span class="c-gray">exit status 1</span></pre>
+    </div>
+  </div>
+</section>
+
+<section class="bt bb alt" style="padding:34px 32px">
+  <div class="container grid-4">
+    <div><div class="stat-num">3</div><div class="stat-label">SBOM formats parsed and converted</div></div>
+    <div><div class="stat-num">7</div><div class="stat-label">Output formats, from text to SARIF</div></div>
+    <div><div class="stat-num">14</div><div class="stat-label">Policy rules for CI gating</div></div>
+    <div><div class="stat-num">26</div><div class="stat-label">Minimum-element checks across NTIA, CISA, BSI</div></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="eyebrow">The blind spot</div>
+    <h2 class="h-section" style="max-width:24ch">Three comparisons. Three different questions.</h2>
+    <p class="sub" style="max-width:62ch;margin:18px 0 0">A component can keep the same name and version while its bytes change. Treating these layers as interchangeable leaves that case unreviewed.</p>
+
+    <div class="grid-3" style="margin-top:44px">
+      <div class="card card-pad">
+        <div class="overline">Layer 01</div>
+        <div class="card-title">Manifest or lockfile diff</div>
+        <div class="card-body">What dependency resolution did the developer request?</div>
+        <div class="card-foot">Blind spot: does not prove what entered the built artifact.</div>
+      </div>
+      <div class="card card-pad">
+        <div class="overline">Layer 02</div>
+        <div class="card-title">Ordinary SBOM component diff</div>
+        <div class="card-body">What components does each build report?</div>
+        <div class="card-foot">Blind spot: a same-name, same-version replacement looks unchanged.</div>
+      </div>
+      <div class="card card-pad card-accent">
+        <div class="overline">Layer 03 · sbomlyze</div>
+        <div class="card-title">Hash / integrity drift</div>
+        <div class="card-body">Did the recorded bytes change without the component version changing?</div>
+        <div class="card-foot">Signals investigation; it does not by itself prove malicious intent.</div>
+      </div>
+    </div>
+
+    <div class="drift-callout">
+      <pre style="font:400 13px/1.8 var(--mono)">component: pkg:golang/example/project@1.4.2
+version:   1.4.2 -> 1.4.2
+hash:      c4e3...aa89 -> 345c...fa36
+verdict:   <span class="c-red">integrity drift</span></pre>
+      <a class="btn btn-outline" style="white-space:nowrap" href="{{ "integrity-drift" | relURL }}">Read the full analysis →</a>
+    </div>
+  </div>
+</section>
+
+<section class="section bt alt">
+  <div class="container">
+    <div class="eyebrow">Four surfaces, one binary</div>
+    <h2 class="h-section" style="max-width:24ch">Review in the terminal, the browser, or the pull request.</h2>
+    <div class="grid-2" style="margin-top:44px">
+      <div class="card card-dark" style="overflow:hidden">
+        <div class="surface-media"><a href="{{ "images/tamper-drift-demo.gif" | relURL }}" data-lightbox data-caption="SBOMlyze turning silent integrity drift into a blocked pull request"><img src="{{ "images/tamper-drift-demo.gif" | relURL }}" alt="sbomlyze detecting tamper drift in a pull request" loading="lazy"></a></div>
+        <div class="surface-body">
+          <div class="surface-title">GitHub Action</div>
+          <div class="surface-desc">Compares the head SBOM against a git, release, artifact, URL, or file baseline. Writes a Job Summary, enforces policy, uploads SARIF, maintains one PR comment.</div>
+          <code class="surface-cmd">uses: rezmoss/sbomlyze@{{ site.Params.version }}</code>
+        </div>
+      </div>
+      <div class="card card-dark" style="overflow:hidden">
+        <div class="surface-media"><a href="{{ "images/web-ui-explorer.png" | relURL }}" data-lightbox data-caption="Web UI explorer: components, per-component detail, and the statistics dashboard"><img src="{{ "images/web-ui-explorer.png" | relURL }}" alt="sbomlyze web UI showing components, details, and statistics panes" loading="lazy"></a></div>
+        <div class="surface-body">
+          <div class="surface-title">Web UI explorer</div>
+          <div class="surface-desc">Drag-and-drop up to 500 MB. Dependency tree, deep search across raw JSON, statistics dashboard, and a full filesystem browser with layer filtering.</div>
+          <code class="surface-cmd">sbomlyze -web --port 8080</code>
+        </div>
+      </div>
+      <div class="card card-dark" style="overflow:hidden">
+        <div class="surface-media"><a href="{{ "images/interactive-sbom.gif" | relURL }}" data-lightbox data-caption="Terminal explorer: deep search with /, component detail, raw JSON, and type filters"><img src="{{ "images/interactive-sbom.gif" | relURL }}" alt="sbomlyze interactive terminal explorer searching and inspecting components" loading="lazy"></a></div>
+        <div class="surface-body">
+          <div class="surface-title">Terminal explorer (TUI)</div>
+          <div class="surface-desc">Keyboard navigation, deep search with <code>/</code>, package-type filters, component detail, and raw JSON with syntax highlighting.</div>
+          <code class="surface-cmd">sbomlyze image.json -i</code>
+        </div>
+      </div>
+      <div class="card card-dark" style="overflow:hidden;display:flex;flex-direction:column">
+        <div class="surface-body" style="border-bottom:1px solid var(--border-strong)">
+          <div class="surface-title">Pipe it anywhere</div>
+          <div class="surface-desc">Read either side of a diff from standard input. Run it right after your generator, with no temporary file.</div>
+        </div>
+        <pre style="padding:20px 24px;font:400 12.5px/1.9 var(--mono);flex:1 1 auto">syft image:tag -o cyclonedx-json \
+  | sbomlyze - --compliance
+
+syft image:tag -o cyclonedx-json \
+  | sbomlyze baseline.json -
+
+sbomlyze convert cdx.json --to spdx
+sbomlyze before.json after.json --format sarif</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+{{ if site.Params.showComparisonTable }}
+<section class="section bt">
+  <div class="container">
+    <div class="eyebrow">Where it fits</div>
+    <h2 class="h-section" style="max-width:26ch">Many tools generate SBOMs. Few compare them.</h2>
+    <p class="sub" style="max-width:62ch;margin:18px 0 0">Generators make SBOMs and scanners find CVEs. sbomlyze tells you what changed between two SBOMs and whether to trust it.</p>
+    <div class="table-scroll">
+      <table class="table" style="margin-top:40px">
+        <thead>
+          <tr>
+            <th>Capability</th>
+            <th class="th-hl" style="width:130px;padding-left:16px">sbomlyze</th>
+            <th style="width:130px;padding-left:16px">cyclonedx-cli</th>
+            <th style="width:110px;padding-left:16px">sbomqs</th>
+            <th style="width:130px;padding-left:16px">syft / trivy</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ range site.Data.home.matrix }}
+          <tr>
+            <td>{{ .cap }}</td>
+            <td class="td-hl">{{ .a }}</td>
+            <td class="mono td-pad">{{ .b }}</td>
+            <td class="mono td-pad">{{ .c }}</td>
+            <td class="mono td-pad">{{ .d }}</td>
+          </tr>
+          {{ end }}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{{ end }}
+
+<section class="section bt alt">
+  <div class="container">
+    <div class="eyebrow">Capabilities</div>
+    <h2 class="h-section" style="max-width:22ch;margin-bottom:32px">What it does with two documents.</h2>
+    <div class="cellgrid cellgrid-3">
+      {{ range site.Data.home.features }}
+      <div class="feature-cell">
+        <div class="feature-n">{{ .n }}</div>
+        <div class="feature-t">{{ .t }}</div>
+        <div class="feature-d">{{ .d }}</div>
+      </div>
+      {{ end }}
+    </div>
+  </div>
+</section>
+
+<section class="section bt">
+  <div class="container split">
+    <div>
+      <div class="eyebrow">Output</div>
+      <h2 class="h-med">One diff, seven ways to read it.</h2>
+      <p style="font:400 17px/1.6 var(--sans);color:var(--soft);margin:18px 0 0">Every format is produced from the same analysis, so the terminal, the code-scanning alert, and the report you email to an auditor never disagree.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:26px">
+        {{ range site.Data.home.formats }}
+        <span class="tag">{{ . }}</span>
+        {{ end }}
+      </div>
+    </div>
+    <div class="codebox">
+      <div class="codebox-head">.github/sbom-policy.json</div>
+      <pre class="codebox-pre">{
+  "deny_integrity_drift": <span class="c-green">true</span>,
+  "deny_licenses": [<span class="c-amber">"GPL-3.0"</span>, <span class="c-amber">"AGPL-3.0"</span>],
+  "require_licenses": <span class="c-green">true</span>,
+  "max_depth": 3,
+  "min_overall_compliance": 80
+}</pre>
+    </div>
+  </div>
+</section>
+
+<section class="section bt violet-band">
+  <div class="container cta-band">
+    <div>
+      <h2 class="h-section" style="margin:0;max-width:24ch">Reproduce the blocked pull request.</h2>
+      <p class="cta-band-text">Three public demo repositories carry five reproducible review scenarios each, with public workflow runs and SARIF evidence.</p>
+    </div>
+    <div class="cta-links">
+      <a class="btn-light-outline" href="https://github.com/rezmoss/sbomlyze-go-spdx-demo">Go + SPDX →</a>
+      <a class="btn-light-outline" href="https://github.com/rezmoss/sbomlyze-node-cyclonedx-demo">Node + CycloneDX →</a>
+      <a class="btn-light-outline" href="https://github.com/rezmoss/sbomlyze-container-demo">Container image →</a>
+    </div>
+  </div>
+</section>
+
+{{ end }}
