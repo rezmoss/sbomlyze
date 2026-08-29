@@ -17,7 +17,7 @@ const {
 
 const MAX_INPUT_BYTES = 50 * 1024 * 1024;
 const MAX_SUMMARY_CHARS = 900_000;
-const DEFAULT_VERSION = 'v0.5.2'; // x-release-please-version
+const DEFAULT_VERSION = 'v0.5.3'; // x-release-please-version
 const FAIL_ON_VALUES = new Set(['policy', 'integrity-drift', 'any-change', 'never']);
 const BASELINE_VALUES = new Set(['git', 'release', 'workflow-artifact', 'url', 'file']);
 

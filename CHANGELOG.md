@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.3](https://github.com/rezmoss/sbomlyze/compare/v0.5.2...v0.5.3) (2026-08-29)
+
+
+### Bug Fixes
+
+* sync action version metadata to v0.5.2 ([#51](https://github.com/rezmoss/sbomlyze/issues/51)) ([9662e6b](https://github.com/rezmoss/sbomlyze/commit/9662e6b13f556ac0efe50e472b5af32dcfe00f9a))
+
 ## [0.5.2](https://github.com/rezmoss/sbomlyze/compare/v0.5.1...v0.5.2) (2026-08-28)
 
 
