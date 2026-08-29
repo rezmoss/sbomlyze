@@ -1,0 +1,91 @@
+name: Sync Website Version
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release tag to sync (e.g., v0.5.4)'
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: write
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Resolve release tag and commit
+        id: rel
+        run: |
+          if [ "${{ github.event_name }}" = "release" ]; then
+            TAG="${{ github.event.release.tag_name }}"
+          else
+            TAG="${{ github.event.inputs.version }}"
+          fi
+          git fetch --tags --quiet
+          SHA=$(git rev-list -n1 "$TAG")
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "sha=$SHA" >> "$GITHUB_OUTPUT"
+          echo "Syncing site to $TAG ($SHA)"
+
+      - name: Update site/hugo.toml
+        id: bump
+        run: |
+          TAG='${{ steps.rel.outputs.tag }}'
+          SHA='${{ steps.rel.outputs.sha }}'
+          sed -i -E "s|^(  version = )\".*\"|\1\"$TAG\"|" site/hugo.toml
+          sed -i -E "s|^(  actionSha = )\".*\"|\1\"$SHA\"|" site/hugo.toml
+          if git diff --quiet -- site/hugo.toml; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "site/hugo.toml already up to date"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            git diff -- site/hugo.toml
+          fi
+
+      - name: Open and merge pull request
+        if: steps.bump.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG='${{ steps.rel.outputs.tag }}'
+          BRANCH="site/sync-$TAG"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git commit -am "chore(site): sync website version to $TAG"
+          git push -u origin "$BRANCH" --force
+          gh pr create --base main --head "$BRANCH" \
+            --title "chore(site): sync website version to $TAG" \
+            --body "Automated update of \`params.version\` and \`params.actionSha\` in site/hugo.toml for $TAG."
+          # Branch protection requires a PR but zero approvals, so the
+          # workflow can merge its own PR once GitHub reports it mergeable.
+          for i in 1 2 3 4 5; do
+            if gh pr merge "$BRANCH" --squash --delete-branch; then
+              exit 0
+            fi
+            echo "Merge not ready yet, retrying ($i/5)..."
+            sleep 10
+          done
+          echo "Failed to merge PR after retries" >&2
+          exit 1
+
+      # A merge performed with GITHUB_TOKEN does not emit a push event that
+      # other workflows can react to, so trigger the deploy explicitly.
+      - name: Trigger website deploy
+        if: steps.bump.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run deploy-site.yml --ref main

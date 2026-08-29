@@ -19,7 +19,7 @@ The `Update Package Repository` workflow continues to own the package directorie
 
 ## Where things live
 
-- `hugo.toml` — site config. Bump `params.version` and `params.actionSha` after each release (the pinned commit shown in the GitHub Action example).
+- `hugo.toml` — site config. `params.version` and `params.actionSha` (the pinned commit shown in the GitHub Action example) are bumped automatically by `.github/workflows/sync-site-version.yml` on every release; it opens and merges a PR, then redeploys the site. Run it manually from the Actions tab (with a tag input) if a sync is ever missed.
 - `content/` — one stub file per page; the real markup lives in layouts.
 - `layouts/_default/` — page templates (`drift`, `action`, `cli`, `compliance`, `install`) plus `baseof.html` (header/footer).
 - `layouts/index.html` — home page.
