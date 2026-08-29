@@ -1,0 +1,83 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>CLI reference — sbomlyze</title>
+<meta name=description content="sbomlyze CLI reference: modes, options, output formats, policy rules, identity matching, and exit codes."><link rel=canonical href=https://sbomlyze.com/cli/><meta property="og:title" content="CLI reference — sbomlyze"><meta property="og:description" content="sbomlyze CLI reference: modes, options, output formats, policy rules, identity matching, and exit codes."><meta property="og:url" content="https://sbomlyze.com/cli/"><meta property="og:type" content="website"><link rel=icon href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='12' fill='%234ade80'/%3E%3C/svg%3E"><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel=stylesheet><link rel=stylesheet href=/css/main.min.ffca80a331dedead62a7214ee65a5f2f59381b45f5aaeb552726fd00ccb981e1.css></head><body><header class=site-header><div class=header-inner><a class=brand href=/><span class=brand-name>sbomlyze</span>
+<span class=brand-dot></span></a><nav class=nav><a class=nav-link href=/integrity-drift/>Integrity drift</a>
+<a class=nav-link href=/action/>GitHub Action</a>
+<a class="nav-link active" href=/cli/>CLI reference</a>
+<a class=nav-link href=/compliance/>Compliance</a>
+<a class=nav-link href=/install/>Install</a></nav><div class=header-meta><span class=header-version>v0.5.3</span>
+<a class=btn-gh href=https://github.com/rezmoss/sbomlyze>GitHub ★ 24</a></div></div></header><section class="section-hero bb"><div class=container-md><div class=eyebrow>Reference</div><h1 class=h-page>CLI reference</h1><p class=lead-md style="max-width:66ch;margin:22px 0 0">Four modes: statistics for one document, diff for two, convert between formats, and a local web server. Use <code>-</code> in place of either path to read from standard input.</p></div></section><section class=section-md><div class="container-md grid-2"><div class=codebox><div class=codebox-head>Usage</div><pre class=codebox-pre style=line-height:1.9>sbomlyze &lt;sbom1|-&gt; [sbom2|-] [options]
+sbomlyze convert &lt;sbom|-&gt; --to &lt;format&gt; [-o out]
+
+Modes:
+  Single file:  sbomlyze &lt;sbom&gt; [--json]
+  Interactive:  sbomlyze &lt;sbom&gt; -i
+  Convert:      sbomlyze convert &lt;sbom&gt; --to &lt;fmt&gt;
+  Web server:   sbomlyze -web [--port 8080]
+  Two files:    sbomlyze &lt;sbom1&gt; &lt;sbom2&gt; [...]</pre></div><div class=codebox><div class=codebox-head>Quick start</div><pre class=codebox-pre style=line-height:1.9>sbomlyze before.json after.json
+sbomlyze image.json
+sbomlyze image.json --compliance
+sbomlyze image.json -i
+sbomlyze -web
+sbomlyze convert syft.json --to spdx
+sbomlyze before.json after.json --format sarif
+sbomlyze before.json after.json --policy policy.json</pre></div></div></section><section style="padding:0 32px 56px"><div class=container-md><h2 class=h-block style="margin:24px 0">Options</h2><div class="cellgrid cellgrid-2 cellgrid-tight on-dark"><div class=opt-row><code class=opt-k>-i, --interactive</code>
+<span class=opt-d>Interactive TUI explorer</span></div><div class=opt-row><code class=opt-k>-web, --web</code>
+<span class=opt-d>Start the web UI server</span></div><div class=opt-row><code class=opt-k>--port &lt;port></code>
+<span class=opt-d>Web server port (default 8080)</span></div><div class=opt-row><code class=opt-k>--json</code>
+<span class=opt-d>Shorthand for --format json</span></div><div class=opt-row><code class=opt-k>--format &lt;format></code>
+<span class=opt-d>text, json, sarif, junit, markdown, html, patch</span></div><div class=opt-row><code class=opt-k>--compliance</code>
+<span class=opt-d>Show NTIA / CISA / BSI compliance scoring</span></div><div class=opt-row><code class=opt-k>--policy &lt;file></code>
+<span class=opt-d>Policy file for CI checks</span></div><div class=opt-row><code class=opt-k>--strict</code>
+<span class=opt-d>Fail on parse warnings</span></div><div class=opt-row><code class=opt-k>--tolerant</code>
+<span class=opt-d>Continue on parse warnings (default)</span></div><div class=opt-row><code class=opt-k>--no-pager</code>
+<span class=opt-d>Disable automatic paging of output</span></div><div class=opt-row><code class=opt-k>--to &lt;format></code>
+<span class=opt-d>Target format for convert: cyclonedx (cdx), spdx, syft</span></div><div class=opt-row><code class=opt-k>-o, --output &lt;file></code>
+<span class=opt-d>Output file for convert (default stdout)</span></div><div class=opt-row><code class=opt-k>--version, -v</code>
+<span class=opt-d>Show version information</span></div><div class=opt-row><code class=opt-k>--help, -h</code>
+<span class=opt-d>Show the help message</span></div></div></div></section><section class="section-md bt alt"><div class=container-md><h2 class=h-block style=margin-bottom:8px>Output formats</h2><p class=note style="max-width:68ch;margin:0 0 26px">Seven formats, all produced from the same analysis.</p><div class=table-scroll><table class=table><thead><tr><th style=width:14%>Format</th><th style=width:24%>Flag</th><th>Description</th><th style=width:22%>Best for</th></tr></thead><tbody><tr><td style="font:600 14px/1.5 var(--sans)"></td><td class=mono style=font-size:13px;color:var(--violet-bright)>--format text (default)</td><td class=body-cell>Human-readable terminal output</td><td class=dim-cell>Local inspection</td></tr><tr><td style="font:600 14px/1.5 var(--sans)"></td><td class=mono style=font-size:13px;color:var(--violet-bright)>--json</td><td class=body-cell>Structured JSON</td><td class=dim-cell>CI pipelines, scripting</td></tr><tr><td style="font:600 14px/1.5 var(--sans)"></td><td class=mono style=font-size:13px;color:var(--violet-bright)>--format sarif</td><td class=body-cell>SARIF 2.1.0 with integrity-drift, deep-dependency, new/removed-component, version-change, and policy-violation rules</td><td class=dim-cell>GitHub Code Scanning</td></tr><tr><td style="font:600 14px/1.5 var(--sans)"></td><td class=mono style=font-size:13px;color:var(--violet-bright)>--format junit</td><td class=body-cell>JUnit XML test cases for drift, depth, and each policy violation</td><td class=dim-cell>CI test dashboards</td></tr><tr><td style="font:600 14px/1.5 var(--sans)"></td><td class=mono style=font-size:13px;color:var(--violet-bright)>--format markdown</td><td class=body-cell>Side-by-side comparison table, key findings, and collapsible package sections</td><td class=dim-cell>Pull request comments</td></tr><tr><td style="font:600 14px/1.5 var(--sans)"></td><td class=mono style=font-size:13px;color:var(--violet-bright)>--format html</td><td class=body-cell>Single self-contained file with inline CSS and JS, no external assets</td><td class=dim-cell>Auditors, sharable reports</td></tr><tr><td style="font:600 14px/1.5 var(--sans)"></td><td class=mono style=font-size:13px;color:var(--violet-bright)>--format patch</td><td class=body-cell>RFC 6902 JSON Patch operations representing the diff</td><td class=dim-cell>Programmatic patching</td></tr></tbody></table></div></div></section><section class="section-md bt"><div class=container-md><h2 class=h-block style=margin-bottom:8px>Policy engine</h2><p class=note style="max-width:68ch;margin:0 0 26px">sbomlyze exits with code 1 when violations occur. Setting any <code>min_*_score</code> threshold automatically triggers compliance evaluation, even without <code>--compliance</code>.</p><div class=split style=grid-template-columns:minmax(0,1fr)minmax(0,1.25fr);gap:24px><div class=codebox><div class=codebox-head>policy.json</div><pre class=codebox-pre style=font-size:12.5px>{
+  "max_added": 10,
+  "max_removed": 5,
+  "max_changed": 100,
+  "deny_licenses": ["GPL-3.0", "AGPL-3.0"],
+  "require_licenses": true,
+  "deny_duplicates": true,
+  "deny_integrity_drift": true,
+  "max_depth": 3,
+  "warn_supplier_change": true,
+  "warn_new_transitive": true,
+  "min_ntia_score": 85,
+  "min_cisa_score": 70,
+  "min_bsi_score": 80,
+  "min_overall_compliance": 75
+}</pre></div><div class="cellgrid cellgrid-tight on-dark"><div class=rule-row><code class=rule-k>max_added</code>
+<span class=rule-d>Maximum new components allowed (0 = unlimited)</span></div><div class=rule-row><code class=rule-k>max_removed</code>
+<span class=rule-d>Maximum removed components allowed</span></div><div class=rule-row><code class=rule-k>max_changed</code>
+<span class=rule-d>Maximum changed components allowed</span></div><div class=rule-row><code class=rule-k>deny_licenses</code>
+<span class=rule-d>Forbidden licence identifiers</span></div><div class=rule-row><code class=rule-k>require_licenses</code>
+<span class=rule-d>Require all added components to have licences</span></div><div class=rule-row><code class=rule-k>deny_duplicates</code>
+<span class=rule-d>Fail if duplicate packages exist in the result</span></div><div class=rule-row><code class=rule-k>deny_integrity_drift</code>
+<span class=rule-d>Fail if a hash changed without a version change</span></div><div class=rule-row><code class=rule-k>max_depth</code>
+<span class=rule-d>Fail if new transitive dependencies reach depth ≥ N</span></div><div class=rule-row><code class=rule-k>warn_supplier_change</code>
+<span class=rule-d>Warn, not fail, if a supplier or author changed</span></div><div class=rule-row><code class=rule-k>warn_new_transitive</code>
+<span class=rule-d>Warn on any new transitive dependencies</span></div><div class=rule-row><code class=rule-k>min_ntia_score</code>
+<span class=rule-d>Fail below this NTIA score (0–100)</span></div><div class=rule-row><code class=rule-k>min_cisa_score</code>
+<span class=rule-d>Fail below this CISA score (0–100)</span></div><div class=rule-row><code class=rule-k>min_bsi_score</code>
+<span class=rule-d>Fail below this BSI score (0–100)</span></div><div class=rule-row><code class=rule-k>min_overall_compliance</code>
+<span class=rule-d>Fail below this overall score (0–100)</span></div></div></div></div></section><section class="section-md bt alt"><div class="container-md split"><div><h2 class=h-block style=margin-bottom:8px>Component identity matching</h2><p class=note style="margin:0 0 22px">Components are matched by precedence, so cross-format comparison works without identical document layouts.</p><div class="cellgrid cellgrid-tight"><div class=id-row><span class=id-p>1</span>
+<span class=id-n></span>
+<code class=id-e>pkg:npm/lodash</code></div><div class=id-row><span class=id-p>2</span>
+<span class=id-n></span>
+<code class=id-e>cpe:vendor:product</code></div><div class=id-row><span class=id-p>3</span>
+<span class=id-n></span>
+<code class=id-e>ref:component-123</code></div><div class=id-row><span class=id-p>4</span>
+<span class=id-n></span>
+<code class=id-e>com.example/mypackage</code></div><div class=id-row><span class=id-p>5</span>
+<span class=id-n></span>
+<code class=id-e>simple-package</code></div></div></div><div><h2 class=h-block style=margin-bottom:22px>Exit codes</h2><div style=display:grid;gap:12px><div class="exit-card card edge-green" style=background:var(--bg-raised)><code class="exit-code c-green">0</code><div class=exit-desc>Success. No differences or violations.</div></div><div class="exit-card card edge-red" style=background:var(--bg-raised)><code class="exit-code c-red">1</code><div class=exit-desc>Differences found, policy violations, or errors. In diff mode, any component change returns 1 — usable as a plain &ldquo;did anything change?&rdquo; gate.</div></div></div><h2 class=h-block style="margin:40px 0 22px">Supported formats</h2><div class="cellgrid cellgrid-tight"><div class=fmt-cell><div class=fmt-n></div><code class=fmt-d>"artifacts" + one of "source", "distro", "descriptor"</code></div><div class=fmt-cell><div class=fmt-n></div><code class=fmt-d>"bomFormat": "CycloneDX", or a cyclonedx $schema</code></div><div class=fmt-cell><div class=fmt-n></div><code class=fmt-d>"spdxVersion" starting with "SPDX-"</code></div></div><p style="font:13.5px/1.6 var(--sans);color:oklch(.58 .008 80);margin-top:14px">All formats must be JSON. XML support is not currently available.</p></div></div></section><footer class=site-footer><div class=footer-grid><div><div class=footer-brand>sbomlyze</div><div class=footer-desc>Git diff for SBOMs. Compare CycloneDX, SPDX, and Syft documents, detect tampering, and gate CI.</div><div class=footer-meta>Apache-2.0 · v0.5.3</div></div><div><div class=overline>Learn</div><div class=footer-links><a href=/integrity-drift>Integrity drift</a>
+<a href=/compliance>Compliance scoring</a>
+<a href=/cli>CLI reference</a></div></div><div><div class=overline>Use</div><div class=footer-links><a href=/install>Install</a>
+<a href=/action>GitHub Action</a>
+<a href=https://github.com/marketplace/actions/sbomlyze-diff>Marketplace</a></div></div><div><div class=overline>Project</div><div class=footer-links><a href=https://github.com/rezmoss/sbomlyze>Repository</a>
+<a href=https://github.com/rezmoss/sbomlyze/releases>Releases</a>
+<a href=https://github.com/rezmoss/sbomlyze/discussions>Discussions</a></div></div></div></footer><div class=lightbox-overlay id=lightbox role=dialog aria-modal=true aria-label="Image preview"><button class=lightbox-close type=button>esc ✕</button>
+<img alt><div class=lightbox-caption></div></div><script>(function(){var e=document.getElementById("lightbox"),t=e.querySelector("img"),s=e.querySelector(".lightbox-caption");function n(){e.classList.remove("open"),document.body.classList.remove("lightbox-open"),t.src=""}document.addEventListener("click",function(o){var i,a=o.target.closest("a[data-lightbox]");if(a){o.preventDefault(),t.src=a.getAttribute("href"),i=a.querySelector("img"),t.alt=i?i.alt:"",s.textContent=a.getAttribute("data-caption")||(i?i.alt:""),e.classList.add("open"),document.body.classList.add("lightbox-open");return}e.classList.contains("open")&&!o.target.closest(".lightbox-caption")&&n()}),document.addEventListener("keydown",function(e){e.key==="Escape"&&n()})})()</script></body></html>

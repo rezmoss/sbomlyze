@@ -1,0 +1,36 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Install — sbomlyze</title>
+<meta name=description content="Install sbomlyze via Homebrew, go install, or the checksum-verifying installer script."><link rel=canonical href=https://sbomlyze.com/install/><meta property="og:title" content="Install — sbomlyze"><meta property="og:description" content="Install sbomlyze via Homebrew, go install, or the checksum-verifying installer script."><meta property="og:url" content="https://sbomlyze.com/install/"><meta property="og:type" content="website"><link rel=icon href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='12' fill='%234ade80'/%3E%3C/svg%3E"><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel=stylesheet><link rel=stylesheet href=/css/main.min.ffca80a331dedead62a7214ee65a5f2f59381b45f5aaeb552726fd00ccb981e1.css></head><body><header class=site-header><div class=header-inner><a class=brand href=/><span class=brand-name>sbomlyze</span>
+<span class=brand-dot></span></a><nav class=nav><a class=nav-link href=/integrity-drift/>Integrity drift</a>
+<a class=nav-link href=/action/>GitHub Action</a>
+<a class=nav-link href=/cli/>CLI reference</a>
+<a class=nav-link href=/compliance/>Compliance</a>
+<a class="nav-link active" href=/install/>Install</a></nav><div class=header-meta><span class=header-version>v0.5.3</span>
+<a class=btn-gh href=https://github.com/rezmoss/sbomlyze>GitHub ★ 24</a></div></div></header><section class="section-hero bb"><div class=container-md><div class=eyebrow>Get started</div><h1 class=h-page>Install sbomlyze</h1><p class=lead-md style="max-width:64ch;margin:22px 0 0">One static Go binary, no runtime dependencies. Release archives are published with GitHub artifact attestations from v0.3.7 onward.</p></div></section><section class=section-md><div class="container-md grid-2"><div class=codebox><div class=install-head><span>Homebrew</span>
+<span class="pill pill-green" style="font-size:10px;padding:5px 9px">Recommended</span></div><pre style="padding:20px;font:13px/1.8 var(--mono)">brew install rezmoss/sbomlyze/sbomlyze</pre></div><div class=codebox><div class=install-head>Go install</div><pre style="padding:20px;font:13px/1.8 var(--mono)">go install github.com/rezmoss/sbomlyze/cmd/sbomlyze@latest</pre></div><div class=codebox style=grid-column:1/-1><div class=install-head>Installer script</div><pre style="padding:20px;font:13px/1.8 var(--mono)"><span class=c-gray># Install to ./bin</span>
+curl -sSfL https://raw.githubusercontent.com/rezmoss/sbomlyze/main/install.sh | sh
+
+<span class=c-gray># Install to /usr/local/bin (requires sudo)</span>
+curl -sSfL https://raw.githubusercontent.com/rezmoss/sbomlyze/main/install.sh | sudo sh -s -- -b /usr/local/bin
+
+<span class=c-gray># Install a specific version</span>
+curl -sSfL https://raw.githubusercontent.com/rezmoss/sbomlyze/main/install.sh | sh -s -- -v 0.4.0</pre><div class=install-flag-row><div><code>-b &lt;dir></code><span>Installation directory (default ./bin)</span></div><div><code>-d</code><span>Enable debug output</span></div><div><code>-v &lt;ver></code><span>Install a specific version (default latest)</span></div></div><div class=install-note>The installer always verifies the release checksum. When a compatible GitHub CLI is installed, it also verifies the release&rsquo;s build provenance and fails closed if that verification does not succeed.</div></div></div></section><section style="padding:0 32px 56px"><div class="container-md grid-2"><div class=codebox><div class=install-head>Verify a binary release</div><pre style="padding:20px;font:12.5px/1.8 var(--mono)">gh attestation verify \
+  ./sbomlyze_0.4.0_Linux_x86_64.tar.gz \
+  --repo rezmoss/sbomlyze \
+  --signer-workflow \
+    rezmoss/sbomlyze/.github/workflows/release.yml</pre></div><div class=codebox><div class=install-head>Build from source</div><pre style="padding:20px;font:12.5px/1.8 var(--mono)">git clone https://github.com/rezmoss/sbomlyze.git
+cd sbomlyze
+go build -o sbomlyze ./cmd/sbomlyze</pre></div><div class=codebox><div class=install-head>macOS quarantine</div><pre style="padding:20px;font:12.5px/1.8 var(--mono)">xattr -d com.apple.quarantine ./sbomlyze
+chmod +x ./sbomlyze</pre></div><div class=warn-card><div class=warn-card-label>Not published</div><div class=warn-card-body>Unsigned apt, rpm, and apk repository instructions have been removed until the repositories support package-manager-native signature verification.</div></div></div></section><section class="section-md bt alt"><div class=container-md><h2 class=h-block style=margin-bottom:22px>First run</h2><div class=codebox><pre class="codebox-pre codebox-pre-lg" style=line-height:1.9><span class=c-gray># Generate two SBOMs and compare them</span>
+syft nginx:1.25-alpine -o json &gt; nginx-125.json
+syft nginx:1.26-alpine -o json &gt; nginx-126.json
+sbomlyze nginx-125.json nginx-126.json
+
+<span class=c-gray># Or analyse and score straight from a pipe</span>
+syft alpine:latest -o cyclonedx-json | sbomlyze - --compliance</pre></div></div></section><footer class=site-footer><div class=footer-grid><div><div class=footer-brand>sbomlyze</div><div class=footer-desc>Git diff for SBOMs. Compare CycloneDX, SPDX, and Syft documents, detect tampering, and gate CI.</div><div class=footer-meta>Apache-2.0 · v0.5.3</div></div><div><div class=overline>Learn</div><div class=footer-links><a href=/integrity-drift>Integrity drift</a>
+<a href=/compliance>Compliance scoring</a>
+<a href=/cli>CLI reference</a></div></div><div><div class=overline>Use</div><div class=footer-links><a href=/install>Install</a>
+<a href=/action>GitHub Action</a>
+<a href=https://github.com/marketplace/actions/sbomlyze-diff>Marketplace</a></div></div><div><div class=overline>Project</div><div class=footer-links><a href=https://github.com/rezmoss/sbomlyze>Repository</a>
+<a href=https://github.com/rezmoss/sbomlyze/releases>Releases</a>
+<a href=https://github.com/rezmoss/sbomlyze/discussions>Discussions</a></div></div></div></footer><div class=lightbox-overlay id=lightbox role=dialog aria-modal=true aria-label="Image preview"><button class=lightbox-close type=button>esc ✕</button>
+<img alt><div class=lightbox-caption></div></div><script>(function(){var e=document.getElementById("lightbox"),t=e.querySelector("img"),s=e.querySelector(".lightbox-caption");function n(){e.classList.remove("open"),document.body.classList.remove("lightbox-open"),t.src=""}document.addEventListener("click",function(o){var i,a=o.target.closest("a[data-lightbox]");if(a){o.preventDefault(),t.src=a.getAttribute("href"),i=a.querySelector("img"),t.alt=i?i.alt:"",s.textContent=a.getAttribute("data-caption")||(i?i.alt:""),e.classList.add("open"),document.body.classList.add("lightbox-open");return}e.classList.contains("open")&&!o.target.closest(".lightbox-caption")&&n()}),document.addEventListener("keydown",function(e){e.key==="Escape"&&n()})})()</script></body></html>
