@@ -261,6 +261,14 @@ install() {
 
     verify_provenance "${TMP_DIR}/${FILENAME}"
 
+    # Resolve the install directory to an absolute path before leaving the
+    # caller's working directory, so a relative -b (or the ./bin default)
+    # does not end up inside TMP_DIR and get deleted by the cleanup trap.
+    case "$INSTALL_DIR" in
+        /*) ;;
+        *) INSTALL_DIR="$(pwd)/${INSTALL_DIR#./}" ;;
+    esac
+
     # Extract
     log_info "Extracting..."
     cd "$TMP_DIR"

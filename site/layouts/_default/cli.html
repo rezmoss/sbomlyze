@@ -67,7 +67,7 @@ sbomlyze before.json after.json --policy policy.json</pre>
         <tbody>
           {{ range site.Data.cli.outFormats }}
           <tr>
-            <td style="font:600 14px/1.5 var(--sans)">{{ .n }}</td>
+            <td style="font:600 14px/1.5 var(--sans)">{{ .name }}</td>
             <td class="mono" style="font-size:13px;color:var(--violet-bright)">{{ .f }}</td>
             <td class="body-cell">{{ .d }}</td>
             <td class="dim-cell">{{ .b }}</td>
@@ -124,7 +124,7 @@ sbomlyze before.json after.json --policy policy.json</pre>
         {{ range site.Data.cli.identity }}
         <div class="id-row">
           <span class="id-p">{{ .p }}</span>
-          <span class="id-n">{{ .n }}</span>
+          <span class="id-n">{{ .name }}</span>
           <code class="id-e">{{ .e }}</code>
         </div>
         {{ end }}
@@ -146,7 +146,7 @@ sbomlyze before.json after.json --policy policy.json</pre>
       <div class="cellgrid cellgrid-tight">
         {{ range site.Data.cli.sbomFormats }}
         <div class="fmt-cell">
-          <div class="fmt-n">{{ .n }}</div>
+          <div class="fmt-n">{{ .name }}</div>
           <code class="fmt-d">{{ .d }}</code>
         </div>
         {{ end }}
