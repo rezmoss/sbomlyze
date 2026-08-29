@@ -111,7 +111,7 @@ nfpms:
   - id: packages
     package_name: sbomlyze
     vendor: rezmoss
-    homepage: &website "https://github.com/rezmoss/sbomlyze"
+    homepage: &website "https://sbomlyze.com"
     maintainer: rezmoss <rezmoss@users.noreply.github.com>
     description: &description "A fast, reliable SBOM diff and analysis tool"
     license: Apache-2.0
