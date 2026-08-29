@@ -87,6 +87,9 @@ func parseSPDXData(data []byte) ([]Component, SBOMInfo, error) {
 
 	var comps []Component
 	for i, pkg := range doc.Packages {
+		if pkg == nil {
+			continue
+		}
 		comp := Component{
 			Name:    pkg.PackageName,
 			Version: pkg.PackageVersion,
@@ -94,6 +97,9 @@ func parseSPDXData(data []byte) ([]Component, SBOMInfo, error) {
 			SPDXID:  string(pkg.PackageSPDXIdentifier),
 		}
 		for _, ref := range pkg.PackageExternalReferences {
+			if ref == nil {
+				continue
+			}
 			if ref.RefType == spdx.PackageManagerPURL || ref.RefType == "purl" {
 				comp.PURL = ref.Locator
 			}
