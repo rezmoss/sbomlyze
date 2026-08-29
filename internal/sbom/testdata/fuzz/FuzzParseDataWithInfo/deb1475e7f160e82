@@ -1,0 +1,2 @@
+go test fuzz v1
+[]byte("{\"spdxVersion\":\"SPDX-2.1\",\"pACkAges\":[{\"000000000000000\":\"000\"}]}")

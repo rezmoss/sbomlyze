@@ -12,14 +12,15 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - name: Checkout with history
+      - name: Checkout release tag
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          ref: v0.5.1 # x-release-please-version
           fetch-depth: 0
 
       - name: Test successful comparison
         id: sbomlyze
-        uses: rezmoss/sbomlyze@v0.5.1 # x-release-please-version
+        uses: ./
         with:
           sbom-path: testdata/cyclonedx-after.json
           base-sbom-path: testdata/cyclonedx-before.json
@@ -53,7 +54,7 @@ jobs:
       - name: Test expected integrity gate failure
         id: integrity
         continue-on-error: true
-        uses: rezmoss/sbomlyze@v0.5.1 # x-release-please-version
+        uses: ./
         with:
           sbom-path: testdata/cyclonedx-integrity-drift.json
           base-sbom-path: testdata/cyclonedx-before.json
