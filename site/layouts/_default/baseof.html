@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{{ $title := .Title }}{{ if .IsHome }}{{ $title = "sbomlyze — git diff for your SBOM" }}{{ else }}{{ $title = printf "%s — sbomlyze" .Title }}{{ end }}
+<title>{{ $title }}</title>
+<meta name="description" content="{{ .Params.description | default site.Params.description }}">
+<link rel="canonical" href="{{ .Permalink }}">
+<meta property="og:title" content="{{ $title }}">
+<meta property="og:description" content="{{ .Params.description | default site.Params.description }}">
+<meta property="og:url" content="{{ .Permalink }}">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='12' fill='%234ade80'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+{{ $css := resources.Get "css/main.css" | minify | fingerprint }}
+<link rel="stylesheet" href="{{ $css.RelPermalink }}">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="{{ site.Home.RelPermalink }}">
+      <span class="brand-name">sbomlyze</span>
+      <span class="brand-dot"></span>
+    </a>
+    <nav class="nav">
+      {{ $current := . }}
+      {{ range site.Menus.main }}
+      <a class="nav-link{{ if or ($current.IsMenuCurrent "main" .) ($current.HasMenuCurrent "main" .) }} active{{ end }}" href="{{ .URL }}">{{ .Name }}</a>
+      {{ end }}
+    </nav>
+    <div class="header-meta">
+      <span class="header-version">{{ site.Params.version }}</span>
+      <a class="btn-gh" href="{{ site.Params.repo }}">GitHub ★ {{ site.Params.githubStars }}</a>
+    </div>
+  </div>
+</header>
+
+{{ block "main" . }}{{ end }}
+
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">sbomlyze</div>
+      <div class="footer-desc">Git diff for SBOMs. Compare CycloneDX, SPDX, and Syft documents, detect tampering, and gate CI.</div>
+      <div class="footer-meta">Apache-2.0 · {{ site.Params.version }}</div>
+    </div>
+    <div>
+      <div class="overline">Learn</div>
+      <div class="footer-links">
+        <a href="{{ "integrity-drift" | relURL }}">Integrity drift</a>
+        <a href="{{ "compliance" | relURL }}">Compliance scoring</a>
+        <a href="{{ "cli" | relURL }}">CLI reference</a>
+      </div>
+    </div>
+    <div>
+      <div class="overline">Use</div>
+      <div class="footer-links">
+        <a href="{{ "install" | relURL }}">Install</a>
+        <a href="{{ "action" | relURL }}">GitHub Action</a>
+        <a href="https://github.com/marketplace/actions/sbomlyze-diff">Marketplace</a>
+      </div>
+    </div>
+    <div>
+      <div class="overline">Project</div>
+      <div class="footer-links">
+        <a href="{{ site.Params.repo }}">Repository</a>
+        <a href="{{ site.Params.repo }}/releases">Releases</a>
+        <a href="{{ site.Params.repo }}/discussions">Discussions</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div class="lightbox-overlay" id="lightbox" role="dialog" aria-modal="true" aria-label="Image preview">
+  <button class="lightbox-close" type="button">esc ✕</button>
+  <img alt="">
+  <div class="lightbox-caption"></div>
+</div>
+<script>
+(function () {
+  var box = document.getElementById('lightbox');
+  var img = box.querySelector('img');
+  var caption = box.querySelector('.lightbox-caption');
+  function close() {
+    box.classList.remove('open');
+    document.body.classList.remove('lightbox-open');
+    img.src = '';
+  }
+  document.addEventListener('click', function (e) {
+    var link = e.target.closest('a[data-lightbox]');
+    if (link) {
+      e.preventDefault();
+      img.src = link.getAttribute('href');
+      var inner = link.querySelector('img');
+      img.alt = inner ? inner.alt : '';
+      caption.textContent = link.getAttribute('data-caption') || (inner ? inner.alt : '');
+      box.classList.add('open');
+      document.body.classList.add('lightbox-open');
+      return;
+    }
+    if (box.classList.contains('open') && !e.target.closest('.lightbox-caption')) close();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') close();
+  });
+})();
+</script>
+
+</body>
+</html>

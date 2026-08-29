@@ -33,3 +33,8 @@ go.work.sum
 vendor
 dist
 .DS_Store
+
+# Hugo build artifacts (site/)
+site/public/
+site/resources/
+site/.hugo_build.lock

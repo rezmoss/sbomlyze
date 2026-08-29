@@ -1,0 +1,87 @@
+{{ define "main" }}
+
+<section class="section-hero bb">
+  <div class="container-md">
+    <div class="eyebrow">Get started</div>
+    <h1 class="h-page">Install sbomlyze</h1>
+    <p class="lead-md" style="max-width:64ch;margin:22px 0 0">One static Go binary, no runtime dependencies. Release archives are published with GitHub artifact attestations from v0.3.7 onward.</p>
+  </div>
+</section>
+
+<section class="section-md">
+  <div class="container-md grid-2">
+    <div class="codebox">
+      <div class="install-head">
+        <span>Homebrew</span>
+        <span class="pill pill-green" style="font-size:10px;padding:5px 9px">Recommended</span>
+      </div>
+      <pre style="padding:20px;font:400 13px/1.8 var(--mono)">brew install rezmoss/sbomlyze/sbomlyze</pre>
+    </div>
+    <div class="codebox">
+      <div class="install-head">Go install</div>
+      <pre style="padding:20px;font:400 13px/1.8 var(--mono)">go install github.com/rezmoss/sbomlyze/cmd/sbomlyze@latest</pre>
+    </div>
+    <div class="codebox" style="grid-column:1 / -1">
+      <div class="install-head">Installer script</div>
+      <pre style="padding:20px;font:400 13px/1.8 var(--mono)"><span class="c-gray"># Install to ./bin</span>
+curl -sSfL https://raw.githubusercontent.com/rezmoss/sbomlyze/main/install.sh | sh
+
+<span class="c-gray"># Install to /usr/local/bin (requires sudo)</span>
+curl -sSfL https://raw.githubusercontent.com/rezmoss/sbomlyze/main/install.sh | sudo sh -s -- -b /usr/local/bin
+
+<span class="c-gray"># Install a specific version</span>
+curl -sSfL https://raw.githubusercontent.com/rezmoss/sbomlyze/main/install.sh | sh -s -- -v 0.4.0</pre>
+      <div class="install-flag-row">
+        <div><code>-b &lt;dir&gt;</code><span>Installation directory (default ./bin)</span></div>
+        <div><code>-d</code><span>Enable debug output</span></div>
+        <div><code>-v &lt;ver&gt;</code><span>Install a specific version (default latest)</span></div>
+      </div>
+      <div class="install-note">The installer always verifies the release checksum. When a compatible GitHub CLI is installed, it also verifies the release&rsquo;s build provenance and fails closed if that verification does not succeed.</div>
+    </div>
+  </div>
+</section>
+
+<section style="padding:0 32px 56px">
+  <div class="container-md grid-2">
+    <div class="codebox">
+      <div class="install-head">Verify a binary release</div>
+      <pre style="padding:20px;font:400 12.5px/1.8 var(--mono)">gh attestation verify \
+  ./sbomlyze_0.4.0_Linux_x86_64.tar.gz \
+  --repo rezmoss/sbomlyze \
+  --signer-workflow \
+    rezmoss/sbomlyze/.github/workflows/release.yml</pre>
+    </div>
+    <div class="codebox">
+      <div class="install-head">Build from source</div>
+      <pre style="padding:20px;font:400 12.5px/1.8 var(--mono)">git clone https://github.com/rezmoss/sbomlyze.git
+cd sbomlyze
+go build -o sbomlyze ./cmd/sbomlyze</pre>
+    </div>
+    <div class="codebox">
+      <div class="install-head">macOS quarantine</div>
+      <pre style="padding:20px;font:400 12.5px/1.8 var(--mono)">xattr -d com.apple.quarantine ./sbomlyze
+chmod +x ./sbomlyze</pre>
+    </div>
+    <div class="warn-card">
+      <div class="warn-card-label">Not published</div>
+      <div class="warn-card-body">Unsigned apt, rpm, and apk repository instructions have been removed until the repositories support package-manager-native signature verification.</div>
+    </div>
+  </div>
+</section>
+
+<section class="section-md bt alt">
+  <div class="container-md">
+    <h2 class="h-block" style="margin-bottom:22px">First run</h2>
+    <div class="codebox">
+      <pre class="codebox-pre codebox-pre-lg" style="line-height:1.9"><span class="c-gray"># Generate two SBOMs and compare them</span>
+syft nginx:1.25-alpine -o json &gt; nginx-125.json
+syft nginx:1.26-alpine -o json &gt; nginx-126.json
+sbomlyze nginx-125.json nginx-126.json
+
+<span class="c-gray"># Or analyse and score straight from a pipe</span>
+syft alpine:latest -o cyclonedx-json | sbomlyze - --compliance</pre>
+    </div>
+  </div>
+</section>
+
+{{ end }}

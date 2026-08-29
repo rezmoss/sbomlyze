@@ -1,0 +1,40 @@
+baseURL = "https://sbomlyze.com/"
+languageCode = "en-us"
+title = "sbomlyze"
+disableKinds = ["taxonomy", "term", "rss", "section"]
+
+[params]
+  description = "Git diff for SBOMs. Compare CycloneDX, SPDX, and Syft documents, detect tampering, and gate CI."
+  version = "v0.5.3"
+  actionSha = "db9182a06acbc58a66143978765f096a576f1f9c"
+  githubStars = "24"
+  showComparisonTable = true
+  repo = "https://github.com/rezmoss/sbomlyze"
+
+[[menus.main]]
+  name = "Integrity drift"
+  pageRef = "/integrity-drift"
+  weight = 10
+
+[[menus.main]]
+  name = "GitHub Action"
+  pageRef = "/action"
+  weight = 20
+
+[[menus.main]]
+  name = "CLI reference"
+  pageRef = "/cli"
+  weight = 30
+
+[[menus.main]]
+  name = "Compliance"
+  pageRef = "/compliance"
+  weight = 40
+
+[[menus.main]]
+  name = "Install"
+  pageRef = "/install"
+  weight = 50
+
+[markup.goldmark.renderer]
+  unsafe = true

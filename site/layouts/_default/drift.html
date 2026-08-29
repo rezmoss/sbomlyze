@@ -1,0 +1,87 @@
+{{ define "main" }}
+
+<section class="section-hero bb">
+  <div class="container-narrow">
+    <div class="eyebrow">Concept · 9 min read</div>
+    <h1 class="h-article">The dependency version did not change. Why did its hash change?</h1>
+    <p class="lead-lg" style="margin:24px 0 0">A manifest diff, an ordinary SBOM component diff, and an integrity-drift check answer three different questions. Treating them as interchangeable leaves a blind spot: a component can keep the same name and version while its bytes change.</p>
+  </div>
+</section>
+
+<section style="padding:64px 32px">
+  <div class="container-md">
+    <h2 class="h-sub" style="margin:0 0 28px">The three layers</h2>
+    <div class="table-scroll">
+      <table class="table">
+        <thead>
+          <tr>
+            <th style="width:22%">Layer</th>
+            <th>Primary question</th>
+            <th>Strongest signal</th>
+            <th>Important blind spot</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ range site.Data.drift.layers }}
+          <tr>
+            <td style="font-weight:500">{{ .layer }}</td>
+            <td class="body-cell" style="color:var(--body)">{{ .q }}</td>
+            <td class="body-cell" style="color:var(--body)">{{ .s }}</td>
+            <td class="dim-cell">{{ .b }}</td>
+          </tr>
+          {{ end }}
+        </tbody>
+      </table>
+    </div>
+    <p class="note" style="max-width:74ch;margin:28px 0 0">These layers complement one another. sbomlyze does not replace a package manager, an SBOM generator, signature verification, or a vulnerability scanner. It reviews the evidence produced by the build and classifies what changed between two points in time.</p>
+  </div>
+</section>
+
+<section style="padding:0 32px 64px">
+  <div class="container-narrow">
+    <h2 class="h-sub" style="margin:32px 0 16px">1 · Manifest diff: developer intent</h2>
+    <div class="callout" style="margin:20px 0"><pre style="font:400 13px/1.8 var(--mono)"><span class="c-red">- github.com/google/uuid v1.5.0</span>
+<span class="c-green">+ github.com/google/uuid v1.6.0</span></pre></div>
+    <p class="body-text">That is an excellent review surface. But the manifest describes dependency resolution, not necessarily the final artifact. It may omit operating-system packages, copied binaries, vendored files, build-stage tools, generated assets, or components introduced by the container base image.</p>
+
+    <h2 class="h-sub" style="margin:44px 0 16px">2 · Ordinary SBOM component diff: build inventory</h2>
+    <p class="body-text">Comparing two inventories reveals changes a manifest misses: a new transitive package, an OS package added by a base-image update, a component removed from the final artifact, a resolved version that differs from the source declaration, or a license and supplier change.</p>
+    <p class="body-text">The naive implementation is a JSON diff, which produces noise from timestamps, serial numbers, generated identifiers, and ordering. sbomlyze matches component identity using stable identifiers when available — Package URLs and CPEs, with format-specific references and names as fallbacks — so it can compare SPDX, CycloneDX, and Syft evidence without identical layouts.</p>
+    <div class="callout callout-amber" style="margin:24px 0">If a package is called <code>example</code> at version <code>1.4.2</code> in both SBOMs, a name-and-version diff calls it unchanged — even if the component bytes are different.</div>
+
+    <h2 class="h-sub" style="margin:44px 0 16px">3 · Integrity drift: same identity and version, different bytes</h2>
+    <p class="body-text">Integrity drift is the narrow condition where sbomlyze matches a component in both SBOMs, sees the same version, and finds that its recorded hash set changed. The version says consumers should be receiving the same release, while the hash says the recorded content is not the same. Those two facts disagree, so a reviewer should establish why before merging.</p>
+    <div class="overline" style="margin:34px 0 14px">Possible explanations</div>
+    <div class="cellgrid cellgrid-tight on-dark" style="border-radius:10px">
+      {{ range site.Data.drift.explanations }}
+      <div style="padding:15px 20px;font:400 15px/1.6 var(--sans);color:oklch(0.80 0.008 80)">{{ . }}</div>
+      {{ end }}
+    </div>
+    <p class="body-text" style="margin-top:24px">Some explanations are benign. The point of the check is not to label every hash change an attack. It is to prevent a silent mismatch from passing as &ldquo;no dependency change.&rdquo;</p>
+
+    <h2 class="h-sub" style="margin:44px 0 16px">Make the signal trustworthy</h2>
+    <p class="body-text">Hash comparison is only as stable as the evidence around it. Before making the check required:</p>
+    <div class="numlist" style="margin-top:22px">
+      {{ range site.Data.drift.trust }}
+      <div class="numlist-row">
+        <span class="numlist-n">{{ .n }}</span>
+        <span class="numlist-d">{{ .d }}</span>
+      </div>
+      {{ end }}
+    </div>
+
+    <h2 class="h-sub" style="margin:48px 0 16px">A practical review rule</h2>
+    <div style="display:grid;gap:14px">
+      <div class="rule-card edge-gray"><strong>Manifest changed, component version changed:</strong> review the intended upgrade.</div>
+      <div class="rule-card edge-amber"><strong>Manifest did not change, SBOM components changed:</strong> identify the build or transitive source of the inventory change.</div>
+      <div class="rule-card edge-red"><strong>Component version did not change, component hash changed:</strong> stop and explain the content mismatch before merging.</div>
+    </div>
+    <p class="body-text" style="margin-top:28px">That last case is small, specific, and easy to miss. Giving it its own policy signal turns an ambiguous SBOM diff into a review decision.</p>
+    <div style="margin-top:36px;padding-top:28px;border-top:1px solid var(--border);display:flex;gap:12px;flex-wrap:wrap">
+      <a class="btn btn-primary" href="{{ "action" | relURL }}">Add the check to CI</a>
+      <a class="btn btn-outline" href="https://github.com/rezmoss/sbomlyze-go-spdx-demo/pull/2">See the blocked pull request</a>
+    </div>
+  </div>
+</section>
+
+{{ end }}
