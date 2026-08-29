@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.2](https://github.com/rezmoss/sbomlyze/compare/v0.5.1...v0.5.2) (2026-08-28)
+
+
+### Bug Fixes
+
+* **sbom:** guard nil SPDX packages and external refs (crashes found by new fuzzer); upgrade golang.org/x/text to v0.39.0 for GO-2026-5970 ([#50](https://github.com/rezmoss/sbomlyze/issues/50)) ([fdb5e2b](https://github.com/rezmoss/sbomlyze/commit/fdb5e2b99b7d7d162a0c269c7cd6c2da2f48b9c7))
+
 ## [0.5.1](https://github.com/rezmoss/sbomlyze/compare/v0.5.0...v0.5.1) (2026-08-09)
 
 

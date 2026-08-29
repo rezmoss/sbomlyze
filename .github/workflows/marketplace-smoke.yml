@@ -15,7 +15,7 @@ jobs:
       - name: Checkout release tag
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: v0.5.1 # x-release-please-version
+          ref: v0.5.2 # x-release-please-version
           fetch-depth: 0
 
       - name: Test successful comparison
