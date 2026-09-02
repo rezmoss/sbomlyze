@@ -1,6 +1,6 @@
 module github.com/rezmoss/sbomlyze
 
-go 1.25.12
+go 1.25.14
 
 require (
 	github.com/CycloneDX/cyclonedx-go v0.11.0
