@@ -103,6 +103,18 @@ jobs:
           HOMEBREW_TAP_GITHUB_TOKEN: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
 
       - name: Attest release artifacts
+        id: attest
         uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
         with:
           subject-checksums: dist/checksums.txt
+
+      # Scorecard's Signed-Releases check only sees signatures attached as
+      # release assets, not the GitHub attestation store.
+      - name: Upload attestation bundle to release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BUNDLE: ${{ steps.attest.outputs.bundle-path }}
+          TAG: ${{ inputs.version || github.ref_name }}
+        run: |
+          cp "$BUNDLE" "sbomlyze_${TAG#v}_attestation.sigstore.json"
+          gh release upload "$TAG" "sbomlyze_${TAG#v}_attestation.sigstore.json" --clobber
