@@ -23,3 +23,31 @@ jobs:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
           skip-github-release: true
+
+  # Merging a release PR bumps the manifest version. When that version has no
+  # tag yet, start the Release workflow, which tags, builds and publishes it.
+  publish:
+    name: Publish merged release
+    runs-on: ubuntu-latest
+    needs: release-pr
+    permissions:
+      actions: write
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Start release for untagged version
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          VERSION="v$(jq -r '."."' .release-please-manifest.json)"
+          if git ls-remote --exit-code --tags origin "refs/tags/$VERSION" >/dev/null; then
+            echo "$VERSION is already tagged; nothing to release"
+            exit 0
+          fi
+          echo "Starting release $VERSION"
+          gh workflow run release.yml --ref main -f version="$VERSION"
