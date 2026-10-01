@@ -68,6 +68,7 @@ jobs:
       artifact-metadata: write
       contents: write
       id-token: write
+      pull-requests: write
     steps:
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -118,3 +119,20 @@ jobs:
         run: |
           cp "$BUNDLE" "sbomlyze_${TAG#v}_attestation.sigstore.json"
           gh release upload "$TAG" "sbomlyze_${TAG#v}_attestation.sigstore.json" --clobber
+
+      # release-please runs with skip-github-release, so it never marks its
+      # merged release PR as tagged and refuses to open the next one.
+      - name: Mark release PR as tagged
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ inputs.version || github.ref_name }}
+        run: |
+          prs=$(gh pr list --state merged --label "autorelease: pending" \
+            --search "\"release ${TAG#v}\" in:title" --json number --jq '.[].number')
+          if [ -z "$prs" ]; then
+            echo "No pending release PR found for $TAG"
+            exit 0
+          fi
+          for pr in $prs; do
+            gh pr edit "$pr" --remove-label "autorelease: pending" --add-label "autorelease: tagged"
+          done
