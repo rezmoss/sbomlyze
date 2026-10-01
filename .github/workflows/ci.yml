@@ -60,6 +60,8 @@ jobs:
       - name: Run govulncheck
         uses: golang/govulncheck-action@032d45514ae346b1db93c04b0c90b841c370344f # v1.1.0
         with:
+          # v1.8.0+ requires Go 1.26; bump together with the go directive.
+          govulncheck-version: v1.7.0
           go-version-file: go.mod
           go-package: ./...
 
