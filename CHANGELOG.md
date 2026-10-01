@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.4](https://github.com/rezmoss/sbomlyze/compare/v0.5.3...v0.5.4) (2026-10-01)
+
+
+### Bug Fixes
+
+* **deps:** ship Go 1.25.14 toolchain and cyclonedx-go v0.12.0 ([#61](https://github.com/rezmoss/sbomlyze/issues/61)) ([8f8c8a0](https://github.com/rezmoss/sbomlyze/commit/8f8c8a052332d7f03605d94086cca1b38a84c3c1))
+
 ## [0.5.3](https://github.com/rezmoss/sbomlyze/compare/v0.5.2...v0.5.3) (2026-08-29)
 
 
