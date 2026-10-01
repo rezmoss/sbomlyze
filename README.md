@@ -9,6 +9,7 @@ sbomlyze compares component hashes, not only version strings. When an attacker s
 [![GitHub Release][release-img]][release]
 [![Go Report Card][go-report-img]][go-report]
 [![OpenSSF Scorecard][scorecard-img]][scorecard]
+[![OpenSSF Best Practices][best-practices-img]][best-practices]
 [![License: Apache-2.0][license-img]][license]
 [![Downloads][download-img]][download]
 
@@ -1344,3 +1345,5 @@ Contributions are welcome! Good first issues are labeled [`good first issue`](ht
 [download-img]: https://img.shields.io/github/downloads/rezmoss/sbomlyze/total
 [scorecard]: https://scorecard.dev/viewer/?uri=github.com/rezmoss/sbomlyze
 [scorecard-img]: https://api.scorecard.dev/projects/github.com/rezmoss/sbomlyze/badge
+[best-practices]: https://www.bestpractices.dev/projects/15129
+[best-practices-img]: https://www.bestpractices.dev/projects/15129/badge
