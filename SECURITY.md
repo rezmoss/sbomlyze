@@ -23,6 +23,8 @@ Instead, report vulnerabilities through a **private GitHub Security Advisory**:
    - Impact assessment (if known)
 3. Submit the advisory
 
+If you cannot use GitHub Security Advisories, email **hi@rezmoss.com** instead.
+
 You should receive an acknowledgment within **48 hours**. We aim to provide a fix or mitigation within **7 days** for critical issues.
 
 ## Scope
