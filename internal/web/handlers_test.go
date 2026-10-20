@@ -175,6 +175,23 @@ func TestHandleUpload_CycloneDX(t *testing.T) {
 	}
 }
 
+func TestHandleUpload_TooLarge(t *testing.T) {
+	resetState()
+	old := maxUploadBytes
+	maxUploadBytes = 1024
+	t.Cleanup(func() { maxUploadBytes = old })
+
+	req, err := createMultipartRequest(webTestdataPath("syft-sample.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	rr := httptest.NewRecorder()
+	handleUpload(rr, req)
+	if rr.Code != http.StatusRequestEntityTooLarge {
+		t.Errorf("expected 413, got %d: %s", rr.Code, rr.Body.String())
+	}
+}
+
 func TestHandleUpload_Syft(t *testing.T) {
 	resetState()
 	req, err := createMultipartRequest(webTestdataPath("syft-sample.json"))

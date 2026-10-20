@@ -3,8 +3,10 @@ package web
 import (
 	"fmt"
 	"io/fs"
+	"net"
 	"net/http"
 	"sync"
+	"time"
 
 	"github.com/rezmoss/sbomlyze/internal/analysis"
 	"github.com/rezmoss/sbomlyze/internal/sbom"
@@ -47,6 +49,28 @@ func Serve(port int) error {
 	}
 	mux.Handle("/", http.FileServer(http.FS(staticFS)))
 
-	addr := fmt.Sprintf(":%d", port)
-	return http.ListenAndServe(addr, mux)
+	// Loopback only: the API is unauthenticated and holds the uploaded SBOM.
+	srv := &http.Server{
+		Addr:              fmt.Sprintf("127.0.0.1:%d", port),
+		Handler:           loopbackHostOnly(mux),
+		ReadHeaderTimeout: 10 * time.Second,
+	}
+	return srv.ListenAndServe()
+}
+
+// loopbackHostOnly rejects requests whose Host is not a loopback name, so a
+// DNS-rebinding page cannot read the API through the user's browser.
+func loopbackHostOnly(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		host, _, err := net.SplitHostPort(r.Host)
+		if err != nil {
+			host = r.Host
+		}
+		switch host {
+		case "localhost", "127.0.0.1", "::1", "[::1]":
+			next.ServeHTTP(w, r)
+		default:
+			http.Error(w, "Forbidden host", http.StatusForbidden)
+		}
+	})
 }

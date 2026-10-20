@@ -1,0 +1,9 @@
+# Enrollment file for Anthropic's OSS Scanner. Not used by this repository: copy it to
+# projects/sbomlyze/project.yaml in a pull request to https://github.com/anthropics/oss-scanner.
+# The Dockerfile and threat model live here under .oss-scanner/, so build changes need no pull request there.
+# Email addresses in project.yaml are public.
+repo: https://github.com/rezmoss/sbomlyze#main
+primary_contact: rez@cloudaid.net
+homepage: https://github.com/rezmoss/sbomlyze
+dockerfile: .oss-scanner/Dockerfile
+threat_model: .oss-scanner/threat_model.md
