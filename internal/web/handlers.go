@@ -2,6 +2,7 @@ package web
 
 import (
 	"encoding/json"
+	"errors"
 	"io"
 	"net/http"
 	"sort"
@@ -36,13 +37,22 @@ type ComponentDetail struct {
 	FileCount    int               `json:"fileCount"`
 }
 
+// maxUploadBytes caps the whole upload request body. A var so tests can lower it.
+var maxUploadBytes int64 = 500 << 20
+
 func handleUpload(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
 
-	if err := r.ParseMultipartForm(500 << 20); err != nil {
+	r.Body = http.MaxBytesReader(w, r.Body, maxUploadBytes)
+	if err := r.ParseMultipartForm(32 << 20); err != nil {
+		var tooLarge *http.MaxBytesError
+		if errors.As(err, &tooLarge) {
+			http.Error(w, "Upload too large", http.StatusRequestEntityTooLarge)
+			return
+		}
 		http.Error(w, "Failed to parse form: "+err.Error(), http.StatusBadRequest)
 		return
 	}

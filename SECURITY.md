@@ -44,9 +44,9 @@ You should receive an acknowledgment within **48 hours**. We aim to provide a fi
 
 ### Web UI (`--web` mode)
 
-The web server is intended for **local use only** (binds to localhost). It is not designed to be exposed to the internet. If you run it in a container or CI environment, ensure it is not publicly accessible.
+The web server is intended for **local use only**: it binds to 127.0.0.1 and rejects requests whose `Host` header is not a loopback name (DNS-rebinding protection). It is not designed to be exposed to a network.
 
-- File uploads are limited to 500 MB
+- Upload requests are limited to 500 MB
 - No authentication is provided (local-only design - personal use not server component)
 - No data is sent to external services
 

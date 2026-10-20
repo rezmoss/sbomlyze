@@ -92,3 +92,23 @@ func TestWebWorkflow_UploadThenQuery(t *testing.T) {
 		}
 	}
 }
+
+func TestLoopbackHostOnly(t *testing.T) {
+	h := loopbackHostOnly(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {}))
+	for host, want := range map[string]int{
+		"localhost:8080":  http.StatusOK,
+		"127.0.0.1:8080":  http.StatusOK,
+		"[::1]:8080":      http.StatusOK,
+		"localhost":       http.StatusOK,
+		"evil.example":    http.StatusForbidden,
+		"evil.example:80": http.StatusForbidden,
+	} {
+		req := httptest.NewRequest(http.MethodGet, "/api/stats", nil)
+		req.Host = host
+		rr := httptest.NewRecorder()
+		h.ServeHTTP(rr, req)
+		if rr.Code != want {
+			t.Errorf("host %q: got %d, want %d", host, rr.Code, want)
+		}
+	}
+}
