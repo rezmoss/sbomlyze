@@ -7,7 +7,7 @@ require (
 	github.com/charmbracelet/bubbles v1.0.0
 	github.com/charmbracelet/bubbletea v1.3.10
 	github.com/charmbracelet/lipgloss v1.1.0
-	github.com/github/go-spdx/v2 v2.7.1
+	github.com/github/go-spdx/v2 v2.8.0
 	github.com/mattn/go-isatty v0.0.24
 	github.com/spdx/tools-golang v0.5.7
 )
