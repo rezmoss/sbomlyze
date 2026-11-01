@@ -8,7 +8,7 @@ Thank you for your interest in contributing to sbomlyze! This guide covers every
 
 | Tool | Version | Install |
 |------|---------|---------|
-| Go | 1.25.12+ | https://go.dev/dl/ |
+| Go | 1.26.10+ | https://go.dev/dl/ |
 | golangci-lint | v2.11+ | `go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.11.3` |
 | goreleaser (optional) | v2 | `go install github.com/goreleaser/goreleaser/v2@latest` |
 
