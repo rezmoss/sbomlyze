@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0](https://github.com/rezmoss/sbomlyze/compare/v0.5.4...v0.6.0) (2026-11-01)
+
+
+### Bug Fixes
+
+* **web:** bind to loopback, block DNS rebinding, cap uploads ([#73](https://github.com/rezmoss/sbomlyze/issues/73)) ([1b086c8](https://github.com/rezmoss/sbomlyze/commit/1b086c8eabaf6688500cc9009ec0f3d3691a0ee4))
+
 ## [0.5.4](https://github.com/rezmoss/sbomlyze/compare/v0.5.3...v0.5.4) (2026-10-01)
 
 
