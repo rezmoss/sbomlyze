@@ -3,7 +3,6 @@
   "packages": {
     ".": {
       "release-type": "simple",
-      "release-as": "0.6.0",
       "package-name": "sbomlyze",
       "include-component-in-tag": false,
       "changelog-path": "CHANGELOG.md",
