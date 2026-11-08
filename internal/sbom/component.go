@@ -59,6 +59,8 @@ type Component struct {
 	// dpkg conffiles; ConfigKnown false if no flag
 	ConfigFiles []string `json:"-"`
 	ConfigKnown bool     `json:"-"`
+	// Syft package type (rust-crate, go-module); ecosystem w/o PURL
+	PkgType string `json:"-"`
 }
 
 // Digest kinds stored in Component.Digests.

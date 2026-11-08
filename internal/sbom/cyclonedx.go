@@ -185,8 +185,11 @@ func extractCycloneDXComponents(bom *cdx.BOM, rawComponents []json.RawMessage) [
 		comp.Locations = cycloneDXLocations(c)
 		if c.Properties != nil {
 			for _, p := range *c.Properties {
-				if p.Name == "syft:metadata:h1Digest" && p.Value != "" {
+				switch {
+				case p.Name == "syft:metadata:h1Digest" && p.Value != "":
 					comp.Digests = map[string]string{DigestGoH1: p.Value}
+				case p.Name == "syft:package:type":
+					comp.PkgType = p.Value
 				}
 			}
 		}

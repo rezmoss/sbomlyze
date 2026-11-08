@@ -145,6 +145,7 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 			PURL:     a.PURL,
 			Type:     a.Type,
 			Language: a.Language,
+			PkgType:  a.Type,
 			FoundBy:  a.FoundBy,
 			Hashes:   make(map[string]string),
 			RawJSON:  rawArtifact,

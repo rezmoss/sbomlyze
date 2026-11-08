@@ -166,11 +166,11 @@ func ClassifyDrift(before, after sbom.Component) DriftInfo {
 	if versionChanged {
 		drift.VersionFrom = before.Version
 		drift.VersionTo = after.Version
-		purl := after.PURL
-		if purl == "" {
-			purl = before.PURL
+		eco := Ecosystem(after)
+		if eco == "unknown" {
+			eco = Ecosystem(before)
 		}
-		drift.Direction, drift.Level = ClassifyVersionChange(ExtractPURLType(purl), before.Version, after.Version)
+		drift.Direction, drift.Level = ClassifyVersionChange(eco, before.Version, after.Version)
 	}
 
 	hashDiff := DiffHashes(before.DigestSet(), after.DigestSet())

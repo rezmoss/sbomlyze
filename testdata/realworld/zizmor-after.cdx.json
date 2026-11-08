@@ -1,0 +1,893 @@
+{
+ "$schema": "http://cyclonedx.org/schema/bom-1.7.schema.json",
+ "bomFormat": "CycloneDX",
+ "specVersion": "1.7",
+ "serialNumber": "urn:uuid:53815605-e861-4ea3-abb7-b65df16fe01b",
+ "version": 1,
+ "metadata": {
+  "timestamp": "2026-11-08T05:55:14Z",
+  "tools": {
+   "components": [
+    {
+     "type": "application",
+     "author": "anchore",
+     "name": "syft",
+     "version": "1.57.0"
+    }
+   ]
+  },
+  "component": {
+   "bom-ref": "131be2c6224ca899",
+   "type": "file",
+   "name": "zizmorcore/zizmor",
+   "version": "v1.32.0"
+  }
+ },
+ "components": [
+  {
+   "bom-ref": "fd6da749ee037450",
+   "type": "library",
+   "name": "github-actions-expressions",
+   "version": "1.32.0",
+   "cpe": "cpe:2.3:a:github-actions-expressions_project:github-actions-expressions:1.32.0:*:*:*:*:rust:*:*",
+   "properties": [
+    {
+     "name": "syft:package:foundBy",
+     "value": "rust-cargo-lock-cataloger"
+    },
+    {
+     "name": "syft:package:language",
+     "value": "rust"
+    },
+    {
+     "name": "syft:package:type",
+     "value": "rust-crate"
+    },
+    {
+     "name": "syft:package:metadataType",
+     "value": "rust-cargo-lock-entry"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:github-actions-expressions_project:github_actions_expressions:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:github-actions-expressions:github-actions-expressions:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:github-actions-expressions:github_actions_expressions:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:github_actions_expressions:github-actions-expressions:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:github_actions_expressions:github_actions_expressions:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:github-actions:github-actions-expressions:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:github-actions:github_actions_expressions:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:github_actions:github-actions-expressions:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:github_actions:github_actions_expressions:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:github:github-actions-expressions:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:github:github_actions_expressions:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:location:0:path",
+     "value": "/Cargo.lock"
+    }
+   ]
+  },
+  {
+   "bom-ref": "68dc43090a609cbb",
+   "type": "library",
+   "name": "github-actions-models",
+   "version": "1.32.0",
+   "cpe": "cpe:2.3:a:github-actions-models_project:github-actions-models:1.32.0:*:*:*:*:rust:*:*",
+   "properties": [
+    {
+     "name": "syft:package:foundBy",
+     "value": "rust-cargo-lock-cataloger"
+    },
+    {
+     "name": "syft:package:language",
+     "value": "rust"
+    },
+    {
+     "name": "syft:package:type",
+     "value": "rust-crate"
+    },
+    {
+     "name": "syft:package:metadataType",
+     "value": "rust-cargo-lock-entry"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:github-actions-models_project:github_actions_models:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:github-actions-models:github-actions-models:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:github-actions-models:github_actions_models:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:github_actions_models:github-actions-models:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:github_actions_models:github_actions_models:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:github-actions:github-actions-models:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:github-actions:github_actions_models:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:github_actions:github-actions-models:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:github_actions:github_actions_models:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:github:github-actions-models:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:github:github_actions_models:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:location:0:path",
+     "value": "/Cargo.lock"
+    }
+   ]
+  },
+  {
+   "bom-ref": "9d943cfcef412382",
+   "type": "library",
+   "name": "pre-commit-models",
+   "version": "1.32.0",
+   "cpe": "cpe:2.3:a:pre-commit-models_project:pre-commit-models:1.32.0:*:*:*:*:rust:*:*",
+   "properties": [
+    {
+     "name": "syft:package:foundBy",
+     "value": "rust-cargo-lock-cataloger"
+    },
+    {
+     "name": "syft:package:language",
+     "value": "rust"
+    },
+    {
+     "name": "syft:package:type",
+     "value": "rust-crate"
+    },
+    {
+     "name": "syft:package:metadataType",
+     "value": "rust-cargo-lock-entry"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:pre-commit-models_project:pre_commit_models:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:pre-commit-models:pre-commit-models:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:pre-commit-models:pre_commit_models:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:pre_commit_models:pre-commit-models:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:pre_commit_models:pre_commit_models:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:pre-commit:pre-commit-models:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:pre-commit:pre_commit_models:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:pre_commit:pre-commit-models:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:pre_commit:pre_commit_models:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:pre:pre-commit-models:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:pre:pre_commit_models:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:location:0:path",
+     "value": "/Cargo.lock"
+    }
+   ]
+  },
+  {
+   "bom-ref": "07becf8fce9b8cbe",
+   "type": "library",
+   "name": "subfeature",
+   "version": "1.32.0",
+   "cpe": "cpe:2.3:a:subfeature_project:subfeature:1.32.0:*:*:*:*:rust:*:*",
+   "properties": [
+    {
+     "name": "syft:package:foundBy",
+     "value": "rust-cargo-lock-cataloger"
+    },
+    {
+     "name": "syft:package:language",
+     "value": "rust"
+    },
+    {
+     "name": "syft:package:type",
+     "value": "rust-crate"
+    },
+    {
+     "name": "syft:package:metadataType",
+     "value": "rust-cargo-lock-entry"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:subfeature:subfeature:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:location:0:path",
+     "value": "/Cargo.lock"
+    }
+   ]
+  },
+  {
+   "bom-ref": "756f3ace03bfc6b5",
+   "type": "library",
+   "name": "tree-sitter-iter",
+   "version": "1.32.0",
+   "cpe": "cpe:2.3:a:tree-sitter-iter_project:tree-sitter-iter:1.32.0:*:*:*:*:rust:*:*",
+   "properties": [
+    {
+     "name": "syft:package:foundBy",
+     "value": "rust-cargo-lock-cataloger"
+    },
+    {
+     "name": "syft:package:language",
+     "value": "rust"
+    },
+    {
+     "name": "syft:package:type",
+     "value": "rust-crate"
+    },
+    {
+     "name": "syft:package:metadataType",
+     "value": "rust-cargo-lock-entry"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:tree-sitter-iter_project:tree_sitter_iter:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:tree-sitter-iter:tree-sitter-iter:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:tree-sitter-iter:tree_sitter_iter:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:tree_sitter_iter:tree-sitter-iter:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:tree_sitter_iter:tree_sitter_iter:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:tree-sitter:tree-sitter-iter:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:tree-sitter:tree_sitter_iter:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:tree_sitter:tree-sitter-iter:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:tree_sitter:tree_sitter_iter:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:tree:tree-sitter-iter:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:tree:tree_sitter_iter:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:location:0:path",
+     "value": "/Cargo.lock"
+    }
+   ]
+  },
+  {
+   "bom-ref": "b2d4c5aa7e2e205e",
+   "type": "library",
+   "name": "yamlpatch",
+   "version": "1.32.0",
+   "cpe": "cpe:2.3:a:yamlpatch_project:yamlpatch:1.32.0:*:*:*:*:rust:*:*",
+   "properties": [
+    {
+     "name": "syft:package:foundBy",
+     "value": "rust-cargo-lock-cataloger"
+    },
+    {
+     "name": "syft:package:language",
+     "value": "rust"
+    },
+    {
+     "name": "syft:package:type",
+     "value": "rust-crate"
+    },
+    {
+     "name": "syft:package:metadataType",
+     "value": "rust-cargo-lock-entry"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:yamlpatch:yamlpatch:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:location:0:path",
+     "value": "/Cargo.lock"
+    }
+   ]
+  },
+  {
+   "bom-ref": "0f800407a28c3708",
+   "type": "library",
+   "name": "yamlpath",
+   "version": "1.32.0",
+   "cpe": "cpe:2.3:a:yamlpath_project:yamlpath:1.32.0:*:*:*:*:rust:*:*",
+   "properties": [
+    {
+     "name": "syft:package:foundBy",
+     "value": "rust-cargo-lock-cataloger"
+    },
+    {
+     "name": "syft:package:language",
+     "value": "rust"
+    },
+    {
+     "name": "syft:package:type",
+     "value": "rust-crate"
+    },
+    {
+     "name": "syft:package:metadataType",
+     "value": "rust-cargo-lock-entry"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:yamlpath:yamlpath:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:location:0:path",
+     "value": "/Cargo.lock"
+    }
+   ]
+  },
+  {
+   "bom-ref": "ccf473d39ef7e4d1",
+   "type": "library",
+   "name": "zizmor",
+   "version": "1.32.0",
+   "cpe": "cpe:2.3:a:zizmor_project:zizmor:1.32.0:*:*:*:*:rust:*:*",
+   "properties": [
+    {
+     "name": "syft:package:foundBy",
+     "value": "rust-cargo-lock-cataloger"
+    },
+    {
+     "name": "syft:package:language",
+     "value": "rust"
+    },
+    {
+     "name": "syft:package:type",
+     "value": "rust-crate"
+    },
+    {
+     "name": "syft:package:metadataType",
+     "value": "rust-cargo-lock-entry"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:zizmor:zizmor:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:location:0:path",
+     "value": "/Cargo.lock"
+    }
+   ]
+  },
+  {
+   "bom-ref": "pkg:pypi/zizmor?package-id=25415727667ed405",
+   "type": "library",
+   "name": "zizmor",
+   "version": "UNKNOWN",
+   "cpe": "cpe:2.3:a:python-zizmor:python-zizmor:*:*:*:*:*:*:*:*",
+   "purl": "pkg:pypi/zizmor",
+   "properties": [
+    {
+     "name": "syft:package:foundBy",
+     "value": "python-package-cataloger"
+    },
+    {
+     "name": "syft:package:language",
+     "value": "python"
+    },
+    {
+     "name": "syft:package:type",
+     "value": "python"
+    },
+    {
+     "name": "syft:package:metadataType",
+     "value": "python-uv-lock-entry"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:python-zizmor:python_zizmor:*:*:*:*:*:*:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:python_zizmor:python-zizmor:*:*:*:*:*:*:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:python_zizmor:python_zizmor:*:*:*:*:*:*:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:python-zizmor:zizmor:*:*:*:*:*:*:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:python:python-zizmor:*:*:*:*:*:*:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:python:python_zizmor:*:*:*:*:*:*:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:python_zizmor:zizmor:*:*:*:*:*:*:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:zizmor:python-zizmor:*:*:*:*:*:*:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:zizmor:python_zizmor:*:*:*:*:*:*:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:python:zizmor:*:*:*:*:*:*:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:zizmor:zizmor:*:*:*:*:*:*:*:*"
+    },
+    {
+     "name": "syft:location:0:path",
+     "value": "/uv.lock"
+    }
+   ]
+  },
+  {
+   "bom-ref": "1c7516533bfbc4ef",
+   "type": "library",
+   "name": "zizmor-dev",
+   "version": "1.32.0",
+   "cpe": "cpe:2.3:a:zizmor-dev_project:zizmor-dev:1.32.0:*:*:*:*:rust:*:*",
+   "properties": [
+    {
+     "name": "syft:package:foundBy",
+     "value": "rust-cargo-lock-cataloger"
+    },
+    {
+     "name": "syft:package:language",
+     "value": "rust"
+    },
+    {
+     "name": "syft:package:type",
+     "value": "rust-crate"
+    },
+    {
+     "name": "syft:package:metadataType",
+     "value": "rust-cargo-lock-entry"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:zizmor-dev_project:zizmor_dev:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:zizmor-dev:zizmor-dev:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:zizmor-dev:zizmor_dev:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:zizmor_dev:zizmor-dev:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:zizmor_dev:zizmor_dev:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:zizmor:zizmor-dev:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:zizmor:zizmor_dev:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:location:0:path",
+     "value": "/Cargo.lock"
+    }
+   ]
+  },
+  {
+   "bom-ref": "a9da040aef3abd74",
+   "type": "library",
+   "name": "zizmor-sarif",
+   "version": "1.32.0",
+   "cpe": "cpe:2.3:a:zizmor-sarif_project:zizmor-sarif:1.32.0:*:*:*:*:rust:*:*",
+   "properties": [
+    {
+     "name": "syft:package:foundBy",
+     "value": "rust-cargo-lock-cataloger"
+    },
+    {
+     "name": "syft:package:language",
+     "value": "rust"
+    },
+    {
+     "name": "syft:package:type",
+     "value": "rust-crate"
+    },
+    {
+     "name": "syft:package:metadataType",
+     "value": "rust-cargo-lock-entry"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:zizmor-sarif_project:zizmor_sarif:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:zizmor-sarif:zizmor-sarif:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:zizmor-sarif:zizmor_sarif:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:zizmor_sarif:zizmor-sarif:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:zizmor_sarif:zizmor_sarif:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:zizmor:zizmor-sarif:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:cpe23",
+     "value": "cpe:2.3:a:zizmor:zizmor_sarif:1.32.0:*:*:*:*:rust:*:*"
+    },
+    {
+     "name": "syft:location:0:path",
+     "value": "/Cargo.lock"
+    }
+   ]
+  },
+  {
+   "bom-ref": "c59585e498acb0a3",
+   "type": "file",
+   "name": "/.github/workflows/benchmark.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "423fb00364af6225b9a0f56aa5d7f11e969b0e65"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "683e54a8def502b046551afa2496a7efe03e0b5a037d31a425b8399797e36d54"
+    }
+   ]
+  },
+  {
+   "bom-ref": "7561d461b00ff11d",
+   "type": "file",
+   "name": "/.github/workflows/ci.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "4674dbbfa97e442ee42715fbeb8c3e662468773d"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "c1a020e4bdc42f94963efdd6bd07c6721da53c698227b177af2c8f2eb3d74046"
+    }
+   ]
+  },
+  {
+   "bom-ref": "875d90274a7d24d5",
+   "type": "file",
+   "name": "/.github/workflows/codegen.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "ffea8401063cf99726e03c466f8ae39faa3d2794"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "8e1644d65d1b4f9dc4ecceb23c13c22c31482eb669a232714bcf627b05dd56e4"
+    }
+   ]
+  },
+  {
+   "bom-ref": "d98286fe73e0d277",
+   "type": "file",
+   "name": "/.github/workflows/release-binaries.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "c5cf80980638f91509268af677bd0e4907e0f288"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "e27c6b5c6d5103fc2cdb2785924b202ac490ed7288c9eed36dfec901bd75340d"
+    }
+   ]
+  },
+  {
+   "bom-ref": "23e9721e277c5eab",
+   "type": "file",
+   "name": "/.github/workflows/release-crates.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "d71e4dd1dbfaa5c190572b3c38b8e9bd91f58e4f"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "4ed3fc1ccc7044f61c4a7ea5c5d700d2da8821cf59a27b6faae49f959ffdb26e"
+    }
+   ]
+  },
+  {
+   "bom-ref": "21513107a67fe2c1",
+   "type": "file",
+   "name": "/.github/workflows/release-docker.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "149032c6baad9e5f4fecb2bfae9a00942fb7fbf7"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "3744de05cf6052370786e2a8731c940339114929b22697c388cc9d999abb744e"
+    }
+   ]
+  },
+  {
+   "bom-ref": "cb9e060c55d4ca0d",
+   "type": "file",
+   "name": "/.github/workflows/release-pypi.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "c91d48618b1c32efa83a1b603e6d5dbb33104026"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "471e1da78a51b1c87de78686c170a1d485aae3c543a59299076c24bfb20f2015"
+    }
+   ]
+  },
+  {
+   "bom-ref": "cc210d8a1a5f5704",
+   "type": "file",
+   "name": "/.github/workflows/release.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "11c16d06cd1cf09bb274c19e18cb2980e2dfe734"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "272b6847fee78b6c0543bf33225acab038d290d690bb1af259c1a329b72fd0f2"
+    }
+   ]
+  },
+  {
+   "bom-ref": "8f5aa86fbaaab175",
+   "type": "file",
+   "name": "/.github/workflows/site.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "ad5f6a61228d70aa6118254957c6579d23cb109a"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "f21c8c6f38b2e19798696e8890c07dee1d67ccdd2fd93644ff021b53cf455f4a"
+    }
+   ]
+  },
+  {
+   "bom-ref": "bb53fdc3294c481c",
+   "type": "file",
+   "name": "/.github/workflows/test-output.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "180b30371ceb63eb87b84601881165f8cd0d9f1e"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "c59a0fd544b8a15fb61be75d7da58a2ef601141e794e9668e2448e52d9a440ae"
+    }
+   ]
+  },
+  {
+   "bom-ref": "3643813eb03d72ac",
+   "type": "file",
+   "name": "/.github/workflows/zizmor.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "58d00aae83234dd1da0137629d80c5fdd821f10f"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "e898aa3a2c678571feacfa9a5b49f98f5740b973eb16707f53bbbe67413a40cd"
+    }
+   ]
+  },
+  {
+   "bom-ref": "c6bea2c24af05bc1",
+   "type": "file",
+   "name": "/Cargo.lock",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "0274f0ca9e0204296fac9d9f38ce8ff328cfd5bd"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "1e5c052b2ae2d8d64fa603a0bd2c21296fcc580629a93ad8e886c3858f15e104"
+    }
+   ]
+  },
+  {
+   "bom-ref": "3717ae13dd3eb744",
+   "type": "file",
+   "name": "/uv.lock",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "d8e93b089defe510ba08c3958ea92a508742b630"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "23df75c8c34cad9cebfaf8cfcdf0de2f67d71206949143f96ad297785aa5ca53"
+    }
+   ]
+  }
+ ],
+ "dependencies": [
+  {
+   "ref": "07becf8fce9b8cbe",
+   "dependsOn": []
+  },
+  {
+   "ref": "0f800407a28c3708",
+   "dependsOn": [
+    "756f3ace03bfc6b5"
+   ]
+  },
+  {
+   "ref": "1c7516533bfbc4ef",
+   "dependsOn": []
+  },
+  {
+   "ref": "68dc43090a609cbb",
+   "dependsOn": []
+  },
+  {
+   "ref": "756f3ace03bfc6b5",
+   "dependsOn": []
+  },
+  {
+   "ref": "9d943cfcef412382",
+   "dependsOn": []
+  },
+  {
+   "ref": "a9da040aef3abd74",
+   "dependsOn": []
+  },
+  {
+   "ref": "b2d4c5aa7e2e205e",
+   "dependsOn": [
+    "07becf8fce9b8cbe",
+    "0f800407a28c3708"
+   ]
+  },
+  {
+   "ref": "ccf473d39ef7e4d1",
+   "dependsOn": [
+    "07becf8fce9b8cbe",
+    "0f800407a28c3708",
+    "1c7516533bfbc4ef",
+    "68dc43090a609cbb",
+    "9d943cfcef412382",
+    "a9da040aef3abd74",
+    "b2d4c5aa7e2e205e",
+    "fd6da749ee037450"
+   ]
+  },
+  {
+   "ref": "fd6da749ee037450",
+   "dependsOn": [
+    "07becf8fce9b8cbe"
+   ]
+  }
+ ]
+}

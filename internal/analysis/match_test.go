@@ -551,3 +551,21 @@ func TestMovedKeepsLicenseChange(t *testing.T) {
 		t.Errorf("changed = %+v", r.Changed[0])
 	}
 }
+
+// zizmor workspace crates: CPE only, no PURL
+func TestRealWorldPURLLessCrates(t *testing.T) {
+	r := diffFixtures(t, "realworld/zizmor-before.cdx.json", "realworld/zizmor-after.cdx.json")
+	crates := 0
+	for _, c := range r.Changed {
+		if c.Before.PURL != "" || c.Drift.Type != DriftTypeVersion {
+			continue
+		}
+		crates++
+		if c.Drift.Direction != DirectionUpgrade || c.Drift.Level != LevelMinor {
+			t.Errorf("%s %s->%s: %s/%s", c.Name, c.Drift.VersionFrom, c.Drift.VersionTo, c.Drift.Direction, c.Drift.Level)
+		}
+	}
+	if crates != 10 || summary(r).UnknownDirection != 0 {
+		t.Errorf("crates=%d unknown=%d", crates, summary(r).UnknownDirection)
+	}
+}

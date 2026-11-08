@@ -52,6 +52,7 @@ func NormalizeComponent(c Component) Component {
 		OwnedFiles:       c.OwnedFiles,
 		ConfigFiles:      c.ConfigFiles,
 		ConfigKnown:      c.ConfigKnown,
+		PkgType:          c.PkgType,
 	}
 
 	nonSPDX := make(map[string]bool, len(c.NonSPDXLicenses))

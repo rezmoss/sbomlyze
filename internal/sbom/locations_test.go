@@ -122,3 +122,16 @@ func TestParseFileInventoryAndOwnership(t *testing.T) {
 		}
 	}
 }
+
+func TestParseCycloneDX_SyftPackageType(t *testing.T) {
+	data := []byte(`{"bomFormat":"CycloneDX","specVersion":"1.6","version":1,"components":[
+	  {"type":"library","name":"zizmor","version":"1.32.0","cpe":"cpe:2.3:a:zizmor_project:zizmor:1.32.0:*:*:*:*:rust:*:*",
+	   "properties":[{"name":"syft:package:type","value":"rust-crate"},{"name":"syft:location:0:path","value":"/Cargo.lock"}]}]}`)
+	comps, err := ParseCycloneDX(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if c := NormalizeComponent(comps[0]); c.PkgType != "rust-crate" {
+		t.Errorf("PkgType = %q", c.PkgType)
+	}
+}
