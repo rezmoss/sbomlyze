@@ -152,6 +152,18 @@ In a Syft CycloneDX source scan of a Go project, CycloneDX `hashes` is empty
 for every package; the `go-h1` checksums are what make the check meaningful.
 Low `comparable` coverage means a clean integrity result says little.
 
+### Same version, different files inside
+
+A package digest is one number for the whole package. Images often carry no
+package digest at all, yet their SBOM records a hash for every installed file
+and which package owns it. SBOMlyze compares those files too: if a package keeps
+its version while a file it owns changes, gains or loses files, that is
+**owned-file drift** (`owned_file_drift` in the JSON report, opt-in policy
+`deny_owned_file_drift`). A tampered `/usr/bin/ls` in an image with the same
+`coreutils 9.1-1`, or an Alpine package rebuilt with the same `-rN`, shows up
+there. dpkg config files are marked `config: true` and skipped by the policy by
+default, because editing `/etc` after install is normal.
+
 ## A real blocked pull request
 
 The public [Go + SPDX demonstration pull request](https://github.com/rezmoss/sbomlyze-go-spdx-demo/pull/2)

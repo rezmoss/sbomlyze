@@ -7,6 +7,7 @@ Key Findings:
   📦 Dominated by apk: 3 of 3 packages (100.0%)
   🔗 Relationships: 2 dependency
   📜 License profile: 33% permissive, 67% copyleft
+  ⚠️ Low hash coverage: 33.3% (2 of 3 missing)
   🔍 Top catalogers: apkdb-cataloger (3)
 
 📦 SBOM Statistics
@@ -26,8 +27,8 @@ Licenses:
     MIT                            1
 
 Integrity:
-  With hashes:    2
-  Without hashes: 1
+  With hashes:    1
+  Without hashes: 2
 
 Dependencies:
   Components with deps: 1

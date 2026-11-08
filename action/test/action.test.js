@@ -287,7 +287,11 @@ test('report counts include file changes and moves', () => {
     added: [{}], changed: [], file_changes: [{ path: '/go.mod' }], moved: [{}, {}],
     drift_summary: { integrity_drift: 0 },
   } });
-  assert.deepEqual(counts, { added: 1, removed: 0, changed: 0, integrity: 0, fileChanges: 1, moved: 2 });
+  assert.deepEqual(counts, { added: 1, removed: 0, changed: 0, integrity: 0, fileChanges: 1, moved: 2, ownedFileDrift: 0, files: 0 });
+  const owned = countsFromReport({ diff: { owned_file_drift: [{}], files_added: [{}], drift_summary: {} } });
+  assert.equal(owned.ownedFileDrift, 1);
+  assert.equal(owned.files, 1);
+  assert.equal(verdictFor('any-change', { violations: [] }, owned), 'fail');
 });
 
 test('every fail-on mode has explicit verdict semantics', () => {
@@ -297,7 +301,7 @@ test('every fail-on mode has explicit verdict semantics', () => {
   assert.equal(verdictFor('integrity-drift', { violations: [] }, changed), 'fail');
   assert.equal(verdictFor('any-change', { violations: [] }, changed), 'fail');
   assert.equal(verdictFor('never', report, changed), 'pass');
-  // a file-entry-only change is not integrity drift but still a change
+  // file-only change: not drift, still a change
   const fileOnly = { added: 0, removed: 0, changed: 0, integrity: 0, fileChanges: 1, moved: 0 };
   assert.equal(verdictFor('integrity-drift', { violations: [] }, fileOnly), 'pass');
   assert.equal(verdictFor('any-change', { violations: [] }, fileOnly), 'fail');

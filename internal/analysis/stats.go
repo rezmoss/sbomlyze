@@ -242,7 +242,7 @@ func SortedByValue(m map[string]int) []string {
 		if m[keys[i]] != m[keys[j]] {
 			return m[keys[i]] > m[keys[j]]
 		}
-		return keys[i] < keys[j] // ties by name, so output is deterministic
+		return keys[i] < keys[j] // ties by name, deterministic
 	})
 	return keys
 }

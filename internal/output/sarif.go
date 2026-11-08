@@ -87,8 +87,7 @@ func sarifFingerprint(kind, identity string) map[string]string {
 	}
 }
 
-// changedIdentity includes the location: one package in two lockfiles is two
-// findings.
+// changedIdentity includes location: per-lockfile findings
 func changedIdentity(changed analysis.ChangedComponent) string {
 	id := changed.ID
 	if id == "" {
@@ -108,7 +107,7 @@ func componentIdentity(component sbom.Component) string {
 	if id == "" {
 		id = component.Name
 	}
-	// version and location tell apart occurrences of one package
+	// version+location tell occurrences apart
 	if len(component.Locations) > 0 {
 		id += "\x00" + component.Version + "\x00" + strings.Join(component.Locations, "\x00")
 	}
@@ -122,6 +121,13 @@ func GenerateSARIF(result analysis.DiffResult, violations []policy.Violation, sb
 			ID:               "integrity-drift",
 			Name:             "Integrity Drift Detected",
 			ShortDescription: SARIFMessage{Text: "Component hash changed without version change"},
+			DefaultConfig:    SARIFRuleConfig{Level: "error"},
+			Properties:       &SARIFProperties{Tags: []string{"security", "supply-chain"}},
+		},
+		{
+			ID:               "owned-file-drift",
+			Name:             "Owned File Drift Detected",
+			ShortDescription: SARIFMessage{Text: "Files owned by a package changed without a version change"},
 			DefaultConfig:    SARIFRuleConfig{Level: "error"},
 			Properties:       &SARIFProperties{Tags: []string{"security", "supply-chain"}},
 		},
@@ -158,7 +164,7 @@ func GenerateSARIF(result analysis.DiffResult, violations []policy.Violation, sb
 		},
 	}
 
-	var results []SARIFResult
+	results := []SARIFResult{} // empty run is [], not null
 
 	for _, changed := range result.Changed {
 		if changed.Drift != nil && changed.Drift.Type == analysis.DriftTypeIntegrity {
@@ -174,6 +180,28 @@ func GenerateSARIF(result analysis.DiffResult, violations []policy.Violation, sb
 				}},
 			})
 		}
+	}
+
+	for _, d := range result.OwnedFileDrift {
+		level := "error"
+		if len(d.GatedFiles(false)) == 0 {
+			level = "note" // config files only
+		}
+		paths := make([]string, 0, len(d.Files))
+		for _, f := range d.Files {
+			paths = append(paths, f.Change+" "+f.Path)
+		}
+		results = append(results, SARIFResult{
+			RuleID:              "owned-file-drift",
+			Level:               level,
+			Message:             SARIFMessage{Text: fmt.Sprintf("Package %s %s changed owned files without a version change: %s", d.Name, d.Version, strings.Join(paths, ", "))},
+			PartialFingerprints: sarifFingerprint("owned-file-drift", d.ID+"\x00"+d.Version+"\x00"+d.Location),
+			Locations: []SARIFLocation{{
+				PhysicalLocation: SARIFPhysicalLocation{
+					ArtifactLocation: SARIFArtifactLocation{URI: sbomFile},
+				},
+			}},
+		})
 	}
 
 	if result.Dependencies != nil {

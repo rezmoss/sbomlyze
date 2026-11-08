@@ -21,16 +21,17 @@ const (
 
 // DriftInfo holds drift details for a component.
 type DriftInfo struct {
-	Type         DriftType `json:"type"`
-	HashChanges  *HashDiff `json:"hash_changes,omitempty"`
-	VersionFrom  string    `json:"version_from,omitempty"`
-	VersionTo    string    `json:"version_to,omitempty"`
-	Direction    string    `json:"direction,omitempty"` // upgrade, downgrade, none, unknown (version drift only)
-	Level        string    `json:"level,omitempty"`     // major, minor, patch, prerelease, none, unknown (version drift only)
-	LicensesDiff []string  `json:"licenses_diff,omitempty"`
+	Type         DriftType  `json:"type"`
+	HashChanges  *HashDiff  `json:"hash_changes,omitempty"`
+	VersionFrom  string     `json:"version_from,omitempty"`
+	VersionTo    string     `json:"version_to,omitempty"`
+	Direction    string     `json:"direction,omitempty"` // upgrade|downgrade|none|unknown; version drift only
+	Level        string     `json:"level,omitempty"`     // major|minor|patch|prerelease|revision|none|unknown
+	Files        *FileDelta `json:"files,omitempty"`     // owned-file changes, if ownership recorded
+	LicensesDiff []string   `json:"licenses_diff,omitempty"`
 }
 
-// HashDiff tracks digest changes, keyed by digest kind.
+// HashDiff: digest changes by kind
 type HashDiff struct {
 	Added   map[string]string     `json:"added,omitempty"`
 	Removed map[string]string     `json:"removed,omitempty"`
@@ -43,12 +44,10 @@ type HashChange struct {
 	After  string `json:"after"`
 }
 
-// DriftSummary aggregates drift counts. Counts are per occurrence (a package
-// at one location) unless noted.
+// DriftSummary: drift counts, per occurrence
 type DriftSummary struct {
 	VersionDrift int `json:"version_drift"`
-	// IntegrityDrift counts packages whose digest of one kind changed at the
-	// same non-empty version and location. File entries never count.
+	// same-version, same-location pkg digest change; no files
 	IntegrityDrift         int `json:"integrity_drift"`
 	MetadataDrift          int `json:"metadata_drift"`
 	Upgrades               int `json:"upgrades"`
@@ -57,9 +56,12 @@ type DriftSummary struct {
 	DistinctVersionChanges int `json:"distinct_version_changes"` // identity + from + to
 	FileChanges            int `json:"file_changes"`
 	LicenseChanges         int `json:"license_changes"`
+	// same-ver pkgs w/ changed owned files; distinct files
+	OwnedFileDrift    int `json:"owned_file_drift"`
+	OwnedFilesChanged int `json:"owned_files_changed"`
 }
 
-// ChangedComponent holds a changed package occurrence with before/after state.
+// ChangedComponent: changed pkg occurrence, before/after
 type ChangedComponent struct {
 	ID       string         `json:"id"`
 	Name     string         `json:"name"`
@@ -70,7 +72,7 @@ type ChangedComponent struct {
 	Drift    *DriftInfo     `json:"drift,omitempty"`
 }
 
-// MovedComponent is a package at the same version found at a different location.
+// MovedComponent: same version, other location
 type MovedComponent struct {
 	ID      string `json:"id"`
 	Name    string `json:"name"`
@@ -79,16 +81,15 @@ type MovedComponent struct {
 	To      string `json:"to"`
 }
 
-// FileChange is a file entry (scanner evidence, not a package) whose content changed.
+// FileChange: file entry w/ changed content
 type FileChange struct {
 	Path         string            `json:"path"`
 	HashesBefore map[string]string `json:"hashes_before,omitempty"`
 	HashesAfter  map[string]string `json:"hashes_after,omitempty"`
+	Owners       []string          `json:"owners,omitempty"` // name@version of owners, if known
 }
 
-// VersionSetChange records several versions of one package changing at one
-// location, where no single pairing is justified. The occurrences are also
-// listed in Added and Removed.
+// VersionSetChange: versions changed at one loc, unpaired
 type VersionSetChange struct {
 	ID              string   `json:"id"`
 	Name            string   `json:"name"`
@@ -97,16 +98,15 @@ type VersionSetChange struct {
 	AddedVersions   []string `json:"added_versions"`
 }
 
-// DigestCoverage describes how many same-version package pairs could be
-// checked for integrity drift.
+// DigestCoverage: same-ver pairs checkable for integrity
 type DigestCoverage struct {
-	SameVersionPairs int            `json:"same_version_pairs"` // same identity, non-empty version and location
-	Comparable       int            `json:"comparable"`         // pairs sharing at least one digest kind
+	SameVersionPairs int            `json:"same_version_pairs"` // same id, non-empty ver, same loc
+	Comparable       int            `json:"comparable"`         // share >=1 digest kind
 	BeforeOnly       int            `json:"before_only"`        // digests only before
 	AfterOnly        int            `json:"after_only"`         // digests only after
-	DisjointKinds    int            `json:"disjoint_kinds"`     // digests on both sides, no kind in common
-	ByKind           map[string]int `json:"by_kind"`            // comparable pairs per digest kind
-	PackagesTotal    int            `json:"packages_total"`     // package occurrences in the after SBOM
+	DisjointKinds    int            `json:"disjoint_kinds"`     // both have digests, no common kind
+	ByKind           map[string]int `json:"by_kind"`            // comparable pairs per kind
+	PackagesTotal    int            `json:"packages_total"`     // pkg occurrences in after SBOM
 }
 
 // PackageSample is a display sample.
@@ -132,32 +132,33 @@ type DiffResult struct {
 	Moved             []MovedComponent       `json:"moved,omitempty"`
 	VersionSetChanges []VersionSetChange     `json:"version_set_changes,omitempty"`
 	FileChanges       []FileChange           `json:"file_changes,omitempty"`
+	FilesAdded        []FileRef              `json:"files_added,omitempty"`
+	FilesRemoved      []FileRef              `json:"files_removed,omitempty"`
+	OwnedFileDrift    []OwnedFileDrift       `json:"owned_file_drift,omitempty"`
 	Duplicates        *DuplicateReport       `json:"duplicates,omitempty"`
 	Dependencies      *DependencyDiff        `json:"dependencies,omitempty"`
 	DriftSummary      *DriftSummary          `json:"drift_summary,omitempty"`
 	DigestCoverage    *DigestCoverage        `json:"digest_coverage,omitempty"`
+	FileCoverage      *FileCoverage          `json:"file_coverage,omitempty"`
 	AddedByType       []PackageSamplesByType `json:"added_by_type,omitempty"`
 	RemovedByType     []PackageSamplesByType `json:"removed_by_type,omitempty"`
 
-	// SharedPackages counts package occurrences present on both sides
-	// (unchanged, changed or moved).
+	// SharedPackages: pkgs on both sides (incl. moved)
 	SharedPackages int `json:"-"`
 }
 
-// HasChanges reports any difference that should fail a change gate.
+// HasChanges: any diff that fails a change gate
 func (r DiffResult) HasChanges() bool {
 	return len(r.Added) > 0 || len(r.Removed) > 0 || len(r.Changed) > 0 ||
-		len(r.Moved) > 0 || len(r.FileChanges) > 0
+		len(r.Moved) > 0 || len(r.FileChanges) > 0 || len(r.FilesAdded) > 0 ||
+		len(r.FilesRemoved) > 0 || len(r.OwnedFileDrift) > 0
 }
 
 func (h *HashDiff) IsEmpty() bool {
 	return len(h.Added) == 0 && len(h.Removed) == 0 && len(h.Changed) == 0
 }
 
-// ClassifyDrift classifies drift between two occurrences of one package at
-// the same location. Priority: integrity > version > metadata > none.
-// Integrity drift needs the same non-empty version and a different digest of
-// the same kind; a digest present on one side only is a coverage change.
+// ClassifyDrift: integrity > version > metadata > none
 func ClassifyDrift(before, after sbom.Component) DriftInfo {
 	drift := DriftInfo{Type: DriftTypeNone}
 
@@ -244,7 +245,7 @@ func DiffHashes(before, after map[string]string) HashDiff {
 	return diff
 }
 
-// SummarizeDrift aggregates drift counts over changed occurrences.
+// SummarizeDrift aggregates drift counts
 func SummarizeDrift(changes []ChangedComponent) DriftSummary {
 	summary := DriftSummary{}
 	distinct := make(map[string]bool)
@@ -309,24 +310,42 @@ func EqualSlices(a, b []string) bool {
 	return true
 }
 
-// DiffComponents compares two component sets. Packages are matched as
-// occurrences (identity, version, location); see matchPackages. File entries
-// are compared by path and reported as FileChanges. The result does not
-// depend on component order in the inputs.
+// DiffComponents: DiffSBOMs w/o file inventories
 func DiffComponents(before, after []sbom.Component) DiffResult {
+	return DiffSBOMs(before, after, nil, nil)
+}
+
+// DiffSBOMs: occurrence + file diff, order-independent
+func DiffSBOMs(before, after []sbom.Component, beforeFiles, afterFiles []sbom.FileEntry) DiffResult {
 	beforeDups := DetectDuplicates(before)
 	afterDups := DetectDuplicates(after)
 
 	var result DiffResult
 
-	beforePkgs, beforeFiles := splitFiles(before)
-	afterPkgs, afterFiles := splitFiles(after)
-	matchPackages(beforePkgs, afterPkgs, &result)
-	matchFiles(beforeFiles, afterFiles, &result)
+	beforePkgs, beforeFileComps := splitFiles(before)
+	afterPkgs, afterFileComps := splitFiles(after)
+	bi, ai := newFileIndex(beforeFiles, beforePkgs), newFileIndex(afterFiles, afterPkgs)
+	var cov FileCoverage
+	matchPackages(beforePkgs, afterPkgs, bi, ai, &result)
+	matchFiles(beforeFileComps, afterFileComps, &result, &cov)
+	if bi.present || ai.present {
+		diffInventories(bi, ai, &result, &cov)
+	}
+	if bi.present || ai.present || len(beforeFileComps)+len(afterFileComps) > 0 {
+		result.FileCoverage = &cov
+	}
 	sortResult(&result)
 
 	summary := SummarizeDrift(result.Changed)
 	summary.FileChanges = len(result.FileChanges)
+	summary.OwnedFileDrift = len(result.OwnedFileDrift)
+	changedFiles := map[string]bool{}
+	for _, d := range result.OwnedFileDrift {
+		for _, f := range d.Files {
+			changedFiles[f.Path] = true
+		}
+	}
+	summary.OwnedFilesChanged = len(changedFiles)
 	if !summary.isEmpty() {
 		result.DriftSummary = &summary
 	}

@@ -25,6 +25,8 @@ type SBOMInfo struct {
 	SBOMAuthor         string         `json:"sbom_author,omitempty"`
 	SearchScope        string         `json:"search_scope,omitempty"`
 	FilesCount         int            `json:"files_count,omitempty"`
+	// file inventory (Syft JSON, SPDX); not output
+	Files []FileEntry `json:"-"`
 }
 
 // Component is a normalized SBOM component.
@@ -36,7 +38,7 @@ type Component struct {
 	Licenses     []string          `json:"licenses,omitempty"`
 	CPEs         []string          `json:"cpes,omitempty"`
 	Hashes       map[string]string `json:"hashes,omitempty"`
-	Digests      map[string]string `json:"digests,omitempty"` // package digests beyond Hashes, by kind (go-h1, cargo-checksum)
+	Digests      map[string]string `json:"digests,omitempty"` // extra pkg digests by kind (go-h1, cargo-checksum)
 	Dependencies []string          `json:"dependencies,omitempty"`
 	DepsDeclared bool              `json:"-"` // deps declared by format, even if empty
 	BOMRef       string            `json:"bom-ref,omitempty"`
@@ -48,12 +50,15 @@ type Component struct {
 	Type         string            `json:"type,omitempty"`      // pkg type
 	Locations    []string          `json:"locations,omitempty"` // file paths
 	RawJSON      json.RawMessage   `json:"-"`                   // original JSON, excluded from output
-	// NonSPDXLicenses lists entries of Licenses declared by name only
-	// (CycloneDX license.name); they are never counted as SPDX-valid.
+	// license.name entries; never SPDX-valid
 	NonSPDXLicenses []string `json:"-"`
-	// PrimaryLocations are the locations Syft marks as primary evidence
-	// (e.g. /var/lib/dpkg/status); supporting files are excluded.
+	// Syft primary-evidence locations
 	PrimaryLocations []string `json:"-"`
+	// owned file paths (contains/CONTAINS); may be shared
+	OwnedFiles []string `json:"-"`
+	// dpkg conffiles; ConfigKnown false if no flag
+	ConfigFiles []string `json:"-"`
+	ConfigKnown bool     `json:"-"`
 }
 
 // Digest kinds stored in Component.Digests.
@@ -62,13 +67,12 @@ const (
 	DigestCargoChecksum = "cargo-checksum" // Cargo.lock crate checksum
 )
 
-// IsEvidence reports file/os entries: scanner evidence, not packages.
+// IsEvidence: file/os entries, not packages
 func (c Component) IsEvidence() bool {
 	return c.Type == "file" || c.Type == "operating-system"
 }
 
-// DigestSet returns every package digest keyed by kind: Hashes by algorithm
-// plus Digests. Kinds with different subjects never share a key.
+// DigestSet: Hashes + Digests, keyed by kind
 func (c Component) DigestSet() map[string]string {
 	if len(c.Digests) == 0 {
 		return c.Hashes

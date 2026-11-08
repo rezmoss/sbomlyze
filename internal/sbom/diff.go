@@ -5,9 +5,7 @@ import (
 	"sort"
 )
 
-// CompareComponents returns a list of field changes. Digests are compared
-// only for kinds present on both sides: a digest added or dropped on its own
-// is a coverage change, not a component change.
+// CompareComponents: field changes; shared digest kinds only
 func CompareComponents(before, after Component) []string {
 	var changes []string
 	if before.Version != after.Version {

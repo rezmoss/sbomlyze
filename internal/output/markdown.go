@@ -200,6 +200,9 @@ func writeMarkdownDiffBody(sb *strings.Builder, result analysis.DiffResult, viol
 	if len(result.FileChanges) > 0 {
 		fmt.Fprintf(sb, "| File changes | %d |\n", len(result.FileChanges))
 	}
+	if len(result.OwnedFileDrift) > 0 {
+		fmt.Fprintf(sb, "| Owned file drift | %d |\n", len(result.OwnedFileDrift))
+	}
 
 	if result.DriftSummary != nil {
 		sb.WriteString("\n### Drift Summary\n\n")
@@ -222,6 +225,9 @@ func writeMarkdownDiffBody(sb *strings.Builder, result analysis.DiffResult, viol
 		}
 		if result.DriftSummary.FileChanges > 0 {
 			fmt.Fprintf(sb, "| File entries (not package drift) | %d | ℹ️ |\n", result.DriftSummary.FileChanges)
+		}
+		if result.DriftSummary.OwnedFileDrift > 0 {
+			fmt.Fprintf(sb, "| Owned file drift | %d | ⚠️ **Review Required** |\n", result.DriftSummary.OwnedFileDrift)
 		}
 	}
 
@@ -305,6 +311,19 @@ func writeMarkdownDiffBody(sb *strings.Builder, result analysis.DiffResult, viol
 		sb.WriteString("|------|----------|---------|-------|\n")
 		for _, v := range result.VersionSetChanges {
 			fmt.Fprintf(sb, "| %s | %s | %s | %s |\n", v.Name, v.Location, strings.Join(v.RemovedVersions, ", "), strings.Join(v.AddedVersions, ", "))
+		}
+		sb.WriteString("\n</details>\n")
+	}
+
+	if len(result.OwnedFileDrift) > 0 {
+		sb.WriteString("\n<details open>\n")
+		fmt.Fprintf(sb, "<summary>⚠️ Owned File Drift (%d packages, same version, files changed)</summary>\n\n", len(result.OwnedFileDrift))
+		sb.WriteString("| Package | Version | File | Change | Config |\n")
+		sb.WriteString("|---------|---------|------|--------|--------|\n")
+		for _, d := range result.OwnedFileDrift {
+			for _, f := range d.Files {
+				fmt.Fprintf(sb, "| %s | %s | `%s` | %s | %s |\n", d.Name, d.Version, f.Path, f.Change, f.Config)
+			}
 		}
 		sb.WriteString("\n</details>\n")
 	}

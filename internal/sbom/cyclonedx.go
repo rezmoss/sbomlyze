@@ -154,7 +154,7 @@ func extractCycloneDXComponents(bom *cdx.BOM, rawComponents []json.RawMessage) [
 				case lic.License != nil && lic.License.ID != "":
 					comp.Licenses = append(comp.Licenses, lic.License.ID)
 				case lic.License != nil && lic.License.Name != "":
-					// declared name ("BSD", "SEE LICENSE IN README"), not an SPDX ID
+					// declared name, not an SPDX ID
 					comp.Licenses = append(comp.Licenses, lic.License.Name)
 					comp.NonSPDXLicenses = append(comp.NonSPDXLicenses, lic.License.Name)
 				}
@@ -199,11 +199,10 @@ func extractCycloneDXComponents(bom *cdx.BOM, rawComponents []json.RawMessage) [
 	return comps
 }
 
-// syftLocationRe matches Syft's per-location property, syft:location:N:path.
+// syftLocationRe: syft:location:N:path
 var syftLocationRe = regexp.MustCompile(`^syft:location:(\d+):path$`)
 
-// cycloneDXLocations collects file paths from Syft location properties (in N
-// order), sbomlyze:location properties and evidence.occurrences.
+// cycloneDXLocations: Syft, sbomlyze, evidence locations
 func cycloneDXLocations(c cdx.Component) []string {
 	type indexed struct {
 		n    int

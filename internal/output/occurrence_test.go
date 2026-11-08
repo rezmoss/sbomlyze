@@ -1,6 +1,7 @@
 package output
 
 import (
+	"encoding/json"
 	"strings"
 	"testing"
 
@@ -66,7 +67,7 @@ func TestOccurrenceOutputsKeepLocations(t *testing.T) {
 	}
 }
 
-// Codex review: patch, Markdown and HTML must show digests, file changes and moves.
+// Codex: patch/MD/HTML show digests, files, moves
 func TestOutputsRenderNewChangeKinds(t *testing.T) {
 	result := analysis.DiffResult{
 		Changed: []analysis.ChangedComponent{{
@@ -109,5 +110,61 @@ func TestOutputsRenderNewChangeKinds(t *testing.T) {
 	}
 	if !strings.Contains(md, "| **Format** | (none) | CycloneDX 1.6 |") || !strings.Contains(md, "| **Generator** | (none) | syft |") {
 		t.Errorf("markdown Format/Generator rows wrong:\n%s", md)
+	}
+}
+
+func TestGenerateSARIF_EmptyResultsIsArray(t *testing.T) {
+	out, err := json.Marshal(GenerateSARIF(analysis.DiffResult{}, nil, "after.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(string(out), `"results":[]`) {
+		t.Errorf("empty SARIF run must have results [], got %s", out)
+	}
+}
+
+func TestOwnedFileDriftOutputs(t *testing.T) {
+	result := analysis.DiffResult{
+		OwnedFileDrift: []analysis.OwnedFileDrift{
+			{ID: "pkg:deb/debian/coreutils", Name: "coreutils", Version: "9.1-1", Files: []analysis.OwnedFileChange{{Path: "/usr/bin/ls", Change: "modified", Config: "false"}}},
+			{ID: "pkg:deb/debian/adduser", Name: "adduser", Version: "3.134", Files: []analysis.OwnedFileChange{{Path: "/etc/adduser.conf", Change: "modified", Config: "true"}}},
+		},
+		FileCoverage: &analysis.FileCoverage{OwnedFilesAfter: 10},
+		DriftSummary: &analysis.DriftSummary{OwnedFileDrift: 2, OwnedFilesChanged: 2},
+	}
+	levels := map[string]string{}
+	for _, r := range GenerateSARIF(result, nil, "after.json").Runs[0].Results {
+		if r.RuleID == "owned-file-drift" {
+			levels[r.Message.Text[:strings.Index(r.Message.Text, " changed")]] = r.Level
+		}
+	}
+	if levels["Package coreutils 9.1-1"] != "error" || levels["Package adduser 3.134"] != "note" {
+		t.Errorf("SARIF levels = %v", levels)
+	}
+	junit := GenerateJUnit(result, nil)
+	found := false
+	for _, tc := range junit.TestSuite[0].TestCases {
+		if tc.Name == "No Owned File Drift" && tc.Failure != nil {
+			found = true
+		}
+	}
+	if !found {
+		t.Error("JUnit must fail the owned-file-drift case")
+	}
+	if junit := GenerateJUnit(analysis.DiffResult{}, nil); len(junit.TestSuite[0].TestCases) == 0 {
+		t.Fatal("no test cases")
+	} else {
+		for _, tc := range junit.TestSuite[0].TestCases {
+			if tc.Name == "No Owned File Drift" {
+				t.Error("owned-file case only appears when the SBOMs record ownership")
+			}
+		}
+	}
+	md := GenerateMarkdownWithOverview(result, nil, analysis.DiffOverview{}, analysis.KeyFindings{})
+	html := GenerateHTML(result, nil, analysis.DiffOverview{}, analysis.KeyFindings{})
+	for name, doc := range map[string]string{"markdown": md, "html": html} {
+		if !strings.Contains(doc, "Owned File Drift (2 packages") || !strings.Contains(doc, "/usr/bin/ls") {
+			t.Errorf("%s missing owned file drift section", name)
+		}
 	}
 }

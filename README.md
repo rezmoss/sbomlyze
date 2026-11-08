@@ -621,7 +621,32 @@ Each package is an *occurrence*: identity (PURL without version, keeping the sub
 4. Occurrences are never paired across two locations that both still exist (a package that left `/Cargo.lock` while another version appeared in `/sub/Cargo.lock` is removed + added). When the location itself was replaced (an image's `python3.11/` became `python3.12/`), the single occurrence on each side is paired.
 5. Results do not depend on component order.
 
-Version direction and level come from the ecosystem's rules: Go modules and GitHub Actions (`golang.org/x/mod/semver`, pseudo-versions included), SemVer for npm, Cargo, Composer, gem, Swift, Hex and pub, and PEP 440 for PyPI. Other ecosystems (deb, rpm, apk, Maven, …) and unparseable versions (`release/v1`) report direction `unknown`, never a guessed downgrade.
+Version direction and level come from the ecosystem's own rules:
+
+| Ecosystem | Ordering |
+|---|---|
+| Go modules, GitHub Actions | `golang.org/x/mod/semver` (pseudo-versions, `+incompatible`, `go1.x`) |
+| npm, Cargo, Composer, Swift, Hex, pub | SemVer |
+| PyPI | PEP 440 |
+| RubyGems | `Gem::Version` |
+| Debian | dpkg (epoch, `~`, revision) |
+| RPM | rpmvercmp (epoch, `~`, `^`, release) |
+| Arch Linux | pacman `vercmp` (pkgrel compared only when both have one) |
+| Alpine | apk-tools (`_alpha` … `_p` suffixes, `-rN`) |
+| Maven | Maven `ComparableVersion` |
+
+Each comparator is tested against the ecosystem's real tool (`dpkg --compare-versions`, `rpm.labelCompare`, `vercmp`, `apk version -t`, `Gem::Version`, Maven) on about 12,000 version pairs from real images. Other ecosystems (`pkg:generic`, …) and unparseable versions (`release/v1`) report direction `unknown`, never a guessed downgrade. `level` is `major`, `minor` or `patch` from the first three numbers, `prerelease` when only a pre-release or pseudo-version part changed, and `revision` when only the packaging revision changed (deb `-9`→`-10`, rpm release, apk `-r0`→`-r1`, pacman pkgrel).
+
+### Owned File Drift (same version, files changed)
+
+A package can keep its version while files inside it change: a rebuilt `.apk` with the same `-rN`, a tampered `/usr/bin/ls` in an image, a config file edited after install. Integrity drift cannot see this when the SBOM has no package-level digest, so sbomlyze also compares files.
+
+- **File inventory**: Syft JSON (`files`) and SPDX (`files`) record a SHA-1/SHA-256 for each file; CycloneDX records file entries without ownership. Files are compared by path. Only hashes of the same kind are compared; a missing or different kind is *unverified*, not a change.
+- **Ownership**: Syft `contains` and SPDX `CONTAINS` relationships say which package owns which file (a file can have several owners, e.g. `busybox` and `busybox-binsh`). The SBOM's root (the scanned image) is not an owner.
+- **`owned_file_drift`**: a package with the same version whose owned files were modified, added or removed. Each file carries `config` (`true` for dpkg conffiles, `false`, or `unknown` when the format has no flag). This is separate from `integrity_drift` and gated by the opt-in `deny_owned_file_drift` policy.
+- **Version changes** get `drift.files` counts; `all_match: true` means every recorded owned file is byte-identical across the version change (e.g. a sibling Debian binary package rebuilt unchanged).
+- **`file_changes`** lists every content change with its `owners`; `files_added` / `files_removed` list inventory files that appeared or disappeared. `file_coverage` says what was checked: files compared, unverified, ambiguous paths (all-layers scans list one path per layer and are not compared), owned and unowned files, and config status unknown.
+- **What it cannot see**: files the generator did not hash. Syft does not hash files of Python and npm packages by default, so an edited `site-packages/pip/__init__.py` is invisible; enable broader file cataloging in Syft (`file.metadata.selection: all`) to cover them.
 
 ### JSON Output for Drift
 
@@ -672,7 +697,7 @@ The drift summary is inside the `diff` object:
 }
 ```
 
-`drift_summary` counts are per occurrence (a package in two lockfiles counts twice); `distinct_version_changes` counts identity + from + to once.
+`drift_summary` counts are per occurrence (a package in two lockfiles counts twice); `distinct_version_changes` counts identity + from + to once. Every field is documented in [docs/diff-json-contract.md](docs/diff-json-contract.md).
 
 **Extracting drift summary:**
 ```bash
@@ -1056,7 +1081,9 @@ Create policies to enforce rules in CI/CD pipelines. sbomlyze exits with code 1 
 | `deny_licenses` | []string | List of forbidden license identifiers |
 | `require_licenses` | bool | Require all *added* components to have licenses (only checks newly added components in diff mode) |
 | `deny_duplicates` | bool | Fail if duplicate packages exist in result |
-| `deny_integrity_drift` | bool | Fail if component hash changed without version change (supply chain risk) |
+| `deny_integrity_drift` | bool | Fail if a package digest changed without a version change (supply chain risk) |
+| `deny_owned_file_drift` | bool | Fail if a package kept its version while files it owns changed (needs Syft JSON or SPDX with file data); dpkg config files are skipped |
+| `owned_file_drift_include_config` | bool | Also fail `deny_owned_file_drift` on config files (dpkg conffiles) |
 | `max_depth` | int | Fail if new transitive dependencies at depth >= N (0 = unlimited) |
 | `warn_supplier_change` | bool | Warn (not fail) if component supplier/author changed |
 | `warn_new_transitive` | bool | Warn (not fail) on any new transitive dependencies |

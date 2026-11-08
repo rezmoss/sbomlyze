@@ -255,6 +255,7 @@ func ComputeKeyFindings(result DiffResult, overview DiffOverview) KeyFindings {
 	findings = append(findings, detectVersionChangeAnalysis(result, overview)...)
 	findings = append(findings, detectIntegrityDriftContext(result)...)
 	findings = append(findings, detectFileChanges(result)...)
+	findings = append(findings, detectOwnedFileDrift(result)...)
 	findings = append(findings, detectDominantPathPattern(result)...)
 	findings = append(findings, detectRemovalHotspots(result)...)
 	findings = append(findings, detectStableTypes(overview, result)...)
@@ -414,7 +415,7 @@ func dominantPattern(comps []sbom.Component, direction string) *Finding {
 	var bestKey typePathKey
 	var bestCount int
 	for k, v := range counts {
-		// ties go to the smallest type/path, so the result is deterministic
+		// ties: smallest type/path, deterministic
 		if v > bestCount || (v == bestCount && (k.ptype < bestKey.ptype || (k.ptype == bestKey.ptype && k.path < bestKey.path))) {
 			bestKey = k
 			bestCount = v
@@ -446,7 +447,7 @@ func topPathPrefix(locations []string) string {
 	return "/" + strings.Join(parts, "/")
 }
 
-// componentType is the PURL type used to group findings.
+// componentType: PURL type for grouping findings
 func componentType(c sbom.Component) string {
 	ptype := ExtractPURLType(c.PURL)
 	if ptype == "unknown" && c.PURL == "" {
@@ -455,7 +456,7 @@ func componentType(c sbom.Component) string {
 	return ptype
 }
 
-// changesByType counts added, removed, changed and moved occurrences per type.
+// changesByType: per-type changed and any-change counts
 func changesByType(result DiffResult) (changed map[string]int, any map[string]int) {
 	changed = make(map[string]int)
 	any = make(map[string]int)
@@ -476,8 +477,7 @@ func changesByType(result DiffResult) (changed map[string]int, any map[string]in
 	return changed, any
 }
 
-// detectStableTypes reports types whose package count is equal on both sides.
-// Only types with no added, removed, changed or moved package are "unchanged".
+// detectStableTypes: "unchanged" only w/ zero changes
 func detectStableTypes(overview DiffOverview, result DiffResult) []Finding {
 	bTypes := overview.Before.Stats.ByType
 	aTypes := overview.After.Stats.ByType
@@ -580,7 +580,7 @@ func detectVersionChangeAnalysis(result DiffResult, overview DiffOverview) []Fin
 		}}
 	}
 
-	// occurrences notes when one change appears at several locations
+	// occurrences: note when a change hits many locs
 	occurrences := func(t *tally) string {
 		if t.occurrences == len(t.distinct) {
 			return ""
@@ -643,7 +643,7 @@ func detectVersionChangeAnalysis(result DiffResult, overview DiffOverview) []Fin
 	return findings
 }
 
-// identityKey is the case-folded identity used to count distinct changes.
+// identityKey: case-folded ID for distinct counts
 func identityKey(id string) string {
 	return identity.MatchKey(id)
 }
@@ -732,8 +732,53 @@ func pathHotspots(comps []sbom.Component, direction string) *Finding {
 	}
 }
 
-// detectFileChanges reports file entries whose content changed. They are
-// scanner evidence (manifests, workflows), not package integrity drift.
+// detectOwnedFileDrift: same-ver file changes, identical upgrades
+func detectOwnedFileDrift(result DiffResult) []Finding {
+	var findings []Finding
+	if n := len(result.OwnedFileDrift); n > 0 {
+		limit := min(n, 5)
+		parts := make([]string, limit)
+		config := 0
+		for _, d := range result.OwnedFileDrift {
+			if len(d.GatedFiles(false)) == 0 {
+				config++
+			}
+		}
+		for i, d := range result.OwnedFileDrift[:limit] {
+			parts[i] = fmt.Sprintf("%s %s (%s %s", d.Name, d.Version, d.Files[0].Change, d.Files[0].Path)
+			if len(d.Files) > 1 {
+				parts[i] += fmt.Sprintf(" +%d", len(d.Files)-1)
+			}
+			parts[i] += ")"
+		}
+		msg := fmt.Sprintf("%d packages changed owned files without a version change: %s", n, strings.Join(parts, ", "))
+		if n > limit {
+			msg += fmt.Sprintf(" + %d more", n-limit)
+		}
+		if config > 0 {
+			msg += fmt.Sprintf(" (%d config files only)", config)
+		}
+		findings = append(findings, Finding{Icon: "\u26a0\ufe0f", Message: msg})
+	}
+
+	var same []string
+	for _, c := range result.Changed {
+		if c.Drift != nil && c.Drift.Files != nil && c.Drift.Files.AllMatch {
+			same = append(same, fmt.Sprintf("%s %s\u2192%s", c.Name, c.Drift.VersionFrom, c.Drift.VersionTo))
+		}
+	}
+	if len(same) > 0 {
+		limit := min(len(same), 5)
+		msg := fmt.Sprintf("%d version changes where all recorded owned files are byte-identical: %s", len(same), strings.Join(same[:limit], ", "))
+		if len(same) > limit {
+			msg += fmt.Sprintf(" + %d more", len(same)-limit)
+		}
+		findings = append(findings, Finding{Icon: "\u2139\ufe0f", Message: msg})
+	}
+	return findings
+}
+
+// detectFileChanges: changed file entries, not pkg drift
 func detectFileChanges(result DiffResult) []Finding {
 	n := len(result.FileChanges)
 	if n == 0 {

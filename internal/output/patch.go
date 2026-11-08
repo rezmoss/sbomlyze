@@ -36,7 +36,7 @@ func GenerateJSONPatch(result analysis.DiffResult) []JSONPatchOp {
 	}
 
 	for _, c := range result.Changed {
-		// one package in two locations is two entries
+		// one pkg, two locations: two entries
 		ref := c.ID
 		if c.Location != "" {
 			ref += "@" + c.Location

@@ -144,10 +144,11 @@ function countsFromReport(report) {
   const count = (value) => Array.isArray(value) ? value.length : 0;
   const integrity = diff.drift_summary?.integrity_drift ?? 0;
   if (!Number.isSafeInteger(integrity) || integrity < 0) throw new Error('invalid integrity drift count in report');
-  // file entries and moved packages are changes too, though not drift
+  // files/moves count as changes, not drift
   return {
     added: count(diff.added), removed: count(diff.removed), changed: count(diff.changed), integrity,
     fileChanges: count(diff.file_changes), moved: count(diff.moved),
+    ownedFileDrift: count(diff.owned_file_drift), files: count(diff.files_added) + count(diff.files_removed),
   };
 }
 
@@ -160,7 +161,8 @@ function verdictFor(failOn, report, counts) {
     case 'policy': return policyFailed(report) ? 'fail' : 'pass';
     case 'integrity-drift': return counts.integrity > 0 ? 'fail' : 'pass';
     case 'any-change': {
-      const total = counts.added + counts.removed + counts.changed + (counts.fileChanges || 0) + (counts.moved || 0);
+      const total = counts.added + counts.removed + counts.changed + (counts.fileChanges || 0) + (counts.moved || 0) +
+        (counts.ownedFileDrift || 0) + (counts.files || 0);
       return total > 0 ? 'fail' : 'pass';
     }
     case 'never': return 'pass';

@@ -137,7 +137,9 @@
       "unknown_direction": 0,
       "distinct_version_changes": 0,
       "file_changes": 0,
-      "license_changes": 0
+      "license_changes": 0,
+      "owned_file_drift": 0,
+      "owned_files_changed": 0
     },
     "digest_coverage": {
       "same_version_pairs": 3,

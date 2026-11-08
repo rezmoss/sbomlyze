@@ -13,7 +13,7 @@ import (
 const (
 	DirectionUpgrade   = "upgrade"
 	DirectionDowngrade = "downgrade"
-	DirectionNone      = "none" // different strings, equal precedence (e.g. build metadata only)
+	DirectionNone      = "none" // equal precedence, e.g. build metadata only
 	DirectionUnknown   = "unknown"
 )
 
@@ -22,22 +22,32 @@ const (
 	LevelMajor      = "major"
 	LevelMinor      = "minor"
 	LevelPatch      = "patch"
-	LevelPrerelease = "prerelease" // same release core; pre-release, pseudo-version or post/dev segment differs
+	LevelPrerelease = "prerelease" // same core; pre-release/pseudo/post/dev differs
 	LevelNone       = "none"
 	LevelUnknown    = "unknown"
 )
 
-// ClassifyVersionChange compares two versions with the rules of the PURL
-// ecosystem. Ecosystems without a supported comparator, and versions that do
-// not parse, yield unknown: never a guessed downgrade.
+// ClassifyVersionChange: per-ecosystem order; else unknown
 func ClassifyVersionChange(ecosystem, from, to string) (direction, level string) {
 	switch ecosystem {
 	case "golang", "github":
 		return compareGoSemver(from, to)
-	case "npm", "cargo", "composer", "gem", "swift", "hex", "pub":
+	case "npm", "cargo", "composer", "swift", "hex", "pub":
 		return compareSemver(from, to)
 	case "pypi":
 		return comparePEP440(from, to)
+	case "gem":
+		return compareGem(from, to)
+	case "deb":
+		return compareDeb(from, to)
+	case "rpm":
+		return compareRPM(from, to)
+	case "alpm":
+		return compareAlpm(from, to)
+	case "apk":
+		return compareAPK(from, to)
+	case "maven":
+		return compareMaven(from, to)
 	}
 	return DirectionUnknown, LevelUnknown
 }
@@ -73,8 +83,7 @@ func compareGoSemver(from, to string) (string, string) {
 	return directionOf(cmp), LevelPrerelease
 }
 
-// withV adds the "v" semver prefix; Go toolchain versions (pkg:golang/stdlib)
-// are written go1.26.8.
+// withV adds "v"; go1.x (stdlib) -> v1.x
 func withV(v string) string {
 	switch {
 	case strings.HasPrefix(v, "v"):
@@ -85,7 +94,7 @@ func withV(v string) string {
 	return "v" + v
 }
 
-// goCore strips pre-release and build from a canonical semver.
+// goCore strips pre-release and build
 func goCore(canonical string) string {
 	core, _, _ := strings.Cut(canonical, "+")
 	core, _, _ = strings.Cut(core, "-")
@@ -113,7 +122,7 @@ func compareSemver(from, to string) (string, string) {
 	return directionOf(cmp), LevelPrerelease
 }
 
-// PEP 440 (https://peps.python.org/pep-0440/#appendix-b-parsing-version-strings-with-regular-expressions).
+// PEP 440 regex: https://peps.python.org/pep-0440/#appendix-b-parsing-version-strings-with-regular-expressions
 var pep440Re = regexp.MustCompile(`(?i)^\s*v?` +
 	`(?:(?P<epoch>[0-9]+)!)?` +
 	`(?P<release>[0-9]+(?:\.[0-9]+)*)` +
@@ -122,8 +131,7 @@ var pep440Re = regexp.MustCompile(`(?i)^\s*v?` +
 	`(?:[-_.]?(?P<dev_l>dev)[-_.]?(?P<dev_n>[0-9]+)?)?` +
 	`(?:\+(?P<local>[a-z0-9]+(?:[-_.][a-z0-9]+)*))?\s*$`)
 
-// pep440Version holds a parsed version. Absent pre/post/dev are represented by
-// the has* flags so ordering can apply PEP 440's implicit sentinels.
+// pep440Version: has* flags mark absent pre/post/dev
 type pep440Version struct {
 	epoch   int
 	release []int
@@ -205,8 +213,7 @@ func cmpRelease(a, b []int) int {
 	return 0
 }
 
-// preKey orders the pre-release slot: a dev-only release sorts before any
-// pre-release, and a final release after all of them.
+// preKey: dev-only < pre-release < final
 func (v pep440Version) preKey() (rank, l, n int) {
 	switch {
 	case !v.hasPre && !v.hasPost && v.hasDev:
@@ -226,7 +233,7 @@ func cmpLocal(a, b []string) int {
 			if c := cmpInt(an, bn); c != 0 {
 				return c
 			}
-		case aErr == nil: // numeric segments sort after alphanumeric ones
+		case aErr == nil: // numeric segments sort after alphanumeric
 			return 1
 		case bErr == nil:
 			return -1

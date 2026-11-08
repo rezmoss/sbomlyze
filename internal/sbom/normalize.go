@@ -6,8 +6,7 @@ import (
 	"github.com/rezmoss/sbomlyze/internal/identity"
 )
 
-// normalizeString trims whitespace. Declared case is kept: Go module paths and
-// file paths are case-sensitive. Case folding happens only in match keys.
+// normalizeString trims; keeps case (paths are case-sensitive)
 func normalizeString(s string) string {
 	return strings.TrimSpace(s)
 }
@@ -50,6 +49,9 @@ func NormalizeComponent(c Component) Component {
 		RawJSON:      c.RawJSON,
 
 		PrimaryLocations: c.PrimaryLocations,
+		OwnedFiles:       c.OwnedFiles,
+		ConfigFiles:      c.ConfigFiles,
+		ConfigKnown:      c.ConfigKnown,
 	}
 
 	nonSPDX := make(map[string]bool, len(c.NonSPDXLicenses))

@@ -36,9 +36,7 @@ func (d *DependencyDiff) IsEmpty() bool {
 		len(d.TransitiveNew) == 0 && len(d.TransitiveLost) == 0
 }
 
-// BuildDependencyGraph returns component ID -> dependency IDs. Components
-// sharing an ID (one package in several lockfiles or versions) contribute the
-// union of their dependencies, sorted, so input order does not matter.
+// BuildDependencyGraph: ID -> deps; same-ID deps unioned, sorted
 func BuildDependencyGraph(comps []sbom.Component) map[string][]string {
 	sets := make(map[string]map[string]bool)
 	for _, c := range comps {

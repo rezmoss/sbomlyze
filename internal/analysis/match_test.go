@@ -85,7 +85,7 @@ func TestRepro1VersionDirection(t *testing.T) {
 	}
 }
 
-// FIX-SPEC repro 2: a package in two lockfiles is never dropped or cross-paired.
+// FIX-SPEC repro 2: shared ID never dropped
 func TestRepro2SharedIDNotDropped(t *testing.T) {
 	r := diffFixtures(t, "repro2-before.cdx.json", "repro2-after.cdx.json")
 	if got := names(r.Added); !slices.Equal(got, []string{"example.com/m v0.2.17"}) {
@@ -99,7 +99,7 @@ func TestRepro2SharedIDNotDropped(t *testing.T) {
 	}
 }
 
-// FIX-SPEC repro 3: file entries are not integrity drift; go-h1 drift is.
+// FIX-SPEC repro 3: files not integrity drift
 func TestRepro3FileVsPackageIntegrity(t *testing.T) {
 	r := diffFixtures(t, "repro3-before.cdx.json", "repro3-after.cdx.json")
 	s := summary(r)
@@ -353,7 +353,7 @@ func TestIntegrityDriftRules(t *testing.T) {
 	})
 }
 
-// Results must not depend on component order in the input.
+// result must not depend on input order
 func TestDiffIndependentOfInputOrder(t *testing.T) {
 	pairs := [][2]string{
 		{"realworld/syft-before.cdx.json", "realworld/syft-after.cdx.json"},
@@ -402,7 +402,7 @@ func findingWith(f KeyFindings, substr string) string {
 	return ""
 }
 
-// FIX-SPEC section 5 rows, on the committed (trimmed) real SBOMs.
+// FIX-SPEC section 5 rows, trimmed real SBOMs
 func TestRealWorldAcceptance(t *testing.T) {
 	t.Run("anchore/syft", func(t *testing.T) {
 		b, bi := loadFixture(t, "realworld/syft-before.cdx.json")
@@ -534,7 +534,7 @@ func TestRealWorldAcceptance(t *testing.T) {
 	})
 }
 
-// Codex review: a move must not swallow a license change.
+// Codex: moves keep license changes
 func TestMovedKeepsLicenseChange(t *testing.T) {
 	b := goPkg("m", "v1.0.0", "/a/go.mod")
 	b.Licenses = []string{"MIT"}

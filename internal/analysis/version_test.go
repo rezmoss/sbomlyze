@@ -13,7 +13,7 @@ func TestClassifyVersionChange(t *testing.T) {
 		{"golang", "v0.0.0-20230404182410-1ff89d7342da", "v1.0.0", DirectionUpgrade, LevelMajor},
 		{"golang", "v4.6.0", "v4.7.0", DirectionUpgrade, LevelMinor},
 		{"golang", "v0.9.3", "v0.9.6", DirectionUpgrade, LevelPatch},
-		// pseudo-version of an unreleased patch sorts before the release
+		// unreleased-patch pseudo-version precedes the release
 		{"golang", "v1.36.12-0.20260120151049-f2248ac996af", "v1.36.12", DirectionUpgrade, LevelPrerelease},
 		{"golang", "v0.6.3-0.20251027160822-ad3df93bed29", "v0.6.3-0.20260930231756-f19d9717deb0", DirectionUpgrade, LevelPrerelease},
 		{"golang", "v29.8.2+incompatible", "v29.9.2+incompatible", DirectionUpgrade, LevelMinor},
@@ -34,8 +34,9 @@ func TestClassifyVersionChange(t *testing.T) {
 		{"composer", "v2.1.0", "v2.2.0", DirectionUpgrade, LevelMinor},
 		{"composer", "dev-main", "v2.2.0", DirectionUnknown, LevelUnknown},
 		{"gem", "1.2.3", "1.2.4", DirectionUpgrade, LevelPatch},
-		{"gem", "1.0.0.pre", "1.0.0", DirectionUnknown, LevelUnknown},
-		{"gem", "1.2.3.4", "1.2.3.5", DirectionUnknown, LevelUnknown},
+		{"gem", "1.0.0.pre", "1.0.0", DirectionUpgrade, LevelPrerelease},
+		{"gem", "1.2.3.4", "1.2.3.5", DirectionUpgrade, LevelPatch},
+		{"gem", "0.3.4.1", "0.4.9.1", DirectionUpgrade, LevelMinor},
 
 		{"swift", "603.0.2", "604.0.0", DirectionUpgrade, LevelMajor},
 		{"hex", "1.14.0", "1.15.0-rc.0", DirectionUpgrade, LevelMinor},
@@ -55,9 +56,20 @@ func TestClassifyVersionChange(t *testing.T) {
 		{"pypi", "2.31.0", "2.32.3", DirectionUpgrade, LevelMinor},
 		{"pypi", "not a version", "1.0", DirectionUnknown, LevelUnknown},
 
-		// no supported comparator: unknown, never a guessed downgrade
-		{"maven", "1.2.3", "1.2.4", DirectionUnknown, LevelUnknown},
-		{"deb", "1:2.3-1", "1:2.4-1", DirectionUnknown, LevelUnknown},
+		// no comparator: unknown, never guessed
+		{"maven", "1.2.3", "1.2.4", DirectionUpgrade, LevelPatch},
+		{"maven", "1.0-SNAPSHOT", "1.0", DirectionUpgrade, LevelPatch},
+		{"maven", "4.1.94.Final", "4.1.100.Final", DirectionUpgrade, LevelPatch},
+		{"deb", "1:2.3-1", "1:2.4-1", DirectionUpgrade, LevelMinor},
+		{"deb", "2.36-9", "2.36-10", DirectionUpgrade, LevelRevision},
+		{"deb", "1.0~rc1-1", "1.0-1", DirectionUpgrade, LevelPatch},
+		{"deb", "1:0.1-1", "2.0-1", DirectionDowngrade, LevelMajor},
+		{"apk", "1.36.1-r29", "1.36.1-r31", DirectionUpgrade, LevelRevision},
+		{"apk", "1.0_rc1-r0", "1.0-r0", DirectionUpgrade, LevelPatch},
+		{"rpm", "1:2.3-4.el9", "1:2.3-5.el9", DirectionUpgrade, LevelRevision},
+		{"rpm", "1.0~rc1-1", "1.0-1", DirectionUpgrade, LevelPatch},
+		{"alpm", "1.0-1", "1.0-2", DirectionUpgrade, LevelRevision},
+		{"alpm", "1.0a-1", "1.0-1", DirectionUpgrade, LevelPatch}, // pacman: 1.0a < 1.0
 		{"unknown", "1.0", "0.9", DirectionUnknown, LevelUnknown},
 	}
 	for _, tt := range tests {

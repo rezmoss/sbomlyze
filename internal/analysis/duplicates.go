@@ -156,7 +156,7 @@ func DetectCollisions(comps []sbom.Component) []Collision {
 
 		names := make(map[string]bool)
 		for _, c := range components {
-			// case-only differences are not collisions where names are case-insensitive
+			// case-insensitive ecosystems: case-only diff ok
 			if caseFold {
 				names[strings.ToLower(c.Name)] = true
 			} else {

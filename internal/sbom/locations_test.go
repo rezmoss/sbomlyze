@@ -66,3 +66,59 @@ func TestParseSyft_GoAndCargoDigests(t *testing.T) {
 		t.Errorf("digests = %v / %v / %v", comps[0].Digests, comps[1].Digests, comps[2].Digests)
 	}
 }
+
+func TestParseFileInventoryAndOwnership(t *testing.T) {
+	syftData := []byte(`{"artifacts":[
+	  {"id":"p1","name":"adduser","version":"3.134","type":"deb","purl":"pkg:deb/debian/adduser@3.134",
+	   "metadataType":"dpkg-db-entry","metadata":{"files":[{"path":"/etc/adduser.conf","isConfigFile":true},{"path":"/usr/sbin/adduser"}]}}],
+	 "files":[
+	  {"id":"f1","location":{"path":"/etc/adduser.conf","layerID":"sha256:l1"},"digests":[{"algorithm":"sha256","value":"aa"}]},
+	  {"id":"f2","location":{"path":"/usr/sbin/adduser"},"digests":[{"algorithm":"sha1","value":"bb"}]},
+	  {"id":"f3","location":{"path":"/go.mod"},"digests":[{"algorithm":"sha1","value":"cc"}]}],
+	 "artifactRelationships":[
+	  {"parent":"p1","child":"f1","type":"contains"},{"parent":"p1","child":"f2","type":"contains"},
+	  {"parent":"p1","child":"f3","type":"evident-by"},{"parent":"src","child":"p1","type":"contains"}],
+	 "descriptor":{"name":"syft"},"schema":{"version":"16.0.0"}}`)
+	comps, info, err := ParseSyftWithInfo(syftData)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(info.Files) != 3 || info.Files[0].Layer != "sha256:l1" {
+		t.Errorf("files = %+v", info.Files)
+	}
+	c := NormalizeComponent(comps[0])
+	if !slices.Equal(c.OwnedFiles, []string{"/etc/adduser.conf", "/usr/sbin/adduser"}) {
+		t.Errorf("owned = %v (evident-by is not ownership)", c.OwnedFiles)
+	}
+	if !c.ConfigKnown || !slices.Equal(c.ConfigFiles, []string{"/etc/adduser.conf"}) {
+		t.Errorf("config = %v known=%v", c.ConfigFiles, c.ConfigKnown)
+	}
+
+	spdxData := []byte(`{"spdxVersion":"SPDX-2.3","dataLicense":"CC0-1.0","SPDXID":"SPDXRef-DOCUMENT","name":"x","documentNamespace":"https://x",
+	 "creationInfo":{"created":"2026-01-01T00:00:00Z","creators":["Tool: syft-1.57.0"]},
+	 "packages":[{"name":"img","SPDXID":"SPDXRef-root","versionInfo":"sha256:x","downloadLocation":"NOASSERTION"},
+	             {"name":"busybox","SPDXID":"SPDXRef-bb","versionInfo":"1.36.1-r31","downloadLocation":"NOASSERTION"}],
+	 "files":[{"fileName":"bin/busybox","SPDXID":"SPDXRef-File-bb","checksums":[{"algorithm":"SHA256","checksumValue":"dd"}]}],
+	 "relationships":[{"spdxElementId":"SPDXRef-DOCUMENT","relatedSpdxElement":"SPDXRef-root","relationshipType":"DESCRIBES"},
+	   {"spdxElementId":"SPDXRef-root","relatedSpdxElement":"SPDXRef-File-bb","relationshipType":"CONTAINS"},
+	   {"spdxElementId":"SPDXRef-bb","relatedSpdxElement":"SPDXRef-File-bb","relationshipType":"CONTAINS"}]}`)
+	comps, info, err = ParseDataWithInfo(spdxData)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(info.Files) != 1 || info.Files[0].Path != "/bin/busybox" || info.Files[0].Hashes["SHA256"] != "dd" {
+		t.Errorf("spdx files = %+v", info.Files)
+	}
+	for _, c := range comps {
+		switch c.Name {
+		case "img":
+			if len(c.OwnedFiles) != 0 {
+				t.Errorf("the described root does not own files: %v", c.OwnedFiles)
+			}
+		case "busybox":
+			if !slices.Equal(c.OwnedFiles, []string{"/bin/busybox"}) {
+				t.Errorf("busybox owned = %v", c.OwnedFiles)
+			}
+		}
+	}
+}

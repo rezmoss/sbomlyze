@@ -22,6 +22,10 @@
         "message": "License profile: 33% permissive, 67% copyleft"
       },
       {
+        "icon": "⚠️",
+        "message": "Low hash coverage: 33.3% (2 of 3 missing)"
+      },
+      {
         "icon": "🔍",
         "message": "Top catalogers: apkdb-cataloger (3)"
       }
@@ -37,8 +41,8 @@
       "MIT": 1
     },
     "without_license": 0,
-    "with_hashes": 2,
-    "without_hashes": 1,
+    "with_hashes": 1,
+    "without_hashes": 2,
     "total_dependencies": 2,
     "with_dependencies": 1,
     "duplicate_count": 0,

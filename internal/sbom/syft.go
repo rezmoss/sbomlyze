@@ -54,6 +54,8 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 			info.FilesCount = len(filesArr)
 		}
 	}
+	files, fileByID := parseSyftFiles(doc.Files)
+	info.Files = files
 
 	if len(doc.Source) > 0 {
 		var sourceInfo struct {
@@ -172,6 +174,7 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 
 		extractSyftHashes(a.MetadataType, a.Metadata, comp.Hashes)
 		comp.Digests = extractSyftDigests(a.MetadataType, a.Metadata)
+		comp.ConfigFiles, comp.ConfigKnown = syftConfigFiles(a.MetadataType, a.Metadata)
 		comp.Supplier = extractSyftMaintainer(a.Metadata)
 
 		comp.ID = identity.ComputeID(comp.ToIdentity())
@@ -187,6 +190,14 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 	for _, rel := range doc.ArtifactRelationships {
 		if rel.Type != "" {
 			relCounts[rel.Type]++
+		}
+		// pkg->file ownership; evident-by (manifests) isn't
+		if rel.Type == "contains" {
+			if parentIdx, ok := syftIDToIdx[rel.Parent]; ok {
+				if path, ok := fileByID[rel.Child]; ok {
+					comps[parentIdx].OwnedFiles = append(comps[parentIdx].OwnedFiles, path)
+				}
+			}
 		}
 		if rel.Type == "dependency-of" {
 			parentIdx, parentOK := syftIDToIdx[rel.Parent]
@@ -220,8 +231,7 @@ func extractSyftMaintainer(metadata json.RawMessage) string {
 	return strings.TrimSpace(md.Maintainer)
 }
 
-// extractSyftDigests reads package checksums that are not artifact hashes:
-// Go module h1 (go.sum) and the Cargo.lock crate checksum.
+// extractSyftDigests: Go h1, Cargo checksum
 func extractSyftDigests(metadataType string, metadata json.RawMessage) map[string]string {
 	if len(metadata) == 0 {
 		return nil
@@ -287,23 +297,6 @@ func extractSyftHashes(metadataType string, metadata json.RawMessage, hashes map
 			}
 		}
 
-	case "rpm-db-entry", "rpm-archive", "python-package":
-		// metadata.files[].digest: {algorithm, value} — use first non-empty
-		var md struct {
-			Files []struct {
-				Digest struct {
-					Algorithm string `json:"algorithm"`
-					Value     string `json:"value"`
-				} `json:"digest"`
-			} `json:"files"`
-		}
-		if json.Unmarshal(metadata, &md) == nil {
-			for _, f := range md.Files {
-				if f.Digest.Algorithm != "" && f.Digest.Value != "" {
-					hashes[strings.ToUpper(f.Digest.Algorithm)] = f.Digest.Value
-					break // one representative hash is enough
-				}
-			}
-		}
+		// rpm/python file digests aren't package hashes
 	}
 }

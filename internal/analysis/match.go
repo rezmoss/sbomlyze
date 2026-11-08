@@ -11,24 +11,21 @@ import (
 	"github.com/rezmoss/sbomlyze/internal/sbom"
 )
 
-// occurrence is one package component: an (identity, version, location) tuple.
+// occurrence: one (identity, version, location) pkg
 type occurrence struct {
 	c       sbom.Component
 	key     string // identity match key
-	loc     string // location match key ("" when the SBOM has no location)
+	loc     string // location match key ("" if none)
 	display string // location shown in output
-	sortKey string // canonical order; pairing never depends on input order
+	sortKey string // canonical order; pairing ignores input order
 }
 
-// versionPathSuffixes are path segments that embed the package version, such
-// as foo-1.2.dist-info or foo-1.2.jar. The version is masked in the location
-// key so a version change at the same place is still one location.
+// versionPathSuffixes: segments embedding pkg version, masked
 var versionPathSuffixes = []string{".dist-info", ".egg-info", ".jar", ".war", ".ear", ".gemspec"}
 
 const versionPlaceholder = "{version}"
 
-// locationMatchKey masks the component's own version in recognised
-// version-bearing path segments. Nothing else in the path is altered.
+// locationMatchKey masks own version in known segments
 func locationMatchKey(path, version string) string {
 	if version == "" {
 		return path
@@ -49,9 +46,7 @@ func locationMatchKey(path, version string) string {
 	return strings.Join(segs, "/")
 }
 
-// primaryLocation returns the smallest location by match key, so the choice
-// does not depend on the order locations are listed in. Syft's primary
-// evidence locations are preferred over supporting files when known.
+// primaryLocation: min loc key, Syft primary preferred
 func primaryLocation(c sbom.Component) (key, display string) {
 	locs := c.PrimaryLocations
 	if len(locs) == 0 {
@@ -97,7 +92,7 @@ func sortOccurrences(occ []occurrence) {
 	sort.SliceStable(occ, func(i, j int) bool { return occ[i].sortKey < occ[j].sortKey })
 }
 
-// exactKey: two occurrences with the same exactKey are unchanged.
+// exactKey: equal keys mean unchanged
 func (o occurrence) exactKey() string {
 	return o.c.Version + "\x00" + digestFingerprint(o.c.DigestSet()) + "\x00" + licenseFingerprint(o.c.Licenses)
 }
@@ -115,12 +110,13 @@ func splitFiles(comps []sbom.Component) (pkgs, files []sbom.Component) {
 
 type matcher struct {
 	result *DiffResult
-	// coverage is accumulated over same-version package pairs
+	// file inventories for owned-file diff
+	bi, ai *fileIndex
+	// coverage over same-version pkg pairs
 	coverage DigestCoverage
 }
 
-// pair records a before/after occurrence pair: compares it, and counts digest
-// coverage when the version is unchanged.
+// pair: compare pair, count digest coverage
 func (m *matcher) pair(b, a occurrence) {
 	if !b.c.IsEvidence() {
 		m.result.SharedPackages++
@@ -128,14 +124,27 @@ func (m *matcher) pair(b, a occurrence) {
 	if b.c.Version == a.c.Version && b.c.Version != "" && !b.c.IsEvidence() && !a.c.IsEvidence() {
 		m.countCoverage(b.c.DigestSet(), a.c.DigestSet())
 	}
+	loc := a.display
+	if loc == "" {
+		loc = b.display
+	}
+	var delta *FileDelta
+	if !b.c.IsEvidence() && (len(b.c.OwnedFiles) > 0 || len(a.c.OwnedFiles) > 0) {
+		files, d := ownedFileDelta(b.c, a.c, m.bi, m.ai)
+		delta = &d
+		if b.c.Version == a.c.Version && b.c.Version != "" && len(files) > 0 {
+			m.result.OwnedFileDrift = append(m.result.OwnedFileDrift, OwnedFileDrift{
+				ID: b.c.ID, Name: b.c.Name, Version: b.c.Version, Location: loc, Files: files,
+			})
+		}
+	}
 	changes := sbom.CompareComponents(b.c, a.c)
 	if len(changes) == 0 {
 		return
 	}
 	drift := ClassifyDrift(b.c, a.c)
-	loc := a.display
-	if loc == "" {
-		loc = b.display
+	if drift.Type == DriftTypeVersion {
+		drift.Files = delta
 	}
 	m.result.Changed = append(m.result.Changed, ChangedComponent{
 		ID:       b.c.ID,
@@ -169,22 +178,9 @@ func (m *matcher) countCoverage(before, after map[string]string) {
 	}
 }
 
-// matchPackages pairs package occurrences:
-//  1. group by identity and location; cancel identical records
-//  2. same version at the same location: compare (integrity / metadata drift)
-//  3. one leftover on each side at the same location: version change
-//  4. several leftovers at one location: version-set change, all of them
-//     added/removed (no guessed pairing)
-//  5. an identity with no location on one side matches its single leftover
-//     on the other side
-//  6. same identity and version at a different location, one on each side: moved
-//  7. relocated: the identity's single leftover on each side, when the before
-//     location is gone from the after SBOM and the after location is new
-//     (an image's python3.11/ became python3.12/): version change
-//  8. everything else is added or removed. A location that still exists on
-//     the other side is never paired across: the package left that lockfile.
-func matchPackages(before, after []sbom.Component, result *DiffResult) {
-	m := &matcher{result: result, coverage: DigestCoverage{ByKind: map[string]int{}}}
+// matchPackages: occurrence matching; rules in README
+func matchPackages(before, after []sbom.Component, bi, ai *fileIndex, result *DiffResult) {
+	m := &matcher{result: result, bi: bi, ai: ai, coverage: DigestCoverage{ByKind: map[string]int{}}}
 
 	type groupKey struct{ key, loc string }
 	groups := make(map[groupKey]*[2][]occurrence)
@@ -262,8 +258,7 @@ func matchPackages(before, after []sbom.Component, result *DiffResult) {
 	}
 }
 
-// pairBy pairs occurrences with equal keys in canonical order and returns the
-// leftovers. Both inputs must be sorted.
+// pairBy: pair equal keys in order; inputs sorted
 func pairBy(bs, as []occurrence, key func(occurrence) string, pair func(b, a occurrence)) ([]occurrence, []occurrence) {
 	if len(bs) == 0 || len(as) == 0 {
 		return bs, as
@@ -313,9 +308,7 @@ func remove(occ []occurrence, used map[int]bool) []occurrence {
 	return out
 }
 
-// matchUnlocated handles identities with no location on one side (e.g. a
-// format without locations): an absent location is unknown, not different,
-// so the identity's leftovers are matched as if they shared one location.
+// matchUnlocated: missing location matches any location
 func matchUnlocated(bs, as []occurrence, pair func(b, a occurrence)) ([]occurrence, []occurrence) {
 	bByID := groupByKey(bs, func(o occurrence) string { return o.key })
 	aByID := groupByKey(as, func(o occurrence) string { return o.key })
@@ -361,8 +354,7 @@ func matchUnlocated(bs, as []occurrence, pair func(b, a occurrence)) ([]occurren
 	return append(remove(bs, usedB), restB...), append(remove(as, usedA), restA...)
 }
 
-// matchMoved reports same identity and version, one occurrence on each side,
-// at different locations.
+// matchMoved: same id+version, 1:1, other location
 func matchMoved(bs, as []occurrence, result *DiffResult) ([]occurrence, []occurrence) {
 	idVer := func(o occurrence) string { return o.key + "\x00" + o.c.Version }
 	bBy := groupByKey(bs, idVer)
@@ -383,8 +375,7 @@ func matchMoved(bs, as []occurrence, result *DiffResult) ([]occurrence, []occurr
 		result.Moved = append(result.Moved, MovedComponent{
 			ID: b.c.ID, Name: b.c.Name, Version: b.c.Version, From: b.display, To: a.display,
 		})
-		// a move can carry a license change; digests are only compared at
-		// one location, so a move is never integrity drift
+		// moves keep license diffs; never integrity drift
 		if lics := diffLicenses(b.c.Licenses, a.c.Licenses); len(lics) > 0 {
 			result.Changed = append(result.Changed, ChangedComponent{
 				ID: b.c.ID, Name: b.c.Name, Location: a.display, Before: b.c, After: a.c,
@@ -397,7 +388,7 @@ func matchMoved(bs, as []occurrence, result *DiffResult) ([]occurrence, []occurr
 	return remove(bs, usedB), remove(as, usedA)
 }
 
-// locationSet holds every location key of the given components.
+// locationSet: all location keys of comps
 func locationSet(comps []sbom.Component) map[string]bool {
 	set := make(map[string]bool)
 	for _, c := range comps {
@@ -408,10 +399,7 @@ func locationSet(comps []sbom.Component) map[string]bool {
 	return set
 }
 
-// matchRelocated pairs an identity's single leftover on each side when its
-// before location no longer exists after and its after location did not
-// exist before: the container was replaced, not the package moved between
-// two live lockfiles.
+// matchRelocated: pair 1:1 when the location was replaced
 func matchRelocated(bs, as []occurrence, beforeLocs, afterLocs map[string]bool, pair func(b, a occurrence)) ([]occurrence, []occurrence) {
 	gone := func(o occurrence, other map[string]bool) bool {
 		for _, loc := range o.c.Locations {
@@ -439,7 +427,7 @@ func matchRelocated(bs, as []occurrence, beforeLocs, afterLocs map[string]bool, 
 	return remove(bs, usedB), remove(as, usedA)
 }
 
-// filePath is the path of a file entry: CycloneDX names files by path.
+// filePath: CycloneDX names files by path
 func filePath(c sbom.Component) string {
 	if c.Name != "" {
 		return c.Name
@@ -450,9 +438,8 @@ func filePath(c sbom.Component) string {
 	return c.ID
 }
 
-// matchFiles compares file entries by path. Content changes go to
-// FileChanges; files that appear or disappear stay in Added/Removed.
-func matchFiles(before, after []sbom.Component, result *DiffResult) {
+// matchFiles: content changes to FileChanges
+func matchFiles(before, after []sbom.Component, result *DiffResult, cov *FileCoverage) {
 	byPath := func(comps []sbom.Component) map[string][]sbom.Component {
 		out := make(map[string][]sbom.Component)
 		for _, c := range comps {
@@ -474,13 +461,14 @@ func matchFiles(before, after []sbom.Component, result *DiffResult) {
 	}
 	for _, p := range paths {
 		bs, as := b[p], a[p]
-		// identical content first, then pair the rest in canonical order
+		// identical content first, rest in canonical order
 		usedA := make([]bool, len(as))
 		var restB []sbom.Component
 		for _, bc := range bs {
 			found := false
 			for i, ac := range as {
-				if !usedA[i] && maps.Equal(bc.Hashes, ac.Hashes) {
+				if !usedA[i] && (maps.Equal(bc.Hashes, ac.Hashes) || compareHashes(bc.Hashes, ac.Hashes) == "equal") {
+					cov.FilesCompared++
 					usedA[i], found = true, true
 					break
 				}
@@ -497,6 +485,12 @@ func matchFiles(before, after []sbom.Component, result *DiffResult) {
 		}
 		n := min(len(restB), len(restA))
 		for i := 0; i < n; i++ {
+			// compare only kinds both sides have
+			if compareHashes(restB[i].Hashes, restA[i].Hashes) == "" {
+				cov.FilesUnverified++
+				continue
+			}
+			cov.FilesCompared++
 			result.FileChanges = append(result.FileChanges, FileChange{
 				Path: p, HashesBefore: restB[i].Hashes, HashesAfter: restA[i].Hashes,
 			})
@@ -535,5 +529,8 @@ func sortResult(r *DiffResult) {
 	})
 	slices.SortStableFunc(r.FileChanges, func(x, y FileChange) int {
 		return strings.Compare(x.Path, y.Path)
+	})
+	slices.SortStableFunc(r.OwnedFileDrift, func(x, y OwnedFileDrift) int {
+		return strings.Compare(x.ID+"\x00"+x.Location+"\x00"+x.Version, y.ID+"\x00"+y.Location+"\x00"+y.Version)
 	})
 }

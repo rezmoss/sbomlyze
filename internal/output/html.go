@@ -305,6 +305,9 @@ func writeHTMLSummaryCards(sb *strings.Builder, result analysis.DiffResult) {
 	if result.DriftSummary != nil && result.DriftSummary.IntegrityDrift > 0 {
 		writeHTMLCardStyled(sb, fmt.Sprintf("%d", result.DriftSummary.IntegrityDrift), "Integrity Drift", "var(--red)")
 	}
+	if len(result.OwnedFileDrift) > 0 {
+		writeHTMLCardStyled(sb, fmt.Sprintf("%d", len(result.OwnedFileDrift)), "Owned File Drift", "var(--red)")
+	}
 	sb.WriteString("</div>\n")
 }
 
@@ -329,6 +332,9 @@ func writeHTMLDriftSummary(sb *strings.Builder, result analysis.DiffResult) {
 	}
 	fmt.Fprintf(sb, "<tr><td>Integrity</td><td>%d</td><td>%s</td></tr>\n", ds.IntegrityDrift, intStatus)
 	fmt.Fprintf(sb, "<tr><td>Metadata</td><td>%d</td><td><span class=\"badge badge-ok\">✅ OK</span></td></tr>\n", ds.MetadataDrift)
+	if ds.OwnedFileDrift > 0 {
+		fmt.Fprintf(sb, "<tr><td>Owned file drift (same version, files changed)</td><td>%d</td><td><span class=\"badge badge-error\">⚠️ Review Required</span></td></tr>\n", ds.OwnedFileDrift)
+	}
 	if ds.UnknownDirection > 0 {
 		fmt.Fprintf(sb, "<tr><td>Version (unknown direction)</td><td>%d</td><td><span class=\"badge badge-ok\">ℹ️ Review</span></td></tr>\n", ds.UnknownDirection)
 	}
@@ -443,7 +449,7 @@ func writeHTMLCardStyled(sb *strings.Builder, num, label, color string) {
 		color, color, html.EscapeString(num), html.EscapeString(label))
 }
 
-// formatLabel is the document format, e.g. "CycloneDX 1.6" or "SPDX 2.3".
+// formatLabel: e.g. "CycloneDX 1.6", "SPDX 2.3"
 func formatLabel(info sbom.SBOMInfo) string {
 	if info.Format == "" {
 		return ""
@@ -451,7 +457,7 @@ func formatLabel(info sbom.SBOMInfo) string {
 	return strings.TrimSpace(info.Format + " " + strings.TrimPrefix(info.SpecVersion, "SPDX-"))
 }
 
-// generatorLabel is the tool that produced the SBOM, e.g. "syft 1.57.0".
+// generatorLabel: e.g. "syft 1.57.0"
 func generatorLabel(info sbom.SBOMInfo) string {
 	if info.ToolVersion == "" {
 		return info.ToolName
@@ -459,9 +465,20 @@ func generatorLabel(info sbom.SBOMInfo) string {
 	return strings.TrimSpace(info.ToolName + " " + info.ToolVersion)
 }
 
-// writeHTMLOccurrenceSections lists moved packages, version-set changes and
-// file entries whose content changed.
+// writeHTMLOccurrenceSections: moved, version-set, file changes
 func writeHTMLOccurrenceSections(sb *strings.Builder, result analysis.DiffResult) {
+	if len(result.OwnedFileDrift) > 0 {
+		fmt.Fprintf(sb, "<details open>\n<summary>⚠️ Owned File Drift (%d packages, same version, files changed)</summary>\n<table>\n", len(result.OwnedFileDrift))
+		sb.WriteString("<tr><th>Package</th><th>Version</th><th>File</th><th>Change</th><th>Config</th></tr>\n")
+		for _, d := range result.OwnedFileDrift {
+			for _, f := range d.Files {
+				fmt.Fprintf(sb, "<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n",
+					html.EscapeString(d.Name), html.EscapeString(d.Version), html.EscapeString(f.Path),
+					html.EscapeString(f.Change), html.EscapeString(f.Config))
+			}
+		}
+		sb.WriteString("</table>\n</details>\n")
+	}
 	if len(result.Moved) > 0 {
 		fmt.Fprintf(sb, "<details>\n<summary>↪️ Moved Components (%d)</summary>\n<table>\n", len(result.Moved))
 		sb.WriteString("<tr><th>Name</th><th>Version</th><th>From</th><th>To</th></tr>\n")

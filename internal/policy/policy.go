@@ -3,6 +3,7 @@ package policy
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	"github.com/rezmoss/sbomlyze/internal/analysis"
 	"github.com/rezmoss/sbomlyze/internal/compliance"
@@ -25,6 +26,9 @@ type Policy struct {
 	// Integrity/Security rules
 	DenyIntegrityDrift bool `json:"deny_integrity_drift,omitempty"` // Fail if hash changed without version
 	MaxDepth           int  `json:"max_depth,omitempty"`            // Fail if new transitive deps at depth >= N
+	// fail on same-ver owned-file changes; config skipped
+	DenyOwnedFileDrift          bool `json:"deny_owned_file_drift,omitempty"`
+	OwnedFileDriftIncludeConfig bool `json:"owned_file_drift_include_config,omitempty"`
 
 	// Warning rules - these produce warnings, not failures
 	WarnSupplierChange bool `json:"warn_supplier_change,omitempty"` // Warn if supplier/author changed
@@ -140,6 +144,28 @@ func Evaluate(policy Policy, result analysis.DiffResult) []Violation {
 					})
 				}
 			}
+		}
+	}
+
+	if policy.DenyOwnedFileDrift {
+		for _, d := range result.OwnedFileDrift {
+			files := d.GatedFiles(policy.OwnedFileDriftIncludeConfig)
+			if len(files) == 0 {
+				continue
+			}
+			paths := make([]string, 0, min(len(files), 5))
+			for _, f := range files[:min(len(files), 5)] {
+				paths = append(paths, f.Change+" "+f.Path)
+			}
+			msg := fmt.Sprintf("%s %s: %d owned files changed without a version change (%s", d.Name, d.Version, len(files), strings.Join(paths, ", "))
+			if len(files) > len(paths) {
+				msg += fmt.Sprintf(", +%d more", len(files)-len(paths))
+			}
+			violations = append(violations, Violation{
+				Rule:     "deny_owned_file_drift",
+				Message:  msg + ")",
+				Severity: SeverityError,
+			})
 		}
 	}
 

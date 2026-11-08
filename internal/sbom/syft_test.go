@@ -319,9 +319,9 @@ func TestParseSyft_Hashes(t *testing.T) {
 	for _, c := range comps {
 		switch c.Name {
 		case "busybox":
-			// rpm-db-entry: metadata.files[0].digest
-			if v, ok := c.Hashes["SHA256"]; !ok || v != "abc123def456" {
-				t.Errorf("busybox: expected SHA256=abc123def456, got %v", c.Hashes)
+			// rpm file digest is not a package hash
+			if len(c.Hashes) != 0 {
+				t.Errorf("busybox: a file digest must not become a package hash, got %v", c.Hashes)
 			}
 		case "musl":
 			// java-archive: metadata.digest[]

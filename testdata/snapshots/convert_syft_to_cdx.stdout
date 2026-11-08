@@ -32,12 +32,6 @@
       "type": "library",
       "name": "busybox",
       "version": "1.36.1-r15",
-      "hashes": [
-        {
-          "alg": "SHA-256",
-          "content": "abc123def456"
-        }
-      ],
       "licenses": [
         {
           "license": {
