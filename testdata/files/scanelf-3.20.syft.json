@@ -1,0 +1,436 @@
+{
+ "artifacts": [
+  {
+   "id": "9898bc37fd3ad7cd",
+   "name": "scanelf",
+   "version": "1.3.7-r2",
+   "type": "apk",
+   "foundBy": "apk-db-cataloger",
+   "locations": [
+    {
+     "path": "/lib/apk/db/installed",
+     "layerID": "sha256:08bc4e534116aa76b16015484b82eac51f9a593416feae9296c8a2d4bb7aa4a2",
+     "accessPath": "/lib/apk/db/installed",
+     "annotations": {
+      "evidence": "primary"
+     }
+    }
+   ],
+   "licenses": [
+    {
+     "value": "GPL-2.0-only",
+     "spdxExpression": "GPL-2.0-only",
+     "type": "declared",
+     "urls": [],
+     "locations": [
+      {
+       "path": "/lib/apk/db/installed",
+       "layerID": "sha256:08bc4e534116aa76b16015484b82eac51f9a593416feae9296c8a2d4bb7aa4a2",
+       "accessPath": "/lib/apk/db/installed",
+       "annotations": {
+        "evidence": "primary"
+       }
+      }
+     ]
+    }
+   ],
+   "language": "",
+   "cpes": [
+    {
+     "cpe": "cpe:2.3:a:scanelf:scanelf:1.3.7-r2:*:*:*:*:*:*:*",
+     "source": "syft-generated"
+    }
+   ],
+   "purl": "pkg:apk/alpine/scanelf@1.3.7-r2?arch=x86_64&distro=alpine-3.20.10&upstream=pax-utils",
+   "metadataType": "apk-db-entry",
+   "metadata": {
+    "package": "scanelf",
+    "originPackage": "pax-utils",
+    "maintainer": "Natanael Copa <ncopa@alpinelinux.org>",
+    "version": "1.3.7-r2",
+    "architecture": "x86_64",
+    "url": "https://wiki.gentoo.org/wiki/Hardened/PaX_Utilities",
+    "description": "Scan ELF binaries for stuff",
+    "size": 32390,
+    "installedSize": 81920,
+    "pullDependencies": [
+     "so:libc.musl-x86_64.so.1"
+    ],
+    "provides": [
+     "cmd:scanelf=1.3.7-r2"
+    ],
+    "pullChecksum": "Q1yEsLSREUhcsIdEgi+bNKn6lST8w=",
+    "gitCommitOfApkPort": "e65a4f2d0470e70d862ef2b5c412ecf2cb9ad0a6",
+    "files": [
+     {
+      "path": "/usr/bin/scanelf",
+      "ownerUid": "0",
+      "ownerGid": "0",
+      "permissions": "755",
+      "digest": {
+       "algorithm": "'Q1'+base64(sha1)",
+       "value": "Q1I/6lUu9KpyNaJs5hreffm9xnfPE="
+      }
+     }
+    ]
+   }
+  }
+ ],
+ "artifactRelationships": [
+  {
+   "parent": "9898bc37fd3ad7cd",
+   "child": "a5a27b5386d00367",
+   "type": "evident-by",
+   "metadata": {
+    "kind": "primary"
+   }
+  },
+  {
+   "parent": "9898bc37fd3ad7cd",
+   "child": "ce63fad7df33638e",
+   "type": "contains"
+  }
+ ],
+ "files": [
+  {
+   "id": "a5a27b5386d00367",
+   "location": {
+    "path": "/lib/apk/db/installed",
+    "layerID": "sha256:08bc4e534116aa76b16015484b82eac51f9a593416feae9296c8a2d4bb7aa4a2"
+   },
+   "metadata": {
+    "mode": 644,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/plain",
+    "size": 14206
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "305c07b4c8504cb9b9fd9ff775af7786f88a2f5c"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "67bc4d6b3ce175c4ef730883af87d7d8c075da45ec07cc19c2b7f8f049efa8f1"
+    }
+   ]
+  },
+  {
+   "id": "ce63fad7df33638e",
+   "location": {
+    "path": "/usr/bin/scanelf",
+    "layerID": "sha256:08bc4e534116aa76b16015484b82eac51f9a593416feae9296c8a2d4bb7aa4a2"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 67576
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "23fea552ef4aa7235a26ce61ade7df9bdc677cf1"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "4d0a125e450889fbcf70e867c6ef1575ad0d6911925bf6c2edf2af5de3a9dc78"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.musl-x86_64.so.1"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "full",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  }
+ ],
+ "source": {
+  "id": "c64c687cbea9300178b30c95835354e34c4e4febc4badfe27102879de0483b5e",
+  "name": "alpine",
+  "version": "3.20",
+  "type": "image",
+  "metadata": {
+   "userInput": "alpine:3.20",
+   "imageID": "sha256:bf8527eb54c3680e728d5b4b383a8ba730d72dae7236fbc8dff97ed6b224a731",
+   "manifestDigest": "sha256:c64c687cbea9300178b30c95835354e34c4e4febc4badfe27102879de0483b5e",
+   "mediaType": "application/vnd.oci.image.manifest.v1+json",
+   "tags": [],
+   "imageSize": 7802737,
+   "layers": [
+    {
+     "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+     "digest": "sha256:08bc4e534116aa76b16015484b82eac51f9a593416feae9296c8a2d4bb7aa4a2",
+     "size": 7802737
+    }
+   ],
+   "manifest": "ewogICJzY2hlbWFWZXJzaW9uIjogMiwKICAibWVkaWFUeXBlIjogImFwcGxpY2F0aW9uL3ZuZC5vY2kuaW1hZ2UubWFuaWZlc3QudjEranNvbiIsCiAgImNvbmZpZyI6IHsKICAgICJtZWRpYVR5cGUiOiAiYXBwbGljYXRpb24vdm5kLm9jaS5pbWFnZS5jb25maWcudjEranNvbiIsCiAgICAiZGlnZXN0IjogInNoYTI1NjpiZjg1MjdlYjU0YzM2ODBlNzI4ZDViNGIzODNhOGJhNzMwZDcyZGFlNzIzNmZiYzhkZmY5N2VkNmIyMjRhNzMxIiwKICAgICJzaXplIjogNjEyCiAgfSwKICAibGF5ZXJzIjogWwogICAgewogICAgICAibWVkaWFUeXBlIjogImFwcGxpY2F0aW9uL3ZuZC5vY2kuaW1hZ2UubGF5ZXIudjEudGFyK2d6aXAiLAogICAgICAiZGlnZXN0IjogInNoYTI1NjoyNWYxZDZiMTk1MWFjOGViMzc0MDU1OGZlOTRjYjgzZDM3N2JkYWRmOTVmZDlmOThiNTBkMmUxYjk2MTMwNDcxIiwKICAgICAgInNpemUiOiAzNjMwMzIxCiAgICB9CiAgXSwKICAiYW5ub3RhdGlvbnMiOiB7CiAgICAiY29tLmRvY2tlci5vZmZpY2lhbC1pbWFnZXMuYmFzaGJyZXcuYXJjaCI6ICJhbWQ2NCIsCiAgICAib3JnLm9wZW5jb250YWluZXJzLmltYWdlLmJhc2UubmFtZSI6ICJzY3JhdGNoIiwKICAgICJvcmcub3BlbmNvbnRhaW5lcnMuaW1hZ2UuY3JlYXRlZCI6ICIyMDI2LTA0LTE2VDIzOjUzOjIzWiIsCiAgICAib3JnLm9wZW5jb250YWluZXJzLmltYWdlLnJldmlzaW9uIjogIjBkYjcwYWUzNTRlZTc0NzEwOWNlMGI5YTBjZmJjZDNjOTA3YmM4MjIiLAogICAgIm9yZy5vcGVuY29udGFpbmVycy5pbWFnZS5zb3VyY2UiOiAiaHR0cHM6Ly9naXRodWIuY29tL2FscGluZWxpbnV4L2RvY2tlci1hbHBpbmUuZ2l0IzBkYjcwYWUzNTRlZTc0NzEwOWNlMGI5YTBjZmJjZDNjOTA3YmM4MjI6eDg2XzY0IiwKICAgICJvcmcub3BlbmNvbnRhaW5lcnMuaW1hZ2UudXJsIjogImh0dHBzOi8vaHViLmRvY2tlci5jb20vXy9hbHBpbmUiLAogICAgIm9yZy5vcGVuY29udGFpbmVycy5pbWFnZS52ZXJzaW9uIjogIjMuMjAuMTAiCiAgfQp9",
+   "config": "eyJhcmNoaXRlY3R1cmUiOiJhbWQ2NCIsImNvbmZpZyI6eyJFbnYiOlsiUEFUSD0vdXNyL2xvY2FsL3NiaW46L3Vzci9sb2NhbC9iaW46L3Vzci9zYmluOi91c3IvYmluOi9zYmluOi9iaW4iXSwiQ21kIjpbIi9iaW4vc2giXSwiV29ya2luZ0RpciI6Ii8ifSwiY3JlYXRlZCI6IjIwMjYtMDQtMTZUMjM6NTM6MjYuODAzNTk5NjA4WiIsImhpc3RvcnkiOlt7ImNyZWF0ZWQiOiIyMDI2LTA0LTE2VDIzOjUzOjI2LjgwMzU5OTYwOFoiLCJjcmVhdGVkX2J5IjoiQUREIGFscGluZS1taW5pcm9vdGZzLTMuMjAuMTAteDg2XzY0LnRhci5neiAvICMgYnVpbGRraXQiLCJjb21tZW50IjoiYnVpbGRraXQuZG9ja2VyZmlsZS52MCJ9LHsiY3JlYXRlZCI6IjIwMjYtMDQtMTZUMjM6NTM6MjYuODAzNTk5NjA4WiIsImNyZWF0ZWRfYnkiOiJDTUQgW1wiL2Jpbi9zaFwiXSIsImNvbW1lbnQiOiJidWlsZGtpdC5kb2NrZXJmaWxlLnYwIiwiZW1wdHlfbGF5ZXIiOnRydWV9XSwib3MiOiJsaW51eCIsInJvb3RmcyI6eyJ0eXBlIjoibGF5ZXJzIiwiZGlmZl9pZHMiOlsic2hhMjU2OjA4YmM0ZTUzNDExNmFhNzZiMTYwMTU0ODRiODJlYWM1MWY5YTU5MzQxNmZlYWU5Mjk2YzhhMmQ0YmI3YWE0YTIiXX19",
+   "repoDigests": [
+    "index.docker.io/library/alpine@sha256:d9e853e87e55526f6b2917df91a2115c36dd7c696a35be12163d44e6e2a4b6bc"
+   ],
+   "architecture": "amd64",
+   "os": "linux"
+  }
+ },
+ "distro": {
+  "prettyName": "Alpine Linux v3.20",
+  "name": "Alpine Linux",
+  "id": "alpine",
+  "versionID": "3.20.10",
+  "homeURL": "https://alpinelinux.org/",
+  "bugReportURL": "https://gitlab.alpinelinux.org/alpine/aports/-/issues"
+ },
+ "descriptor": {
+  "name": "syft",
+  "version": "1.56.0",
+  "configuration": {
+   "archive": {
+    "include-indexed-archives": true,
+    "include-unindexed-archives": false,
+    "max-depth": 0,
+    "max-disk-bytes": 107374182400,
+    "max-memory-bytes": 2147483648
+   },
+   "catalogers": {
+    "requested": {
+     "default": [
+      "image",
+      "file"
+     ]
+    },
+    "used": [
+     "alpm-db-cataloger",
+     "apk-db-cataloger",
+     "apple-app-bundle-cataloger",
+     "binary-classifier-cataloger",
+     "bitnami-cataloger",
+     "cargo-auditable-binary-cataloger",
+     "conan-info-cataloger",
+     "dotnet-deps-binary-cataloger",
+     "dotnet-packages-lock-cataloger",
+     "dpkg-db-cataloger",
+     "elf-binary-package-cataloger",
+     "file-content-cataloger",
+     "file-digest-cataloger",
+     "file-executable-cataloger",
+     "file-metadata-cataloger",
+     "gguf-cataloger",
+     "go-module-binary-cataloger",
+     "graalvm-native-image-cataloger",
+     "homebrew-cataloger",
+     "java-archive-cataloger",
+     "java-jvm-cataloger",
+     "javascript-package-cataloger",
+     "linux-kernel-cataloger",
+     "lua-rock-cataloger",
+     "nix-cataloger",
+     "pe-binary-package-cataloger",
+     "perl-cpan-installed-cataloger",
+     "php-composer-installed-cataloger",
+     "php-interpreter-cataloger",
+     "php-pear-serialized-cataloger",
+     "portage-cataloger",
+     "python-installed-package-cataloger",
+     "r-package-cataloger",
+     "rpm-db-cataloger",
+     "ruby-installed-gemspec-cataloger",
+     "safetensors-cataloger",
+     "snap-cataloger",
+     "wordpress-plugins-cataloger"
+    ]
+   },
+   "data-generation": {
+    "generate-cpes": true
+   },
+   "files": {
+    "content": {
+     "globs": null,
+     "skip-files-above-size": 0
+    },
+    "hashers": [
+     "sha-1",
+     "sha-256"
+    ],
+    "selection": "owned-by-package"
+   },
+   "licenses": {
+    "coverage": 75,
+    "include-content": "none"
+   },
+   "packages": {
+    "binary": [
+     "python-binary",
+     "python-binary-lib",
+     "pypy-binary-lib",
+     "go-binary",
+     "julia-binary",
+     "julia-binary",
+     "helm",
+     "redis-binary",
+     "valkey-binary",
+     "nodejs-binary",
+     "busybox-binary",
+     "util-linux-binary",
+     "haproxy-binary",
+     "perl-binary",
+     "php-composer-binary",
+     "httpd-binary",
+     "memcached-binary",
+     "traefik-binary",
+     "arangodb-binary",
+     "postgresql-binary",
+     "mysql-binary",
+     "mysql-binary",
+     "mysql-binary",
+     "mysqld-mysql-cluster-legacy-binary",
+     "mysqld-binary",
+     "ndbd-binary",
+     "ndbmtd-binary",
+     "ndb_mgmd-binary",
+     "xtrabackup-binary",
+     "mariadb-binary",
+     "rust-standard-library-linux",
+     "rust-standard-library-macos",
+     "ruby-binary",
+     "erlang-binary",
+     "erlang-alpine-binary",
+     "erlang-library",
+     "swipl-binary",
+     "dart-binary",
+     "deno-binary",
+     "bun-binary",
+     "haskell-ghc-binary",
+     "haskell-cabal-binary",
+     "haskell-stack-binary",
+     "consul-binary",
+     "hashicorp-vault-binary",
+     "nginx-binary",
+     "bash-binary",
+     "openssl-binary",
+     "openldap-search-binary",
+     "qt-qtbase-lib",
+     "gcc-binary",
+     "fluent-bit-binary",
+     "wordpress-cli-binary",
+     "curl-binary",
+     "lighttpd-binary",
+     "proftpd-binary",
+     "zstd-binary",
+     "xz-binary",
+     "gzip-binary",
+     "sqlcipher-binary",
+     "jq-binary",
+     "chrome-binary",
+     "firefox-binary",
+     "ffmpeg-binary",
+     "ffmpeg-library",
+     "ffmpeg-library",
+     "elixir-binary",
+     "elixir-library",
+     "istio-binary",
+     "istio-binary",
+     "grafana-binary",
+     "grafana-binary",
+     "envoy-binary",
+     "mongodb-binary",
+     "ingress-nginx-binary",
+     "filebeat-binary",
+     "metricbeat-binary",
+     "heartbeat-binary",
+     "packetbeat-binary",
+     "auditbeat-binary",
+     "elastic-agent-binary",
+     "krb5-library",
+     "heimdal-krb5-library",
+     "java-binary",
+     "java-jdb-binary"
+    ],
+    "cpp": {
+     "vcpkg-allow-git-clone": false
+    },
+    "dotnet": {
+     "dep-packages-must-claim-dll": true,
+     "dep-packages-must-have-dll": false,
+     "exclude-project-references": true,
+     "propagate-dll-claims-to-parents": true,
+     "relax-dll-claims-when-bundling-detected": true
+    },
+    "golang": {
+     "capture-symbols": "none",
+     "local-mod-cache-dir": "/Users/rezmoss/go/pkg/mod",
+     "local-vendor-dir": "",
+     "main-module-version": {
+      "from-build-settings": true,
+      "from-contents": false,
+      "from-ld-flags": true
+     },
+     "proxies": [
+      "https://proxy.golang.org",
+      "direct"
+     ],
+     "search-local-mod-cache-licenses": false,
+     "search-local-vendor-licenses": false,
+     "search-remote-licenses": false,
+     "use-packages-lib": true
+    },
+    "java-archive": {
+     "include-indexed-archives": true,
+     "include-unindexed-archives": false,
+     "maven-base-url": "https://repo1.maven.org/maven2",
+     "maven-localrepository-dir": "/Users/rezmoss/.m2/repository",
+     "max-depth": 0,
+     "max-disk-bytes": 0,
+     "max-memory-bytes": 0,
+     "max-parent-recursive-depth": 0,
+     "resolve-transitive-dependencies": false,
+     "use-maven-localrepository": false,
+     "use-network": false
+    },
+    "javascript": {
+     "include-dev-dependencies": false,
+     "npm-base-url": "https://registry.npmjs.org",
+     "search-remote-licenses": false
+    },
+    "linux-kernel": {
+     "catalog-modules": true
+    },
+    "nix": {
+     "capture-owned-files": false
+    },
+    "python": {
+     "guess-unpinned-requirements": false,
+     "pypi-base-url": "https://pypi.org/pypi",
+     "search-remote-licenses": false
+    }
+   },
+   "relationships": {
+    "exclude-binary-packages-with-file-ownership-overlap": true,
+    "package-file-ownership": true,
+    "package-file-ownership-overlap": true
+   },
+   "search": {
+    "scope": "squashed"
+   }
+  }
+ },
+ "schema": {
+  "version": "16.1.12",
+  "url": "https://raw.githubusercontent.com/anchore/syft/main/schema/json/schema-16.1.12.json"
+ }
+}
