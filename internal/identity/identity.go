@@ -2,6 +2,7 @@ package identity
 
 import (
 	"net/url"
+	"regexp"
 	"strings"
 )
 
@@ -48,12 +49,13 @@ var osPackageTypes = map[string]bool{
 	"rpm": true, "deb": true, "apk": true, "alpm": true,
 }
 
-// NormalizePURL strips version/qualifiers/subpath from a PURL.
+// NormalizePURL strips version and qualifiers from a PURL. The subpath is
+// kept: pkg:github/o/r#a and pkg:github/o/r#b are different packages.
 func NormalizePURL(purl string) string {
 	if purl == "" {
 		return ""
 	}
-	purl, _, _ = strings.Cut(purl, "#")
+	purl, subpath, _ := strings.Cut(purl, "#")
 	purl, _, _ = strings.Cut(purl, "?")
 	if idx := strings.LastIndex(purl, "@"); idx != -1 {
 		purl = purl[:idx]
@@ -72,7 +74,35 @@ func NormalizePURL(purl string) string {
 		}
 	}
 
+	if subpath = strings.Trim(subpath, "/"); subpath != "" {
+		purl += "#" + subpath
+	}
 	return purl
+}
+
+// pep503Separators matches runs of PyPI name separators.
+var pep503Separators = regexp.MustCompile(`[-_.]+`)
+
+// MatchKey folds an ID for comparison where the ecosystem treats names as
+// case-insensitive: npm (lowercase) and PyPI (PEP 503). Other IDs are
+// returned unchanged; Go module paths and file paths are case-sensitive.
+func MatchKey(id string) string {
+	switch {
+	case strings.HasPrefix(id, "pkg:npm/"):
+		name, subpath, found := strings.Cut(id, "#")
+		if found {
+			return strings.ToLower(name) + "#" + subpath
+		}
+		return strings.ToLower(name)
+	case strings.HasPrefix(id, "pkg:pypi/"):
+		name, subpath, _ := strings.Cut(id[len("pkg:pypi/"):], "#")
+		key := "pkg:pypi/" + pep503Separators.ReplaceAllString(strings.ToLower(name), "-")
+		if subpath != "" {
+			key += "#" + subpath
+		}
+		return key
+	}
+	return id
 }
 
 // ExtractPURLVersion extracts the version from a PURL.

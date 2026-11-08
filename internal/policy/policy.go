@@ -135,7 +135,7 @@ func Evaluate(policy Policy, result analysis.DiffResult) []Violation {
 				if changed.Drift != nil && changed.Drift.Type == analysis.DriftTypeIntegrity {
 					violations = append(violations, Violation{
 						Rule:     "deny_integrity_drift",
-						Message:  fmt.Sprintf("%s: hash changed without version change", changed.Name),
+						Message:  fmt.Sprintf("%s%s: hash changed without version change", changed.Name, atLocation(changed.Location)),
 						Severity: SeverityError,
 					})
 				}
@@ -260,4 +260,11 @@ func HasErrors(violations []Violation) bool {
 		}
 	}
 	return false
+}
+
+func atLocation(loc string) string {
+	if loc == "" {
+		return ""
+	}
+	return " @ " + loc
 }

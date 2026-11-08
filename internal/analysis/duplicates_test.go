@@ -206,3 +206,31 @@ func TestDetectCollisions(t *testing.T) {
 		}
 	})
 }
+
+func TestDetectCollisions_CaseByEcosystem(t *testing.T) {
+	npm := []sbom.Component{
+		{ID: "pkg:npm/jsonstream", Name: "JSONStream", Version: "1.0.0"},
+		{ID: "pkg:npm/jsonstream", Name: "jsonstream", Version: "1.0.1"},
+	}
+	if c := DetectCollisions(npm); len(c) != 0 {
+		t.Errorf("npm names are case-insensitive, got %+v", c)
+	}
+	golang := []sbom.Component{
+		{ID: "ref:x", Name: "github.com/Foo/bar", Version: "v1"},
+		{ID: "ref:x", Name: "github.com/foo/bar", Version: "v2"},
+	}
+	if c := DetectCollisions(golang); len(c) != 1 || c[0].Reason != "name_mismatch" {
+		t.Errorf("case-only Go name difference is a collision, got %+v", c)
+	}
+}
+
+func TestBuildDependencyGraph_SharedIDUnion(t *testing.T) {
+	comps := []sbom.Component{
+		{ID: "pkg:npm/a", Dependencies: []string{"pkg:npm/c", "pkg:npm/b"}},
+		{ID: "pkg:npm/a", Dependencies: []string{"pkg:npm/b", "pkg:npm/d"}},
+	}
+	g := BuildDependencyGraph(comps)
+	if got := g["pkg:npm/a"]; len(got) != 3 || got[0] != "pkg:npm/b" || got[2] != "pkg:npm/d" {
+		t.Errorf("graph = %v", got)
+	}
+}

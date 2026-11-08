@@ -297,9 +297,12 @@ func TestParseCycloneDX_ComplexLicenses(t *testing.T) {
 				t.Errorf("expected 3 licenses for multi-license-pkg, got %d: %v", len(c.Licenses), c.Licenses)
 			}
 		case "no-id-license-pkg":
-			// license.name without license.id should not be extracted
-			if len(c.Licenses) != 0 {
-				t.Errorf("expected 0 licenses for no-id-license-pkg, got %d: %v", len(c.Licenses), c.Licenses)
+			// license.name without license.id is kept as a declared, non-SPDX license
+			if len(c.Licenses) != 1 || c.Licenses[0] != "Some Custom License" {
+				t.Errorf("expected [Some Custom License] for no-id-license-pkg, got %v", c.Licenses)
+			}
+			if len(c.NonSPDXLicenses) != 1 {
+				t.Errorf("expected license.name marked non-SPDX, got %v", c.NonSPDXLicenses)
 			}
 		case "no-license-pkg":
 			if len(c.Licenses) != 0 {

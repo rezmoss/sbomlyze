@@ -42,7 +42,7 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 		return nil, SBOMInfo{}, err
 	}
 
-	var info SBOMInfo
+	info := SBOMInfo{Format: "Syft JSON", SpecVersion: doc.Schema.Version}
 	info.ToolName = doc.Descriptor.Name
 	info.ToolVersion = doc.Descriptor.Version
 	info.SchemaVersion = doc.Schema.Version
@@ -120,7 +120,10 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 			MetadataType string          `json:"metadataType"`
 			Metadata     json.RawMessage `json:"metadata"`
 			Locations    []struct {
-				Path string `json:"path"`
+				Path        string `json:"path"`
+				Annotations struct {
+					Evidence string `json:"evidence"`
+				} `json:"annotations"`
 			} `json:"locations"`
 			Licenses []struct {
 				Value          string `json:"value"`
@@ -147,6 +150,9 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 		for _, loc := range a.Locations {
 			if loc.Path != "" {
 				comp.Locations = append(comp.Locations, loc.Path)
+				if loc.Annotations.Evidence == "primary" {
+					comp.PrimaryLocations = append(comp.PrimaryLocations, loc.Path)
+				}
 			}
 		}
 		for _, lic := range a.Licenses {
@@ -165,6 +171,7 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 		}
 
 		extractSyftHashes(a.MetadataType, a.Metadata, comp.Hashes)
+		comp.Digests = extractSyftDigests(a.MetadataType, a.Metadata)
 		comp.Supplier = extractSyftMaintainer(a.Metadata)
 
 		comp.ID = identity.ComputeID(comp.ToIdentity())
@@ -211,6 +218,37 @@ func extractSyftMaintainer(metadata json.RawMessage) string {
 		return ""
 	}
 	return strings.TrimSpace(md.Maintainer)
+}
+
+// extractSyftDigests reads package checksums that are not artifact hashes:
+// Go module h1 (go.sum) and the Cargo.lock crate checksum.
+func extractSyftDigests(metadataType string, metadata json.RawMessage) map[string]string {
+	if len(metadata) == 0 {
+		return nil
+	}
+	switch metadataType {
+	case "go-module-entry", "go-module-buildinfo-entry", "rust-cargo-lock-entry":
+	default:
+		return nil
+	}
+	var md struct {
+		H1Digest string `json:"h1Digest"`
+		Checksum string `json:"checksum"`
+	}
+	if json.Unmarshal(metadata, &md) != nil {
+		return nil
+	}
+	var out map[string]string
+	if md.H1Digest != "" {
+		out = map[string]string{DigestGoH1: md.H1Digest}
+	}
+	if md.Checksum != "" {
+		if out == nil {
+			out = make(map[string]string, 1)
+		}
+		out[DigestCargoChecksum] = md.Checksum
+	}
+	return out
 }
 
 // extractSyftHashes extracts hashes from Syft metadata.

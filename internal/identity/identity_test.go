@@ -227,9 +227,14 @@ func TestNormalizePURL(t *testing.T) {
 			"pkg:npm/lodash",
 		},
 		{
-			"strips subpath",
+			"keeps subpath",
 			"pkg:npm/lodash@4.17.21#lib/index.js",
-			"pkg:npm/lodash",
+			"pkg:npm/lodash#lib/index.js",
+		},
+		{
+			"keeps github action subpath",
+			"pkg:github/anchore/go-make@v0.9.6#.github/actions/setup",
+			"pkg:github/anchore/go-make#.github/actions/setup",
 		},
 		{
 			"handles PURL without version",

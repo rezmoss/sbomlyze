@@ -361,7 +361,7 @@ func main() {
 
 	p.Stop()
 
-	hasDiff := len(result.Added) > 0 || len(result.Removed) > 0 || len(result.Changed) > 0
+	hasDiff := result.HasChanges()
 	hasPolicyErrors := policy.HasErrors(violations)
 	if hasDiff || hasPolicyErrors {
 		os.Exit(1)

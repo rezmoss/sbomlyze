@@ -4,7 +4,8 @@
     "source_name": "alpine:latest",
     "relationship_counts": {
       "dependency-of": 2
-    }
+    },
+    "format": "Syft JSON"
   },
   "findings": {
     "findings": [

@@ -3,6 +3,9 @@ package sbom
 import (
 	"encoding/json"
 	"encoding/xml"
+	"regexp"
+	"sort"
+	"strconv"
 	"strings"
 
 	cdx "github.com/CycloneDX/cyclonedx-go"
@@ -57,7 +60,10 @@ func extractCycloneDX(bom *cdx.BOM, rawComponents []json.RawMessage) ([]Componen
 }
 
 func extractCycloneDXInfo(bom *cdx.BOM) SBOMInfo {
-	info := SBOMInfo{}
+	info := SBOMInfo{Format: "CycloneDX"}
+	if v := bom.SpecVersion.String(); !strings.HasPrefix(v, "SpecVersion(") {
+		info.SpecVersion = v
+	}
 	if bom.Metadata == nil {
 		return info
 	}
@@ -144,8 +150,13 @@ func extractCycloneDXComponents(bom *cdx.BOM, rawComponents []json.RawMessage) [
 		}
 		if c.Licenses != nil {
 			for _, lic := range *c.Licenses {
-				if lic.License != nil && lic.License.ID != "" {
+				switch {
+				case lic.License != nil && lic.License.ID != "":
 					comp.Licenses = append(comp.Licenses, lic.License.ID)
+				case lic.License != nil && lic.License.Name != "":
+					// declared name ("BSD", "SEE LICENSE IN README"), not an SPDX ID
+					comp.Licenses = append(comp.Licenses, lic.License.Name)
+					comp.NonSPDXLicenses = append(comp.NonSPDXLicenses, lic.License.Name)
 				}
 				// SPDX expr, e.g. "MIT AND BSD-2-Clause"
 				if lic.Expression != "" {
@@ -171,6 +182,14 @@ func extractCycloneDXComponents(bom *cdx.BOM, rawComponents []json.RawMessage) [
 		case c.Author != "":
 			comp.Supplier = c.Author
 		}
+		comp.Locations = cycloneDXLocations(c)
+		if c.Properties != nil {
+			for _, p := range *c.Properties {
+				if p.Name == "syft:metadata:h1Digest" && p.Value != "" {
+					comp.Digests = map[string]string{DigestGoH1: p.Value}
+				}
+			}
+		}
 		if i < len(rawComponents) {
 			comp.RawJSON = rawComponents[i]
 		}
@@ -178,6 +197,54 @@ func extractCycloneDXComponents(bom *cdx.BOM, rawComponents []json.RawMessage) [
 		comps = append(comps, comp)
 	}
 	return comps
+}
+
+// syftLocationRe matches Syft's per-location property, syft:location:N:path.
+var syftLocationRe = regexp.MustCompile(`^syft:location:(\d+):path$`)
+
+// cycloneDXLocations collects file paths from Syft location properties (in N
+// order), sbomlyze:location properties and evidence.occurrences.
+func cycloneDXLocations(c cdx.Component) []string {
+	type indexed struct {
+		n    int
+		path string
+	}
+	var syftLocs []indexed
+	var locs []string
+	if c.Properties != nil {
+		for _, p := range *c.Properties {
+			if p.Value == "" {
+				continue
+			}
+			if m := syftLocationRe.FindStringSubmatch(p.Name); m != nil {
+				n, _ := strconv.Atoi(m[1])
+				syftLocs = append(syftLocs, indexed{n, p.Value})
+			} else if p.Name == "sbomlyze:location" {
+				locs = append(locs, p.Value)
+			}
+		}
+	}
+	sort.SliceStable(syftLocs, func(i, j int) bool { return syftLocs[i].n < syftLocs[j].n })
+	seen := make(map[string]bool)
+	var out []string
+	add := func(path string) {
+		if path != "" && !seen[path] {
+			seen[path] = true
+			out = append(out, path)
+		}
+	}
+	for _, l := range syftLocs {
+		add(l.path)
+	}
+	for _, l := range locs {
+		add(l)
+	}
+	if c.Evidence != nil && c.Evidence.Occurrences != nil {
+		for _, o := range *c.Evidence.Occurrences {
+			add(o.Location)
+		}
+	}
+	return out
 }
 
 func resolveCycloneDXDependencies(bom *cdx.BOM, comps []Component) {

@@ -1,5 +1,31 @@
 # Changelog
 
+## Unreleased
+
+### ⚠ Behavior change
+
+* **`drift_summary.integrity_drift` now means "same-version package digest change".** It used to count any hash change without a version change, including `type: file` entries (manifest and workflow file hashes from Syft directory scans), so `deny_integrity_drift` failed ordinary pull requests. File entries are now reported in `diff.file_changes`; they never count as integrity drift but still count as a change for the exit code and the Action's `fail-on: any-change`.
+* Component IDs keep the PURL subpath (`pkg:github/anchore/go-make#.github/actions/setup`); names keep their declared case (`github.com/Microsoft/go-winio`).
+
+### Bug Fixes
+
+* **diff:** compare versions with ecosystem rules (`golang.org/x/mod/semver` for Go and GitHub Actions, SemVer for npm/Cargo/Composer/gem/Swift/Hex/pub, PEP 440 for PyPI). `v`-prefixed versions no longer lose their major number and pseudo-versions sort before releases, so `v0.2.3→v1.0.0` and `v0.0.0-2023…→v1.0.0` are upgrades. Unsupported ecosystems and unparseable versions report direction `unknown`, never a downgrade. (Bug 1)
+* **diff:** match packages as occurrences (identity, version, location) instead of keeping the first component per ID. Components sharing an ID are never dropped, leftovers are never paired across two live lockfiles, and results no longer depend on input order. New `moved` and `version_set_changes` lists. (Bug 2)
+* **diff:** integrity drift only for packages with the same non-empty version and location and a different digest of the same kind; reads Syft's `syft:metadata:h1Digest` (`go-h1`) and Cargo checksums; adds `file_changes` and `digest_coverage`. (Bug 3)
+* **findings:** "Core system packages stable … unchanged" only for types with no changed, added, removed or moved package; otherwise "golang: 342 packages before and after (N version changes)". (Bug 4)
+* **html:** the Format row shows the document format (CycloneDX 1.6, SPDX 2.3, Syft JSON); a new Generator row shows the tool. `SBOMInfo` gains `format` and `spec_version`. (Bug 5)
+* **cyclonedx:** keep `license.name` as a declared license; it is never counted as SPDX-valid in compliance. (Bug 6)
+* **normalize:** stop lowercasing names; case folding applies only to npm and PyPI match keys. (Bug 7)
+* **findings:** list version changes with unknown direction (e.g. `release/v1 → v1.14.3`). (Bug 8)
+* **diff:** a digest added on one side no longer turns a license change into integrity drift. (Bug 9)
+* **diff:** CycloneDX locations are read from `syft:location:N:path`, `sbomlyze:location` and `evidence.occurrences`; Syft JSON primary-evidence locations are used for matching.
+* **diff:** dependency graphs merge components that share an ID, and duplicate groups, findings and ties are sorted deterministically.
+* **output:** SARIF fingerprints and JSON Patch paths include the location, so one package in two lockfiles is two results; SARIF, text and policy messages show the location.
+
+### JSON fields added
+
+`diff.changed[].location`, `diff.changed[].drift.direction` (`upgrade|downgrade|none|unknown`), `diff.changed[].drift.level` (`major|minor|patch|prerelease|none|unknown`), `diff.moved[]` (`id, name, version, from, to`), `diff.version_set_changes[]` (`id, name, location, removed_versions, added_versions`), `diff.file_changes[]` (`path, hashes_before, hashes_after`), `diff.drift_summary.{upgrades, downgrades, unknown_direction, distinct_version_changes, file_changes, license_changes}`, `diff.digest_coverage.{same_version_pairs, comparable, before_only, after_only, disjoint_kinds, by_kind, packages_total}`, `overview.*.info.{format, spec_version}`, component `digests` (`go-h1`, `cargo-checksum`).
+
 ## [0.6.0](https://github.com/rezmoss/sbomlyze/compare/v0.5.4...v0.6.0) (2026-11-01)
 
 

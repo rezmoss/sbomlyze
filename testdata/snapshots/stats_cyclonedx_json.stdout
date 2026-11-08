@@ -1,5 +1,8 @@
 {
-  "info": {},
+  "info": {
+    "format": "CycloneDX",
+    "spec_version": "1.4"
+  },
   "findings": {
     "findings": [
       {

@@ -210,6 +210,12 @@ func writeMarkdownDiffBody(sb *strings.Builder, result analysis.DiffResult, viol
 
 		metadataStatus := "✅"
 		fmt.Fprintf(sb, "| Metadata | %d | %s |\n", result.DriftSummary.MetadataDrift, metadataStatus)
+		if result.DriftSummary.UnknownDirection > 0 {
+			fmt.Fprintf(sb, "| Version (unknown direction) | %d | ℹ️ |\n", result.DriftSummary.UnknownDirection)
+		}
+		if result.DriftSummary.FileChanges > 0 {
+			fmt.Fprintf(sb, "| File entries (not package drift) | %d | ℹ️ |\n", result.DriftSummary.FileChanges)
+		}
 	}
 
 	if result.Dependencies != nil && result.Dependencies.DepthSummary != nil {

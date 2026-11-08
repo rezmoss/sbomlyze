@@ -4,12 +4,14 @@ go 1.26.10
 
 require (
 	github.com/CycloneDX/cyclonedx-go v0.12.0
+	github.com/Masterminds/semver/v3 v3.5.0
 	github.com/charmbracelet/bubbles v1.0.0
 	github.com/charmbracelet/bubbletea v1.3.10
 	github.com/charmbracelet/lipgloss v1.1.0
 	github.com/github/go-spdx/v2 v2.8.0
 	github.com/mattn/go-isatty v0.0.24
 	github.com/spdx/tools-golang v0.5.7
+	golang.org/x/mod v0.42.0
 )
 
 require (

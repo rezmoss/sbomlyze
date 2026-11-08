@@ -1,7 +1,9 @@
 package analysis
 
 import (
+	"slices"
 	"sort"
+	"strings"
 
 	"github.com/rezmoss/sbomlyze/internal/sbom"
 )
@@ -54,6 +56,7 @@ func DetectDuplicates(comps []sbom.Component) []DuplicateGroup {
 	var dups []DuplicateGroup
 	for id, components := range groups {
 		if len(components) > 1 {
+			slices.SortStableFunc(components, componentOrder)
 			versions := make([]string, 0, len(components))
 			seen := make(map[string]bool)
 			for _, c := range components {
@@ -148,10 +151,17 @@ func DetectCollisions(comps []sbom.Component) []Collision {
 		if len(components) < 2 {
 			continue
 		}
+		slices.SortStableFunc(components, componentOrder)
+		caseFold := strings.HasPrefix(id, "pkg:npm/") || strings.HasPrefix(id, "pkg:pypi/")
 
 		names := make(map[string]bool)
 		for _, c := range components {
-			names[c.Name] = true
+			// case-only differences are not collisions where names are case-insensitive
+			if caseFold {
+				names[strings.ToLower(c.Name)] = true
+			} else {
+				names[c.Name] = true
+			}
 		}
 		if len(names) > 1 {
 			collisions = append(collisions, Collision{

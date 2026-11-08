@@ -1,6 +1,8 @@
 package analysis
 
 import (
+	"maps"
+	"slices"
 	"sort"
 
 	"github.com/rezmoss/sbomlyze/internal/sbom"
@@ -34,11 +36,28 @@ func (d *DependencyDiff) IsEmpty() bool {
 		len(d.TransitiveNew) == 0 && len(d.TransitiveLost) == 0
 }
 
-// BuildDependencyGraph returns component ID -> dependency IDs.
+// BuildDependencyGraph returns component ID -> dependency IDs. Components
+// sharing an ID (one package in several lockfiles or versions) contribute the
+// union of their dependencies, sorted, so input order does not matter.
 func BuildDependencyGraph(comps []sbom.Component) map[string][]string {
-	graph := make(map[string][]string)
+	sets := make(map[string]map[string]bool)
 	for _, c := range comps {
-		graph[c.ID] = c.Dependencies
+		set := sets[c.ID]
+		if set == nil {
+			set = make(map[string]bool)
+			sets[c.ID] = set
+		}
+		for _, d := range c.Dependencies {
+			set[d] = true
+		}
+	}
+	graph := make(map[string][]string, len(sets))
+	for id, set := range sets {
+		if len(set) == 0 {
+			graph[id] = nil
+			continue
+		}
+		graph[id] = slices.Sorted(maps.Keys(set))
 	}
 	return graph
 }

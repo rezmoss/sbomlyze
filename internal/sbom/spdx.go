@@ -63,7 +63,7 @@ func parseSPDXData(data []byte) ([]Component, SBOMInfo, error) {
 		return nil, SBOMInfo{}, err
 	}
 
-	var info SBOMInfo
+	info := SBOMInfo{Format: "SPDX", SpecVersion: doc.SPDXVersion}
 	// creationInfo: Tool -> tool meta, Person/Org -> author
 	if doc.CreationInfo != nil {
 		info.SBOMTimestamp = doc.CreationInfo.Created

@@ -36,10 +36,15 @@ func GenerateJSONPatch(result analysis.DiffResult) []JSONPatchOp {
 	}
 
 	for _, c := range result.Changed {
+		// one package in two locations is two entries
+		ref := c.ID
+		if c.Location != "" {
+			ref += "@" + c.Location
+		}
 		if c.Before.Version != c.After.Version {
 			ops = append(ops, JSONPatchOp{
 				Op:    "replace",
-				Path:  fmt.Sprintf("/components/%s/version", c.ID),
+				Path:  fmt.Sprintf("/components/%s/version", ref),
 				Value: c.After.Version,
 			})
 		}
@@ -47,7 +52,7 @@ func GenerateJSONPatch(result analysis.DiffResult) []JSONPatchOp {
 		if !slices.Equal(c.Before.Licenses, c.After.Licenses) {
 			ops = append(ops, JSONPatchOp{
 				Op:    "replace",
-				Path:  fmt.Sprintf("/components/%s/licenses", c.ID),
+				Path:  fmt.Sprintf("/components/%s/licenses", ref),
 				Value: c.After.Licenses,
 			})
 		}
@@ -55,7 +60,7 @@ func GenerateJSONPatch(result analysis.DiffResult) []JSONPatchOp {
 		if !maps.Equal(c.Before.Hashes, c.After.Hashes) {
 			ops = append(ops, JSONPatchOp{
 				Op:    "replace",
-				Path:  fmt.Sprintf("/components/%s/hashes", c.ID),
+				Path:  fmt.Sprintf("/components/%s/hashes", ref),
 				Value: c.After.Hashes,
 			})
 		}

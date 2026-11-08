@@ -273,7 +273,9 @@ func writeHTMLOverview(sb *strings.Builder, overview analysis.DiffOverview) {
 	fmt.Fprintf(sb, "<tr><td><strong>File Size</strong></td><td>%s</td><td>%s</td></tr>\n",
 		formatFileSize(b.FileSize), formatFileSize(a.FileSize))
 	fmt.Fprintf(sb, "<tr><td><strong>Format</strong></td><td>%s</td><td>%s</td></tr>\n",
-		html.EscapeString(orNone(b.Info.ToolName)), html.EscapeString(orNone(a.Info.ToolName)))
+		html.EscapeString(orNone(formatLabel(b.Info))), html.EscapeString(orNone(formatLabel(a.Info))))
+	fmt.Fprintf(sb, "<tr><td><strong>Generator</strong></td><td>%s</td><td>%s</td></tr>\n",
+		html.EscapeString(orNone(generatorLabel(b.Info))), html.EscapeString(orNone(generatorLabel(a.Info))))
 	fmt.Fprintf(sb, "<tr><td><strong>Components</strong></td><td>%d</td><td>%d</td></tr>\n",
 		b.Stats.TotalComponents, a.Stats.TotalComponents)
 	fmt.Fprintf(sb, "<tr><td><strong>PURL Coverage</strong></td><td>%s</td><td>%s</td></tr>\n",
@@ -320,6 +322,12 @@ func writeHTMLDriftSummary(sb *strings.Builder, result analysis.DiffResult) {
 	}
 	fmt.Fprintf(sb, "<tr><td>Integrity</td><td>%d</td><td>%s</td></tr>\n", ds.IntegrityDrift, intStatus)
 	fmt.Fprintf(sb, "<tr><td>Metadata</td><td>%d</td><td><span class=\"badge badge-ok\">✅ OK</span></td></tr>\n", ds.MetadataDrift)
+	if ds.UnknownDirection > 0 {
+		fmt.Fprintf(sb, "<tr><td>Version (unknown direction)</td><td>%d</td><td><span class=\"badge badge-ok\">ℹ️ Review</span></td></tr>\n", ds.UnknownDirection)
+	}
+	if ds.FileChanges > 0 {
+		fmt.Fprintf(sb, "<tr><td>File entries changed (not package drift)</td><td>%d</td><td><span class=\"badge badge-ok\">ℹ️ Info</span></td></tr>\n", ds.FileChanges)
+	}
 	sb.WriteString("</table>\n")
 }
 
@@ -426,4 +434,20 @@ func writeHTMLCard(sb *strings.Builder, num, label string) {
 func writeHTMLCardStyled(sb *strings.Builder, num, label, color string) {
 	fmt.Fprintf(sb, "<div class=\"summary-card\" style=\"border-color: %s;\"><div class=\"num\" style=\"color: %s;\">%s</div><div class=\"label\">%s</div></div>\n",
 		color, color, html.EscapeString(num), html.EscapeString(label))
+}
+
+// formatLabel is the document format, e.g. "CycloneDX 1.6" or "SPDX 2.3".
+func formatLabel(info sbom.SBOMInfo) string {
+	if info.Format == "" {
+		return ""
+	}
+	return strings.TrimSpace(info.Format + " " + strings.TrimPrefix(info.SpecVersion, "SPDX-"))
+}
+
+// generatorLabel is the tool that produced the SBOM, e.g. "syft 1.57.0".
+func generatorLabel(info sbom.SBOMInfo) string {
+	if info.ToolVersion == "" {
+		return info.ToolName
+	}
+	return strings.TrimSpace(info.ToolName + " " + info.ToolVersion)
 }

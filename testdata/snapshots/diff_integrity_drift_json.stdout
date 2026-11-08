@@ -3,7 +3,10 @@
     "before": {
       "file_name": "TESTDATA/cyclonedx-before.json",
       "file_size": 921,
-      "info": {},
+      "info": {
+        "format": "CycloneDX",
+        "spec_version": "1.4"
+      },
       "stats": {
         "total_components": 3,
         "by_type": {
@@ -33,7 +36,10 @@
     "after": {
       "file_name": "TESTDATA/cyclonedx-integrity-drift.json",
       "file_size": 936,
-      "info": {},
+      "info": {
+        "format": "CycloneDX",
+        "spec_version": "1.4"
+      },
       "stats": {
         "total_components": 3,
         "by_type": {
@@ -125,7 +131,24 @@
     "drift_summary": {
       "version_drift": 0,
       "integrity_drift": 1,
-      "metadata_drift": 0
+      "metadata_drift": 0,
+      "upgrades": 0,
+      "downgrades": 0,
+      "unknown_direction": 0,
+      "distinct_version_changes": 0,
+      "file_changes": 0,
+      "license_changes": 0
+    },
+    "digest_coverage": {
+      "same_version_pairs": 3,
+      "comparable": 1,
+      "before_only": 0,
+      "after_only": 0,
+      "disjoint_kinds": 0,
+      "by_kind": {
+        "SHA-256": 1
+      },
+      "packages_total": 3
     }
   }
 }

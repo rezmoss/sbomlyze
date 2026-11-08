@@ -144,7 +144,11 @@ function countsFromReport(report) {
   const count = (value) => Array.isArray(value) ? value.length : 0;
   const integrity = diff.drift_summary?.integrity_drift ?? 0;
   if (!Number.isSafeInteger(integrity) || integrity < 0) throw new Error('invalid integrity drift count in report');
-  return { added: count(diff.added), removed: count(diff.removed), changed: count(diff.changed), integrity };
+  // file entries and moved packages are changes too, though not drift
+  return {
+    added: count(diff.added), removed: count(diff.removed), changed: count(diff.changed), integrity,
+    fileChanges: count(diff.file_changes), moved: count(diff.moved),
+  };
 }
 
 function policyFailed(report) {
@@ -155,7 +159,10 @@ function verdictFor(failOn, report, counts) {
   switch (failOn) {
     case 'policy': return policyFailed(report) ? 'fail' : 'pass';
     case 'integrity-drift': return counts.integrity > 0 ? 'fail' : 'pass';
-    case 'any-change': return counts.added + counts.removed + counts.changed > 0 ? 'fail' : 'pass';
+    case 'any-change': {
+      const total = counts.added + counts.removed + counts.changed + (counts.fileChanges || 0) + (counts.moved || 0);
+      return total > 0 ? 'fail' : 'pass';
+    }
     case 'never': return 'pass';
     default: throw new Error(`unsupported fail-on value: ${failOn}`);
   }

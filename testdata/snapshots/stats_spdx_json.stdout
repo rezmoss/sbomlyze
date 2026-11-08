@@ -1,7 +1,9 @@
 {
   "info": {
     "tool_name": "test",
-    "sbom_timestamp": "TIMESTAMP"
+    "sbom_timestamp": "TIMESTAMP",
+    "format": "SPDX",
+    "spec_version": "SPDX-2.3"
   },
   "findings": {
     "findings": [

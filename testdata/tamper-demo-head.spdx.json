@@ -1,0 +1,127 @@
+{
+  "spdxVersion": "SPDX-2.3",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "name": "sbomlyze-go-spdx-demo",
+  "documentNamespace": "https://github.com/rezmoss/sbomlyze-go-spdx-demo/sbom/v1",
+  "creationInfo": {
+    "created": "2026-08-09T00:00:00Z",
+    "creators": [
+      "Organization: SBOMlyze Demo <security@example.com>",
+      "Tool: syft-1.42.3"
+    ]
+  },
+  "packages": [
+    {
+      "name": "sbomlyze-go-spdx-demo",
+      "SPDXID": "SPDXRef-App",
+      "versionInfo": "1.0.0",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "e49021451a45192f61d42ddb226b94d5074a09d5c573c6b1bc165db8268d6217"
+        },
+        {
+          "algorithm": "SHA512",
+          "checksumValue": "345c2147a6d780ebc28eca29519c57608e4229a7270a27bddf61eba8995413cd33fa46a70dfa59fb9d223082f69a2761aaafcdfedfcec727b7a45a62a831fa36"
+        }
+      ],
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "copyrightText": "NOASSERTION",
+      "supplier": "Organization: SBOMlyze Demo <security@example.com>",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:golang/github.com/rezmoss/sbomlyze-go-spdx-demo@1.0.0"
+        }
+      ]
+    },
+    {
+      "name": "github.com/google/uuid",
+      "SPDXID": "SPDXRef-UUID",
+      "versionInfo": "1.5.0",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "fb686f6912ea05dabc595b2b1becb29e299044124162e5df21b064561ce44f9e"
+        },
+        {
+          "algorithm": "SHA512",
+          "checksumValue": "26eb1a6a703570751c79ed4868b9bc3a885e092ec5c7aa0e6daff86968e326aaa2c893a8972e41b4986c73d22a8ec92bf4548c7ac508f99170df6cd274020530"
+        }
+      ],
+      "licenseConcluded": "BSD-3-Clause",
+      "licenseDeclared": "BSD-3-Clause",
+      "copyrightText": "NOASSERTION",
+      "supplier": "Organization: github.com/google/uuid maintainers <security@example.com>",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:golang/github.com/google/uuid@v1.5.0"
+        }
+      ]
+    },
+    {
+      "name": "golang.org/x/text",
+      "SPDXID": "SPDXRef-Text",
+      "versionInfo": "0.28.0",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "160c7c116b799622b273a6f2aabcda45c1e7d9c90ccf3b769ebe46ab16286b17"
+        },
+        {
+          "algorithm": "SHA512",
+          "checksumValue": "3819e3b9583729f791103859fa0b8c76091f63c540b162518dd801bfe00854c44ca86eebcd856ce0b669e3bbd852acc6e7d64ff520ef6d1707bf0ac56248f007"
+        }
+      ],
+      "licenseConcluded": "BSD-3-Clause",
+      "licenseDeclared": "BSD-3-Clause",
+      "copyrightText": "NOASSERTION",
+      "supplier": "Organization: golang.org/x/text maintainers <security@example.com>",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:golang/golang.org/x/text@v0.28.0"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "spdxElementId": "SPDXRef-DOCUMENT",
+      "relationshipType": "DESCRIBES",
+      "relatedSpdxElement": "SPDXRef-App"
+    },
+    {
+      "spdxElementId": "SPDXRef-App",
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-UUID"
+    },
+    {
+      "spdxElementId": "SPDXRef-App",
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Text"
+    },
+    {
+      "spdxElementId": "SPDXRef-UUID",
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "NONE"
+    },
+    {
+      "spdxElementId": "SPDXRef-Text",
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "NONE"
+    }
+  ]
+}
