@@ -776,3 +776,18 @@ func TestWriteSyft_EmptyLocationsAndLicenses(t *testing.T) {
 		t.Error("CPEs should be empty array, not null")
 	}
 }
+
+func TestWriteSyft_KeepsSourceVersionAndVersionID(t *testing.T) {
+	info := sbom.SBOMInfo{SourceName: "nginx", SourceType: "image", SourceVersion: "sha256:aaa", OSName: "debian", OSVersionID: "12.10"}
+	var buf bytes.Buffer
+	if err := WriteSyft(&buf, nil, info); err != nil {
+		t.Fatal(err)
+	}
+	_, got, err := sbom.ParseSyftWithInfo(buf.Bytes())
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got.SourceVersion != "sha256:aaa" || got.OSVersionID != "12.10" {
+		t.Errorf("got %+v", got)
+	}
+}

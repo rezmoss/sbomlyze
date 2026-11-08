@@ -136,3 +136,14 @@ jobs:
           for pr in $prs; do
             gh pr edit "$pr" --remove-label "autorelease: pending" --add-label "autorelease: tagged"
           done
+
+  # Runs only after every release step succeeded; a site failure does not
+  # undo the release.
+  website:
+    name: Update website
+    needs: release
+    permissions:
+      contents: write
+    uses: ./.github/workflows/site.yml
+    with:
+      tag: ${{ inputs.version || github.ref_name }}

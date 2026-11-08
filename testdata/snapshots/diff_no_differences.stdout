@@ -4,7 +4,8 @@ SBOM Comparison
                         Before                  After
 File:                   cyclonedx-before.json   cyclonedx-before.json
 File Size:              921 B                   921 B
-Format:                 (none)                  (none)
+Format:                 CycloneDX 1.4           CycloneDX 1.4
+Generator:              (none)                  (none)
 OS:                     (none)                  (none)
 Source:                 (none)                  (none)
 Source Type:            (none)                  (none)

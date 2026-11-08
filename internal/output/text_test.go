@@ -246,3 +246,50 @@ func TestPrintViolations_WarningsOnly(t *testing.T) {
 		t.Error("expected Policy Warnings section")
 	}
 }
+
+func TestPrintDiffOverview_FormatGeneratorAndWideValues(t *testing.T) {
+	ov := analysis.DiffOverview{
+		Before: analysis.SBOMSide{FileName: "nginx-alpine-1.26.syft.json", Info: sbom.SBOMInfo{Format: "Syft JSON", SpecVersion: "16.1.12", ToolName: "syft", ToolVersion: "1.56.0", OSPrettyName: "Debian GNU/Linux 12 (bookworm)"}},
+		After:  analysis.SBOMSide{FileName: "nginx-alpine-1.28.syft.json", Info: sbom.SBOMInfo{Format: "CycloneDX", SpecVersion: "1.6", ToolName: "syft", ToolVersion: "1.57.0", OSPrettyName: "Debian GNU/Linux 13 (trixie)"}},
+	}
+	out := captureOutput(func() { PrintDiffOverview(ov) })
+	for _, want := range []string{"Syft JSON 16.1.12", "CycloneDX 1.6", "syft 1.56.0", "syft 1.57.0"} {
+		if !strings.Contains(out, want) {
+			t.Errorf("missing %q in:\n%s", want, out)
+		}
+	}
+	for _, glued := range []string{"(bookworm)Debian", "1.26.syft.jsonnginx"} {
+		if strings.Contains(out, glued) {
+			t.Errorf("columns run together (%q):\n%s", glued, out)
+		}
+	}
+}
+
+func TestPrintDiffOverview_LongValueCapped(t *testing.T) {
+	long := "/private/tmp/very/long/scratch/path/that/goes/on/and/on/retag/app/proxy"
+	ov := analysis.DiffOverview{
+		Before: analysis.SBOMSide{Info: sbom.SBOMInfo{SourceName: long}},
+		After:  analysis.SBOMSide{Info: sbom.SBOMInfo{SourceName: "x"}},
+	}
+	out := captureOutput(func() { PrintDiffOverview(ov) })
+	for _, line := range strings.Split(out, "\n") {
+		if strings.HasPrefix(line, "Source:") {
+			if !strings.Contains(line, "…") || !strings.Contains(line, "app/proxy") || len([]rune(line)) > 24+40+5 {
+				t.Errorf("long value not capped: %q", line)
+			}
+		}
+	}
+}
+
+func TestPrintTextDiff_DependenciesSorted(t *testing.T) {
+	deps := map[string][]string{}
+	for _, k := range []string{"pkg:cargo/d", "pkg:cargo/a", "pkg:cargo/c", "pkg:cargo/b"} {
+		deps[k] = []string{"x"}
+	}
+	r := analysis.DiffResult{Dependencies: &analysis.DependencyDiff{AddedDeps: deps}}
+	out := captureOutput(func() { PrintTextDiff(r) })
+	a, b, c, d := strings.Index(out, "cargo/a:"), strings.Index(out, "cargo/b:"), strings.Index(out, "cargo/c:"), strings.Index(out, "cargo/d:")
+	if a < 0 || a > b || b > c || c > d {
+		t.Errorf("not sorted:\n%s", out)
+	}
+}

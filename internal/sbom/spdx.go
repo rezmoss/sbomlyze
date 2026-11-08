@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"os"
+	"slices"
 	"strings"
 
 	"github.com/rezmoss/sbomlyze/internal/identity"
@@ -207,5 +208,29 @@ func parseSPDXData(data []byte) ([]Component, SBOMInfo, error) {
 			comps[parentIdx].Dependencies = append(comps[parentIdx].Dependencies, comps[childIdx].ID)
 		}
 	}
+	// scanned image/dir root is the source, not a package
+	comps = slices.DeleteFunc(comps, func(c Component) bool {
+		typ := spdxRootType(c)
+		if !described[c.SPDXID] || typ == "" {
+			return false
+		}
+		if info.SourceName == "" {
+			info.SourceName, info.SourceType, info.SourceVersion = c.Name, typ, c.Version
+		}
+		return true
+	})
 	return comps, info, nil
+}
+
+// spdxRootType: source type of a scan root package, else ""
+func spdxRootType(c Component) string {
+	// tools-golang strips the SPDXRef- prefix
+	if rest, ok := strings.CutPrefix(strings.TrimPrefix(c.SPDXID, "SPDXRef-"), "DocumentRoot-"); ok {
+		typ, _, _ := strings.Cut(rest, "-")
+		return strings.ToLower(typ)
+	}
+	if strings.HasPrefix(c.PURL, "pkg:oci/") || strings.HasPrefix(c.PURL, "pkg:docker/") {
+		return "image"
+	}
+	return ""
 }

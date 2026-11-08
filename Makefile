@@ -1,4 +1,4 @@
-.PHONY: all test test-go test-action lint vulncheck build build-quick clean snapshot-test update-snapshot snapshot-diff snapshot-review help
+.PHONY: all test test-go test-action lint vulncheck build build-quick clean snapshot-test update-snapshot snapshot-diff snapshot-review site site-serve help
 
 # The project does not vendor dependencies. Force module mode so an ignored,
 # stale local vendor/ directory cannot change build or test behavior.
@@ -50,6 +50,13 @@ snapshot-diff: ## Show what snapshot changes would occur (no writes)
 
 snapshot-review: ## Interactively review and accept snapshot changes
 	@bash scripts/review-snapshots.sh
+
+site: ## Build the website into site/public (as CI does)
+	tag=$$(git describe --tags --abbrev=0); scripts/site-build.sh . "$$tag" "$$(git rev-list -n1 $$tag)" 0 "$$PWD/site/public"
+
+site-serve: ## Generate site data, then serve the website locally
+	tag=$$(git describe --tags --abbrev=0); go run ./internal/tools/sitegen -tag "$$tag" -sha "$$(git rev-list -n1 $$tag)"
+	hugo server --source site
 
 clean: ## Remove build artifacts
 	rm -rf dist/ sbomlyze

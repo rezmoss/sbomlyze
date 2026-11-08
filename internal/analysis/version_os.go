@@ -144,8 +144,15 @@ func compareDeb(from, to string) (string, string) {
 	if !ok1 || !ok2 || !debUpstreamRe.MatchString(f.upstream) || !debUpstreamRe.MatchString(t.upstream) {
 		return DirectionUnknown, LevelUnknown
 	}
-	return classifyEVR(f, t, sign(fe-te), sign(dpkgVerrevcmp(f.upstream, t.upstream)), sign(dpkgVerrevcmp(f.revision, t.revision)))
+	dir, level := classifyEVR(f, t, sign(fe-te), sign(dpkgVerrevcmp(f.upstream, t.upstream)), sign(dpkgVerrevcmp(f.revision, t.revision)))
+	// 12.4+deb12u10 -> 12.4+deb12u12: Debian stable update
+	if fe == te && f.upstream != t.upstream && debStableRe.ReplaceAllString(f.upstream, "") == debStableRe.ReplaceAllString(t.upstream, "") {
+		level = LevelRevision
+	}
+	return dir, level
 }
+
+var debStableRe = regexp.MustCompile(`[+~]deb\d+u\d+$`)
 
 func sign(n int) int {
 	switch {

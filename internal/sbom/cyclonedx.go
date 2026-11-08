@@ -55,6 +55,7 @@ func ParseCycloneDXXMLWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 func extractCycloneDX(bom *cdx.BOM, rawComponents []json.RawMessage) ([]Component, SBOMInfo, error) {
 	info := extractCycloneDXInfo(bom)
 	comps := extractCycloneDXComponents(bom, rawComponents)
+	cycloneDXOSInfo(&info, bom)
 	resolveCycloneDXDependencies(bom, comps)
 	return comps, info, nil
 }
@@ -70,13 +71,14 @@ func extractCycloneDXInfo(bom *cdx.BOM) SBOMInfo {
 	if bom.Metadata.Component != nil {
 		mc := bom.Metadata.Component
 		switch mc.Type {
-		case cdx.ComponentTypeOS, cdx.ComponentTypeContainer:
+		case cdx.ComponentTypeOS:
 			info.OSName = mc.Name
 			info.OSVersion = mc.Version
 			info.SourceType = string(mc.Type)
-		case cdx.ComponentTypeApplication, cdx.ComponentTypeFile:
+		case cdx.ComponentTypeContainer, cdx.ComponentTypeApplication, cdx.ComponentTypeFile:
 			info.SourceName = mc.Name
 			info.SourceType = string(mc.Type)
+			info.SourceVersion = mc.Version
 		}
 	}
 	// Real author/email/contact info, not just the tool name.
@@ -126,6 +128,30 @@ func extractCycloneDXInfo(bom *cdx.BOM) SBOMInfo {
 		}
 	}
 	return info
+}
+
+// cycloneDXOSInfo: OS from operating-system component (Syft)
+func cycloneDXOSInfo(info *SBOMInfo, bom *cdx.BOM) {
+	if info.OSPrettyName != "" || bom.Components == nil {
+		return
+	}
+	for _, c := range *bom.Components {
+		if c.Type != cdx.ComponentTypeOS {
+			continue
+		}
+		if info.OSName == "" {
+			info.OSName, info.OSVersion = c.Name, c.Version
+		}
+		info.OSPrettyName, info.OSVersionID = c.Description, c.Version
+		if c.Properties != nil {
+			for _, p := range *c.Properties {
+				if p.Name == "syft:distro:prettyName" && p.Value != "" {
+					info.OSPrettyName = p.Value
+				}
+			}
+		}
+		return
+	}
 }
 
 func extractCycloneDXComponents(bom *cdx.BOM, rawComponents []json.RawMessage) []Component {
@@ -185,8 +211,11 @@ func extractCycloneDXComponents(bom *cdx.BOM, rawComponents []json.RawMessage) [
 		comp.Locations = cycloneDXLocations(c)
 		if c.Properties != nil {
 			for _, p := range *c.Properties {
-				if p.Name == "syft:metadata:h1Digest" && p.Value != "" {
+				switch {
+				case p.Name == "syft:metadata:h1Digest" && p.Value != "":
 					comp.Digests = map[string]string{DigestGoH1: p.Value}
+				case p.Name == "syft:package:type":
+					comp.PkgType = p.Value
 				}
 			}
 		}

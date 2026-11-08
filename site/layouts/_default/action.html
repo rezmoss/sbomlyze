@@ -11,7 +11,7 @@
 <section class="section-md">
   <div class="container-md">
     <h2 class="h-block" style="margin-bottom:8px">Recommended workflow</h2>
-    <p class="note" style="max-width:70ch;margin:0 0 22px">Pin all Actions to full commit SHAs. The SHA below is the published {{ site.Params.version }} Action; the binary version defaults to the same release.</p>
+    <p class="note" style="max-width:70ch;margin:0 0 22px">Pin all Actions to full commit SHAs. The SHA below is the published {{ (partial "release.html" .).tag }} Action; the binary version defaults to the same release.</p>
     <div class="codebox">
       <div class="codebox-head">.github/workflows/sbom-review.yml</div>
       <pre class="codebox-pre codebox-pre-lg">name: SBOM review
@@ -34,7 +34,7 @@ jobs:
       <span class="c-gray"># Generate or commit the head SBOM in a separate, reviewed step.
       # SBOMlyze deliberately does not accept or execute generator commands.</span>
       - id: sbomlyze
-        uses: rezmoss/sbomlyze@{{ site.Params.actionSha }} # {{ site.Params.version }}
+        uses: rezmoss/sbomlyze@{{ (partial "release.html" .).sha }} # {{ (partial "release.html" .).tag }}
         with:
           sbom-path: build/sbom.cdx.json
           policy: .github/sbom-policy.json
@@ -64,12 +64,12 @@ jobs:
           </tr>
         </thead>
         <tbody>
-          {{ range site.Data.action.inputs }}
+          {{ range site.Data.gen.action.inputs }}
           <tr>
-            <td class="mono-strong">{{ .k }}</td>
-            <td class="mono" style="font-size:13px">{{ .r }}</td>
-            <td class="mono" style="font-size:13px">{{ .v }}</td>
-            <td class="body-cell">{{ .m }}</td>
+            <td class="mono-strong">{{ .name }}</td>
+            <td class="mono" style="font-size:13px">{{ if .required }}yes{{ else }}no{{ end }}</td>
+            <td class="mono" style="font-size:13px">{{ .default | default "—" }}</td>
+            <td class="body-cell">{{ .description }}</td>
           </tr>
           {{ end }}
         </tbody>
@@ -99,10 +99,10 @@ jobs:
     <div>
       <h2 class="h-block" style="margin-bottom:20px">Outputs</h2>
       <div class="cellgrid cellgrid-tight">
-        {{ range site.Data.action.outputs }}
+        {{ range site.Data.gen.action.outputs }}
         <div class="kv-cell">
-          <code class="kv-k">{{ .k }}</code>
-          <div class="kv-d">{{ .d }}</div>
+          <code class="kv-k">{{ .name }}</code>
+          <div class="kv-d">{{ .description }}</div>
         </div>
         {{ end }}
       </div>

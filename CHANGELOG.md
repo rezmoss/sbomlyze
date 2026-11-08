@@ -5,7 +5,7 @@
 
 ### Features
 
-* occurrence matching, owned-file drift, per-ecosystem version or ([#77](https://github.com/rezmoss/sbomlyze/issues/77)) ([4874243](https://github.com/rezmoss/sbomlyze/commit/48742431b3daba8150a73746c413f8829242b97d))
+* occurrence matching, owned-file drift, per-ecosystem version ordering ([#77](https://github.com/rezmoss/sbomlyze/issues/77)) ([4874243](https://github.com/rezmoss/sbomlyze/commit/48742431b3daba8150a73746c413f8829242b97d))
 
 ## [0.6.0](https://github.com/rezmoss/sbomlyze/compare/v0.5.4...v0.6.0) (2026-11-01)
 

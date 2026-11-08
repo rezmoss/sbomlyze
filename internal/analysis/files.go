@@ -53,6 +53,7 @@ type FileDelta struct {
 	Added      int `json:"added"`
 	Removed    int `json:"removed"`
 	Unverified int `json:"unverified"` // on both sides, no comparable hash
+	Unchanged  int `json:"unchanged"`  // on both sides, equal hash
 	// AllMatch: same paths, all hashes comparable and equal
 	AllMatch bool `json:"all_match"`
 }
@@ -182,6 +183,8 @@ func ownedFileDelta(b, a sbom.Component, bi, ai *fileIndex) ([]OwnedFileChange, 
 			changes = append(changes, OwnedFileChange{Path: p, Change: FileModified, Config: configStatus(bi, ai, p), HashesBefore: bf.Hashes, HashesAfter: af.Hashes})
 		case "":
 			delta.Unverified++
+		default:
+			delta.Unchanged++
 		}
 	}
 	for _, p := range slices.Sorted(maps.Keys(aset)) {

@@ -141,7 +141,7 @@ func GenerateHTMLStats(stats analysis.Stats, info sbom.SBOMInfo, findings analys
 	sb.WriteString("<h2>Scan Context</h2>\n<table>\n")
 	sb.WriteString("<tr><th>Field</th><th>Value</th></tr>\n")
 	writeHTMLRow(&sb, "Tool", orNone(info.ToolName))
-	writeHTMLRow(&sb, "OS", orNone(info.OSPrettyName))
+	writeHTMLRow(&sb, "OS", orNone(analysis.OSLabel(info)))
 	writeHTMLRow(&sb, "Source", orNone(info.SourceName))
 	if info.SchemaVersion != "" {
 		writeHTMLRow(&sb, "Schema", info.SchemaVersion)

@@ -59,10 +59,11 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 
 	if len(doc.Source) > 0 {
 		var sourceInfo struct {
-			ID     string `json:"id"`
-			Name   string `json:"name"`
-			Type   string `json:"type"`
-			Target struct {
+			ID      string `json:"id"`
+			Name    string `json:"name"`
+			Version string `json:"version"`
+			Type    string `json:"type"`
+			Target  struct {
 				UserInput string `json:"userInput"`
 			} `json:"target"`
 		}
@@ -73,27 +74,24 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 				info.SourceName = sourceInfo.Name
 			}
 			info.SourceID = sourceInfo.ID
+			info.SourceVersion = sourceInfo.Version
 		}
 	}
 
 	if len(doc.Distro) > 0 {
-		var distroInfo struct {
+		type distro struct {
 			Name       string   `json:"name"`
 			PrettyName string   `json:"prettyName"`
 			Version    string   `json:"version"`
+			VersionID  string   `json:"versionID"`
 			ID         string   `json:"id"`
 			IDLike     []string `json:"idLike"`
 		}
+		var distroInfo distro
 		// Try parsing as object first
 		if err := json.Unmarshal(doc.Distro, &distroInfo); err != nil {
 			// Try parsing as array and take first element
-			var distroArray []struct {
-				Name       string   `json:"name"`
-				PrettyName string   `json:"prettyName"`
-				Version    string   `json:"version"`
-				ID         string   `json:"id"`
-				IDLike     []string `json:"idLike"`
-			}
+			var distroArray []distro
 			if err := json.Unmarshal(doc.Distro, &distroArray); err == nil && len(distroArray) > 0 {
 				distroInfo = distroArray[0]
 			}
@@ -101,6 +99,7 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 		info.OSName = distroInfo.Name
 		info.OSVersion = distroInfo.Version
 		info.OSPrettyName = distroInfo.PrettyName
+		info.OSVersionID = distroInfo.VersionID
 		info.OSIDLike = distroInfo.IDLike
 		if info.OSName == "" && distroInfo.ID != "" {
 			info.OSName = distroInfo.ID
@@ -145,6 +144,7 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 			PURL:     a.PURL,
 			Type:     a.Type,
 			Language: a.Language,
+			PkgType:  a.Type,
 			FoundBy:  a.FoundBy,
 			Hashes:   make(map[string]string),
 			RawJSON:  rawArtifact,

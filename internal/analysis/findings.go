@@ -2,6 +2,7 @@ package analysis
 
 import (
 	"fmt"
+	"slices"
 	"sort"
 	"strings"
 
@@ -37,6 +38,7 @@ func ComputeSingleFindings(stats Stats, info sbom.SBOMInfo, comps []sbom.Compone
 	findings = append(findings, detectLocationHotspots(comps)...)
 	findings = append(findings, detectLicenseRiskProfile(pkgStats)...)
 	findings = append(findings, detectDataQuality(pkgStats)...)
+	findings = append(findings, detectSplitLicenses(comps)...)
 	findings = append(findings, detectDuplicateWarning(stats)...)
 	findings = append(findings, detectCatalogerBreakdown(stats)...)
 
@@ -214,6 +216,25 @@ func detectDataQuality(stats Stats) []Finding {
 	return findings
 }
 
+// detectSplitLicenses: AND/OR/WITH alone as a license value
+func detectSplitLicenses(comps []sbom.Component) []Finding {
+	var names []string
+	for _, c := range comps {
+		if slices.ContainsFunc(c.Licenses, func(l string) bool { return l == "AND" || l == "OR" || l == "WITH" }) {
+			names = append(names, c.Name)
+		}
+	}
+	if len(names) == 0 {
+		return nil
+	}
+	limit := min(len(names), 5)
+	msg := fmt.Sprintf("%d packages list AND/OR/WITH as a license: the SBOM generator split a license expression (%s", len(names), strings.Join(names[:limit], ", "))
+	if len(names) > limit {
+		msg += fmt.Sprintf(" + %d more", len(names)-limit)
+	}
+	return []Finding{{Icon: "\u26a0\ufe0f", Message: msg + ")"}}
+}
+
 func detectDuplicateWarning(stats Stats) []Finding {
 	if stats.DuplicateCount == 0 {
 		return nil
@@ -249,13 +270,15 @@ func ComputeKeyFindings(result DiffResult, overview DiffOverview) KeyFindings {
 	var findings []Finding
 
 	findings = append(findings, detectScanContextMismatch(overview)...)
-	findings = append(findings, detectAttackSurfaceDelta(overview)...)
+	findings = append(findings, detectSourceChange(result)...)
+	findings = append(findings, detectInventoryDelta(overview)...)
 	findings = append(findings, detectVanishedEcosystems(overview)...)
 	findings = append(findings, detectOSChange(overview)...)
 	findings = append(findings, detectVersionChangeAnalysis(result, overview)...)
 	findings = append(findings, detectIntegrityDriftContext(result)...)
+	findings = append(findings, detectLowDigestCoverage(result)...)
 	findings = append(findings, detectFileChanges(result)...)
-	findings = append(findings, detectOwnedFileDrift(result)...)
+	findings = append(findings, detectOwnedFileDrift(result, overview)...)
 	findings = append(findings, detectDominantPathPattern(result)...)
 	findings = append(findings, detectRemovalHotspots(result)...)
 	findings = append(findings, detectStableTypes(overview, result)...)
@@ -263,6 +286,41 @@ func ComputeKeyFindings(result DiffResult, overview DiffOverview) KeyFindings {
 	findings = append(findings, detectCatalogerGaps(overview)...)
 
 	return KeyFindings{Findings: findings}
+}
+
+// detectSourceChange: same source, different digest (retag)
+func detectSourceChange(result DiffResult) []Finding {
+	c := result.SourceChange
+	if c == nil {
+		return nil
+	}
+	name := c.Name
+	if name == "" {
+		name = "source"
+	}
+	return []Finding{{
+		Icon:    "\U0001f504",
+		Message: fmt.Sprintf("Scanned %s changed: %s \u2192 %s", name, c.From, c.To),
+	}}
+}
+
+// detectLowDigestCoverage: integrity check mostly blind
+func detectLowDigestCoverage(result DiffResult) []Finding {
+	c := result.DigestCoverage
+	if c == nil || c.SameVersionPairs < 5 || c.Comparable*2 >= c.SameVersionPairs {
+		return nil
+	}
+	return []Finding{{
+		Icon:    "\U0001f648",
+		Message: fmt.Sprintf("Integrity drift checked only %d of %d same-version packages; the rest carry no comparable digest", c.Comparable, c.SameVersionPairs),
+	}}
+}
+
+func plural(n int, word string) string {
+	if n == 1 {
+		return "1 " + word
+	}
+	return fmt.Sprintf("%d %ss", n, word)
 }
 
 func detectScanContextMismatch(overview DiffOverview) []Finding {
@@ -337,14 +395,7 @@ func detectVanishedEcosystems(overview DiffOverview) []Finding {
 }
 
 func detectOSChange(overview DiffOverview) []Finding {
-	bOS := overview.Before.Info.OSPrettyName
-	aOS := overview.After.Info.OSPrettyName
-	if bOS == "" {
-		bOS = overview.Before.Info.OSName
-	}
-	if aOS == "" {
-		aOS = overview.After.Info.OSName
-	}
+	bOS, aOS := OSLabel(overview.Before.Info), OSLabel(overview.After.Info)
 
 	if bOS == aOS {
 		return nil
@@ -545,7 +596,7 @@ func detectVersionChangeAnalysis(result DiffResult, overview DiffOverview) []Fin
 	levels := make(map[string]int) // distinct upgrades per level
 
 	for _, c := range result.Changed {
-		if c.Drift == nil || c.Drift.Type != DriftTypeVersion {
+		if c.Drift == nil || c.Drift.Type != DriftTypeVersion || c.Before.IsEvidence() {
 			continue
 		}
 		var t *tally
@@ -610,9 +661,9 @@ func detectVersionChangeAnalysis(result DiffResult, overview DiffOverview) []Fin
 
 	if len(up.distinct) > 0 {
 		msg := fmt.Sprintf("%d version upgrades", len(up.distinct))
-		if levels[LevelMajor] > 0 || levels[LevelMinor] > 0 || levels[LevelPrerelease] > 0 {
-			parts := make([]string, 0, 4)
-			for _, l := range []string{LevelMajor, LevelMinor, LevelPatch, LevelPrerelease} {
+		if levels[LevelMajor] > 0 || levels[LevelMinor] > 0 || levels[LevelPrerelease] > 0 || levels[LevelRevision] > 0 {
+			parts := make([]string, 0, 5)
+			for _, l := range []string{LevelMajor, LevelMinor, LevelPatch, LevelPrerelease, LevelRevision} {
 				if levels[l] > 0 {
 					parts = append(parts, fmt.Sprintf("%d %s", levels[l], l))
 				}
@@ -648,7 +699,7 @@ func identityKey(id string) string {
 	return identity.MatchKey(id)
 }
 
-func detectAttackSurfaceDelta(overview DiffOverview) []Finding {
+func detectInventoryDelta(overview DiffOverview) []Finding {
 	bTotal := overview.Before.Stats.TotalComponents
 	aTotal := overview.After.Stats.TotalComponents
 	if bTotal == 0 && aTotal == 0 {
@@ -660,7 +711,7 @@ func detectAttackSurfaceDelta(overview DiffOverview) []Finding {
 	pkgDelta := aTotal - bTotal
 	if pkgDelta != 0 {
 		pct := float64(pkgDelta) / float64(bTotal) * 100
-		parts = append(parts, fmt.Sprintf("%+d packages (%.1f%%)", pkgDelta, pct))
+		parts = append(parts, fmt.Sprintf("%+d components (%.1f%%)", pkgDelta, pct))
 	}
 
 	bFiles := overview.Before.Info.FilesCount
@@ -683,14 +734,22 @@ func detectAttackSurfaceDelta(overview DiffOverview) []Finding {
 		return nil
 	}
 
+	// direction of the first non-zero delta: components, files, relationships
+	delta := pkgDelta
+	if delta == 0 {
+		delta = aFiles - bFiles
+	}
+	if delta == 0 {
+		delta = aContains - bContains
+	}
 	icon := "\U0001f4c9" // chart decreasing
-	if pkgDelta > 0 {
+	if delta > 0 {
 		icon = "\U0001f4c8" // chart increasing
 	}
 
 	return []Finding{{
 		Icon:    icon,
-		Message: fmt.Sprintf("Attack surface: %s", strings.Join(parts, ", ")),
+		Message: fmt.Sprintf("Inventory: %s", strings.Join(parts, ", ")),
 	}}
 }
 
@@ -733,7 +792,7 @@ func pathHotspots(comps []sbom.Component, direction string) *Finding {
 }
 
 // detectOwnedFileDrift: same-ver file changes, identical upgrades
-func detectOwnedFileDrift(result DiffResult) []Finding {
+func detectOwnedFileDrift(result DiffResult, overview DiffOverview) []Finding {
 	var findings []Finding
 	if n := len(result.OwnedFileDrift); n > 0 {
 		limit := min(n, 5)
@@ -758,18 +817,22 @@ func detectOwnedFileDrift(result DiffResult) []Finding {
 		if config > 0 {
 			msg += fmt.Sprintf(" (%d config files only)", config)
 		}
+		// a new base OS release rebuilds packages under the same version
+		if from, to := OSLabel(overview.Before.Info), OSLabel(overview.After.Info); from != "" && to != "" && from != to {
+			msg += fmt.Sprintf(" \u2014 base OS changed (%s \u2192 %s), so same-version rebuilds are expected", from, to)
+		}
 		findings = append(findings, Finding{Icon: "\u26a0\ufe0f", Message: msg})
 	}
 
 	var same []string
 	for _, c := range result.Changed {
-		if c.Drift != nil && c.Drift.Files != nil && c.Drift.Files.AllMatch {
-			same = append(same, fmt.Sprintf("%s %s\u2192%s", c.Name, c.Drift.VersionFrom, c.Drift.VersionTo))
+		if d := c.Drift; d != nil && d.Files != nil && d.Files.AllMatch {
+			same = append(same, fmt.Sprintf("%s %s\u2192%s (%s)", c.Name, d.VersionFrom, d.VersionTo, plural(d.Files.Unchanged, "file")))
 		}
 	}
 	if len(same) > 0 {
 		limit := min(len(same), 5)
-		msg := fmt.Sprintf("%d version changes where all recorded owned files are byte-identical: %s", len(same), strings.Join(same[:limit], ", "))
+		msg := fmt.Sprintf("%d version changes where every hashed owned file is byte-identical: %s", len(same), strings.Join(same[:limit], ", "))
 		if len(same) > limit {
 			msg += fmt.Sprintf(" + %d more", len(same)-limit)
 		}
@@ -778,20 +841,59 @@ func detectOwnedFileDrift(result DiffResult) []Finding {
 	return findings
 }
 
+// OSLabel: OS name plus exact VERSION_ID (12.10)
+func OSLabel(info sbom.SBOMInfo) string {
+	l := info.OSPrettyName
+	if l == "" {
+		l = strings.TrimSpace(info.OSName + " " + info.OSVersion)
+	}
+	if v := info.OSVersionID; v != "" && !strings.Contains(l, v) {
+		l = strings.TrimSpace(l + " " + v)
+	}
+	return l
+}
+
 // detectFileChanges: changed file entries, not pkg drift
 func detectFileChanges(result DiffResult) []Finding {
 	n := len(result.FileChanges)
 	if n == 0 {
 		return nil
 	}
-	limit := min(n, 5)
-	paths := make([]string, limit)
-	for i := 0; i < limit; i++ {
-		paths[i] = result.FileChanges[i].Path
+	sameVersion := make(map[string]bool)
+	for _, d := range result.OwnedFileDrift {
+		sameVersion[d.Name+"@"+d.Version] = true
 	}
-	msg := fmt.Sprintf("%d file entries changed content (not package integrity drift): %s", n, strings.Join(paths, ", "))
-	if n > limit {
-		msg += fmt.Sprintf(" + %d more", n-limit)
+	// split by owner: unowned and same-version files matter most
+	var unowned, same, upgraded []string
+	for _, f := range result.FileChanges {
+		switch {
+		case len(f.Owners) == 0:
+			unowned = append(unowned, f.Path)
+		case slices.ContainsFunc(f.Owners, func(o string) bool { return sameVersion[o] }):
+			same = append(same, f.Path)
+		default:
+			upgraded = append(upgraded, f.Path)
+		}
+	}
+	sample := func(paths []string) string {
+		limit := min(len(paths), 5)
+		s := strings.Join(paths[:limit], ", ")
+		if len(paths) > limit {
+			s += fmt.Sprintf(" + %d more", len(paths)-limit)
+		}
+		return s
+	}
+	if len(unowned) == n { // no ownership data (e.g. CycloneDX)
+		msg := fmt.Sprintf("%d file entries changed content (not package integrity drift): %s", n, sample(unowned))
+		return []Finding{{Icon: "\U0001f4c4", Message: msg}}
+	}
+	msg := fmt.Sprintf("%d file entries changed content: %d in packages that changed version, %d in same-version packages, %d not owned by any package",
+		n, len(upgraded), len(same), len(unowned))
+	switch {
+	case len(unowned) > 0:
+		msg += ": " + sample(unowned)
+	case len(same) > 0:
+		msg += ": " + sample(same)
 	}
 	return []Finding{{Icon: "\U0001f4c4", Message: msg}}
 }

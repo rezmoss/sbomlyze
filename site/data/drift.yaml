@@ -7,10 +7,14 @@ layers:
     q: "What components does each build report?"
     s: "Added, removed, and version-changed components"
     b: "A same-name, same-version replacement can look unchanged"
-  - layer: "Hash / integrity drift"
-    q: "Did the recorded bytes change without the component version changing?"
-    s: "Unexpected same-version hash change"
-    b: "Signals investigation; it does not by itself prove malicious intent"
+  - layer: "Integrity drift"
+    q: "Did a package's recorded digest change without its version changing?"
+    s: "Same-version package digest change (same kind: SHA-256, go-h1, …)"
+    b: "Only as good as digest coverage; many images carry no package digest"
+  - layer: "Owned-file drift"
+    q: "Did files a package owns change without its version changing?"
+    s: "Modified, added or removed owned files, from the SBOM's file inventory"
+    b: "Needs Syft JSON or SPDX file data; files the generator did not hash are invisible"
 
 explanations:
   - "A package or artifact was replaced without a version bump."
@@ -19,6 +23,8 @@ explanations:
   - "The SBOM generator changed what bytes it hashes."
   - "Platform, architecture, or build flags changed between the baseline and head."
   - "The trusted baseline was generated from a different stage of the build."
+  - "A package was rebuilt with the same version (e.g. the same Alpine -rN)."
+  - "A file was edited after install: a config change, or tampering."
 
 trust:
   - num: "01"
@@ -33,3 +39,5 @@ trust:
     d: "Investigate one expected rebuild to identify legitimate nondeterminism."
   - num: "06"
     d: "Update the baseline only after the change has been reviewed and accepted."
+  - num: "07"
+    d: "Read digest_coverage and file_coverage: a clean result over few comparable pairs says little."

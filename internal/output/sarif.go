@@ -114,13 +114,13 @@ func componentIdentity(component sbom.Component) string {
 	return id
 }
 
-// GenerateSARIF creates a SARIF report.
-func GenerateSARIF(result analysis.DiffResult, violations []policy.Violation, sbomFile string) SARIFReport {
-	rules := []SARIFRule{
+// SARIFRules lists every rule sbomlyze can report.
+func SARIFRules() []SARIFRule {
+	return []SARIFRule{
 		{
 			ID:               "integrity-drift",
 			Name:             "Integrity Drift Detected",
-			ShortDescription: SARIFMessage{Text: "Component hash changed without version change"},
+			ShortDescription: SARIFMessage{Text: "Package digest changed without a version change"},
 			DefaultConfig:    SARIFRuleConfig{Level: "error"},
 			Properties:       &SARIFProperties{Tags: []string{"security", "supply-chain"}},
 		},
@@ -163,6 +163,11 @@ func GenerateSARIF(result analysis.DiffResult, violations []policy.Violation, sb
 			DefaultConfig:    SARIFRuleConfig{Level: "error"},
 		},
 	}
+}
+
+// GenerateSARIF creates a SARIF report.
+func GenerateSARIF(result analysis.DiffResult, violations []policy.Violation, sbomFile string) SARIFReport {
+	rules := SARIFRules()
 
 	results := []SARIFResult{} // empty run is [], not null
 

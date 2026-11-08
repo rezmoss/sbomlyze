@@ -2,15 +2,15 @@
 
 <section class="section-hero bb">
   <div class="container-narrow">
-    <div class="eyebrow">Concept · 9 min read</div>
+    <div class="eyebrow">Concept · 12 min read</div>
     <h1 class="h-article">The dependency version did not change. Why did its hash change?</h1>
-    <p class="lead-lg" style="margin:24px 0 0">A manifest diff, an ordinary SBOM component diff, and an integrity-drift check answer three different questions. Treating them as interchangeable leaves a blind spot: a component can keep the same name and version while its bytes change.</p>
+    <p class="lead-lg" style="margin:24px 0 0">A manifest diff, an ordinary SBOM component diff, an integrity-drift check and an owned-file check answer different questions. Treating them as interchangeable leaves a blind spot: a package can keep the same name and version while its bytes, or the files inside it, change.</p>
   </div>
 </section>
 
 <section style="padding:64px 32px">
   <div class="container-md">
-    <h2 class="h-sub" style="margin:0 0 28px">The three layers</h2>
+    <h2 class="h-sub" style="margin:0 0 28px">The layers</h2>
     <div class="table-scroll">
       <table class="table">
         <thead>
@@ -46,11 +46,30 @@
 
     <h2 class="h-sub" style="margin:44px 0 16px">2 · Ordinary SBOM component diff: build inventory</h2>
     <p class="body-text">Comparing two inventories reveals changes a manifest misses: a new transitive package, an OS package added by a base-image update, a component removed from the final artifact, a resolved version that differs from the source declaration, or a license and supplier change.</p>
-    <p class="body-text">The naive implementation is a JSON diff, which produces noise from timestamps, serial numbers, generated identifiers, and ordering. sbomlyze matches component identity using stable identifiers when available — Package URLs and CPEs, with format-specific references and names as fallbacks — so it can compare SPDX, CycloneDX, and Syft evidence without identical layouts.</p>
+    <p class="body-text">The naive implementation is a JSON diff, which produces noise from timestamps, serial numbers, generated identifiers, and ordering. sbomlyze matches component identity using stable identifiers when available — Package URLs (keeping the subpath) and CPEs, with format-specific references and names as fallbacks — so it can compare SPDX, CycloneDX, and Syft evidence without identical layouts.</p>
+    <p class="body-text">Each package is an <em>occurrence</em>: identity, version and location (the lockfile or install path). A package in two lockfiles is two occurrences; none is ever dropped. A version change is reported only within one location, and never by pairing a package that left <code>/Cargo.lock</code> with another version that appeared in <code>/sub/Cargo.lock</code>. Results do not depend on component order.</p>
+    <p class="body-text">Upgrade and downgrade follow each ecosystem's own ordering, checked against the real tools:</p>
+    <div class="table-scroll">
+      <table class="table" style="margin:18px 0 8px">
+        <thead><tr><th style="width:30%">Ecosystems</th><th>Ordering</th><th style="width:22%">Tested pairs</th></tr></thead>
+        <tbody>
+          {{ range site.Data.gen.versions }}
+          <tr>
+            <td class="mono" style="font-size:13px">{{ delimit .ecosystems ", " }}</td>
+            <td class="body-cell">{{ .rule }}</td>
+            <td class="dim-cell">{{ with .oracle_pairs }}{{ . }} vs the real tool{{ else }}—{{ end }}</td>
+          </tr>
+          {{ end }}
+        </tbody>
+      </table>
+    </div>
+    <p class="note-xs" style="margin:0 0 18px">Anything else, and versions like <code>release/v1</code>, report direction <code>unknown</code> — never a guessed downgrade.</p>
     <div class="callout callout-amber" style="margin:24px 0">If a package is called <code>example</code> at version <code>1.4.2</code> in both SBOMs, a name-and-version diff calls it unchanged — even if the component bytes are different.</div>
 
     <h2 class="h-sub" style="margin:44px 0 16px">3 · Integrity drift: same identity and version, different bytes</h2>
-    <p class="body-text">Integrity drift is the narrow condition where sbomlyze matches a component in both SBOMs, sees the same version, and finds that its recorded hash set changed. The version says consumers should be receiving the same release, while the hash says the recorded content is not the same. Those two facts disagree, so a reviewer should establish why before merging.</p>
+    <p class="body-text">Integrity drift is the narrow condition where sbomlyze matches a <strong>package</strong> in both SBOMs at the same location, sees the same non-empty version, and finds that a digest of the <strong>same kind</strong> changed. The version says consumers should be receiving the same release, while the digest says the recorded content is not the same. Those two facts disagree, so a reviewer should establish why before merging.</p>
+    <p class="body-text">Digest kinds are never mixed: CycloneDX and SPDX hashes by algorithm (<code>SHA-256</code>), the Go module checksum from go.sum (<code>go-h1</code>, Syft's <code>syft:metadata:h1Digest</code>) and the Cargo.lock checksum (<code>cargo-checksum</code>). A digest that exists on one side only is a coverage change, not drift. The JSON report's <code>digest_coverage</code> says how many same-version pairs could actually be compared.</p>
+    <div class="callout callout-amber" style="margin:24px 0"><strong>What does not count:</strong> scanner file entries. Syft directory scans list the SHA-256 of every manifest they read — <code>go.mod</code>, <code>package-lock.json</code>, workflow files. Those change on every ordinary edit, so they are reported as <code>file_changes</code>, never as integrity drift.</div>
     <div class="overline" style="margin:34px 0 14px">Possible explanations</div>
     <div class="cellgrid cellgrid-tight on-dark" style="border-radius:10px">
       {{ range site.Data.drift.explanations }}
@@ -58,6 +77,13 @@
       {{ end }}
     </div>
     <p class="body-text" style="margin-top:24px">Some explanations are benign. The point of the check is not to label every hash change an attack. It is to prevent a silent mismatch from passing as &ldquo;no dependency change.&rdquo;</p>
+
+    <h2 class="h-sub" style="margin:44px 0 16px">4 · Owned-file drift: same version, different files inside</h2>
+    <p class="body-text">A package digest is one number for the whole package, and many images carry none. Their SBOM still records a hash for every installed file and which package owns it (Syft JSON <code>files</code> + <code>contains</code>, SPDX <code>files</code> + <code>CONTAINS</code>). sbomlyze compares those files too: a package that keeps its version while a file it owns is modified, added or removed is <strong>owned-file drift</strong>.</p>
+    <div class="callout" style="margin:20px 0"><pre style="font:400 13px/1.8 var(--mono)">package:  coreutils 9.1-1 -> 9.1-1
+file:     /usr/bin/ls  sha256 cb30d69b… -> 1a12c71a…
+verdict:  <span class="c-red">owned-file drift</span>  [deny_owned_file_drift]</pre></div>
+    <p class="body-text">dpkg marks config files; they are flagged <code>config: true</code> and skipped by the policy unless <code>owned_file_drift_include_config</code> is set, because editing <code>/etc</code> after install is normal. A file can have several owners (<code>busybox</code> and <code>busybox-binsh</code>), and both are reported. What the generator did not hash stays invisible: Syft does not hash Python or npm package files by default, and <code>file_coverage</code> says so.</p>
 
     <h2 class="h-sub" style="margin:44px 0 16px">Make the signal trustworthy</h2>
     <p class="body-text">Hash comparison is only as stable as the evidence around it. Before making the check required:</p>
@@ -74,9 +100,10 @@
     <div style="display:grid;gap:14px">
       <div class="rule-card edge-gray"><strong>Manifest changed, component version changed:</strong> review the intended upgrade.</div>
       <div class="rule-card edge-amber"><strong>Manifest did not change, SBOM components changed:</strong> identify the build or transitive source of the inventory change.</div>
-      <div class="rule-card edge-red"><strong>Component version did not change, component hash changed:</strong> stop and explain the content mismatch before merging.</div>
+      <div class="rule-card edge-red"><strong>Package version did not change, package digest changed:</strong> stop and explain the content mismatch before merging.</div>
+      <div class="rule-card edge-red"><strong>Package version did not change, files it owns changed:</strong> find who edited them; a rebuild or a config change is fine once explained.</div>
     </div>
-    <p class="body-text" style="margin-top:28px">That last case is small, specific, and easy to miss. Giving it its own policy signal turns an ambiguous SBOM diff into a review decision.</p>
+    <p class="body-text" style="margin-top:28px">The last two cases are small, specific, and easy to miss. Giving each its own policy signal (<code>deny_integrity_drift</code>, <code>deny_owned_file_drift</code>) turns an ambiguous SBOM diff into a review decision.</p>
     <div style="margin-top:36px;padding-top:28px;border-top:1px solid var(--border);display:flex;gap:12px;flex-wrap:wrap">
       <a class="btn btn-primary" href="{{ "action" | relURL }}">Add the check to CI</a>
       <a class="btn btn-outline" href="https://github.com/rezmoss/sbomlyze-go-spdx-demo/pull/2">See the blocked pull request</a>

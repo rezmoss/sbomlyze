@@ -635,6 +635,8 @@ Version direction and level come from the ecosystem's own rules:
 | Alpine | apk-tools (`_alpha` … `_p` suffixes, `-rN`) |
 | Maven | Maven `ComparableVersion` |
 
+The ecosystem comes from the PURL type; for components without a PURL (e.g. Syft's Rust workspace crates, which carry only a CPE) it falls back to Syft's package type, the CPE `target_sw` field (`rust`, `node.js`, …), then the lockfile name (`Cargo.lock`, `go.mod`, …).
+
 Each comparator is tested against the ecosystem's real tool (`dpkg --compare-versions`, `rpm.labelCompare`, `vercmp`, `apk version -t`, `Gem::Version`, Maven) on about 12,000 version pairs from real images. Other ecosystems (`pkg:generic`, …) and unparseable versions (`release/v1`) report direction `unknown`, never a guessed downgrade. `level` is `major`, `minor` or `patch` from the first three numbers, `prerelease` when only a pre-release or pseudo-version part changed, and `revision` when only the packaging revision changed (deb `-9`→`-10`, rpm release, apk `-r0`→`-r1`, pacman pkgrel).
 
 ### Owned File Drift (same version, files changed)

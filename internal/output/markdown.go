@@ -31,7 +31,7 @@ func GenerateMarkdownWithOverviewAndCompliance(result analysis.DiffResult, viola
 	fmt.Fprintf(&sb, "| **File Size** | %s | %s |\n", formatFileSize(b.FileSize), formatFileSize(a.FileSize))
 	fmt.Fprintf(&sb, "| **Format** | %s | %s |\n", orNone(formatLabel(b.Info)), orNone(formatLabel(a.Info)))
 	fmt.Fprintf(&sb, "| **Generator** | %s | %s |\n", orNone(generatorLabel(b.Info)), orNone(generatorLabel(a.Info)))
-	fmt.Fprintf(&sb, "| **OS** | %s | %s |\n", orNone(b.Info.OSPrettyName), orNone(a.Info.OSPrettyName))
+	fmt.Fprintf(&sb, "| **OS** | %s | %s |\n", orNone(analysis.OSLabel(b.Info)), orNone(analysis.OSLabel(a.Info)))
 	fmt.Fprintf(&sb, "| **Source** | %s | %s |\n", orNone(b.Info.SourceName), orNone(a.Info.SourceName))
 	fmt.Fprintf(&sb, "| **Total Components** | %d | %d |\n", b.Stats.TotalComponents, a.Stats.TotalComponents)
 	fmt.Fprintf(&sb, "| **PURL Coverage** | %s | %s |\n",

@@ -7,6 +7,8 @@
 <title>{{ $title }}</title>
 <meta name="description" content="{{ .Params.description | default site.Params.description }}">
 <link rel="canonical" href="{{ .Permalink }}">
+{{ $rel := partial "release.html" . }}
+<meta name="sbomlyze-version" content="{{ $rel.tag }}">
 <meta property="og:title" content="{{ $title }}">
 <meta property="og:description" content="{{ .Params.description | default site.Params.description }}">
 <meta property="og:url" content="{{ .Permalink }}">
@@ -33,8 +35,8 @@
       {{ end }}
     </nav>
     <div class="header-meta">
-      <span class="header-version">{{ site.Params.version }}</span>
-      <a class="btn-gh" href="{{ site.Params.repo }}">GitHub ★ {{ site.Params.githubStars }}</a>
+      <span class="header-version">{{ $rel.tag }}</span>
+      <a class="btn-gh" href="{{ site.Params.repo }}">GitHub{{ with $rel.stars }} ★ {{ . }}{{ end }}</a>
     </div>
   </div>
 </header>
@@ -46,7 +48,7 @@
     <div>
       <div class="footer-brand">sbomlyze</div>
       <div class="footer-desc">Git diff for SBOMs. Compare CycloneDX, SPDX, and Syft documents, detect tampering, and gate CI.</div>
-      <div class="footer-meta">Apache-2.0 · {{ site.Params.version }}</div>
+      <div class="footer-meta">Apache-2.0 · {{ $rel.tag }}</div>
     </div>
     <div>
       <div class="overline">Learn</div>
@@ -54,6 +56,8 @@
         <a href="{{ "integrity-drift" | relURL }}">Integrity drift</a>
         <a href="{{ "compliance" | relURL }}">Compliance scoring</a>
         <a href="{{ "cli" | relURL }}">CLI reference</a>
+        <a href="{{ "json-reference" | relURL }}">JSON reference</a>
+        <a href="{{ "examples" | relURL }}">Example report</a>
       </div>
     </div>
     <div>
@@ -68,6 +72,7 @@
       <div class="overline">Project</div>
       <div class="footer-links">
         <a href="{{ site.Params.repo }}">Repository</a>
+        <a href="{{ "changelog" | relURL }}">Changelog</a>
         <a href="{{ site.Params.repo }}/releases">Releases</a>
         <a href="{{ site.Params.repo }}/discussions">Discussions</a>
       </div>

@@ -1,0 +1,4 @@
+{{- /* release info written by internal/tools/sitegen; build fails without it */ -}}
+{{- $r := site.Data.gen.release -}}
+{{- if not $r -}}{{- errorf "site/data/gen missing: run `go run ./internal/tools/sitegen -tag <tag>` first" -}}{{- end -}}
+{{- return $r -}}

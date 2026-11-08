@@ -9,36 +9,31 @@ import (
 	"github.com/rezmoss/sbomlyze/internal/compliance"
 )
 
-// Policy defines SBOM diff rules.
+// Policy defines SBOM diff rules. doc tags feed the website.
 type Policy struct {
-	// Component count limits
-	MaxAdded   int `json:"max_added,omitempty"`
-	MaxRemoved int `json:"max_removed,omitempty"`
-	MaxChanged int `json:"max_changed,omitempty"`
+	MaxAdded   int `json:"max_added,omitempty" doc:"Maximum new components allowed (0 = unlimited)"`
+	MaxRemoved int `json:"max_removed,omitempty" doc:"Maximum removed components allowed"`
+	MaxChanged int `json:"max_changed,omitempty" doc:"Maximum changed packages allowed"`
 
-	// License rules
-	DenyLicenses    []string `json:"deny_licenses,omitempty"`
-	RequireLicenses bool     `json:"require_licenses,omitempty"`
+	DenyLicenses    []string `json:"deny_licenses,omitempty" doc:"Forbidden license identifiers"`
+	RequireLicenses bool     `json:"require_licenses,omitempty" doc:"Require all added components to have licenses"`
 
-	// Duplicate detection
-	DenyDuplicates bool `json:"deny_duplicates,omitempty"`
+	DenyDuplicates bool `json:"deny_duplicates,omitempty" doc:"Fail if duplicate packages exist in the result"`
 
-	// Integrity/Security rules
-	DenyIntegrityDrift bool `json:"deny_integrity_drift,omitempty"` // Fail if hash changed without version
-	MaxDepth           int  `json:"max_depth,omitempty"`            // Fail if new transitive deps at depth >= N
+	DenyIntegrityDrift bool `json:"deny_integrity_drift,omitempty" doc:"Fail if a package digest changed without a version change"`
+	MaxDepth           int  `json:"max_depth,omitempty" doc:"Fail if new transitive dependencies reach depth >= N"`
 	// fail on same-ver owned-file changes; config skipped
-	DenyOwnedFileDrift          bool `json:"deny_owned_file_drift,omitempty"`
-	OwnedFileDriftIncludeConfig bool `json:"owned_file_drift_include_config,omitempty"`
+	DenyOwnedFileDrift          bool `json:"deny_owned_file_drift,omitempty" doc:"Fail if a package kept its version while files it owns changed (Syft JSON, SPDX)"`
+	OwnedFileDriftIncludeConfig bool `json:"owned_file_drift_include_config,omitempty" doc:"Also fail deny_owned_file_drift on dpkg config files"`
 
 	// Warning rules - these produce warnings, not failures
-	WarnSupplierChange bool `json:"warn_supplier_change,omitempty"` // Warn if supplier/author changed
-	WarnNewTransitive  bool `json:"warn_new_transitive,omitempty"`  // Warn on any new transitive deps
+	WarnSupplierChange bool `json:"warn_supplier_change,omitempty" doc:"Warn, not fail, if a supplier or author changed"`
+	WarnNewTransitive  bool `json:"warn_new_transitive,omitempty" doc:"Warn on any new transitive dependencies"`
 
-	// Compliance score rules - enforce minimum SBOM quality scores (0-100)
-	MinNTIAScore         int `json:"min_ntia_score,omitempty"`         // Fail if NTIA score < N
-	MinCISAScore         int `json:"min_cisa_score,omitempty"`         // Fail if CISA score < N
-	MinBSIScore          int `json:"min_bsi_score,omitempty"`          // Fail if BSI TR-03183 score < N
-	MinOverallCompliance int `json:"min_overall_compliance,omitempty"` // Fail if overall compliance < N
+	MinNTIAScore         int `json:"min_ntia_score,omitempty" doc:"Fail below this NTIA score (0-100)"`
+	MinCISAScore         int `json:"min_cisa_score,omitempty" doc:"Fail below this CISA score (0-100)"`
+	MinBSIScore          int `json:"min_bsi_score,omitempty" doc:"Fail below this BSI TR-03183 score (0-100)"`
+	MinOverallCompliance int `json:"min_overall_compliance,omitempty" doc:"Fail below this overall compliance score (0-100)"`
 }
 
 type Severity string

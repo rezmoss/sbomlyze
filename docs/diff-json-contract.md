@@ -30,8 +30,9 @@ Other changes that affect existing values:
 | `changed[].drift.level` *(new)* | `major`, `minor`, `patch`, `prerelease`, `revision`, `none` or `unknown` |
 | `changed[].drift.licenses_diff` | `+MIT`, `-Apache-2.0`; also on version changes |
 | `changed[].drift.hash_changes` | Digest changes by kind (`SHA-256`, `go-h1`, `cargo-checksum`) |
-| `changed[].drift.files` *(new)* | Owned-file counts for a version change: `modified`, `added`, `removed`, `unverified`, `all_match` |
+| `changed[].drift.files` *(new)* | Owned-file counts for a version change: `modified`, `added`, `removed`, `unverified`, `unchanged`, `all_match` |
 | `moved[]` *(new)* | Same identity and version at another location: `id`, `name`, `version`, `from`, `to` |
+| `source_change` *(new)* | The scanned source kept its name but its version or digest changed (a re-pushed image tag): `name`, `from`, `to`. Counts as a change for the exit code |
 | `version_set_changes[]` *(new)* | Several versions changing at one location with no justified pairing: `id`, `name`, `location`, `removed_versions`, `added_versions`. The occurrences are also in `added`/`removed` |
 
 ## File changes *(new)*
@@ -44,6 +45,8 @@ Other changes that affect existing values:
 | `file_coverage` | `files_compared`, `files_unverified`, `ambiguous_paths`, `owned_files_after`, `unowned_files_after`, `config_unknown` |
 
 CycloneDX `type: file` entries that appear or disappear stay in `added`/`removed`, as before.
+
+The scanned image or directory is the source, not a component: an SPDX root package (`SPDXRef-DocumentRoot-*`, or a described `pkg:oci`/`pkg:docker` package) is no longer listed in `changed`, and a CycloneDX `operating-system` entry without a PURL or CPE is matched by name (id `os:<name>`), so a point release shows as one change instead of a removal plus an addition. OS entries are not counted in `drift_summary`.
 
 ## Summary and coverage
 

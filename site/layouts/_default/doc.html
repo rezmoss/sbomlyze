@@ -1,0 +1,15 @@
+{{ define "main" }}
+{{ $rel := partial "release.html" . }}
+<section class="section-hero bb">
+  <div class="container-md">
+    <div class="eyebrow">Reference · {{ $rel.tag }}</div>
+    <h1 class="h-page" style="max-width:24ch">{{ .Title }}</h1>
+    <p class="lead-md" style="max-width:66ch;margin:22px 0 0">{{ .Params.description }}</p>
+  </div>
+</section>
+<section class="section-md">
+  <div class="container-md doc-body">
+    {{ .Content }}
+  </div>
+</section>
+{{ end }}

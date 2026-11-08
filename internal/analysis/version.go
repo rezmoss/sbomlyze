@@ -27,27 +27,45 @@ const (
 	LevelUnknown    = "unknown"
 )
 
+// VersionOrdering is one version-ordering rule set; feeds the website.
+type VersionOrdering struct {
+	Ecosystems []string `json:"ecosystems"` // PURL types
+	Rule       string   `json:"rule"`
+	Oracle     string   `json:"oracle,omitempty"` // tool it is tested against (testdata/version-oracle)
+	compare    func(from, to string) (string, string)
+}
+
+var versionOrderings = []VersionOrdering{
+	{[]string{"golang", "github"}, "golang.org/x/mod/semver (pseudo-versions, +incompatible, go1.x)", "", compareGoSemver},
+	{[]string{"npm", "cargo", "composer", "swift", "hex", "pub"}, "SemVer", "", compareSemver},
+	{[]string{"pypi"}, "PEP 440", "", comparePEP440},
+	{[]string{"gem"}, "RubyGems Gem::Version", "gem", compareGem},
+	{[]string{"deb"}, "dpkg (epoch, ~, revision)", "deb", compareDeb},
+	{[]string{"rpm"}, "rpmvercmp (epoch, ~, ^, release)", "rpm", compareRPM},
+	{[]string{"alpm"}, "pacman vercmp (pkgrel only when both have one)", "alpm", compareAlpm},
+	{[]string{"apk"}, "apk-tools (_alpha.._p suffixes, -rN)", "apk", compareAPK},
+	{[]string{"maven"}, "Maven ComparableVersion", "maven", compareMaven},
+}
+
+var orderingByEcosystem = func() map[string]VersionOrdering {
+	m := make(map[string]VersionOrdering)
+	for _, o := range versionOrderings {
+		for _, e := range o.Ecosystems {
+			m[e] = o
+		}
+	}
+	return m
+}()
+
+// VersionOrderings lists the supported version-ordering rules.
+func VersionOrderings() []VersionOrdering {
+	return versionOrderings
+}
+
 // ClassifyVersionChange: per-ecosystem order; else unknown
 func ClassifyVersionChange(ecosystem, from, to string) (direction, level string) {
-	switch ecosystem {
-	case "golang", "github":
-		return compareGoSemver(from, to)
-	case "npm", "cargo", "composer", "swift", "hex", "pub":
-		return compareSemver(from, to)
-	case "pypi":
-		return comparePEP440(from, to)
-	case "gem":
-		return compareGem(from, to)
-	case "deb":
-		return compareDeb(from, to)
-	case "rpm":
-		return compareRPM(from, to)
-	case "alpm":
-		return compareAlpm(from, to)
-	case "apk":
-		return compareAPK(from, to)
-	case "maven":
-		return compareMaven(from, to)
+	if o, ok := orderingByEcosystem[ecosystem]; ok {
+		return o.compare(from, to)
 	}
 	return DirectionUnknown, LevelUnknown
 }
