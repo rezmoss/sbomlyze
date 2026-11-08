@@ -6,7 +6,8 @@
 |---|---|---|
 | **File** | cyclonedx-before.json | cyclonedx-after.json |
 | **File Size** | 921 B | 1 KB |
-| **Format** | (none) | (none) |
+| **Format** | CycloneDX 1.4 | CycloneDX 1.4 |
+| **Generator** | (none) | (none) |
 | **OS** | (none) | (none) |
 | **Source** | (none) | (none) |
 | **Total Components** | 3 | 3 |

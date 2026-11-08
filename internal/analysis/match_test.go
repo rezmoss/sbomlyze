@@ -533,3 +533,21 @@ func TestRealWorldAcceptance(t *testing.T) {
 		}
 	})
 }
+
+// Codex review: a move must not swallow a license change.
+func TestMovedKeepsLicenseChange(t *testing.T) {
+	b := goPkg("m", "v1.0.0", "/a/go.mod")
+	b.Licenses = []string{"MIT"}
+	a := goPkg("m", "v1.0.0", "/b/go.mod")
+	a.Licenses = []string{"Apache-2.0"}
+	r := DiffComponents([]sbom.Component{b}, []sbom.Component{a})
+	if len(r.Moved) != 1 {
+		t.Fatalf("moved = %+v", r.Moved)
+	}
+	if s := summary(r); s.MetadataDrift != 1 || s.LicenseChanges != 1 || s.IntegrityDrift != 0 {
+		t.Fatalf("summary = %+v", s)
+	}
+	if r.Changed[0].Location != "/b/go.mod" || !slices.Equal(r.Changed[0].Drift.LicensesDiff, []string{"+Apache-2.0", "-MIT"}) {
+		t.Errorf("changed = %+v", r.Changed[0])
+	}
+}

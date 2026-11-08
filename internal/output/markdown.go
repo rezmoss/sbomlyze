@@ -29,7 +29,8 @@ func GenerateMarkdownWithOverviewAndCompliance(result analysis.DiffResult, viola
 	sb.WriteString("|---|---|---|\n")
 	fmt.Fprintf(&sb, "| **File** | %s | %s |\n", filepath.Base(b.FileName), filepath.Base(a.FileName))
 	fmt.Fprintf(&sb, "| **File Size** | %s | %s |\n", formatFileSize(b.FileSize), formatFileSize(a.FileSize))
-	fmt.Fprintf(&sb, "| **Format** | %s | %s |\n", orNone(b.Info.ToolName), orNone(a.Info.ToolName))
+	fmt.Fprintf(&sb, "| **Format** | %s | %s |\n", orNone(formatLabel(b.Info)), orNone(formatLabel(a.Info)))
+	fmt.Fprintf(&sb, "| **Generator** | %s | %s |\n", orNone(generatorLabel(b.Info)), orNone(generatorLabel(a.Info)))
 	fmt.Fprintf(&sb, "| **OS** | %s | %s |\n", orNone(b.Info.OSPrettyName), orNone(a.Info.OSPrettyName))
 	fmt.Fprintf(&sb, "| **Source** | %s | %s |\n", orNone(b.Info.SourceName), orNone(a.Info.SourceName))
 	fmt.Fprintf(&sb, "| **Total Components** | %d | %d |\n", b.Stats.TotalComponents, a.Stats.TotalComponents)
@@ -193,6 +194,12 @@ func writeMarkdownDiffBody(sb *strings.Builder, result analysis.DiffResult, viol
 	fmt.Fprintf(sb, "| Added | %d |\n", len(result.Added))
 	fmt.Fprintf(sb, "| Removed | %d |\n", len(result.Removed))
 	fmt.Fprintf(sb, "| Changed | %d |\n", len(result.Changed))
+	if len(result.Moved) > 0 {
+		fmt.Fprintf(sb, "| Moved | %d |\n", len(result.Moved))
+	}
+	if len(result.FileChanges) > 0 {
+		fmt.Fprintf(sb, "| File changes | %d |\n", len(result.FileChanges))
+	}
 
 	if result.DriftSummary != nil {
 		sb.WriteString("\n### Drift Summary\n\n")
@@ -280,6 +287,37 @@ func writeMarkdownDiffBody(sb *strings.Builder, result analysis.DiffResult, viol
 		sb.WriteString("\n</details>\n")
 	}
 
+	if len(result.Moved) > 0 {
+		sb.WriteString("\n<details>\n")
+		fmt.Fprintf(sb, "<summary>↪️ Moved Components (%d)</summary>\n\n", len(result.Moved))
+		sb.WriteString("| Name | Version | From | To |\n")
+		sb.WriteString("|------|---------|------|----|\n")
+		for _, m := range result.Moved {
+			fmt.Fprintf(sb, "| %s | %s | %s | %s |\n", m.Name, m.Version, m.From, m.To)
+		}
+		sb.WriteString("\n</details>\n")
+	}
+
+	if len(result.VersionSetChanges) > 0 {
+		sb.WriteString("\n<details>\n")
+		fmt.Fprintf(sb, "<summary>± Version Set Changes (%d, listed in added/removed)</summary>\n\n", len(result.VersionSetChanges))
+		sb.WriteString("| Name | Location | Removed | Added |\n")
+		sb.WriteString("|------|----------|---------|-------|\n")
+		for _, v := range result.VersionSetChanges {
+			fmt.Fprintf(sb, "| %s | %s | %s | %s |\n", v.Name, v.Location, strings.Join(v.RemovedVersions, ", "), strings.Join(v.AddedVersions, ", "))
+		}
+		sb.WriteString("\n</details>\n")
+	}
+
+	if len(result.FileChanges) > 0 {
+		sb.WriteString("\n<details>\n")
+		fmt.Fprintf(sb, "<summary>📄 File Changes (%d, not package drift)</summary>\n\n", len(result.FileChanges))
+		for _, f := range result.FileChanges {
+			fmt.Fprintf(sb, "- `%s`\n", f.Path)
+		}
+		sb.WriteString("\n</details>\n")
+	}
+
 	if len(result.Changed) > 0 {
 		sb.WriteString("\n<details>\n")
 		fmt.Fprintf(sb, "<summary>🔄 Changed Components (%d)</summary>\n\n", len(result.Changed))
@@ -297,7 +335,7 @@ func writeMarkdownDiffBody(sb *strings.Builder, result analysis.DiffResult, viol
 					drift = "📝 Metadata"
 				}
 			}
-			fmt.Fprintf(sb, "| %s | %s | %s | %s |\n", c.Name, c.Before.Version, c.After.Version, drift)
+			fmt.Fprintf(sb, "| %s | %s | %s | %s |\n", c.Name+atLocation(c.Location), c.Before.Version, c.After.Version, drift)
 		}
 		sb.WriteString("\n</details>\n")
 	}

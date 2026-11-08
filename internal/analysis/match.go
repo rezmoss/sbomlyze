@@ -1,6 +1,7 @@
 package analysis
 
 import (
+	"fmt"
 	"maps"
 	"slices"
 	"sort"
@@ -382,6 +383,15 @@ func matchMoved(bs, as []occurrence, result *DiffResult) ([]occurrence, []occurr
 		result.Moved = append(result.Moved, MovedComponent{
 			ID: b.c.ID, Name: b.c.Name, Version: b.c.Version, From: b.display, To: a.display,
 		})
+		// a move can carry a license change; digests are only compared at
+		// one location, so a move is never integrity drift
+		if lics := diffLicenses(b.c.Licenses, a.c.Licenses); len(lics) > 0 {
+			result.Changed = append(result.Changed, ChangedComponent{
+				ID: b.c.ID, Name: b.c.Name, Location: a.display, Before: b.c, After: a.c,
+				Changes: []string{fmt.Sprintf("licenses: %v -> %v", b.c.Licenses, a.c.Licenses)},
+				Drift:   &DriftInfo{Type: DriftTypeMetadata, LicensesDiff: lics},
+			})
+		}
 		usedB[bi[0]], usedA[ai[0]] = true, true
 	}
 	return remove(bs, usedB), remove(as, usedA)

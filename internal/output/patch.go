@@ -18,7 +18,7 @@ type JSONPatchOp struct {
 
 // GenerateJSONPatch creates a JSON Patch from a diff.
 func GenerateJSONPatch(result analysis.DiffResult) []JSONPatchOp {
-	var ops []JSONPatchOp
+	ops := []JSONPatchOp{} // an empty diff is [], not null
 
 	for i, c := range result.Added {
 		ops = append(ops, JSONPatchOp{
@@ -64,6 +64,31 @@ func GenerateJSONPatch(result analysis.DiffResult) []JSONPatchOp {
 				Value: c.After.Hashes,
 			})
 		}
+
+		// go-h1 and cargo-checksum live outside Hashes
+		if !maps.Equal(c.Before.Digests, c.After.Digests) {
+			ops = append(ops, JSONPatchOp{
+				Op:    "replace",
+				Path:  fmt.Sprintf("/components/%s/digests", ref),
+				Value: c.After.Digests,
+			})
+		}
+	}
+
+	for _, m := range result.Moved {
+		ops = append(ops, JSONPatchOp{
+			Op:   "move",
+			From: fmt.Sprintf("/components/%s@%s", m.ID, m.From),
+			Path: fmt.Sprintf("/components/%s@%s", m.ID, m.To),
+		})
+	}
+
+	for _, f := range result.FileChanges {
+		ops = append(ops, JSONPatchOp{
+			Op:    "replace",
+			Path:  fmt.Sprintf("/files/%s/hashes", f.Path),
+			Value: f.HashesAfter,
+		})
 	}
 
 	return ops

@@ -65,3 +65,49 @@ func TestOccurrenceOutputsKeepLocations(t *testing.T) {
 		t.Errorf("markdown missing file-change row:\n%s", md)
 	}
 }
+
+// Codex review: patch, Markdown and HTML must show digests, file changes and moves.
+func TestOutputsRenderNewChangeKinds(t *testing.T) {
+	result := analysis.DiffResult{
+		Changed: []analysis.ChangedComponent{{
+			ID: "pkg:golang/x", Name: "x", Location: "/go.mod",
+			Before: sbom.Component{Version: "v1.0.0", Digests: map[string]string{sbom.DigestGoH1: "h1:A="}},
+			After:  sbom.Component{Version: "v1.0.0", Digests: map[string]string{sbom.DigestGoH1: "h1:B="}},
+			Drift:  &analysis.DriftInfo{Type: analysis.DriftTypeIntegrity},
+		}},
+		Moved:             []analysis.MovedComponent{{ID: "pkg:golang/m", Name: "m", Version: "v1.0.0", From: "/a/go.mod", To: "/b/go.mod"}},
+		FileChanges:       []analysis.FileChange{{Path: "/go.mod", HashesAfter: map[string]string{"SHA-256": "bb"}}},
+		VersionSetChanges: []analysis.VersionSetChange{{Name: "e", Location: "/package-lock.json", RemovedVersions: []string{"1.10.0"}, AddedVersions: []string{"1.11.0", "1.9.2"}}},
+	}
+
+	ops := map[string]JSONPatchOp{}
+	for _, op := range GenerateJSONPatch(result) {
+		ops[op.Op+" "+op.Path] = op
+	}
+	for _, want := range []string{
+		"replace /components/pkg:golang/x@/go.mod/digests",
+		"move /components/pkg:golang/m@/b/go.mod",
+		"replace /files//go.mod/hashes",
+	} {
+		if _, ok := ops[want]; !ok {
+			t.Errorf("patch missing %q; got %v", want, ops)
+		}
+	}
+	if got := GenerateJSONPatch(analysis.DiffResult{}); got == nil || len(got) != 0 {
+		t.Errorf("empty diff patch = %#v, want []", got)
+	}
+
+	overview := analysis.DiffOverview{After: analysis.SBOMSide{Info: sbom.SBOMInfo{Format: "CycloneDX", SpecVersion: "1.6", ToolName: "syft"}}}
+	md := GenerateMarkdownWithOverview(result, nil, overview, analysis.KeyFindings{})
+	html := GenerateHTML(result, nil, overview, analysis.KeyFindings{})
+	for name, doc := range map[string]string{"markdown": md, "html": html} {
+		for _, want := range []string{"Moved Components (1)", "/a/go.mod", "/b/go.mod", "File Changes (1", "Version Set Changes (1", "1.11.0, 1.9.2", "x @ /go.mod"} {
+			if !strings.Contains(doc, want) {
+				t.Errorf("%s missing %q", name, want)
+			}
+		}
+	}
+	if !strings.Contains(md, "| **Format** | (none) | CycloneDX 1.6 |") || !strings.Contains(md, "| **Generator** | (none) | syft |") {
+		t.Errorf("markdown Format/Generator rows wrong:\n%s", md)
+	}
+}
