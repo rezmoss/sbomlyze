@@ -26,3 +26,14 @@ func TestDetectDominantType_IgnoresFileComponents(t *testing.T) {
 		}
 	}
 }
+
+func TestUpgradeFindingShowsRevisionLevel(t *testing.T) {
+	deb := func(v string) sbom.Component {
+		return sbom.Component{ID: "pkg:deb/debian/libc6", Name: "libc6", Version: v, PURL: "pkg:deb/debian/libc6@" + v}
+	}
+	r := DiffComponents([]sbom.Component{deb("2.36-9")}, []sbom.Component{deb("2.36-10")})
+	f := ComputeKeyFindings(r, DiffOverview{})
+	if m := findingWith(f, "version upgrades"); !strings.Contains(m, "1 revision") {
+		t.Errorf("finding = %q", m)
+	}
+}

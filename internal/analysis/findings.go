@@ -610,9 +610,9 @@ func detectVersionChangeAnalysis(result DiffResult, overview DiffOverview) []Fin
 
 	if len(up.distinct) > 0 {
 		msg := fmt.Sprintf("%d version upgrades", len(up.distinct))
-		if levels[LevelMajor] > 0 || levels[LevelMinor] > 0 || levels[LevelPrerelease] > 0 {
-			parts := make([]string, 0, 4)
-			for _, l := range []string{LevelMajor, LevelMinor, LevelPatch, LevelPrerelease} {
+		if levels[LevelMajor] > 0 || levels[LevelMinor] > 0 || levels[LevelPrerelease] > 0 || levels[LevelRevision] > 0 {
+			parts := make([]string, 0, 5)
+			for _, l := range []string{LevelMajor, LevelMinor, LevelPatch, LevelPrerelease, LevelRevision} {
 				if levels[l] > 0 {
 					parts = append(parts, fmt.Sprintf("%d %s", levels[l], l))
 				}

@@ -4,7 +4,17 @@ matrix:
     b: "basic"
     c: "—"
     d: "—"
-  - cap: "Integrity / tamper drift (hash changed without version)"
+  - cap: "Integrity drift (package digest changed, same version)"
+    a: "yes"
+    b: "—"
+    c: "—"
+    d: "—"
+  - cap: "Owned-file tamper detection (files inside a package changed, same version)"
+    a: "yes"
+    b: "—"
+    c: "—"
+    d: "—"
+  - cap: "Ecosystem-correct upgrade/downgrade (deb, rpm, apk, pacman, Maven, Go, PEP 440, …)"
     a: "yes"
     b: "—"
     c: "—"
@@ -38,7 +48,7 @@ matrix:
 features:
   - num: "01"
     t: "Drift classification"
-    d: "Version drift, integrity drift, and metadata drift are separated, not merged into one changed count."
+    d: "Version, integrity, metadata and owned-file drift are separated, and scanner file entries (go.mod, workflows) are reported apart from packages."
   - num: "02"
     t: "Dependency graph diff"
     d: "Added and removed edges, new transitive reachability, the exact path to each new dependency, and its depth."
@@ -46,8 +56,8 @@ features:
     t: "Depth risk summary"
     d: "Depth 1 is a choice you made. Depth 3+ is flagged for careful review."
   - num: "04"
-    t: "Strong identity matching"
-    d: "PURL → CPE → BOM-ref → namespace/name precedence, so cross-format diffs stay meaningful."
+    t: "Occurrence matching"
+    d: "Each package is matched by identity, version and location, so a package in two lockfiles is never dropped or paired across lockfiles, and results do not depend on input order."
   - num: "05"
     t: "Compliance scoring"
     d: "NTIA, CISA 2025, and BSI TR-03183 minimum elements with per-check pass/fail detail."
@@ -63,12 +73,12 @@ features:
   - num: "09"
     t: "Tolerant parsing"
     d: "Continue on malformed input with structured warnings, or use --strict to fail closed."
-
-formats:
-  - text
-  - json
-  - sarif
-  - junit
-  - markdown
-  - html
-  - patch
+  - num: "10"
+    t: "Ecosystem-correct versions"
+    d: "Upgrade, downgrade and major/minor/patch/revision follow each ecosystem's own rules, checked against dpkg, rpm, apk, pacman, RubyGems and Maven."
+  - num: "11"
+    t: "Owned-file drift"
+    d: "From Syft JSON and SPDX file inventories: a package that keeps its version while files it owns are modified, added or removed."
+  - num: "12"
+    t: "Digest coverage"
+    d: "Reports how many same-version packages could actually be checked, by digest kind (go-h1, SHA-256, cargo-checksum), so a clean result is not mistaken for proof."

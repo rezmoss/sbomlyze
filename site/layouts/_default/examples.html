@@ -1,0 +1,20 @@
+{{ define "main" }}
+{{ $rel := partial "release.html" . }}
+<section class="section-hero bb">
+  <div class="container-md">
+    <div class="eyebrow">Live output · {{ $rel.tag }}</div>
+    <h1 class="h-page" style="max-width:24ch">{{ .Title }}</h1>
+    <p class="lead-md" style="max-width:66ch;margin:22px 0 0">{{ .Params.description }}</p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:28px">
+      <code class="inline-cmd">sbomlyze syft-before.cdx.json syft-after.cdx.json --format html</code>
+    </div>
+  </div>
+</section>
+<section class="section-md">
+  <div class="container-md doc-body">
+    <p>Real Syft CycloneDX SBOMs of <a href="https://github.com/anchore/syft">anchore/syft</a> v1.55.0 and v1.57.0 (from <code>testdata/realworld/</code>), diffed by the released {{ $rel.tag }} binary when this site was built. Nothing here is hand-written.</p>
+    <p><a href="{{ "examples/syft/report.html" | relURL }}">Open the HTML report</a> · <a href="{{ "examples/syft/report.json" | relURL }}">JSON</a> · <a href="{{ "examples/syft/report.md" | relURL }}">Markdown</a></p>
+    <iframe src="{{ "examples/syft/report.html" | relURL }}" title="sbomlyze HTML report: syft 1.55.0 to 1.57.0" style="width:100%;height:900px;border:1px solid var(--line, #333);border-radius:10px;background:#fff" loading="lazy"></iframe>
+  </div>
+</section>
+{{ end }}

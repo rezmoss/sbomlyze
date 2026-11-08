@@ -13,7 +13,7 @@
               "id": "integrity-drift",
               "name": "Integrity Drift Detected",
               "shortDescription": {
-                "text": "Component hash changed without version change"
+                "text": "Package digest changed without a version change"
               },
               "fullDescription": {
                 "text": ""

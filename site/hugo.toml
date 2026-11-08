@@ -5,9 +5,6 @@ disableKinds = ["taxonomy", "term", "rss", "section"]
 
 [params]
   description = "Git diff for SBOMs. Compare CycloneDX, SPDX, and Syft documents, detect tampering, and gate CI."
-  version = "v0.5.3"
-  actionSha = "db9182a06acbc58a66143978765f096a576f1f9c"
-  githubStars = "24"
   showComparisonTable = true
   repo = "https://github.com/rezmoss/sbomlyze"
 
@@ -35,6 +32,11 @@ disableKinds = ["taxonomy", "term", "rss", "section"]
   name = "Install"
   pageRef = "/install"
   weight = 50
+
+[[menus.main]]
+  name = "Changelog"
+  pageRef = "/changelog"
+  weight = 60
 
 [markup.goldmark.renderer]
   unsafe = true

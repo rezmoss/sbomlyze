@@ -15,14 +15,21 @@
 <section class="section-md">
   <div class="container-md grid-3">
     {{ range site.Data.compliance.frameworks }}
+    {{ $std := .standard }}{{ $gen := index (where site.Data.gen.compliance "standard" $std) 0 }}
+    {{ if not $gen }}{{ errorf "compliance framework %q not produced by sitegen" $std }}{{ end }}
     <div class="card fw-card">
       <div class="fw-head">
         <span class="fw-year">{{ .year }}</span>
-        <span class="fw-checks">{{ .checks }}</span>
+        <span class="fw-checks">{{ len $gen.checks }}</span>
       </div>
       <div class="fw-name">{{ .name }}</div>
-      <div class="fw-label">{{ .checksLabel }}</div>
+      <div class="fw-label">{{ len $gen.checks }} checks</div>
       <div class="fw-req">{{ .req }}</div>
+      <details style="margin-top:14px"><summary class="note-xs" style="cursor:pointer">All checks</summary>
+        <ul class="note-xs" style="margin:10px 0 0;padding-left:18px">
+          {{ range $gen.checks }}<li><strong>{{ .name }}</strong> — {{ .description }}</li>{{ end }}
+        </ul>
+      </details>
     </div>
     {{ end }}
   </div>

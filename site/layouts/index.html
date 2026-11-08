@@ -10,7 +10,7 @@
       </div>
       <h1 class="h-hero"><span style="font-family:var(--mono);font-weight:500;color:var(--green)">git diff</span> for your SBOM.</h1>
       <p class="lead" style="max-width:56ch;margin:26px 0 0">Compare two Software Bills of Materials and see what changed between builds, versions, and releases.</p>
-      <p style="font:400 17px/1.65 var(--sans);color:oklch(0.66 0.008 80);max-width:56ch;margin:16px 0 0">sbomlyze compares component hashes, not only version strings. When an attacker swaps a package without bumping its version, sbomlyze flags it. Generators and vulnerability scanners miss this.</p>
+      <p style="font:400 17px/1.65 var(--sans);color:oklch(0.66 0.008 80);max-width:56ch;margin:16px 0 0">sbomlyze compares package digests and the files inside each package, not only version strings. When a package is swapped or its files are edited without a version bump, sbomlyze flags it. Generators and vulnerability scanners miss this.</p>
       <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:34px">
         <a class="btn btn-primary" href="{{ "install" | relURL }}">Install sbomlyze</a>
         <a class="btn btn-outline" href="{{ "action" | relURL }}">Gate a pull request</a>
@@ -24,24 +24,24 @@
         <span class="term-title">sbomlyze baseline.json build.json</span>
       </div>
       <pre class="term-pre">Drift Summary:
-  Version drift:   58 components
-  Integrity drift: <span class="c-red">1 component  (hash changed, version did not)</span>
-  Metadata drift:  2 components
+  Version drift:    58 components
+  Integrity drift:  <span class="c-red">1 components</span>
+  Owned file drift: <span class="c-red">1 packages (1 files)</span>
 
 Key Findings:
-  Attack surface: +5 packages (7.0%), +120 files (3.2%)
-  <span class="c-amber">2 version downgrades: openssl 3.1.4→3.0.2, curl 8.5.0→8.4.0</span>
-  56 upgrades (2 major, 12 minor, 42 patch) of 65 shared
-  New ecosystem: golang (8 packages)
+  <span class="c-amber">1 version downgrades detected: nginx 1.29.4-r1→1.27.3-r1</span>
+  56 version upgrades (2 major, 12 minor, 41 patch, ...)
+  6 file entries changed content (not package drift)
 
 ~ Changed (58):
-  ~ nginx
+  ~ nginx @ /lib/apk/db/installed [downgrade]
       version: 1.29.4-r1 -> 1.27.3-r1
-  <span class="c-red">~ suspicious-pkg  [INTEGRITY]
-      hash[SHA256]: abc123 -> def456</span>
+  <span class="c-red">~ suspicious-pkg @ /package-lock.json [INTEGRITY]
+      hash[SHA-256]: abc123 -> def456</span>
 
-<span class="c-red">!! Policy Violations (1):
-  [deny_integrity_drift] hash changed without version change</span>
+<span class="c-red">!! Policy Violations (2):
+  [deny_integrity_drift] suspicious-pkg: hash changed
+  [deny_owned_file_drift] coreutils 9.1-1: /usr/bin/ls</span>
 <span class="c-gray">exit status 1</span></pre>
     </div>
   </div>
@@ -50,11 +50,32 @@ Key Findings:
 <section class="bt bb alt" style="padding:34px 32px">
   <div class="container grid-4">
     <div><div class="stat-num">3</div><div class="stat-label">SBOM formats parsed and converted</div></div>
-    <div><div class="stat-num">7</div><div class="stat-label">Output formats, from text to SARIF</div></div>
-    <div><div class="stat-num">14</div><div class="stat-label">Policy rules for CI gating</div></div>
-    <div><div class="stat-num">26</div><div class="stat-label">Minimum-element checks across NTIA, CISA, BSI</div></div>
+    <div><div class="stat-num">{{ len site.Data.gen.cli.formats }}</div><div class="stat-label">Output formats, from text to SARIF</div></div>
+    <div><div class="stat-num">{{ len site.Data.gen.policy }}</div><div class="stat-label">Policy rules for CI gating</div></div>
+    {{ $checks := 0 }}{{ range site.Data.gen.compliance }}{{ $checks = add $checks (len .checks) }}{{ end }}
+    <div><div class="stat-num">{{ $checks }}</div><div class="stat-label">Minimum-element checks across NTIA, CISA, BSI</div></div>
   </div>
 </section>
+
+{{ with site.Data.gen.whatsnew }}
+<section class="section-md bb">
+  <div class="container">
+    <div class="eyebrow">What's new · v{{ .version }}{{ with .date }} · {{ . }}{{ end }}</div>
+    <div class="grid-2" style="margin-top:22px;gap:16px">
+      {{ range .sections }}
+      <div class="card card-pad">
+        <div class="card-title">{{ .title }}</div>
+        <ul class="card-body" style="margin:10px 0 0;padding-left:18px">
+          {{ range first 6 .items }}<li>{{ . | markdownify }}</li>{{ end }}
+        </ul>
+        {{ if gt (len .items) 6 }}<div class="card-foot">+ {{ sub (len .items) 6 }} more</div>{{ end }}
+      </div>
+      {{ end }}
+    </div>
+    <p class="note" style="margin-top:18px"><a href="{{ "changelog" | relURL }}">Full changelog →</a> · <a href="{{ "examples" | relURL }}">See a real report from this release →</a></p>
+  </div>
+</section>
+{{ end }}
 
 <section class="section">
   <div class="container">
@@ -77,8 +98,8 @@ Key Findings:
       </div>
       <div class="card card-pad card-accent">
         <div class="overline">Layer 03 · sbomlyze</div>
-        <div class="card-title">Hash / integrity drift</div>
-        <div class="card-body">Did the recorded bytes change without the component version changing?</div>
+        <div class="card-title">Integrity &amp; owned-file drift</div>
+        <div class="card-body">Did a package's digest, or the files it owns, change without its version changing?</div>
         <div class="card-foot">Signals investigation; it does not by itself prove malicious intent.</div>
       </div>
     </div>
@@ -103,7 +124,7 @@ verdict:   <span class="c-red">integrity drift</span></pre>
         <div class="surface-body">
           <div class="surface-title">GitHub Action</div>
           <div class="surface-desc">Compares the head SBOM against a git, release, artifact, URL, or file baseline. Writes a Job Summary, enforces policy, uploads SARIF, maintains one PR comment.</div>
-          <code class="surface-cmd">uses: rezmoss/sbomlyze@{{ site.Params.version }}</code>
+          <code class="surface-cmd">uses: rezmoss/sbomlyze@{{ (partial "release.html" .).tag }}</code>
         </div>
       </div>
       <div class="card card-dark" style="overflow:hidden">
@@ -194,11 +215,11 @@ sbomlyze before.json after.json --format sarif</pre>
   <div class="container split">
     <div>
       <div class="eyebrow">Output</div>
-      <h2 class="h-med">One diff, seven ways to read it.</h2>
+      <h2 class="h-med">One diff, {{ len site.Data.gen.cli.formats }} ways to read it.</h2>
       <p style="font:400 17px/1.6 var(--sans);color:var(--soft);margin:18px 0 0">Every format is produced from the same analysis, so the terminal, the code-scanning alert, and the report you email to an auditor never disagree.</p>
       <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:26px">
-        {{ range site.Data.home.formats }}
-        <span class="tag">{{ . }}</span>
+        {{ range site.Data.gen.cli.formats }}
+        <span class="tag">{{ .name }}</span>
         {{ end }}
       </div>
     </div>
@@ -206,6 +227,7 @@ sbomlyze before.json after.json --format sarif</pre>
       <div class="codebox-head">.github/sbom-policy.json</div>
       <pre class="codebox-pre">{
   "deny_integrity_drift": <span class="c-green">true</span>,
+  "deny_owned_file_drift": <span class="c-green">true</span>,
   "deny_licenses": [<span class="c-amber">"GPL-3.0"</span>, <span class="c-amber">"AGPL-3.0"</span>],
   "require_licenses": <span class="c-green">true</span>,
   "max_depth": 3,

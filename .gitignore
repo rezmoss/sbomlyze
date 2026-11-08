@@ -38,3 +38,10 @@ dist
 site/public/
 site/resources/
 site/.hugo_build.lock
+# website: written by internal/tools/sitegen and the site workflow
+site/data/gen/
+site/content/changelog.md
+site/content/json-reference.md
+site/static/examples/
+site/public/
+site/resources/

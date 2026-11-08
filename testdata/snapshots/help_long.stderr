@@ -18,6 +18,7 @@ Options:
   --port <port>       Web server port (default 8080)
   --json              Output in JSON format (shortcut for --format json)
   --format <format>   Output format: text, json, sarif, junit, markdown, html, patch
+  --compliance        Score NTIA, CISA and BSI TR-03183 compliance
   --policy <file>     Policy file for CI checks
   --strict            Fail on parse warnings
   --tolerant          Continue on parse warnings (default)
