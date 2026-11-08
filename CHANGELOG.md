@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.1](https://github.com/rezmoss/sbomlyze/compare/v0.7.0...v0.7.1) (2026-11-08)
+
+
+### Bug Fixes
+
+* **diff:** resolve ecosystem for components without a PURL ([#79](https://github.com/rezmoss/sbomlyze/issues/79)) ([126308d](https://github.com/rezmoss/sbomlyze/commit/126308d42a042e49ad7fcefc23f833d70b479021))
+
 ## [0.7.0](https://github.com/rezmoss/sbomlyze/compare/v0.6.0...v0.7.0) (2026-11-08)
 
 
