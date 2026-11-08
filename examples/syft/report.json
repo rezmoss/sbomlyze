@@ -1,0 +1,3920 @@
+{
+  "overview": {
+    "before": {
+      "file_name": "/home/runner/work/sbomlyze/sbomlyze/release-src/testdata/realworld/syft-before.cdx.json",
+      "file_size": 274355,
+      "info": {
+        "source_type": "file",
+        "source_name": "anchore/syft",
+        "source_version": "v1.55.0",
+        "tool_name": "syft",
+        "tool_version": "1.55.0",
+        "sbom_timestamp": "2026-11-02T03:06:31Z",
+        "format": "CycloneDX",
+        "spec_version": "1.7"
+      },
+      "stats": {
+        "total_components": 369,
+        "by_type": {
+          "file": 7,
+          "github": 18,
+          "golang": 342,
+          "library": 2
+        },
+        "without_license": 369,
+        "with_hashes": 7,
+        "without_hashes": 362,
+        "total_dependencies": 0,
+        "with_dependencies": 0,
+        "duplicate_count": 7,
+        "duplicates": [
+          {
+            "id": "cpe:.\\/.github\\/actions\\/bootstrap:.\\/.github\\/actions\\/bootstrap",
+            "name": "./.github/actions/bootstrap",
+            "versions": [
+              "UNKNOWN"
+            ],
+            "components": [
+              {
+                "id": "cpe:.\\/.github\\/actions\\/bootstrap:.\\/.github\\/actions\\/bootstrap",
+                "name": "./.github/actions/bootstrap",
+                "version": "UNKNOWN",
+                "cpes": [
+                  "cpe:2.3:a:.\\/.github\\/actions\\/bootstrap:.\\/.github\\/actions\\/bootstrap:*:*:*:*:*:*:*:*"
+                ],
+                "bom-ref": "68c61397fd92924c",
+                "type": "library",
+                "locations": [
+                  "/.github/workflows/validations.yaml"
+                ]
+              },
+              {
+                "id": "cpe:.\\/.github\\/actions\\/bootstrap:.\\/.github\\/actions\\/bootstrap",
+                "name": "./.github/actions/bootstrap",
+                "version": "UNKNOWN",
+                "cpes": [
+                  "cpe:2.3:a:.\\/.github\\/actions\\/bootstrap:.\\/.github\\/actions\\/bootstrap:*:*:*:*:*:*:*:*"
+                ],
+                "bom-ref": "a7d3cafcd05cc99e",
+                "type": "library",
+                "locations": [
+                  "/.github/workflows/release.yaml"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "pkg:github/actions/checkout",
+            "name": "actions/checkout",
+            "versions": [
+              "v7.0.1"
+            ],
+            "components": [
+              {
+                "id": "pkg:github/actions/checkout",
+                "name": "actions/checkout",
+                "version": "v7.0.1",
+                "purl": "pkg:github/actions/checkout@v7.0.1",
+                "cpes": [
+                  "cpe:2.3:a:actions\\/checkout:actions\\/checkout:v7.0.1:*:*:*:*:*:*:*"
+                ],
+                "bom-ref": "pkg:github/actions/checkout@v7.0.1?package-id=062b97dfdcdff99f",
+                "type": "library",
+                "locations": [
+                  "/.github/workflows/validate-github-actions.yaml"
+                ]
+              },
+              {
+                "id": "pkg:github/actions/checkout",
+                "name": "actions/checkout",
+                "version": "v7.0.1",
+                "purl": "pkg:github/actions/checkout@v7.0.1",
+                "cpes": [
+                  "cpe:2.3:a:actions\\/checkout:actions\\/checkout:v7.0.1:*:*:*:*:*:*:*"
+                ],
+                "bom-ref": "pkg:github/actions/checkout@v7.0.1?package-id=3b74fc2874009c20",
+                "type": "library",
+                "locations": [
+                  "/.github/workflows/validations.yaml"
+                ]
+              },
+              {
+                "id": "pkg:github/actions/checkout",
+                "name": "actions/checkout",
+                "version": "v7.0.1",
+                "purl": "pkg:github/actions/checkout@v7.0.1",
+                "cpes": [
+                  "cpe:2.3:a:actions\\/checkout:actions\\/checkout:v7.0.1:*:*:*:*:*:*:*"
+                ],
+                "bom-ref": "pkg:github/actions/checkout@v7.0.1?package-id=8aacae6b26a1120f",
+                "type": "library",
+                "locations": [
+                  "/.github/workflows/release.yaml"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "pkg:github/anchore/go-make#.github/actions/setup",
+            "name": "anchore/go-make/.github/actions/setup",
+            "versions": [
+              "v0.9.3"
+            ],
+            "components": [
+              {
+                "id": "pkg:github/anchore/go-make#.github/actions/setup",
+                "name": "anchore/go-make/.github/actions/setup",
+                "version": "v0.9.3",
+                "purl": "pkg:github/anchore/go-make@v0.9.3#.github/actions/setup",
+                "cpes": [
+                  "cpe:2.3:a:anchore\\/go-make\\/.github\\/actions\\/setup:anchore\\/go-make\\/.github\\/actions\\/setup:v0.9.3:*:*:*:*:*:*:*"
+                ],
+                "bom-ref": "pkg:github/anchore/go-make@v0.9.3?package-id=467cf6d8aa4bea83#.github/actions/setup",
+                "type": "library",
+                "locations": [
+                  "/.github/actions/bootstrap/action.yaml"
+                ]
+              },
+              {
+                "id": "pkg:github/anchore/go-make#.github/actions/setup",
+                "name": "anchore/go-make/.github/actions/setup",
+                "version": "v0.9.3",
+                "purl": "pkg:github/anchore/go-make@v0.9.3#.github/actions/setup",
+                "cpes": [
+                  "cpe:2.3:a:anchore\\/go-make\\/.github\\/actions\\/setup:anchore\\/go-make\\/.github\\/actions\\/setup:v0.9.3:*:*:*:*:*:*:*"
+                ],
+                "bom-ref": "pkg:github/anchore/go-make@v0.9.3?package-id=f85a2ac334504f05#.github/actions/setup",
+                "type": "library",
+                "locations": [
+                  "/.github/workflows/validations.yaml"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "pkg:golang/github.com/bmatcuk/doublestar/v4",
+            "name": "github.com/bmatcuk/doublestar/v4",
+            "versions": [
+              "v4.10.2"
+            ],
+            "components": [
+              {
+                "id": "pkg:golang/github.com/bmatcuk/doublestar/v4",
+                "name": "github.com/bmatcuk/doublestar/v4",
+                "version": "v4.10.2",
+                "purl": "pkg:golang/github.com/bmatcuk/doublestar/v4@v4.10.2",
+                "cpes": [
+                  "cpe:2.3:a:bmatcuk:doublestar\\/v4:v4.10.2:*:*:*:*:*:*:*"
+                ],
+                "digests": {
+                  "go-h1": "h1:eF7W7HWKg3z9NrWV9pTLnNeoXaqq3Tq9DNKXVMfoCnw="
+                },
+                "bom-ref": "pkg:golang/github.com/bmatcuk/doublestar/v4@v4.10.2?package-id=5fa04512449baf6a",
+                "type": "library",
+                "locations": [
+                  "/.make/go.mod"
+                ]
+              },
+              {
+                "id": "pkg:golang/github.com/bmatcuk/doublestar/v4",
+                "name": "github.com/bmatcuk/doublestar/v4",
+                "version": "v4.10.2",
+                "purl": "pkg:golang/github.com/bmatcuk/doublestar/v4@v4.10.2",
+                "cpes": [
+                  "cpe:2.3:a:bmatcuk:doublestar\\/v4:v4.10.2:*:*:*:*:*:*:*"
+                ],
+                "digests": {
+                  "go-h1": "h1:eF7W7HWKg3z9NrWV9pTLnNeoXaqq3Tq9DNKXVMfoCnw="
+                },
+                "bom-ref": "pkg:golang/github.com/bmatcuk/doublestar/v4@v4.10.2?package-id=86adfb224e15d2f0",
+                "type": "library",
+                "locations": [
+                  "/go.mod"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "pkg:golang/github.com/goccy/go-yaml",
+            "name": "github.com/goccy/go-yaml",
+            "versions": [
+              "v1.19.2"
+            ],
+            "components": [
+              {
+                "id": "pkg:golang/github.com/goccy/go-yaml",
+                "name": "github.com/goccy/go-yaml",
+                "version": "v1.19.2",
+                "purl": "pkg:golang/github.com/goccy/go-yaml@v1.19.2",
+                "cpes": [
+                  "cpe:2.3:a:goccy:go-yaml:v1.19.2:*:*:*:*:*:*:*"
+                ],
+                "digests": {
+                  "go-h1": "h1:PmFC1S6h8ljIz6gMRBopkjP1TVT7xuwrButHID66PoM="
+                },
+                "bom-ref": "pkg:golang/github.com/goccy/go-yaml@v1.19.2?package-id=46f9bf440b91e2a0",
+                "type": "library",
+                "locations": [
+                  "/.make/go.mod"
+                ]
+              },
+              {
+                "id": "pkg:golang/github.com/goccy/go-yaml",
+                "name": "github.com/goccy/go-yaml",
+                "version": "v1.19.2",
+                "purl": "pkg:golang/github.com/goccy/go-yaml@v1.19.2",
+                "cpes": [
+                  "cpe:2.3:a:goccy:go-yaml:v1.19.2:*:*:*:*:*:*:*"
+                ],
+                "digests": {
+                  "go-h1": "h1:PmFC1S6h8ljIz6gMRBopkjP1TVT7xuwrButHID66PoM="
+                },
+                "bom-ref": "pkg:golang/github.com/goccy/go-yaml@v1.19.2?package-id=efc377de37bce13b",
+                "type": "library",
+                "locations": [
+                  "/go.mod"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "pkg:golang/golang.org/x/mod",
+            "name": "golang.org/x/mod",
+            "versions": [
+              "v0.41.0"
+            ],
+            "components": [
+              {
+                "id": "pkg:golang/golang.org/x/mod",
+                "name": "golang.org/x/mod",
+                "version": "v0.41.0",
+                "purl": "pkg:golang/golang.org/x/mod@v0.41.0",
+                "cpes": [
+                  "cpe:2.3:a:golang:x\\/mod:v0.41.0:*:*:*:*:*:*:*"
+                ],
+                "digests": {
+                  "go-h1": "h1:qJmnOUb4YB+FsEuM3HcWucdZASCPGhsX6uljO6pog0c="
+                },
+                "bom-ref": "pkg:golang/golang.org/x/mod@v0.41.0?package-id=56d232e7120c3a8b",
+                "type": "library",
+                "locations": [
+                  "/go.mod"
+                ]
+              },
+              {
+                "id": "pkg:golang/golang.org/x/mod",
+                "name": "golang.org/x/mod",
+                "version": "v0.41.0",
+                "purl": "pkg:golang/golang.org/x/mod@v0.41.0",
+                "cpes": [
+                  "cpe:2.3:a:golang:x\\/mod:v0.41.0:*:*:*:*:*:*:*"
+                ],
+                "digests": {
+                  "go-h1": "h1:qJmnOUb4YB+FsEuM3HcWucdZASCPGhsX6uljO6pog0c="
+                },
+                "bom-ref": "pkg:golang/golang.org/x/mod@v0.41.0?package-id=c11f50fe32495f81",
+                "type": "library",
+                "locations": [
+                  "/.make/go.mod"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "pkg:golang/golang.org/x/sys",
+            "name": "golang.org/x/sys",
+            "versions": [
+              "v0.48.0",
+              "v0.49.0"
+            ],
+            "components": [
+              {
+                "id": "pkg:golang/golang.org/x/sys",
+                "name": "golang.org/x/sys",
+                "version": "v0.48.0",
+                "purl": "pkg:golang/golang.org/x/sys@v0.48.0",
+                "cpes": [
+                  "cpe:2.3:a:golang:x\\/sys:v0.48.0:*:*:*:*:*:*:*"
+                ],
+                "digests": {
+                  "go-h1": "h1:bbX/i/6MgT9BVLM9RT1thmxL04yeTAhbEz4SyadbXoo="
+                },
+                "bom-ref": "pkg:golang/golang.org/x/sys@v0.48.0?package-id=e8a9a7aa8a5b6bf3",
+                "type": "library",
+                "locations": [
+                  "/.make/go.mod"
+                ]
+              },
+              {
+                "id": "pkg:golang/golang.org/x/sys",
+                "name": "golang.org/x/sys",
+                "version": "v0.49.0",
+                "purl": "pkg:golang/golang.org/x/sys@v0.49.0",
+                "cpes": [
+                  "cpe:2.3:a:golang:x\\/sys:v0.49.0:*:*:*:*:*:*:*"
+                ],
+                "digests": {
+                  "go-h1": "h1:XbzkgYJHdqh/8m2Uu0W/dQv8nktxx4BFHp1M0gROTXA="
+                },
+                "bom-ref": "pkg:golang/golang.org/x/sys@v0.49.0?package-id=aec8e4adcf0dcac2",
+                "type": "library",
+                "locations": [
+                  "/go.mod"
+                ]
+              }
+            ]
+          }
+        ],
+        "license_categories": {
+          "copyleft": 0,
+          "permissive": 0,
+          "public_domain": 0,
+          "unknown": 369
+        },
+        "with_cpes": 349,
+        "without_cpes": 20,
+        "with_purl": 360,
+        "without_purl": 9
+      }
+    },
+    "after": {
+      "file_name": "/home/runner/work/sbomlyze/sbomlyze/release-src/testdata/realworld/syft-after.cdx.json",
+      "file_size": 274239,
+      "info": {
+        "source_type": "file",
+        "source_name": "anchore/syft",
+        "source_version": "v1.57.0",
+        "tool_name": "syft",
+        "tool_version": "1.57.0",
+        "sbom_timestamp": "2026-11-08T05:53:16Z",
+        "format": "CycloneDX",
+        "spec_version": "1.7"
+      },
+      "stats": {
+        "total_components": 369,
+        "by_type": {
+          "file": 7,
+          "github": 18,
+          "golang": 342,
+          "library": 2
+        },
+        "without_license": 369,
+        "with_hashes": 7,
+        "without_hashes": 362,
+        "total_dependencies": 0,
+        "with_dependencies": 0,
+        "duplicate_count": 7,
+        "duplicates": [
+          {
+            "id": "cpe:.\\/.github\\/actions\\/bootstrap:.\\/.github\\/actions\\/bootstrap",
+            "name": "./.github/actions/bootstrap",
+            "versions": [
+              "UNKNOWN"
+            ],
+            "components": [
+              {
+                "id": "cpe:.\\/.github\\/actions\\/bootstrap:.\\/.github\\/actions\\/bootstrap",
+                "name": "./.github/actions/bootstrap",
+                "version": "UNKNOWN",
+                "cpes": [
+                  "cpe:2.3:a:.\\/.github\\/actions\\/bootstrap:.\\/.github\\/actions\\/bootstrap:*:*:*:*:*:*:*:*"
+                ],
+                "bom-ref": "68c61397fd92924c",
+                "type": "library",
+                "locations": [
+                  "/.github/workflows/validations.yaml"
+                ]
+              },
+              {
+                "id": "cpe:.\\/.github\\/actions\\/bootstrap:.\\/.github\\/actions\\/bootstrap",
+                "name": "./.github/actions/bootstrap",
+                "version": "UNKNOWN",
+                "cpes": [
+                  "cpe:2.3:a:.\\/.github\\/actions\\/bootstrap:.\\/.github\\/actions\\/bootstrap:*:*:*:*:*:*:*:*"
+                ],
+                "bom-ref": "a7d3cafcd05cc99e",
+                "type": "library",
+                "locations": [
+                  "/.github/workflows/release.yaml"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "pkg:github/actions/checkout",
+            "name": "actions/checkout",
+            "versions": [
+              "v7.0.1"
+            ],
+            "components": [
+              {
+                "id": "pkg:github/actions/checkout",
+                "name": "actions/checkout",
+                "version": "v7.0.1",
+                "purl": "pkg:github/actions/checkout@v7.0.1",
+                "cpes": [
+                  "cpe:2.3:a:actions\\/checkout:actions\\/checkout:v7.0.1:*:*:*:*:*:*:*"
+                ],
+                "bom-ref": "pkg:github/actions/checkout@v7.0.1?package-id=062b97dfdcdff99f",
+                "type": "library",
+                "locations": [
+                  "/.github/workflows/validate-github-actions.yaml"
+                ]
+              },
+              {
+                "id": "pkg:github/actions/checkout",
+                "name": "actions/checkout",
+                "version": "v7.0.1",
+                "purl": "pkg:github/actions/checkout@v7.0.1",
+                "cpes": [
+                  "cpe:2.3:a:actions\\/checkout:actions\\/checkout:v7.0.1:*:*:*:*:*:*:*"
+                ],
+                "bom-ref": "pkg:github/actions/checkout@v7.0.1?package-id=3b74fc2874009c20",
+                "type": "library",
+                "locations": [
+                  "/.github/workflows/validations.yaml"
+                ]
+              },
+              {
+                "id": "pkg:github/actions/checkout",
+                "name": "actions/checkout",
+                "version": "v7.0.1",
+                "purl": "pkg:github/actions/checkout@v7.0.1",
+                "cpes": [
+                  "cpe:2.3:a:actions\\/checkout:actions\\/checkout:v7.0.1:*:*:*:*:*:*:*"
+                ],
+                "bom-ref": "pkg:github/actions/checkout@v7.0.1?package-id=8aacae6b26a1120f",
+                "type": "library",
+                "locations": [
+                  "/.github/workflows/release.yaml"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "pkg:github/anchore/go-make#.github/actions/setup",
+            "name": "anchore/go-make/.github/actions/setup",
+            "versions": [
+              "v0.9.6"
+            ],
+            "components": [
+              {
+                "id": "pkg:github/anchore/go-make#.github/actions/setup",
+                "name": "anchore/go-make/.github/actions/setup",
+                "version": "v0.9.6",
+                "purl": "pkg:github/anchore/go-make@v0.9.6#.github/actions/setup",
+                "cpes": [
+                  "cpe:2.3:a:anchore\\/go-make\\/.github\\/actions\\/setup:anchore\\/go-make\\/.github\\/actions\\/setup:v0.9.6:*:*:*:*:*:*:*"
+                ],
+                "bom-ref": "pkg:github/anchore/go-make@v0.9.6?package-id=8b554b8f7b14afab#.github/actions/setup",
+                "type": "library",
+                "locations": [
+                  "/.github/workflows/validations.yaml"
+                ]
+              },
+              {
+                "id": "pkg:github/anchore/go-make#.github/actions/setup",
+                "name": "anchore/go-make/.github/actions/setup",
+                "version": "v0.9.6",
+                "purl": "pkg:github/anchore/go-make@v0.9.6#.github/actions/setup",
+                "cpes": [
+                  "cpe:2.3:a:anchore\\/go-make\\/.github\\/actions\\/setup:anchore\\/go-make\\/.github\\/actions\\/setup:v0.9.6:*:*:*:*:*:*:*"
+                ],
+                "bom-ref": "pkg:github/anchore/go-make@v0.9.6?package-id=c1bf7b6db85a678c#.github/actions/setup",
+                "type": "library",
+                "locations": [
+                  "/.github/actions/bootstrap/action.yaml"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "pkg:golang/github.com/bmatcuk/doublestar/v4",
+            "name": "github.com/bmatcuk/doublestar/v4",
+            "versions": [
+              "v4.10.3"
+            ],
+            "components": [
+              {
+                "id": "pkg:golang/github.com/bmatcuk/doublestar/v4",
+                "name": "github.com/bmatcuk/doublestar/v4",
+                "version": "v4.10.3",
+                "purl": "pkg:golang/github.com/bmatcuk/doublestar/v4@v4.10.3",
+                "cpes": [
+                  "cpe:2.3:a:bmatcuk:doublestar\\/v4:v4.10.3:*:*:*:*:*:*:*"
+                ],
+                "digests": {
+                  "go-h1": "h1:1UIv1+fqH3++ViVkpnaPTB+Pi1UHycnPFAq14zgK+gI="
+                },
+                "bom-ref": "pkg:golang/github.com/bmatcuk/doublestar/v4@v4.10.3?package-id=6fd187a94708c41e",
+                "type": "library",
+                "locations": [
+                  "/.make/go.mod"
+                ]
+              },
+              {
+                "id": "pkg:golang/github.com/bmatcuk/doublestar/v4",
+                "name": "github.com/bmatcuk/doublestar/v4",
+                "version": "v4.10.3",
+                "purl": "pkg:golang/github.com/bmatcuk/doublestar/v4@v4.10.3",
+                "cpes": [
+                  "cpe:2.3:a:bmatcuk:doublestar\\/v4:v4.10.3:*:*:*:*:*:*:*"
+                ],
+                "digests": {
+                  "go-h1": "h1:1UIv1+fqH3++ViVkpnaPTB+Pi1UHycnPFAq14zgK+gI="
+                },
+                "bom-ref": "pkg:golang/github.com/bmatcuk/doublestar/v4@v4.10.3?package-id=937a2b30137b1650",
+                "type": "library",
+                "locations": [
+                  "/go.mod"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "pkg:golang/github.com/goccy/go-yaml",
+            "name": "github.com/goccy/go-yaml",
+            "versions": [
+              "v1.19.2"
+            ],
+            "components": [
+              {
+                "id": "pkg:golang/github.com/goccy/go-yaml",
+                "name": "github.com/goccy/go-yaml",
+                "version": "v1.19.2",
+                "purl": "pkg:golang/github.com/goccy/go-yaml@v1.19.2",
+                "cpes": [
+                  "cpe:2.3:a:goccy:go-yaml:v1.19.2:*:*:*:*:*:*:*"
+                ],
+                "digests": {
+                  "go-h1": "h1:PmFC1S6h8ljIz6gMRBopkjP1TVT7xuwrButHID66PoM="
+                },
+                "bom-ref": "pkg:golang/github.com/goccy/go-yaml@v1.19.2?package-id=46f9bf440b91e2a0",
+                "type": "library",
+                "locations": [
+                  "/.make/go.mod"
+                ]
+              },
+              {
+                "id": "pkg:golang/github.com/goccy/go-yaml",
+                "name": "github.com/goccy/go-yaml",
+                "version": "v1.19.2",
+                "purl": "pkg:golang/github.com/goccy/go-yaml@v1.19.2",
+                "cpes": [
+                  "cpe:2.3:a:goccy:go-yaml:v1.19.2:*:*:*:*:*:*:*"
+                ],
+                "digests": {
+                  "go-h1": "h1:PmFC1S6h8ljIz6gMRBopkjP1TVT7xuwrButHID66PoM="
+                },
+                "bom-ref": "pkg:golang/github.com/goccy/go-yaml@v1.19.2?package-id=efc377de37bce13b",
+                "type": "library",
+                "locations": [
+                  "/go.mod"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "pkg:golang/golang.org/x/mod",
+            "name": "golang.org/x/mod",
+            "versions": [
+              "v0.42.0"
+            ],
+            "components": [
+              {
+                "id": "pkg:golang/golang.org/x/mod",
+                "name": "golang.org/x/mod",
+                "version": "v0.42.0",
+                "purl": "pkg:golang/golang.org/x/mod@v0.42.0",
+                "cpes": [
+                  "cpe:2.3:a:golang:x\\/mod:v0.42.0:*:*:*:*:*:*:*"
+                ],
+                "digests": {
+                  "go-h1": "h1:ICeL3t2L30ljSPHHxDnR4fqVcBt/zR2zJAb9juavmQg="
+                },
+                "bom-ref": "pkg:golang/golang.org/x/mod@v0.42.0?package-id=2679d6a5bc401bae",
+                "type": "library",
+                "locations": [
+                  "/go.mod"
+                ]
+              },
+              {
+                "id": "pkg:golang/golang.org/x/mod",
+                "name": "golang.org/x/mod",
+                "version": "v0.42.0",
+                "purl": "pkg:golang/golang.org/x/mod@v0.42.0",
+                "cpes": [
+                  "cpe:2.3:a:golang:x\\/mod:v0.42.0:*:*:*:*:*:*:*"
+                ],
+                "digests": {
+                  "go-h1": "h1:ICeL3t2L30ljSPHHxDnR4fqVcBt/zR2zJAb9juavmQg="
+                },
+                "bom-ref": "pkg:golang/golang.org/x/mod@v0.42.0?package-id=da9832cedf7e9f2c",
+                "type": "library",
+                "locations": [
+                  "/.make/go.mod"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "pkg:golang/golang.org/x/sys",
+            "name": "golang.org/x/sys",
+            "versions": [
+              "v0.49.0"
+            ],
+            "components": [
+              {
+                "id": "pkg:golang/golang.org/x/sys",
+                "name": "golang.org/x/sys",
+                "version": "v0.49.0",
+                "purl": "pkg:golang/golang.org/x/sys@v0.49.0",
+                "cpes": [
+                  "cpe:2.3:a:golang:x\\/sys:v0.49.0:*:*:*:*:*:*:*"
+                ],
+                "digests": {
+                  "go-h1": "h1:XbzkgYJHdqh/8m2Uu0W/dQv8nktxx4BFHp1M0gROTXA="
+                },
+                "bom-ref": "pkg:golang/golang.org/x/sys@v0.49.0?package-id=aec8e4adcf0dcac2",
+                "type": "library",
+                "locations": [
+                  "/go.mod"
+                ]
+              },
+              {
+                "id": "pkg:golang/golang.org/x/sys",
+                "name": "golang.org/x/sys",
+                "version": "v0.49.0",
+                "purl": "pkg:golang/golang.org/x/sys@v0.49.0",
+                "cpes": [
+                  "cpe:2.3:a:golang:x\\/sys:v0.49.0:*:*:*:*:*:*:*"
+                ],
+                "digests": {
+                  "go-h1": "h1:XbzkgYJHdqh/8m2Uu0W/dQv8nktxx4BFHp1M0gROTXA="
+                },
+                "bom-ref": "pkg:golang/golang.org/x/sys@v0.49.0?package-id=d38fabbb38154c30",
+                "type": "library",
+                "locations": [
+                  "/.make/go.mod"
+                ]
+              }
+            ]
+          }
+        ],
+        "license_categories": {
+          "copyleft": 0,
+          "permissive": 0,
+          "public_domain": 0,
+          "unknown": 369
+        },
+        "with_cpes": 349,
+        "without_cpes": 20,
+        "with_purl": 360,
+        "without_purl": 9
+      }
+    }
+  },
+  "findings": {
+    "findings": [
+      {
+        "icon": "🔄",
+        "message": "Scanned anchore/syft changed: v1.55.0 → v1.57.0"
+      },
+      {
+        "icon": "🔄",
+        "message": "40 version upgrades (1 major, 17 minor, 20 patch, 2 prerelease) across 43 occurrences among 361 shared packages"
+      },
+      {
+        "icon": "📄",
+        "message": "6 file entries changed content (not package integrity drift): /.github/actions/bootstrap/action.yaml, /.github/workflows/release.yaml, /.github/workflows/validate-github-actions.yaml, /.github/workflows/validations.yaml, /.make/go.mod + 1 more"
+      },
+      {
+        "icon": "🔄",
+        "message": "golang: 342 packages before and after (39 version changes, 2 added/removed/moved)"
+      },
+      {
+        "icon": "🔄",
+        "message": "github: 18 packages before and after (4 version changes)"
+      }
+    ]
+  },
+  "diff": {
+    "added": [
+      {
+        "id": "pkg:golang/github.com/varlink/go",
+        "name": "github.com/varlink/go",
+        "version": "v0.4.1-0.20261015173642-c935be0c53f7",
+        "purl": "pkg:golang/github.com/varlink/go@v0.4.1-0.20261015173642-c935be0c53f7",
+        "cpes": [
+          "cpe:2.3:a:varlink:go:v0.4.1-0.20261015173642-c935be0c53f7:*:*:*:*:*:*:*"
+        ],
+        "digests": {
+          "go-h1": "h1:pl46d1ZU17758S4EQhns0po6ZPtX+EdHgMPd1uvjia4="
+        },
+        "bom-ref": "pkg:golang/github.com/varlink/go@v0.4.1-0.20261015173642-c935be0c53f7?package-id=133e713425be54cd",
+        "type": "library",
+        "locations": [
+          "/go.mod"
+        ]
+      }
+    ],
+    "removed": [
+      {
+        "id": "pkg:golang/github.com/becheran/wildmatch-go",
+        "name": "github.com/becheran/wildmatch-go",
+        "version": "v1.0.0",
+        "purl": "pkg:golang/github.com/becheran/wildmatch-go@v1.0.0",
+        "cpes": [
+          "cpe:2.3:a:becheran:wildmatch-go:v1.0.0:*:*:*:*:*:*:*"
+        ],
+        "digests": {
+          "go-h1": "h1:mE3dGGkTmpKtT4Z+88t8RStG40yN9T+kFEGj2PZFSzA="
+        },
+        "bom-ref": "pkg:golang/github.com/becheran/wildmatch-go@v1.0.0?package-id=c3e582c1d8b61130",
+        "type": "library",
+        "locations": [
+          "/go.mod"
+        ]
+      }
+    ],
+    "changed": [
+      {
+        "id": "pkg:github/anchore/go-make#.github/actions/setup",
+        "name": "anchore/go-make/.github/actions/setup",
+        "location": "/.github/actions/bootstrap/action.yaml",
+        "before": {
+          "id": "pkg:github/anchore/go-make#.github/actions/setup",
+          "name": "anchore/go-make/.github/actions/setup",
+          "version": "v0.9.3",
+          "purl": "pkg:github/anchore/go-make@v0.9.3#.github/actions/setup",
+          "cpes": [
+            "cpe:2.3:a:anchore\\/go-make\\/.github\\/actions\\/setup:anchore\\/go-make\\/.github\\/actions\\/setup:v0.9.3:*:*:*:*:*:*:*"
+          ],
+          "bom-ref": "pkg:github/anchore/go-make@v0.9.3?package-id=467cf6d8aa4bea83#.github/actions/setup",
+          "type": "library",
+          "locations": [
+            "/.github/actions/bootstrap/action.yaml"
+          ]
+        },
+        "after": {
+          "id": "pkg:github/anchore/go-make#.github/actions/setup",
+          "name": "anchore/go-make/.github/actions/setup",
+          "version": "v0.9.6",
+          "purl": "pkg:github/anchore/go-make@v0.9.6#.github/actions/setup",
+          "cpes": [
+            "cpe:2.3:a:anchore\\/go-make\\/.github\\/actions\\/setup:anchore\\/go-make\\/.github\\/actions\\/setup:v0.9.6:*:*:*:*:*:*:*"
+          ],
+          "bom-ref": "pkg:github/anchore/go-make@v0.9.6?package-id=c1bf7b6db85a678c#.github/actions/setup",
+          "type": "library",
+          "locations": [
+            "/.github/actions/bootstrap/action.yaml"
+          ]
+        },
+        "changes": [
+          "version: v0.9.3 -\u003e v0.9.6"
+        ],
+        "drift": {
+          "type": "version",
+          "version_from": "v0.9.3",
+          "version_to": "v0.9.6",
+          "direction": "upgrade",
+          "level": "patch"
+        }
+      },
+      {
+        "id": "pkg:github/anchore/go-make#.github/actions/setup",
+        "name": "anchore/go-make/.github/actions/setup",
+        "location": "/.github/workflows/validations.yaml",
+        "before": {
+          "id": "pkg:github/anchore/go-make#.github/actions/setup",
+          "name": "anchore/go-make/.github/actions/setup",
+          "version": "v0.9.3",
+          "purl": "pkg:github/anchore/go-make@v0.9.3#.github/actions/setup",
+          "cpes": [
+            "cpe:2.3:a:anchore\\/go-make\\/.github\\/actions\\/setup:anchore\\/go-make\\/.github\\/actions\\/setup:v0.9.3:*:*:*:*:*:*:*"
+          ],
+          "bom-ref": "pkg:github/anchore/go-make@v0.9.3?package-id=f85a2ac334504f05#.github/actions/setup",
+          "type": "library",
+          "locations": [
+            "/.github/workflows/validations.yaml"
+          ]
+        },
+        "after": {
+          "id": "pkg:github/anchore/go-make#.github/actions/setup",
+          "name": "anchore/go-make/.github/actions/setup",
+          "version": "v0.9.6",
+          "purl": "pkg:github/anchore/go-make@v0.9.6#.github/actions/setup",
+          "cpes": [
+            "cpe:2.3:a:anchore\\/go-make\\/.github\\/actions\\/setup:anchore\\/go-make\\/.github\\/actions\\/setup:v0.9.6:*:*:*:*:*:*:*"
+          ],
+          "bom-ref": "pkg:github/anchore/go-make@v0.9.6?package-id=8b554b8f7b14afab#.github/actions/setup",
+          "type": "library",
+          "locations": [
+            "/.github/workflows/validations.yaml"
+          ]
+        },
+        "changes": [
+          "version: v0.9.3 -\u003e v0.9.6"
+        ],
+        "drift": {
+          "type": "version",
+          "version_from": "v0.9.3",
+          "version_to": "v0.9.6",
+          "direction": "upgrade",
+          "level": "patch"
+        }
+      },
+      {
+        "id": "pkg:github/docker/login-action",
+        "name": "docker/login-action",
+        "location": "/.github/workflows/release.yaml",
+        "before": {
+          "id": "pkg:github/docker/login-action",
+          "name": "docker/login-action",
+          "version": "v4.6.0",
+          "purl": "pkg:github/docker/login-action@v4.6.0",
+          "cpes": [
+            "cpe:2.3:a:docker\\/login-action:docker\\/login-action:v4.6.0:*:*:*:*:*:*:*"
+          ],
+          "bom-ref": "pkg:github/docker/login-action@v4.6.0?package-id=0779cb880c7886e2",
+          "type": "library",
+          "locations": [
+            "/.github/workflows/release.yaml"
+          ]
+        },
+        "after": {
+          "id": "pkg:github/docker/login-action",
+          "name": "docker/login-action",
+          "version": "v4.7.0",
+          "purl": "pkg:github/docker/login-action@v4.7.0",
+          "cpes": [
+            "cpe:2.3:a:docker\\/login-action:docker\\/login-action:v4.7.0:*:*:*:*:*:*:*"
+          ],
+          "bom-ref": "pkg:github/docker/login-action@v4.7.0?package-id=e07ebd80660af9a9",
+          "type": "library",
+          "locations": [
+            "/.github/workflows/release.yaml"
+          ]
+        },
+        "changes": [
+          "version: v4.6.0 -\u003e v4.7.0"
+        ],
+        "drift": {
+          "type": "version",
+          "version_from": "v4.6.0",
+          "version_to": "v4.7.0",
+          "direction": "upgrade",
+          "level": "minor"
+        }
+      },
+      {
+        "id": "pkg:github/zizmorcore/zizmor-action",
+        "name": "zizmorcore/zizmor-action",
+        "location": "/.github/workflows/validate-github-actions.yaml",
+        "before": {
+          "id": "pkg:github/zizmorcore/zizmor-action",
+          "name": "zizmorcore/zizmor-action",
+          "version": "v0.6.4",
+          "purl": "pkg:github/zizmorcore/zizmor-action@v0.6.4",
+          "cpes": [
+            "cpe:2.3:a:zizmorcore\\/zizmor-action:zizmorcore\\/zizmor-action:v0.6.4:*:*:*:*:*:*:*"
+          ],
+          "bom-ref": "pkg:github/zizmorcore/zizmor-action@v0.6.4?package-id=0fa37c54600ec99b",
+          "type": "library",
+          "locations": [
+            "/.github/workflows/validate-github-actions.yaml"
+          ]
+        },
+        "after": {
+          "id": "pkg:github/zizmorcore/zizmor-action",
+          "name": "zizmorcore/zizmor-action",
+          "version": "v0.8.0",
+          "purl": "pkg:github/zizmorcore/zizmor-action@v0.8.0",
+          "cpes": [
+            "cpe:2.3:a:zizmorcore\\/zizmor-action:zizmorcore\\/zizmor-action:v0.8.0:*:*:*:*:*:*:*"
+          ],
+          "bom-ref": "pkg:github/zizmorcore/zizmor-action@v0.8.0?package-id=031faa07f7354e20",
+          "type": "library",
+          "locations": [
+            "/.github/workflows/validate-github-actions.yaml"
+          ]
+        },
+        "changes": [
+          "version: v0.6.4 -\u003e v0.8.0"
+        ],
+        "drift": {
+          "type": "version",
+          "version_from": "v0.6.4",
+          "version_to": "v0.8.0",
+          "direction": "upgrade",
+          "level": "minor"
+        }
+      },
+      {
+        "id": "pkg:golang/github.com/Microsoft/go-winio",
+        "name": "github.com/Microsoft/go-winio",
+        "location": "/go.mod",
+        "before": {
+          "id": "pkg:golang/github.com/Microsoft/go-winio",
+          "name": "github.com/Microsoft/go-winio",
+          "version": "v0.6.3-0.20251027160822-ad3df93bed29",
+          "purl": "pkg:golang/github.com/Microsoft/go-winio@v0.6.3-0.20251027160822-ad3df93bed29",
+          "cpes": [
+            "cpe:2.3:a:Microsoft:go-winio:v0.6.3-0.20251027160822-ad3df93bed29:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:0kQAzHq8vLs7Pptv+7TxjdETLf/nIqJpIB4oC6Ba4vY="
+          },
+          "bom-ref": "pkg:golang/github.com/microsoft/go-winio@v0.6.3-0.20251027160822-ad3df93bed29?package-id=fc378e330b798bc4",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/github.com/Microsoft/go-winio",
+          "name": "github.com/Microsoft/go-winio",
+          "version": "v0.6.3-0.20260930231756-f19d9717deb0",
+          "purl": "pkg:golang/github.com/Microsoft/go-winio@v0.6.3-0.20260930231756-f19d9717deb0",
+          "cpes": [
+            "cpe:2.3:a:Microsoft:go-winio:v0.6.3-0.20260930231756-f19d9717deb0:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:71VU8kW/LCxJkx41+YYys1EgQO+AUnPa1TrxTSyYUCU="
+          },
+          "bom-ref": "pkg:golang/github.com/microsoft/go-winio@v0.6.3-0.20260930231756-f19d9717deb0?package-id=39b290a281916a71",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v0.6.3-0.20251027160822-ad3df93bed29 -\u003e v0.6.3-0.20260930231756-f19d9717deb0",
+          "hash[go-h1]: h1:0kQAzHq8vLs7Pptv+7TxjdETLf/nIqJpIB4oC6Ba4vY= -\u003e h1:71VU8kW/LCxJkx41+YYys1EgQO+AUnPa1TrxTSyYUCU="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:0kQAzHq8vLs7Pptv+7TxjdETLf/nIqJpIB4oC6Ba4vY=",
+                "after": "h1:71VU8kW/LCxJkx41+YYys1EgQO+AUnPa1TrxTSyYUCU="
+              }
+            }
+          },
+          "version_from": "v0.6.3-0.20251027160822-ad3df93bed29",
+          "version_to": "v0.6.3-0.20260930231756-f19d9717deb0",
+          "direction": "upgrade",
+          "level": "prerelease"
+        }
+      },
+      {
+        "id": "pkg:golang/github.com/ProtonMail/go-crypto",
+        "name": "github.com/ProtonMail/go-crypto",
+        "location": "/go.mod",
+        "before": {
+          "id": "pkg:golang/github.com/ProtonMail/go-crypto",
+          "name": "github.com/ProtonMail/go-crypto",
+          "version": "v1.4.1",
+          "purl": "pkg:golang/github.com/ProtonMail/go-crypto@v1.4.1",
+          "cpes": [
+            "cpe:2.3:a:ProtonMail:go-crypto:v1.4.1:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:9RfcZHqEQUvP8RzecWEUafnZVtEvrBVL9BiF67IQOfM="
+          },
+          "bom-ref": "pkg:golang/github.com/protonmail/go-crypto@v1.4.1?package-id=6d5b046a5726eafa",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/github.com/ProtonMail/go-crypto",
+          "name": "github.com/ProtonMail/go-crypto",
+          "version": "v1.5.2",
+          "purl": "pkg:golang/github.com/ProtonMail/go-crypto@v1.5.2",
+          "cpes": [
+            "cpe:2.3:a:ProtonMail:go-crypto:v1.5.2:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:cucYnvqcY7UOXVD//mSyjeaPY0SSN3v5cDkYPxumINk="
+          },
+          "bom-ref": "pkg:golang/github.com/protonmail/go-crypto@v1.5.2?package-id=88d12f2ea950e3fd",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v1.4.1 -\u003e v1.5.2",
+          "hash[go-h1]: h1:9RfcZHqEQUvP8RzecWEUafnZVtEvrBVL9BiF67IQOfM= -\u003e h1:cucYnvqcY7UOXVD//mSyjeaPY0SSN3v5cDkYPxumINk="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:9RfcZHqEQUvP8RzecWEUafnZVtEvrBVL9BiF67IQOfM=",
+                "after": "h1:cucYnvqcY7UOXVD//mSyjeaPY0SSN3v5cDkYPxumINk="
+              }
+            }
+          },
+          "version_from": "v1.4.1",
+          "version_to": "v1.5.2",
+          "direction": "upgrade",
+          "level": "minor"
+        }
+      },
+      {
+        "id": "pkg:golang/github.com/anchore/clio",
+        "name": "github.com/anchore/clio",
+        "location": "/go.mod",
+        "before": {
+          "id": "pkg:golang/github.com/anchore/clio",
+          "name": "github.com/anchore/clio",
+          "version": "v0.1.1",
+          "purl": "pkg:golang/github.com/anchore/clio@v0.1.1",
+          "cpes": [
+            "cpe:2.3:a:anchore:clio:v0.1.1:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:9bkYnaFbpT0J3G0qSHyQqa/lpK5zV0C9Gtgh82H/jj0="
+          },
+          "bom-ref": "pkg:golang/github.com/anchore/clio@v0.1.1?package-id=0ca4696fdd0313fb",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/github.com/anchore/clio",
+          "name": "github.com/anchore/clio",
+          "version": "v0.1.2",
+          "purl": "pkg:golang/github.com/anchore/clio@v0.1.2",
+          "cpes": [
+            "cpe:2.3:a:anchore:clio:v0.1.2:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:kCWNUkJsRJ5A103fFSLG+CSqIP9bOIFX2X5GEnup0HM="
+          },
+          "bom-ref": "pkg:golang/github.com/anchore/clio@v0.1.2?package-id=e2276b35647cd5f6",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v0.1.1 -\u003e v0.1.2",
+          "hash[go-h1]: h1:9bkYnaFbpT0J3G0qSHyQqa/lpK5zV0C9Gtgh82H/jj0= -\u003e h1:kCWNUkJsRJ5A103fFSLG+CSqIP9bOIFX2X5GEnup0HM="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:9bkYnaFbpT0J3G0qSHyQqa/lpK5zV0C9Gtgh82H/jj0=",
+                "after": "h1:kCWNUkJsRJ5A103fFSLG+CSqIP9bOIFX2X5GEnup0HM="
+              }
+            }
+          },
+          "version_from": "v0.1.1",
+          "version_to": "v0.1.2",
+          "direction": "upgrade",
+          "level": "patch"
+        }
+      },
+      {
+        "id": "pkg:golang/github.com/anchore/go-make",
+        "name": "github.com/anchore/go-make",
+        "location": "/.make/go.mod",
+        "before": {
+          "id": "pkg:golang/github.com/anchore/go-make",
+          "name": "github.com/anchore/go-make",
+          "version": "v0.9.3",
+          "purl": "pkg:golang/github.com/anchore/go-make@v0.9.3",
+          "cpes": [
+            "cpe:2.3:a:anchore:go-make:v0.9.3:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:D+MkpvEJsOGwkOqKN0rd2zYi9jEzwKtZreNysH0DenI="
+          },
+          "bom-ref": "pkg:golang/github.com/anchore/go-make@v0.9.3?package-id=5b86084942e92dde",
+          "type": "library",
+          "locations": [
+            "/.make/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/github.com/anchore/go-make",
+          "name": "github.com/anchore/go-make",
+          "version": "v0.9.6",
+          "purl": "pkg:golang/github.com/anchore/go-make@v0.9.6",
+          "cpes": [
+            "cpe:2.3:a:anchore:go-make:v0.9.6:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:HjO7H/M/WZ4v3B73/EuShuQHHblQJGwHDrl/MqCavWs="
+          },
+          "bom-ref": "pkg:golang/github.com/anchore/go-make@v0.9.6?package-id=d55e59b1711a0ea7",
+          "type": "library",
+          "locations": [
+            "/.make/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v0.9.3 -\u003e v0.9.6",
+          "hash[go-h1]: h1:D+MkpvEJsOGwkOqKN0rd2zYi9jEzwKtZreNysH0DenI= -\u003e h1:HjO7H/M/WZ4v3B73/EuShuQHHblQJGwHDrl/MqCavWs="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:D+MkpvEJsOGwkOqKN0rd2zYi9jEzwKtZreNysH0DenI=",
+                "after": "h1:HjO7H/M/WZ4v3B73/EuShuQHHblQJGwHDrl/MqCavWs="
+              }
+            }
+          },
+          "version_from": "v0.9.3",
+          "version_to": "v0.9.6",
+          "direction": "upgrade",
+          "level": "patch"
+        }
+      },
+      {
+        "id": "pkg:golang/github.com/anchore/stereoscope",
+        "name": "github.com/anchore/stereoscope",
+        "location": "/go.mod",
+        "before": {
+          "id": "pkg:golang/github.com/anchore/stereoscope",
+          "name": "github.com/anchore/stereoscope",
+          "version": "v0.3.4",
+          "purl": "pkg:golang/github.com/anchore/stereoscope@v0.3.4",
+          "cpes": [
+            "cpe:2.3:a:anchore:stereoscope:v0.3.4:*:*:*:*:go:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:dT5AfjCTXUJowMiRIc+VBQVwvwnIEwnxxwA1GwAkMxw="
+          },
+          "bom-ref": "pkg:golang/github.com/anchore/stereoscope@v0.3.4?package-id=4f27ad0ae1364cbb",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/github.com/anchore/stereoscope",
+          "name": "github.com/anchore/stereoscope",
+          "version": "v0.4.1",
+          "purl": "pkg:golang/github.com/anchore/stereoscope@v0.4.1",
+          "cpes": [
+            "cpe:2.3:a:anchore:stereoscope:v0.4.1:*:*:*:*:go:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:7mxw24JCabbJIAcyvQDjBd2pbzo+0HSFVgjYlE8Zm+k="
+          },
+          "bom-ref": "pkg:golang/github.com/anchore/stereoscope@v0.4.1?package-id=b3784c28a1510ace",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v0.3.4 -\u003e v0.4.1",
+          "hash[go-h1]: h1:dT5AfjCTXUJowMiRIc+VBQVwvwnIEwnxxwA1GwAkMxw= -\u003e h1:7mxw24JCabbJIAcyvQDjBd2pbzo+0HSFVgjYlE8Zm+k="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:dT5AfjCTXUJowMiRIc+VBQVwvwnIEwnxxwA1GwAkMxw=",
+                "after": "h1:7mxw24JCabbJIAcyvQDjBd2pbzo+0HSFVgjYlE8Zm+k="
+              }
+            }
+          },
+          "version_from": "v0.3.4",
+          "version_to": "v0.4.1",
+          "direction": "upgrade",
+          "level": "minor"
+        }
+      },
+      {
+        "id": "pkg:golang/github.com/bmatcuk/doublestar/v4",
+        "name": "github.com/bmatcuk/doublestar/v4",
+        "location": "/.make/go.mod",
+        "before": {
+          "id": "pkg:golang/github.com/bmatcuk/doublestar/v4",
+          "name": "github.com/bmatcuk/doublestar/v4",
+          "version": "v4.10.2",
+          "purl": "pkg:golang/github.com/bmatcuk/doublestar/v4@v4.10.2",
+          "cpes": [
+            "cpe:2.3:a:bmatcuk:doublestar\\/v4:v4.10.2:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:eF7W7HWKg3z9NrWV9pTLnNeoXaqq3Tq9DNKXVMfoCnw="
+          },
+          "bom-ref": "pkg:golang/github.com/bmatcuk/doublestar/v4@v4.10.2?package-id=5fa04512449baf6a",
+          "type": "library",
+          "locations": [
+            "/.make/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/github.com/bmatcuk/doublestar/v4",
+          "name": "github.com/bmatcuk/doublestar/v4",
+          "version": "v4.10.3",
+          "purl": "pkg:golang/github.com/bmatcuk/doublestar/v4@v4.10.3",
+          "cpes": [
+            "cpe:2.3:a:bmatcuk:doublestar\\/v4:v4.10.3:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:1UIv1+fqH3++ViVkpnaPTB+Pi1UHycnPFAq14zgK+gI="
+          },
+          "bom-ref": "pkg:golang/github.com/bmatcuk/doublestar/v4@v4.10.3?package-id=6fd187a94708c41e",
+          "type": "library",
+          "locations": [
+            "/.make/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v4.10.2 -\u003e v4.10.3",
+          "hash[go-h1]: h1:eF7W7HWKg3z9NrWV9pTLnNeoXaqq3Tq9DNKXVMfoCnw= -\u003e h1:1UIv1+fqH3++ViVkpnaPTB+Pi1UHycnPFAq14zgK+gI="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:eF7W7HWKg3z9NrWV9pTLnNeoXaqq3Tq9DNKXVMfoCnw=",
+                "after": "h1:1UIv1+fqH3++ViVkpnaPTB+Pi1UHycnPFAq14zgK+gI="
+              }
+            }
+          },
+          "version_from": "v4.10.2",
+          "version_to": "v4.10.3",
+          "direction": "upgrade",
+          "level": "patch"
+        }
+      },
+      {
+        "id": "pkg:golang/github.com/bmatcuk/doublestar/v4",
+        "name": "github.com/bmatcuk/doublestar/v4",
+        "location": "/go.mod",
+        "before": {
+          "id": "pkg:golang/github.com/bmatcuk/doublestar/v4",
+          "name": "github.com/bmatcuk/doublestar/v4",
+          "version": "v4.10.2",
+          "purl": "pkg:golang/github.com/bmatcuk/doublestar/v4@v4.10.2",
+          "cpes": [
+            "cpe:2.3:a:bmatcuk:doublestar\\/v4:v4.10.2:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:eF7W7HWKg3z9NrWV9pTLnNeoXaqq3Tq9DNKXVMfoCnw="
+          },
+          "bom-ref": "pkg:golang/github.com/bmatcuk/doublestar/v4@v4.10.2?package-id=86adfb224e15d2f0",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/github.com/bmatcuk/doublestar/v4",
+          "name": "github.com/bmatcuk/doublestar/v4",
+          "version": "v4.10.3",
+          "purl": "pkg:golang/github.com/bmatcuk/doublestar/v4@v4.10.3",
+          "cpes": [
+            "cpe:2.3:a:bmatcuk:doublestar\\/v4:v4.10.3:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:1UIv1+fqH3++ViVkpnaPTB+Pi1UHycnPFAq14zgK+gI="
+          },
+          "bom-ref": "pkg:golang/github.com/bmatcuk/doublestar/v4@v4.10.3?package-id=937a2b30137b1650",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v4.10.2 -\u003e v4.10.3",
+          "hash[go-h1]: h1:eF7W7HWKg3z9NrWV9pTLnNeoXaqq3Tq9DNKXVMfoCnw= -\u003e h1:1UIv1+fqH3++ViVkpnaPTB+Pi1UHycnPFAq14zgK+gI="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:eF7W7HWKg3z9NrWV9pTLnNeoXaqq3Tq9DNKXVMfoCnw=",
+                "after": "h1:1UIv1+fqH3++ViVkpnaPTB+Pi1UHycnPFAq14zgK+gI="
+              }
+            }
+          },
+          "version_from": "v4.10.2",
+          "version_to": "v4.10.3",
+          "direction": "upgrade",
+          "level": "patch"
+        }
+      },
+      {
+        "id": "pkg:golang/github.com/containerd/containerd/v2",
+        "name": "github.com/containerd/containerd/v2",
+        "location": "/go.mod",
+        "before": {
+          "id": "pkg:golang/github.com/containerd/containerd/v2",
+          "name": "github.com/containerd/containerd/v2",
+          "version": "v2.4.1",
+          "purl": "pkg:golang/github.com/containerd/containerd/v2@v2.4.1",
+          "cpes": [
+            "cpe:2.3:a:containerd:containerd\\/v2:v2.4.1:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:DUx/ZJN7cEu0WuzHClDB+68H/bqMEH5pWoEjf0ae4hc="
+          },
+          "bom-ref": "pkg:golang/github.com/containerd/containerd/v2@v2.4.1?package-id=a83587ba6c94c137",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/github.com/containerd/containerd/v2",
+          "name": "github.com/containerd/containerd/v2",
+          "version": "v2.4.2",
+          "purl": "pkg:golang/github.com/containerd/containerd/v2@v2.4.2",
+          "cpes": [
+            "cpe:2.3:a:containerd:containerd\\/v2:v2.4.2:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:p6Qg+xbEz8lvwdhHDx0U469xENvp4LgGBx+E7djXkGw="
+          },
+          "bom-ref": "pkg:golang/github.com/containerd/containerd/v2@v2.4.2?package-id=e313528ab73bc069",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v2.4.1 -\u003e v2.4.2",
+          "hash[go-h1]: h1:DUx/ZJN7cEu0WuzHClDB+68H/bqMEH5pWoEjf0ae4hc= -\u003e h1:p6Qg+xbEz8lvwdhHDx0U469xENvp4LgGBx+E7djXkGw="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:DUx/ZJN7cEu0WuzHClDB+68H/bqMEH5pWoEjf0ae4hc=",
+                "after": "h1:p6Qg+xbEz8lvwdhHDx0U469xENvp4LgGBx+E7djXkGw="
+              }
+            }
+          },
+          "version_from": "v2.4.1",
+          "version_to": "v2.4.2",
+          "direction": "upgrade",
+          "level": "patch"
+        }
+      },
+      {
+        "id": "pkg:golang/github.com/containerd/stargz-snapshotter/estargz",
+        "name": "github.com/containerd/stargz-snapshotter/estargz",
+        "location": "/go.mod",
+        "before": {
+          "id": "pkg:golang/github.com/containerd/stargz-snapshotter/estargz",
+          "name": "github.com/containerd/stargz-snapshotter/estargz",
+          "version": "v0.18.2",
+          "purl": "pkg:golang/github.com/containerd/stargz-snapshotter/estargz@v0.18.2",
+          "cpes": [
+            "cpe:2.3:a:containerd:stargz-snapshotter\\/estargz:v0.18.2:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:yXkZFYIzz3eoLwlTUZKz2iQ4MrckBxJjkmD16ynUTrw="
+          },
+          "bom-ref": "pkg:golang/github.com/containerd/stargz-snapshotter/estargz@v0.18.2?package-id=9bd9dc5b53b6b42e",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/github.com/containerd/stargz-snapshotter/estargz",
+          "name": "github.com/containerd/stargz-snapshotter/estargz",
+          "version": "v0.19.0",
+          "purl": "pkg:golang/github.com/containerd/stargz-snapshotter/estargz@v0.19.0",
+          "cpes": [
+            "cpe:2.3:a:containerd:stargz-snapshotter\\/estargz:v0.19.0:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:tak4qAx648jBAgZmywkd+6kaJ5pqSOVzKYB5DcVSHxk="
+          },
+          "bom-ref": "pkg:golang/github.com/containerd/stargz-snapshotter/estargz@v0.19.0?package-id=c6179c8e87c8b56c",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v0.18.2 -\u003e v0.19.0",
+          "hash[go-h1]: h1:yXkZFYIzz3eoLwlTUZKz2iQ4MrckBxJjkmD16ynUTrw= -\u003e h1:tak4qAx648jBAgZmywkd+6kaJ5pqSOVzKYB5DcVSHxk="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:yXkZFYIzz3eoLwlTUZKz2iQ4MrckBxJjkmD16ynUTrw=",
+                "after": "h1:tak4qAx648jBAgZmywkd+6kaJ5pqSOVzKYB5DcVSHxk="
+              }
+            }
+          },
+          "version_from": "v0.18.2",
+          "version_to": "v0.19.0",
+          "direction": "upgrade",
+          "level": "minor"
+        }
+      },
+      {
+        "id": "pkg:golang/github.com/deitch/magic",
+        "name": "github.com/deitch/magic",
+        "location": "/go.mod",
+        "before": {
+          "id": "pkg:golang/github.com/deitch/magic",
+          "name": "github.com/deitch/magic",
+          "version": "v0.0.0-20230404182410-1ff89d7342da",
+          "purl": "pkg:golang/github.com/deitch/magic@v0.0.0-20230404182410-1ff89d7342da",
+          "cpes": [
+            "cpe:2.3:a:deitch:magic:v0.0.0-20230404182410-1ff89d7342da:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:ZOjWpVsFZ06eIhnh4mkaceTiVoktdU67+M7KDHJ268M="
+          },
+          "bom-ref": "pkg:golang/github.com/deitch/magic@v0.0.0-20230404182410-1ff89d7342da?package-id=e5cf1a42e6ee96ad",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/github.com/deitch/magic",
+          "name": "github.com/deitch/magic",
+          "version": "v1.0.0",
+          "purl": "pkg:golang/github.com/deitch/magic@v1.0.0",
+          "cpes": [
+            "cpe:2.3:a:deitch:magic:v1.0.0:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:Nma1YAj7EB8Mlv4pVhbPpUp0CV1luYj2NOnE2+2xPNE="
+          },
+          "bom-ref": "pkg:golang/github.com/deitch/magic@v1.0.0?package-id=4e486f79e03680b6",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v0.0.0-20230404182410-1ff89d7342da -\u003e v1.0.0",
+          "hash[go-h1]: h1:ZOjWpVsFZ06eIhnh4mkaceTiVoktdU67+M7KDHJ268M= -\u003e h1:Nma1YAj7EB8Mlv4pVhbPpUp0CV1luYj2NOnE2+2xPNE="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:ZOjWpVsFZ06eIhnh4mkaceTiVoktdU67+M7KDHJ268M=",
+                "after": "h1:Nma1YAj7EB8Mlv4pVhbPpUp0CV1luYj2NOnE2+2xPNE="
+              }
+            }
+          },
+          "version_from": "v0.0.0-20230404182410-1ff89d7342da",
+          "version_to": "v1.0.0",
+          "direction": "upgrade",
+          "level": "major"
+        }
+      },
+      {
+        "id": "pkg:golang/github.com/docker/cli",
+        "name": "github.com/docker/cli",
+        "location": "/go.mod",
+        "before": {
+          "id": "pkg:golang/github.com/docker/cli",
+          "name": "github.com/docker/cli",
+          "version": "v29.8.2+incompatible",
+          "purl": "pkg:golang/github.com/docker/cli@v29.8.2%2Bincompatible",
+          "cpes": [
+            "cpe:2.3:a:docker:cli:v29.8.2\\+incompatible:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:2zgdFuoFst2T80oS42vhKGxkd0JRo305eIEKTsxR7pQ="
+          },
+          "bom-ref": "pkg:golang/github.com/docker/cli@v29.8.2%2Bincompatible?package-id=0531726ba53b4d9f",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/github.com/docker/cli",
+          "name": "github.com/docker/cli",
+          "version": "v29.9.2+incompatible",
+          "purl": "pkg:golang/github.com/docker/cli@v29.9.2%2Bincompatible",
+          "cpes": [
+            "cpe:2.3:a:docker:cli:v29.9.2\\+incompatible:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:trup/vUxx5uUo2t+87Cd9AmITR+DvKUe4H2tTtZN8FY="
+          },
+          "bom-ref": "pkg:golang/github.com/docker/cli@v29.9.2%2Bincompatible?package-id=d15cc4386f2fb9f2",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v29.8.2+incompatible -\u003e v29.9.2+incompatible",
+          "hash[go-h1]: h1:2zgdFuoFst2T80oS42vhKGxkd0JRo305eIEKTsxR7pQ= -\u003e h1:trup/vUxx5uUo2t+87Cd9AmITR+DvKUe4H2tTtZN8FY="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:2zgdFuoFst2T80oS42vhKGxkd0JRo305eIEKTsxR7pQ=",
+                "after": "h1:trup/vUxx5uUo2t+87Cd9AmITR+DvKUe4H2tTtZN8FY="
+              }
+            }
+          },
+          "version_from": "v29.8.2+incompatible",
+          "version_to": "v29.9.2+incompatible",
+          "direction": "upgrade",
+          "level": "minor"
+        }
+      },
+      {
+        "id": "pkg:golang/github.com/docker/docker-credential-helpers",
+        "name": "github.com/docker/docker-credential-helpers",
+        "location": "/go.mod",
+        "before": {
+          "id": "pkg:golang/github.com/docker/docker-credential-helpers",
+          "name": "github.com/docker/docker-credential-helpers",
+          "version": "v0.9.8",
+          "purl": "pkg:golang/github.com/docker/docker-credential-helpers@v0.9.8",
+          "cpes": [
+            "cpe:2.3:a:docker:docker-credential-helpers:v0.9.8:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:bIREROb7So6PRlq6KTtdS9MPEjC29OQRkFNlvK2OX8Q="
+          },
+          "bom-ref": "pkg:golang/github.com/docker/docker-credential-helpers@v0.9.8?package-id=21583d883112ee03",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/github.com/docker/docker-credential-helpers",
+          "name": "github.com/docker/docker-credential-helpers",
+          "version": "v0.9.10",
+          "purl": "pkg:golang/github.com/docker/docker-credential-helpers@v0.9.10",
+          "cpes": [
+            "cpe:2.3:a:docker:docker-credential-helpers:v0.9.10:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:LCWwv7UmS7fQVmdKDWeMuureOeY5kkbC5kZfkzxkS6k="
+          },
+          "bom-ref": "pkg:golang/github.com/docker/docker-credential-helpers@v0.9.10?package-id=b7e62c5191c3a0b1",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v0.9.8 -\u003e v0.9.10",
+          "hash[go-h1]: h1:bIREROb7So6PRlq6KTtdS9MPEjC29OQRkFNlvK2OX8Q= -\u003e h1:LCWwv7UmS7fQVmdKDWeMuureOeY5kkbC5kZfkzxkS6k="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:bIREROb7So6PRlq6KTtdS9MPEjC29OQRkFNlvK2OX8Q=",
+                "after": "h1:LCWwv7UmS7fQVmdKDWeMuureOeY5kkbC5kZfkzxkS6k="
+              }
+            }
+          },
+          "version_from": "v0.9.8",
+          "version_to": "v0.9.10",
+          "direction": "upgrade",
+          "level": "patch"
+        }
+      },
+      {
+        "id": "pkg:golang/github.com/docker/go-connections",
+        "name": "github.com/docker/go-connections",
+        "location": "/go.mod",
+        "before": {
+          "id": "pkg:golang/github.com/docker/go-connections",
+          "name": "github.com/docker/go-connections",
+          "version": "v0.8.1",
+          "purl": "pkg:golang/github.com/docker/go-connections@v0.8.1",
+          "cpes": [
+            "cpe:2.3:a:docker:go-connections:v0.8.1:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:JibmG5hULs5qXSr/cp/w3Pw5fZuStt4MOHMUExb29/M="
+          },
+          "bom-ref": "pkg:golang/github.com/docker/go-connections@v0.8.1?package-id=166704c30495edb9",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/github.com/docker/go-connections",
+          "name": "github.com/docker/go-connections",
+          "version": "v0.8.2",
+          "purl": "pkg:golang/github.com/docker/go-connections@v0.8.2",
+          "cpes": [
+            "cpe:2.3:a:docker:go-connections:v0.8.2:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:9d9DEokx5W7qlr0shkFXIxEA7+TTD+llwzcykSlxMNc="
+          },
+          "bom-ref": "pkg:golang/github.com/docker/go-connections@v0.8.2?package-id=cfaba1bac6df1dc5",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v0.8.1 -\u003e v0.8.2",
+          "hash[go-h1]: h1:JibmG5hULs5qXSr/cp/w3Pw5fZuStt4MOHMUExb29/M= -\u003e h1:9d9DEokx5W7qlr0shkFXIxEA7+TTD+llwzcykSlxMNc="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:JibmG5hULs5qXSr/cp/w3Pw5fZuStt4MOHMUExb29/M=",
+                "after": "h1:9d9DEokx5W7qlr0shkFXIxEA7+TTD+llwzcykSlxMNc="
+              }
+            }
+          },
+          "version_from": "v0.8.1",
+          "version_to": "v0.8.2",
+          "direction": "upgrade",
+          "level": "patch"
+        }
+      },
+      {
+        "id": "pkg:golang/github.com/gabriel-vasile/mimetype",
+        "name": "github.com/gabriel-vasile/mimetype",
+        "location": "/go.mod",
+        "before": {
+          "id": "pkg:golang/github.com/gabriel-vasile/mimetype",
+          "name": "github.com/gabriel-vasile/mimetype",
+          "version": "v1.4.15",
+          "purl": "pkg:golang/github.com/gabriel-vasile/mimetype@v1.4.15",
+          "cpes": [
+            "cpe:2.3:a:gabriel-vasile:mimetype:v1.4.15:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:05iP/CYtZ/w455R/KZM6rZ5ieAdh99UPtd+d3YzLmaI="
+          },
+          "bom-ref": "pkg:golang/github.com/gabriel-vasile/mimetype@v1.4.15?package-id=32583b205e9b1eb8",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/github.com/gabriel-vasile/mimetype",
+          "name": "github.com/gabriel-vasile/mimetype",
+          "version": "v1.4.16",
+          "purl": "pkg:golang/github.com/gabriel-vasile/mimetype@v1.4.16",
+          "cpes": [
+            "cpe:2.3:a:gabriel-vasile:mimetype:v1.4.16:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:5izNFuvA37st1dDRAcA7TtmngBmRgiIPDmTtiEvjx1E="
+          },
+          "bom-ref": "pkg:golang/github.com/gabriel-vasile/mimetype@v1.4.16?package-id=7c2488820215e1f0",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v1.4.15 -\u003e v1.4.16",
+          "hash[go-h1]: h1:05iP/CYtZ/w455R/KZM6rZ5ieAdh99UPtd+d3YzLmaI= -\u003e h1:5izNFuvA37st1dDRAcA7TtmngBmRgiIPDmTtiEvjx1E="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:05iP/CYtZ/w455R/KZM6rZ5ieAdh99UPtd+d3YzLmaI=",
+                "after": "h1:5izNFuvA37st1dDRAcA7TtmngBmRgiIPDmTtiEvjx1E="
+              }
+            }
+          },
+          "version_from": "v1.4.15",
+          "version_to": "v1.4.16",
+          "direction": "upgrade",
+          "level": "patch"
+        }
+      },
+      {
+        "id": "pkg:golang/github.com/github/go-spdx/v2",
+        "name": "github.com/github/go-spdx/v2",
+        "location": "/go.mod",
+        "before": {
+          "id": "pkg:golang/github.com/github/go-spdx/v2",
+          "name": "github.com/github/go-spdx/v2",
+          "version": "v2.7.1",
+          "purl": "pkg:golang/github.com/github/go-spdx/v2@v2.7.1",
+          "cpes": [
+            "cpe:2.3:a:github:go-spdx\\/v2:v2.7.1:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:+siV9wnsncI5pg4otH/sKvqGL8UkcLdPh16TSJYY1V4="
+          },
+          "bom-ref": "pkg:golang/github.com/github/go-spdx/v2@v2.7.1?package-id=5b4db080270ce6ff",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/github.com/github/go-spdx/v2",
+          "name": "github.com/github/go-spdx/v2",
+          "version": "v2.8.0",
+          "purl": "pkg:golang/github.com/github/go-spdx/v2@v2.8.0",
+          "cpes": [
+            "cpe:2.3:a:github:go-spdx\\/v2:v2.8.0:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:WKCnF2Ee/x+zwSIEeQdm6+be0H6PiCNLQmSZ5CFmxMI="
+          },
+          "bom-ref": "pkg:golang/github.com/github/go-spdx/v2@v2.8.0?package-id=48f3e68cec6710c0",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v2.7.1 -\u003e v2.8.0",
+          "hash[go-h1]: h1:+siV9wnsncI5pg4otH/sKvqGL8UkcLdPh16TSJYY1V4= -\u003e h1:WKCnF2Ee/x+zwSIEeQdm6+be0H6PiCNLQmSZ5CFmxMI="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:+siV9wnsncI5pg4otH/sKvqGL8UkcLdPh16TSJYY1V4=",
+                "after": "h1:WKCnF2Ee/x+zwSIEeQdm6+be0H6PiCNLQmSZ5CFmxMI="
+              }
+            }
+          },
+          "version_from": "v2.7.1",
+          "version_to": "v2.8.0",
+          "direction": "upgrade",
+          "level": "minor"
+        }
+      },
+      {
+        "id": "pkg:golang/github.com/gkampitakis/go-snaps",
+        "name": "github.com/gkampitakis/go-snaps",
+        "location": "/go.mod",
+        "before": {
+          "id": "pkg:golang/github.com/gkampitakis/go-snaps",
+          "name": "github.com/gkampitakis/go-snaps",
+          "version": "v0.5.23",
+          "purl": "pkg:golang/github.com/gkampitakis/go-snaps@v0.5.23",
+          "cpes": [
+            "cpe:2.3:a:gkampitakis:go-snaps:v0.5.23:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:okh5QR48zpUjpWtu65AtqxdCY8huJq+dEDuUzd1PuKg="
+          },
+          "bom-ref": "pkg:golang/github.com/gkampitakis/go-snaps@v0.5.23?package-id=07da3958600bec9b",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/github.com/gkampitakis/go-snaps",
+          "name": "github.com/gkampitakis/go-snaps",
+          "version": "v0.5.24",
+          "purl": "pkg:golang/github.com/gkampitakis/go-snaps@v0.5.24",
+          "cpes": [
+            "cpe:2.3:a:gkampitakis:go-snaps:v0.5.24:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:oyQ/CQA4s0nkVm6CLlM2GJSU8e4p6KGPZbrSCnTNBzE="
+          },
+          "bom-ref": "pkg:golang/github.com/gkampitakis/go-snaps@v0.5.24?package-id=0174fec27ac6c53c",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v0.5.23 -\u003e v0.5.24",
+          "hash[go-h1]: h1:okh5QR48zpUjpWtu65AtqxdCY8huJq+dEDuUzd1PuKg= -\u003e h1:oyQ/CQA4s0nkVm6CLlM2GJSU8e4p6KGPZbrSCnTNBzE="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:okh5QR48zpUjpWtu65AtqxdCY8huJq+dEDuUzd1PuKg=",
+                "after": "h1:oyQ/CQA4s0nkVm6CLlM2GJSU8e4p6KGPZbrSCnTNBzE="
+              }
+            }
+          },
+          "version_from": "v0.5.23",
+          "version_to": "v0.5.24",
+          "direction": "upgrade",
+          "level": "patch"
+        }
+      },
+      {
+        "id": "pkg:golang/github.com/go-jose/go-jose/v4",
+        "name": "github.com/go-jose/go-jose/v4",
+        "location": "/go.mod",
+        "before": {
+          "id": "pkg:golang/github.com/go-jose/go-jose/v4",
+          "name": "github.com/go-jose/go-jose/v4",
+          "version": "v4.1.5",
+          "purl": "pkg:golang/github.com/go-jose/go-jose/v4@v4.1.5",
+          "cpes": [
+            "cpe:2.3:a:go-jose:go-jose\\/v4:v4.1.5:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:RjgjO2LOtWOJKUC5wpwY9LR3B3vwVAz6JS2YHfYU6eA="
+          },
+          "bom-ref": "pkg:golang/github.com/go-jose/go-jose/v4@v4.1.5?package-id=05eb82ff5b803225",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/github.com/go-jose/go-jose/v4",
+          "name": "github.com/go-jose/go-jose/v4",
+          "version": "v4.1.6",
+          "purl": "pkg:golang/github.com/go-jose/go-jose/v4@v4.1.6",
+          "cpes": [
+            "cpe:2.3:a:go-jose:go-jose\\/v4:v4.1.6:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:sNRkftxFJxwsILiQukqp5z83QBSmntVwmgRY7AqBDO4="
+          },
+          "bom-ref": "pkg:golang/github.com/go-jose/go-jose/v4@v4.1.6?package-id=3f9ecd636ff815cb",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v4.1.5 -\u003e v4.1.6",
+          "hash[go-h1]: h1:RjgjO2LOtWOJKUC5wpwY9LR3B3vwVAz6JS2YHfYU6eA= -\u003e h1:sNRkftxFJxwsILiQukqp5z83QBSmntVwmgRY7AqBDO4="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:RjgjO2LOtWOJKUC5wpwY9LR3B3vwVAz6JS2YHfYU6eA=",
+                "after": "h1:sNRkftxFJxwsILiQukqp5z83QBSmntVwmgRY7AqBDO4="
+              }
+            }
+          },
+          "version_from": "v4.1.5",
+          "version_to": "v4.1.6",
+          "direction": "upgrade",
+          "level": "patch"
+        }
+      },
+      {
+        "id": "pkg:golang/github.com/go-test/deep",
+        "name": "github.com/go-test/deep",
+        "location": "/go.mod",
+        "before": {
+          "id": "pkg:golang/github.com/go-test/deep",
+          "name": "github.com/go-test/deep",
+          "version": "v1.1.1",
+          "purl": "pkg:golang/github.com/go-test/deep@v1.1.1",
+          "cpes": [
+            "cpe:2.3:a:go-test:deep:v1.1.1:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:0r/53hagsehfO4bzD2Pgr/+RgHqhmf+k1Bpse2cTu1U="
+          },
+          "bom-ref": "pkg:golang/github.com/go-test/deep@v1.1.1?package-id=83b71898925befa2",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/github.com/go-test/deep",
+          "name": "github.com/go-test/deep",
+          "version": "v1.1.2",
+          "purl": "pkg:golang/github.com/go-test/deep@v1.1.2",
+          "cpes": [
+            "cpe:2.3:a:go-test:deep:v1.1.2:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:JUuyv17rKrqYfLFnP9A4Yh6hw0635ugB93bMg2bwuDQ="
+          },
+          "bom-ref": "pkg:golang/github.com/go-test/deep@v1.1.2?package-id=8cf13e24cbac0eea",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v1.1.1 -\u003e v1.1.2",
+          "hash[go-h1]: h1:0r/53hagsehfO4bzD2Pgr/+RgHqhmf+k1Bpse2cTu1U= -\u003e h1:JUuyv17rKrqYfLFnP9A4Yh6hw0635ugB93bMg2bwuDQ="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:0r/53hagsehfO4bzD2Pgr/+RgHqhmf+k1Bpse2cTu1U=",
+                "after": "h1:JUuyv17rKrqYfLFnP9A4Yh6hw0635ugB93bMg2bwuDQ="
+              }
+            }
+          },
+          "version_from": "v1.1.1",
+          "version_to": "v1.1.2",
+          "direction": "upgrade",
+          "level": "patch"
+        }
+      },
+      {
+        "id": "pkg:golang/github.com/google/pprof",
+        "name": "github.com/google/pprof",
+        "location": "/go.mod",
+        "before": {
+          "id": "pkg:golang/github.com/google/pprof",
+          "name": "github.com/google/pprof",
+          "version": "v0.0.0-20260802141513-ef3492d7dac3",
+          "purl": "pkg:golang/github.com/google/pprof@v0.0.0-20260802141513-ef3492d7dac3",
+          "cpes": [
+            "cpe:2.3:a:google:pprof:v0.0.0-20260802141513-ef3492d7dac3:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:LMLX+LgTNWpfvCBdFebv6EsYotImrt/Ppc5cXIriCSo="
+          },
+          "bom-ref": "pkg:golang/github.com/google/pprof@v0.0.0-20260802141513-ef3492d7dac3?package-id=0f80dceb464406c3",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/github.com/google/pprof",
+          "name": "github.com/google/pprof",
+          "version": "v0.0.0-20261016150608-1facf8f91b50",
+          "purl": "pkg:golang/github.com/google/pprof@v0.0.0-20261016150608-1facf8f91b50",
+          "cpes": [
+            "cpe:2.3:a:google:pprof:v0.0.0-20261016150608-1facf8f91b50:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:PlNWJRxu5APSV0pWqfIsZ0qt9OOGHSWfZQ4zvx+WgWs="
+          },
+          "bom-ref": "pkg:golang/github.com/google/pprof@v0.0.0-20261016150608-1facf8f91b50?package-id=b54c973e5af75704",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v0.0.0-20260802141513-ef3492d7dac3 -\u003e v0.0.0-20261016150608-1facf8f91b50",
+          "hash[go-h1]: h1:LMLX+LgTNWpfvCBdFebv6EsYotImrt/Ppc5cXIriCSo= -\u003e h1:PlNWJRxu5APSV0pWqfIsZ0qt9OOGHSWfZQ4zvx+WgWs="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:LMLX+LgTNWpfvCBdFebv6EsYotImrt/Ppc5cXIriCSo=",
+                "after": "h1:PlNWJRxu5APSV0pWqfIsZ0qt9OOGHSWfZQ4zvx+WgWs="
+              }
+            }
+          },
+          "version_from": "v0.0.0-20260802141513-ef3492d7dac3",
+          "version_to": "v0.0.0-20261016150608-1facf8f91b50",
+          "direction": "upgrade",
+          "level": "prerelease"
+        }
+      },
+      {
+        "id": "pkg:golang/github.com/gookit/color",
+        "name": "github.com/gookit/color",
+        "location": "/go.mod",
+        "before": {
+          "id": "pkg:golang/github.com/gookit/color",
+          "name": "github.com/gookit/color",
+          "version": "v1.6.2",
+          "purl": "pkg:golang/github.com/gookit/color@v1.6.2",
+          "cpes": [
+            "cpe:2.3:a:gookit:color:v1.6.2:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:M6TJRJMuDFPYkrWmjOvMj+E0xIjcHq8lMPy7+vv0z1Y="
+          },
+          "bom-ref": "pkg:golang/github.com/gookit/color@v1.6.2?package-id=8b02327c05fccbdd",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/github.com/gookit/color",
+          "name": "github.com/gookit/color",
+          "version": "v1.6.3",
+          "purl": "pkg:golang/github.com/gookit/color@v1.6.3",
+          "cpes": [
+            "cpe:2.3:a:gookit:color:v1.6.3:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:m6E49x+KftGaspcLtPLMsyci2ARhWIUW0PUV1owMlhs="
+          },
+          "bom-ref": "pkg:golang/github.com/gookit/color@v1.6.3?package-id=60ce66700a21cbd9",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v1.6.2 -\u003e v1.6.3",
+          "hash[go-h1]: h1:M6TJRJMuDFPYkrWmjOvMj+E0xIjcHq8lMPy7+vv0z1Y= -\u003e h1:m6E49x+KftGaspcLtPLMsyci2ARhWIUW0PUV1owMlhs="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:M6TJRJMuDFPYkrWmjOvMj+E0xIjcHq8lMPy7+vv0z1Y=",
+                "after": "h1:m6E49x+KftGaspcLtPLMsyci2ARhWIUW0PUV1owMlhs="
+              }
+            }
+          },
+          "version_from": "v1.6.2",
+          "version_to": "v1.6.3",
+          "direction": "upgrade",
+          "level": "patch"
+        }
+      },
+      {
+        "id": "pkg:golang/github.com/gpustack/gguf-parser-go",
+        "name": "github.com/gpustack/gguf-parser-go",
+        "location": "/go.mod",
+        "before": {
+          "id": "pkg:golang/github.com/gpustack/gguf-parser-go",
+          "name": "github.com/gpustack/gguf-parser-go",
+          "version": "v0.26.4",
+          "purl": "pkg:golang/github.com/gpustack/gguf-parser-go@v0.26.4",
+          "cpes": [
+            "cpe:2.3:a:gpustack:gguf-parser-go:v0.26.4:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:B9CRrQBcIB7I/MJFZvzPZ+e+cbc1xBzQJcmpi9l/mKU="
+          },
+          "bom-ref": "pkg:golang/github.com/gpustack/gguf-parser-go@v0.26.4?package-id=558881b7daefd5eb",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/github.com/gpustack/gguf-parser-go",
+          "name": "github.com/gpustack/gguf-parser-go",
+          "version": "v0.27.0",
+          "purl": "pkg:golang/github.com/gpustack/gguf-parser-go@v0.27.0",
+          "cpes": [
+            "cpe:2.3:a:gpustack:gguf-parser-go:v0.27.0:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:eXFU9pmJEMQHOTL9qI742lXHWSa1CtlMWUU3gFce7nM="
+          },
+          "bom-ref": "pkg:golang/github.com/gpustack/gguf-parser-go@v0.27.0?package-id=af55c182552c2104",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v0.26.4 -\u003e v0.27.0",
+          "hash[go-h1]: h1:B9CRrQBcIB7I/MJFZvzPZ+e+cbc1xBzQJcmpi9l/mKU= -\u003e h1:eXFU9pmJEMQHOTL9qI742lXHWSa1CtlMWUU3gFce7nM="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:B9CRrQBcIB7I/MJFZvzPZ+e+cbc1xBzQJcmpi9l/mKU=",
+                "after": "h1:eXFU9pmJEMQHOTL9qI742lXHWSa1CtlMWUU3gFce7nM="
+              }
+            }
+          },
+          "version_from": "v0.26.4",
+          "version_to": "v0.27.0",
+          "direction": "upgrade",
+          "level": "minor"
+        }
+      },
+      {
+        "id": "pkg:golang/github.com/klauspost/compress",
+        "name": "github.com/klauspost/compress",
+        "location": "/go.mod",
+        "before": {
+          "id": "pkg:golang/github.com/klauspost/compress",
+          "name": "github.com/klauspost/compress",
+          "version": "v1.20.1",
+          "purl": "pkg:golang/github.com/klauspost/compress@v1.20.1",
+          "cpes": [
+            "cpe:2.3:a:klauspost:compress:v1.20.1:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:T7kKElXUMXrUJ2E9QhQhxFtcK5rPyLdsGZvdbLMPdiQ="
+          },
+          "bom-ref": "pkg:golang/github.com/klauspost/compress@v1.20.1?package-id=7c9fc9fc997a453a",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/github.com/klauspost/compress",
+          "name": "github.com/klauspost/compress",
+          "version": "v1.20.3",
+          "purl": "pkg:golang/github.com/klauspost/compress@v1.20.3",
+          "cpes": [
+            "cpe:2.3:a:klauspost:compress:v1.20.3:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:zWNoFqq/lSuYQRim3dUXlXeA0IqwuZGicdG5ZTfY5j4="
+          },
+          "bom-ref": "pkg:golang/github.com/klauspost/compress@v1.20.3?package-id=face917fa1b6d027",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v1.20.1 -\u003e v1.20.3",
+          "hash[go-h1]: h1:T7kKElXUMXrUJ2E9QhQhxFtcK5rPyLdsGZvdbLMPdiQ= -\u003e h1:zWNoFqq/lSuYQRim3dUXlXeA0IqwuZGicdG5ZTfY5j4="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:T7kKElXUMXrUJ2E9QhQhxFtcK5rPyLdsGZvdbLMPdiQ=",
+                "after": "h1:zWNoFqq/lSuYQRim3dUXlXeA0IqwuZGicdG5ZTfY5j4="
+              }
+            }
+          },
+          "version_from": "v1.20.1",
+          "version_to": "v1.20.3",
+          "direction": "upgrade",
+          "level": "patch"
+        }
+      },
+      {
+        "id": "pkg:golang/github.com/klauspost/pgzip",
+        "name": "github.com/klauspost/pgzip",
+        "location": "/go.mod",
+        "before": {
+          "id": "pkg:golang/github.com/klauspost/pgzip",
+          "name": "github.com/klauspost/pgzip",
+          "version": "v1.2.6",
+          "purl": "pkg:golang/github.com/klauspost/pgzip@v1.2.6",
+          "cpes": [
+            "cpe:2.3:a:klauspost:pgzip:v1.2.6:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:8RXeL5crjEUFnR2/Sn6GJNWtSQ3Dk8pq4CL3jvdDyjU="
+          },
+          "bom-ref": "pkg:golang/github.com/klauspost/pgzip@v1.2.6?package-id=ba8d2ab961878e02",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/github.com/klauspost/pgzip",
+          "name": "github.com/klauspost/pgzip",
+          "version": "v1.2.7",
+          "purl": "pkg:golang/github.com/klauspost/pgzip@v1.2.7",
+          "cpes": [
+            "cpe:2.3:a:klauspost:pgzip:v1.2.7:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:02QB3Ttao6zOWDnSsv3bIvjN24bX0eGjWniQ8vuBfkA="
+          },
+          "bom-ref": "pkg:golang/github.com/klauspost/pgzip@v1.2.7?package-id=994f668a435e1d10",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v1.2.6 -\u003e v1.2.7",
+          "hash[go-h1]: h1:8RXeL5crjEUFnR2/Sn6GJNWtSQ3Dk8pq4CL3jvdDyjU= -\u003e h1:02QB3Ttao6zOWDnSsv3bIvjN24bX0eGjWniQ8vuBfkA="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:8RXeL5crjEUFnR2/Sn6GJNWtSQ3Dk8pq4CL3jvdDyjU=",
+                "after": "h1:02QB3Ttao6zOWDnSsv3bIvjN24bX0eGjWniQ8vuBfkA="
+              }
+            }
+          },
+          "version_from": "v1.2.6",
+          "version_to": "v1.2.7",
+          "direction": "upgrade",
+          "level": "patch"
+        }
+      },
+      {
+        "id": "pkg:golang/github.com/mattn/go-runewidth",
+        "name": "github.com/mattn/go-runewidth",
+        "location": "/go.mod",
+        "before": {
+          "id": "pkg:golang/github.com/mattn/go-runewidth",
+          "name": "github.com/mattn/go-runewidth",
+          "version": "v0.0.27",
+          "purl": "pkg:golang/github.com/mattn/go-runewidth@v0.0.27",
+          "cpes": [
+            "cpe:2.3:a:mattn:go-runewidth:v0.0.27:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:Feg/Oou5zI/wnpgDF6omIU0OokC9GxLC/WRknhVlIR0="
+          },
+          "bom-ref": "pkg:golang/github.com/mattn/go-runewidth@v0.0.27?package-id=cf94b2c96fe5c02c",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/github.com/mattn/go-runewidth",
+          "name": "github.com/mattn/go-runewidth",
+          "version": "v0.0.31",
+          "purl": "pkg:golang/github.com/mattn/go-runewidth@v0.0.31",
+          "cpes": [
+            "cpe:2.3:a:mattn:go-runewidth:v0.0.31:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:1oCV4ReTlosDBc6rYRw5cL8S/4y8iv5oRl4SJ5IBgwo="
+          },
+          "bom-ref": "pkg:golang/github.com/mattn/go-runewidth@v0.0.31?package-id=1b29e79a2b1ef76f",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v0.0.27 -\u003e v0.0.31",
+          "hash[go-h1]: h1:Feg/Oou5zI/wnpgDF6omIU0OokC9GxLC/WRknhVlIR0= -\u003e h1:1oCV4ReTlosDBc6rYRw5cL8S/4y8iv5oRl4SJ5IBgwo="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:Feg/Oou5zI/wnpgDF6omIU0OokC9GxLC/WRknhVlIR0=",
+                "after": "h1:1oCV4ReTlosDBc6rYRw5cL8S/4y8iv5oRl4SJ5IBgwo="
+              }
+            }
+          },
+          "version_from": "v0.0.27",
+          "version_to": "v0.0.31",
+          "direction": "upgrade",
+          "level": "patch"
+        }
+      },
+      {
+        "id": "pkg:golang/github.com/mattn/go-sqlite3",
+        "name": "github.com/mattn/go-sqlite3",
+        "location": "/go.mod",
+        "before": {
+          "id": "pkg:golang/github.com/mattn/go-sqlite3",
+          "name": "github.com/mattn/go-sqlite3",
+          "version": "v1.14.48",
+          "purl": "pkg:golang/github.com/mattn/go-sqlite3@v1.14.48",
+          "cpes": [
+            "cpe:2.3:a:mattn:go-sqlite3:v1.14.48:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:7XHIgl0a8HwOaiK4E47ozLkST78rR9+OtNGx27D/TFs="
+          },
+          "bom-ref": "pkg:golang/github.com/mattn/go-sqlite3@v1.14.48?package-id=cf67ebf7846f4d66",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/github.com/mattn/go-sqlite3",
+          "name": "github.com/mattn/go-sqlite3",
+          "version": "v1.14.52",
+          "purl": "pkg:golang/github.com/mattn/go-sqlite3@v1.14.52",
+          "cpes": [
+            "cpe:2.3:a:mattn:go-sqlite3:v1.14.52:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:wVbm2Qnf4OXkqhBTSPuCRZDRnxfbVrrmiCEroVdog8U="
+          },
+          "bom-ref": "pkg:golang/github.com/mattn/go-sqlite3@v1.14.52?package-id=4c47d79d3295542f",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v1.14.48 -\u003e v1.14.52",
+          "hash[go-h1]: h1:7XHIgl0a8HwOaiK4E47ozLkST78rR9+OtNGx27D/TFs= -\u003e h1:wVbm2Qnf4OXkqhBTSPuCRZDRnxfbVrrmiCEroVdog8U="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:7XHIgl0a8HwOaiK4E47ozLkST78rR9+OtNGx27D/TFs=",
+                "after": "h1:wVbm2Qnf4OXkqhBTSPuCRZDRnxfbVrrmiCEroVdog8U="
+              }
+            }
+          },
+          "version_from": "v1.14.48",
+          "version_to": "v1.14.52",
+          "direction": "upgrade",
+          "level": "patch"
+        }
+      },
+      {
+        "id": "pkg:golang/github.com/moby/moby/api",
+        "name": "github.com/moby/moby/api",
+        "location": "/go.mod",
+        "before": {
+          "id": "pkg:golang/github.com/moby/moby/api",
+          "name": "github.com/moby/moby/api",
+          "version": "v1.56.0",
+          "purl": "pkg:golang/github.com/moby/moby/api@v1.56.0",
+          "cpes": [
+            "cpe:2.3:a:moby:moby\\/api:v1.56.0:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:GQzua3NA599ASSIICx0iFgiJeO9YkdDARvQsm23ZZuQ="
+          },
+          "bom-ref": "pkg:golang/github.com/moby/moby/api@v1.56.0?package-id=a011d526f6a3613d",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/github.com/moby/moby/api",
+          "name": "github.com/moby/moby/api",
+          "version": "v1.56.1",
+          "purl": "pkg:golang/github.com/moby/moby/api@v1.56.1",
+          "cpes": [
+            "cpe:2.3:a:moby:moby\\/api:v1.56.1:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:PpWkvVPB7Fr/No8w+TfyJ/I6rWZ2YPZhT3JorIg+06c="
+          },
+          "bom-ref": "pkg:golang/github.com/moby/moby/api@v1.56.1?package-id=e8865d6ccb87d654",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v1.56.0 -\u003e v1.56.1",
+          "hash[go-h1]: h1:GQzua3NA599ASSIICx0iFgiJeO9YkdDARvQsm23ZZuQ= -\u003e h1:PpWkvVPB7Fr/No8w+TfyJ/I6rWZ2YPZhT3JorIg+06c="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:GQzua3NA599ASSIICx0iFgiJeO9YkdDARvQsm23ZZuQ=",
+                "after": "h1:PpWkvVPB7Fr/No8w+TfyJ/I6rWZ2YPZhT3JorIg+06c="
+              }
+            }
+          },
+          "version_from": "v1.56.0",
+          "version_to": "v1.56.1",
+          "direction": "upgrade",
+          "level": "patch"
+        }
+      },
+      {
+        "id": "pkg:golang/github.com/moby/moby/client",
+        "name": "github.com/moby/moby/client",
+        "location": "/go.mod",
+        "before": {
+          "id": "pkg:golang/github.com/moby/moby/client",
+          "name": "github.com/moby/moby/client",
+          "version": "v0.6.0",
+          "purl": "pkg:golang/github.com/moby/moby/client@v0.6.0",
+          "cpes": [
+            "cpe:2.3:a:moby:moby\\/client:v0.6.0:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:AJjEB21QPbXSXjDsZorFBoDZPhMrfbpaPLgSMAW9Bgs="
+          },
+          "bom-ref": "pkg:golang/github.com/moby/moby/client@v0.6.0?package-id=510c5701256fab0b",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/github.com/moby/moby/client",
+          "name": "github.com/moby/moby/client",
+          "version": "v0.6.2",
+          "purl": "pkg:golang/github.com/moby/moby/client@v0.6.2",
+          "cpes": [
+            "cpe:2.3:a:moby:moby\\/client:v0.6.2:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:ekSPlMccrZGcw6Scb8T9D39qE0mB+XupU/yS0zNw9N4="
+          },
+          "bom-ref": "pkg:golang/github.com/moby/moby/client@v0.6.2?package-id=ff42e5cc00a64648",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v0.6.0 -\u003e v0.6.2",
+          "hash[go-h1]: h1:AJjEB21QPbXSXjDsZorFBoDZPhMrfbpaPLgSMAW9Bgs= -\u003e h1:ekSPlMccrZGcw6Scb8T9D39qE0mB+XupU/yS0zNw9N4="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:AJjEB21QPbXSXjDsZorFBoDZPhMrfbpaPLgSMAW9Bgs=",
+                "after": "h1:ekSPlMccrZGcw6Scb8T9D39qE0mB+XupU/yS0zNw9N4="
+              }
+            }
+          },
+          "version_from": "v0.6.0",
+          "version_to": "v0.6.2",
+          "direction": "upgrade",
+          "level": "patch"
+        }
+      },
+      {
+        "id": "pkg:golang/github.com/ncruces/go-strftime",
+        "name": "github.com/ncruces/go-strftime",
+        "location": "/go.mod",
+        "before": {
+          "id": "pkg:golang/github.com/ncruces/go-strftime",
+          "name": "github.com/ncruces/go-strftime",
+          "version": "v1.0.0",
+          "purl": "pkg:golang/github.com/ncruces/go-strftime@v1.0.0",
+          "cpes": [
+            "cpe:2.3:a:ncruces:go-strftime:v1.0.0:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:HMFp8mLCTPp341M/ZnA4qaf7ZlsbTc+miZjCLOFAw7w="
+          },
+          "bom-ref": "pkg:golang/github.com/ncruces/go-strftime@v1.0.0?package-id=1144b4da6fcfdc60",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/github.com/ncruces/go-strftime",
+          "name": "github.com/ncruces/go-strftime",
+          "version": "v1.1.0",
+          "purl": "pkg:golang/github.com/ncruces/go-strftime@v1.1.0",
+          "cpes": [
+            "cpe:2.3:a:ncruces:go-strftime:v1.1.0:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:vtPmPWMkb539RGV9WpWT9EwJGvrOCKvMNI4obWL47Hk="
+          },
+          "bom-ref": "pkg:golang/github.com/ncruces/go-strftime@v1.1.0?package-id=0e65fe0c8aa0a10f",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v1.0.0 -\u003e v1.1.0",
+          "hash[go-h1]: h1:HMFp8mLCTPp341M/ZnA4qaf7ZlsbTc+miZjCLOFAw7w= -\u003e h1:vtPmPWMkb539RGV9WpWT9EwJGvrOCKvMNI4obWL47Hk="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:HMFp8mLCTPp341M/ZnA4qaf7ZlsbTc+miZjCLOFAw7w=",
+                "after": "h1:vtPmPWMkb539RGV9WpWT9EwJGvrOCKvMNI4obWL47Hk="
+              }
+            }
+          },
+          "version_from": "v1.0.0",
+          "version_to": "v1.1.0",
+          "direction": "upgrade",
+          "level": "minor"
+        }
+      },
+      {
+        "id": "pkg:golang/github.com/sigstore/fulcio",
+        "name": "github.com/sigstore/fulcio",
+        "location": "/go.mod",
+        "before": {
+          "id": "pkg:golang/github.com/sigstore/fulcio",
+          "name": "github.com/sigstore/fulcio",
+          "version": "v1.8.7",
+          "purl": "pkg:golang/github.com/sigstore/fulcio@v1.8.7",
+          "cpes": [
+            "cpe:2.3:a:sigstore:fulcio:v1.8.7:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:d7QJQxukgXarqPCT9uDNeyzt1Bbt/biw58/VfOnwI/o="
+          },
+          "bom-ref": "pkg:golang/github.com/sigstore/fulcio@v1.8.7?package-id=40ee7c1d575f8f19",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/github.com/sigstore/fulcio",
+          "name": "github.com/sigstore/fulcio",
+          "version": "v1.8.8",
+          "purl": "pkg:golang/github.com/sigstore/fulcio@v1.8.8",
+          "cpes": [
+            "cpe:2.3:a:sigstore:fulcio:v1.8.8:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:AtVoVQ4R7YaP6RHIH9puHyB398CHS/9WYc6d+gKf5Y0="
+          },
+          "bom-ref": "pkg:golang/github.com/sigstore/fulcio@v1.8.8?package-id=d28e65f2d8cd83c7",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v1.8.7 -\u003e v1.8.8",
+          "hash[go-h1]: h1:d7QJQxukgXarqPCT9uDNeyzt1Bbt/biw58/VfOnwI/o= -\u003e h1:AtVoVQ4R7YaP6RHIH9puHyB398CHS/9WYc6d+gKf5Y0="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:d7QJQxukgXarqPCT9uDNeyzt1Bbt/biw58/VfOnwI/o=",
+                "after": "h1:AtVoVQ4R7YaP6RHIH9puHyB398CHS/9WYc6d+gKf5Y0="
+              }
+            }
+          },
+          "version_from": "v1.8.7",
+          "version_to": "v1.8.8",
+          "direction": "upgrade",
+          "level": "patch"
+        }
+      },
+      {
+        "id": "pkg:golang/github.com/vbauerster/cupwriter",
+        "name": "github.com/vbauerster/cupwriter",
+        "location": "/go.mod",
+        "before": {
+          "id": "pkg:golang/github.com/vbauerster/cupwriter",
+          "name": "github.com/vbauerster/cupwriter",
+          "version": "v0.0.4",
+          "purl": "pkg:golang/github.com/vbauerster/cupwriter@v0.0.4",
+          "cpes": [
+            "cpe:2.3:a:vbauerster:cupwriter:v0.0.4:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:9sBPe0uXWLZuWQU5lqVbhyFlxX6c09asST/YfatFAys="
+          },
+          "bom-ref": "pkg:golang/github.com/vbauerster/cupwriter@v0.0.4?package-id=be49ac5d984b9e5a",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/github.com/vbauerster/cupwriter",
+          "name": "github.com/vbauerster/cupwriter",
+          "version": "v0.0.5",
+          "purl": "pkg:golang/github.com/vbauerster/cupwriter@v0.0.5",
+          "cpes": [
+            "cpe:2.3:a:vbauerster:cupwriter:v0.0.5:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:pxlPgxPLIebXh8lJPOZmn2TmjPE8+PqJIFkKkr7hI9I="
+          },
+          "bom-ref": "pkg:golang/github.com/vbauerster/cupwriter@v0.0.5?package-id=68a515e9d805d3d9",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v0.0.4 -\u003e v0.0.5",
+          "hash[go-h1]: h1:9sBPe0uXWLZuWQU5lqVbhyFlxX6c09asST/YfatFAys= -\u003e h1:pxlPgxPLIebXh8lJPOZmn2TmjPE8+PqJIFkKkr7hI9I="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:9sBPe0uXWLZuWQU5lqVbhyFlxX6c09asST/YfatFAys=",
+                "after": "h1:pxlPgxPLIebXh8lJPOZmn2TmjPE8+PqJIFkKkr7hI9I="
+              }
+            }
+          },
+          "version_from": "v0.0.4",
+          "version_to": "v0.0.5",
+          "direction": "upgrade",
+          "level": "patch"
+        }
+      },
+      {
+        "id": "pkg:golang/github.com/vbauerster/mpb/v8",
+        "name": "github.com/vbauerster/mpb/v8",
+        "location": "/go.mod",
+        "before": {
+          "id": "pkg:golang/github.com/vbauerster/mpb/v8",
+          "name": "github.com/vbauerster/mpb/v8",
+          "version": "v8.14.0",
+          "purl": "pkg:golang/github.com/vbauerster/mpb/v8@v8.14.0",
+          "cpes": [
+            "cpe:2.3:a:vbauerster:mpb\\/v8:v8.14.0:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:55SR80dptMfASxIG/oCEkBXgBhxeSu4GrVsjl16oKmA="
+          },
+          "bom-ref": "pkg:golang/github.com/vbauerster/mpb/v8@v8.14.0?package-id=1119320c91977032",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/github.com/vbauerster/mpb/v8",
+          "name": "github.com/vbauerster/mpb/v8",
+          "version": "v8.16.2",
+          "purl": "pkg:golang/github.com/vbauerster/mpb/v8@v8.16.2",
+          "cpes": [
+            "cpe:2.3:a:vbauerster:mpb\\/v8:v8.16.2:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:+UH2Nhn6asKkdX58hSgN+5Jqg/JcFSqCcU+8z0IiYYo="
+          },
+          "bom-ref": "pkg:golang/github.com/vbauerster/mpb/v8@v8.16.2?package-id=e7388c8481891fde",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v8.14.0 -\u003e v8.16.2",
+          "hash[go-h1]: h1:55SR80dptMfASxIG/oCEkBXgBhxeSu4GrVsjl16oKmA= -\u003e h1:+UH2Nhn6asKkdX58hSgN+5Jqg/JcFSqCcU+8z0IiYYo="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:55SR80dptMfASxIG/oCEkBXgBhxeSu4GrVsjl16oKmA=",
+                "after": "h1:+UH2Nhn6asKkdX58hSgN+5Jqg/JcFSqCcU+8z0IiYYo="
+              }
+            }
+          },
+          "version_from": "v8.14.0",
+          "version_to": "v8.16.2",
+          "direction": "upgrade",
+          "level": "minor"
+        }
+      },
+      {
+        "id": "pkg:golang/go.podman.io/image/v5",
+        "name": "go.podman.io/image/v5",
+        "location": "/go.mod",
+        "before": {
+          "id": "pkg:golang/go.podman.io/image/v5",
+          "name": "go.podman.io/image/v5",
+          "version": "v5.41.2",
+          "purl": "pkg:golang/go.podman.io/image/v5@v5.41.2",
+          "cpes": [
+            "cpe:2.3:a:image:v5:v5.41.2:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:YnVaFrGLPWSBmipKfNvlOsGcBtk5bUxlPxQ+A6CS/uo="
+          },
+          "bom-ref": "pkg:golang/go.podman.io/image/v5@v5.41.2?package-id=99b30ad03ff0ba8e",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/go.podman.io/image/v5",
+          "name": "go.podman.io/image/v5",
+          "version": "v5.42.0",
+          "purl": "pkg:golang/go.podman.io/image/v5@v5.42.0",
+          "cpes": [
+            "cpe:2.3:a:image:v5:v5.42.0:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:C//Ix0Thj2LYOQO6++NjU3McLFLQbf4czgUyH98R9gc="
+          },
+          "bom-ref": "pkg:golang/go.podman.io/image/v5@v5.42.0?package-id=e33062e74f262851",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v5.41.2 -\u003e v5.42.0",
+          "hash[go-h1]: h1:YnVaFrGLPWSBmipKfNvlOsGcBtk5bUxlPxQ+A6CS/uo= -\u003e h1:C//Ix0Thj2LYOQO6++NjU3McLFLQbf4czgUyH98R9gc="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:YnVaFrGLPWSBmipKfNvlOsGcBtk5bUxlPxQ+A6CS/uo=",
+                "after": "h1:C//Ix0Thj2LYOQO6++NjU3McLFLQbf4czgUyH98R9gc="
+              }
+            }
+          },
+          "version_from": "v5.41.2",
+          "version_to": "v5.42.0",
+          "direction": "upgrade",
+          "level": "minor"
+        }
+      },
+      {
+        "id": "pkg:golang/go.podman.io/storage",
+        "name": "go.podman.io/storage",
+        "location": "/go.mod",
+        "before": {
+          "id": "pkg:golang/go.podman.io/storage",
+          "name": "go.podman.io/storage",
+          "version": "v1.64.1",
+          "purl": "pkg:golang/go.podman.io/storage@v1.64.1",
+          "digests": {
+            "go-h1": "h1:DqbG8scW/bD3xHiSRzV7O5fzn46qVC+SwmUN6C6Fr5w="
+          },
+          "bom-ref": "pkg:golang/go.podman.io/storage@v1.64.1?package-id=dc2ae2d4da187d5d",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/go.podman.io/storage",
+          "name": "go.podman.io/storage",
+          "version": "v1.65.0",
+          "purl": "pkg:golang/go.podman.io/storage@v1.65.0",
+          "digests": {
+            "go-h1": "h1:GgY5VibEw6coVhOGYWuxZ4F7H2AaTfPiwL7E1CJ2dnM="
+          },
+          "bom-ref": "pkg:golang/go.podman.io/storage@v1.65.0?package-id=079492184d49ee5d",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v1.64.1 -\u003e v1.65.0",
+          "hash[go-h1]: h1:DqbG8scW/bD3xHiSRzV7O5fzn46qVC+SwmUN6C6Fr5w= -\u003e h1:GgY5VibEw6coVhOGYWuxZ4F7H2AaTfPiwL7E1CJ2dnM="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:DqbG8scW/bD3xHiSRzV7O5fzn46qVC+SwmUN6C6Fr5w=",
+                "after": "h1:GgY5VibEw6coVhOGYWuxZ4F7H2AaTfPiwL7E1CJ2dnM="
+              }
+            }
+          },
+          "version_from": "v1.64.1",
+          "version_to": "v1.65.0",
+          "direction": "upgrade",
+          "level": "minor"
+        }
+      },
+      {
+        "id": "pkg:golang/golang.org/x/mod",
+        "name": "golang.org/x/mod",
+        "location": "/.make/go.mod",
+        "before": {
+          "id": "pkg:golang/golang.org/x/mod",
+          "name": "golang.org/x/mod",
+          "version": "v0.41.0",
+          "purl": "pkg:golang/golang.org/x/mod@v0.41.0",
+          "cpes": [
+            "cpe:2.3:a:golang:x\\/mod:v0.41.0:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:qJmnOUb4YB+FsEuM3HcWucdZASCPGhsX6uljO6pog0c="
+          },
+          "bom-ref": "pkg:golang/golang.org/x/mod@v0.41.0?package-id=c11f50fe32495f81",
+          "type": "library",
+          "locations": [
+            "/.make/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/golang.org/x/mod",
+          "name": "golang.org/x/mod",
+          "version": "v0.42.0",
+          "purl": "pkg:golang/golang.org/x/mod@v0.42.0",
+          "cpes": [
+            "cpe:2.3:a:golang:x\\/mod:v0.42.0:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:ICeL3t2L30ljSPHHxDnR4fqVcBt/zR2zJAb9juavmQg="
+          },
+          "bom-ref": "pkg:golang/golang.org/x/mod@v0.42.0?package-id=da9832cedf7e9f2c",
+          "type": "library",
+          "locations": [
+            "/.make/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v0.41.0 -\u003e v0.42.0",
+          "hash[go-h1]: h1:qJmnOUb4YB+FsEuM3HcWucdZASCPGhsX6uljO6pog0c= -\u003e h1:ICeL3t2L30ljSPHHxDnR4fqVcBt/zR2zJAb9juavmQg="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:qJmnOUb4YB+FsEuM3HcWucdZASCPGhsX6uljO6pog0c=",
+                "after": "h1:ICeL3t2L30ljSPHHxDnR4fqVcBt/zR2zJAb9juavmQg="
+              }
+            }
+          },
+          "version_from": "v0.41.0",
+          "version_to": "v0.42.0",
+          "direction": "upgrade",
+          "level": "minor"
+        }
+      },
+      {
+        "id": "pkg:golang/golang.org/x/mod",
+        "name": "golang.org/x/mod",
+        "location": "/go.mod",
+        "before": {
+          "id": "pkg:golang/golang.org/x/mod",
+          "name": "golang.org/x/mod",
+          "version": "v0.41.0",
+          "purl": "pkg:golang/golang.org/x/mod@v0.41.0",
+          "cpes": [
+            "cpe:2.3:a:golang:x\\/mod:v0.41.0:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:qJmnOUb4YB+FsEuM3HcWucdZASCPGhsX6uljO6pog0c="
+          },
+          "bom-ref": "pkg:golang/golang.org/x/mod@v0.41.0?package-id=56d232e7120c3a8b",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/golang.org/x/mod",
+          "name": "golang.org/x/mod",
+          "version": "v0.42.0",
+          "purl": "pkg:golang/golang.org/x/mod@v0.42.0",
+          "cpes": [
+            "cpe:2.3:a:golang:x\\/mod:v0.42.0:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:ICeL3t2L30ljSPHHxDnR4fqVcBt/zR2zJAb9juavmQg="
+          },
+          "bom-ref": "pkg:golang/golang.org/x/mod@v0.42.0?package-id=2679d6a5bc401bae",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v0.41.0 -\u003e v0.42.0",
+          "hash[go-h1]: h1:qJmnOUb4YB+FsEuM3HcWucdZASCPGhsX6uljO6pog0c= -\u003e h1:ICeL3t2L30ljSPHHxDnR4fqVcBt/zR2zJAb9juavmQg="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:qJmnOUb4YB+FsEuM3HcWucdZASCPGhsX6uljO6pog0c=",
+                "after": "h1:ICeL3t2L30ljSPHHxDnR4fqVcBt/zR2zJAb9juavmQg="
+              }
+            }
+          },
+          "version_from": "v0.41.0",
+          "version_to": "v0.42.0",
+          "direction": "upgrade",
+          "level": "minor"
+        }
+      },
+      {
+        "id": "pkg:golang/golang.org/x/sys",
+        "name": "golang.org/x/sys",
+        "location": "/.make/go.mod",
+        "before": {
+          "id": "pkg:golang/golang.org/x/sys",
+          "name": "golang.org/x/sys",
+          "version": "v0.48.0",
+          "purl": "pkg:golang/golang.org/x/sys@v0.48.0",
+          "cpes": [
+            "cpe:2.3:a:golang:x\\/sys:v0.48.0:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:bbX/i/6MgT9BVLM9RT1thmxL04yeTAhbEz4SyadbXoo="
+          },
+          "bom-ref": "pkg:golang/golang.org/x/sys@v0.48.0?package-id=e8a9a7aa8a5b6bf3",
+          "type": "library",
+          "locations": [
+            "/.make/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/golang.org/x/sys",
+          "name": "golang.org/x/sys",
+          "version": "v0.49.0",
+          "purl": "pkg:golang/golang.org/x/sys@v0.49.0",
+          "cpes": [
+            "cpe:2.3:a:golang:x\\/sys:v0.49.0:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:XbzkgYJHdqh/8m2Uu0W/dQv8nktxx4BFHp1M0gROTXA="
+          },
+          "bom-ref": "pkg:golang/golang.org/x/sys@v0.49.0?package-id=d38fabbb38154c30",
+          "type": "library",
+          "locations": [
+            "/.make/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v0.48.0 -\u003e v0.49.0",
+          "hash[go-h1]: h1:bbX/i/6MgT9BVLM9RT1thmxL04yeTAhbEz4SyadbXoo= -\u003e h1:XbzkgYJHdqh/8m2Uu0W/dQv8nktxx4BFHp1M0gROTXA="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:bbX/i/6MgT9BVLM9RT1thmxL04yeTAhbEz4SyadbXoo=",
+                "after": "h1:XbzkgYJHdqh/8m2Uu0W/dQv8nktxx4BFHp1M0gROTXA="
+              }
+            }
+          },
+          "version_from": "v0.48.0",
+          "version_to": "v0.49.0",
+          "direction": "upgrade",
+          "level": "minor"
+        }
+      },
+      {
+        "id": "pkg:golang/golang.org/x/tools",
+        "name": "golang.org/x/tools",
+        "location": "/go.mod",
+        "before": {
+          "id": "pkg:golang/golang.org/x/tools",
+          "name": "golang.org/x/tools",
+          "version": "v0.51.0",
+          "purl": "pkg:golang/golang.org/x/tools@v0.51.0",
+          "cpes": [
+            "cpe:2.3:a:golang:x\\/tools:v0.51.0:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:k4Xc/1Om9jwkBJBo4NVLMSARBoWtK10mx+W5BnXCeAI="
+          },
+          "bom-ref": "pkg:golang/golang.org/x/tools@v0.51.0?package-id=9208579da0e0c549",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/golang.org/x/tools",
+          "name": "golang.org/x/tools",
+          "version": "v0.52.0",
+          "purl": "pkg:golang/golang.org/x/tools@v0.52.0",
+          "cpes": [
+            "cpe:2.3:a:golang:x\\/tools:v0.52.0:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:ryxg4U63oaUYk7uOLTF37n43f4qgtGvqV4Ioit1BaEs="
+          },
+          "bom-ref": "pkg:golang/golang.org/x/tools@v0.52.0?package-id=b2c2b699e88e6408",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v0.51.0 -\u003e v0.52.0",
+          "hash[go-h1]: h1:k4Xc/1Om9jwkBJBo4NVLMSARBoWtK10mx+W5BnXCeAI= -\u003e h1:ryxg4U63oaUYk7uOLTF37n43f4qgtGvqV4Ioit1BaEs="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:k4Xc/1Om9jwkBJBo4NVLMSARBoWtK10mx+W5BnXCeAI=",
+                "after": "h1:ryxg4U63oaUYk7uOLTF37n43f4qgtGvqV4Ioit1BaEs="
+              }
+            }
+          },
+          "version_from": "v0.51.0",
+          "version_to": "v0.52.0",
+          "direction": "upgrade",
+          "level": "minor"
+        }
+      },
+      {
+        "id": "pkg:golang/modernc.org/libc",
+        "name": "modernc.org/libc",
+        "location": "/go.mod",
+        "before": {
+          "id": "pkg:golang/modernc.org/libc",
+          "name": "modernc.org/libc",
+          "version": "v1.77.1",
+          "purl": "pkg:golang/modernc.org/libc@v1.77.1",
+          "digests": {
+            "go-h1": "h1:Ct8j47QtiZ1Enj2DtFXQtUqrPCAjdCmPjtCuvrYQ0Hs="
+          },
+          "bom-ref": "pkg:golang/modernc.org/libc@v1.77.1?package-id=d87a007401d54949",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/modernc.org/libc",
+          "name": "modernc.org/libc",
+          "version": "v1.79.0",
+          "purl": "pkg:golang/modernc.org/libc@v1.79.0",
+          "digests": {
+            "go-h1": "h1:9Dvvv++bAMSkSuBzuOFAatbTV5OIoq6Y6FohmD3e7q8="
+          },
+          "bom-ref": "pkg:golang/modernc.org/libc@v1.79.0?package-id=71b98568bdca6e90",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v1.77.1 -\u003e v1.79.0",
+          "hash[go-h1]: h1:Ct8j47QtiZ1Enj2DtFXQtUqrPCAjdCmPjtCuvrYQ0Hs= -\u003e h1:9Dvvv++bAMSkSuBzuOFAatbTV5OIoq6Y6FohmD3e7q8="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:Ct8j47QtiZ1Enj2DtFXQtUqrPCAjdCmPjtCuvrYQ0Hs=",
+                "after": "h1:9Dvvv++bAMSkSuBzuOFAatbTV5OIoq6Y6FohmD3e7q8="
+              }
+            }
+          },
+          "version_from": "v1.77.1",
+          "version_to": "v1.79.0",
+          "direction": "upgrade",
+          "level": "minor"
+        }
+      },
+      {
+        "id": "pkg:golang/modernc.org/sqlite",
+        "name": "modernc.org/sqlite",
+        "location": "/go.mod",
+        "before": {
+          "id": "pkg:golang/modernc.org/sqlite",
+          "name": "modernc.org/sqlite",
+          "version": "v1.60.1",
+          "purl": "pkg:golang/modernc.org/sqlite@v1.60.1",
+          "digests": {
+            "go-h1": "h1:/blz53O951KWFOso4QQvEs/Fq6cDBKLtMVrYNSeJVKw="
+          },
+          "bom-ref": "pkg:golang/modernc.org/sqlite@v1.60.1?package-id=d455567d57f7c1b3",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/modernc.org/sqlite",
+          "name": "modernc.org/sqlite",
+          "version": "v1.61.0",
+          "purl": "pkg:golang/modernc.org/sqlite@v1.61.0",
+          "digests": {
+            "go-h1": "h1:sQi63oLQ9uquAUA4CzOisH35Q3pEszkPBuHM0tFL8CY="
+          },
+          "bom-ref": "pkg:golang/modernc.org/sqlite@v1.61.0?package-id=8cdf4413fdcbe6a4",
+          "type": "library",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "changes": [
+          "version: v1.60.1 -\u003e v1.61.0",
+          "hash[go-h1]: h1:/blz53O951KWFOso4QQvEs/Fq6cDBKLtMVrYNSeJVKw= -\u003e h1:sQi63oLQ9uquAUA4CzOisH35Q3pEszkPBuHM0tFL8CY="
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:/blz53O951KWFOso4QQvEs/Fq6cDBKLtMVrYNSeJVKw=",
+                "after": "h1:sQi63oLQ9uquAUA4CzOisH35Q3pEszkPBuHM0tFL8CY="
+              }
+            }
+          },
+          "version_from": "v1.60.1",
+          "version_to": "v1.61.0",
+          "direction": "upgrade",
+          "level": "minor"
+        }
+      }
+    ],
+    "file_changes": [
+      {
+        "path": "/.github/actions/bootstrap/action.yaml",
+        "hashes_before": {
+          "SHA-1": "6273e3fbc0208539f1c8e7f207d4d8b7d8611da3",
+          "SHA-256": "349f1044f8c519e2a1d934e7ec41c994d16f577eabc377875104753f881c5505"
+        },
+        "hashes_after": {
+          "SHA-1": "3e94403fe362978da75abd8b5711bb6c363235b3",
+          "SHA-256": "3a5673b41305feb160a77a975058c926af9877380541596b61fcefa64f5f4b52"
+        }
+      },
+      {
+        "path": "/.github/workflows/release.yaml",
+        "hashes_before": {
+          "SHA-1": "a3fd2b55fb7c4a4cc391ab3c2746199bbf7111fc",
+          "SHA-256": "f88b0c339c45dd4f36c1eaddb67f6f0cfdd225b16bf123e1f442ba679be85e63"
+        },
+        "hashes_after": {
+          "SHA-1": "5c7f6d87bd70a83cf9a7972fde596e270aba2a2d",
+          "SHA-256": "9baa4799aecc575c34f91028deb48d02102c9b337c95dff04092d48e691e8c0a"
+        }
+      },
+      {
+        "path": "/.github/workflows/validate-github-actions.yaml",
+        "hashes_before": {
+          "SHA-1": "1280db745713baf4fd70d7564e2a4fffaa3dde8b",
+          "SHA-256": "0d806cbb0b37fb86b79f215f19b56c7d6ed1abf22042626444612161cb9bd0b3"
+        },
+        "hashes_after": {
+          "SHA-1": "6ed5d6ffd88b7ada3c5e6b6dfff3b622fcdf706e",
+          "SHA-256": "6df49eff06a251ed23de77a57c11bdf8abab1cf5870c15b23dd5924ebe087047"
+        }
+      },
+      {
+        "path": "/.github/workflows/validations.yaml",
+        "hashes_before": {
+          "SHA-1": "09f173526abdba92e61d88a9bd7e752d188c8b34",
+          "SHA-256": "485c1606d7e8ef4407e2453714e10a766fecc3fb5887628fcd0b8131c2669dff"
+        },
+        "hashes_after": {
+          "SHA-1": "3e81b3a2426b8507d5f54092208346216c53c10e",
+          "SHA-256": "81022ce60333ef34961fc51788c62aff682106a686b308f947c4b0dc1a65927e"
+        }
+      },
+      {
+        "path": "/.make/go.mod",
+        "hashes_before": {
+          "SHA-1": "3bc0ef051908ec6b7c796b45eee836dbea058502",
+          "SHA-256": "28b511a942a9b936c60e528be4e5c57349c621619faf2f1ce2baeec31e09baec"
+        },
+        "hashes_after": {
+          "SHA-1": "8747be22ea9551184961f945d10e27c1367f2895",
+          "SHA-256": "2feeeab7df3385095625cf7bcc5823c7e4dd002ad83a7011d8f78daa7af1f67d"
+        }
+      },
+      {
+        "path": "/go.mod",
+        "hashes_before": {
+          "SHA-1": "01e709f12a8f5ca3c08e836a569f666c4cd3433c",
+          "SHA-256": "a9e851acedee1cdcba947101a44d6fd4182dbd947fc26d9565216eb397966419"
+        },
+        "hashes_after": {
+          "SHA-1": "c3eea40fafe9aec16f3adeed1a43b33b64cea749",
+          "SHA-256": "4ba1467e2e42d6e5c2bd47bfa505b61e918da564f4d1ff09c099e6bb675d483c"
+        }
+      }
+    ],
+    "source_change": {
+      "name": "anchore/syft",
+      "from": "v1.55.0",
+      "to": "v1.57.0"
+    },
+    "duplicates": {
+      "before": [
+        {
+          "id": "cpe:.\\/.github\\/actions\\/bootstrap:.\\/.github\\/actions\\/bootstrap",
+          "name": "./.github/actions/bootstrap",
+          "versions": [
+            "UNKNOWN"
+          ],
+          "components": [
+            {
+              "id": "cpe:.\\/.github\\/actions\\/bootstrap:.\\/.github\\/actions\\/bootstrap",
+              "name": "./.github/actions/bootstrap",
+              "version": "UNKNOWN",
+              "cpes": [
+                "cpe:2.3:a:.\\/.github\\/actions\\/bootstrap:.\\/.github\\/actions\\/bootstrap:*:*:*:*:*:*:*:*"
+              ],
+              "bom-ref": "68c61397fd92924c",
+              "type": "library",
+              "locations": [
+                "/.github/workflows/validations.yaml"
+              ]
+            },
+            {
+              "id": "cpe:.\\/.github\\/actions\\/bootstrap:.\\/.github\\/actions\\/bootstrap",
+              "name": "./.github/actions/bootstrap",
+              "version": "UNKNOWN",
+              "cpes": [
+                "cpe:2.3:a:.\\/.github\\/actions\\/bootstrap:.\\/.github\\/actions\\/bootstrap:*:*:*:*:*:*:*:*"
+              ],
+              "bom-ref": "a7d3cafcd05cc99e",
+              "type": "library",
+              "locations": [
+                "/.github/workflows/release.yaml"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pkg:github/actions/checkout",
+          "name": "actions/checkout",
+          "versions": [
+            "v7.0.1"
+          ],
+          "components": [
+            {
+              "id": "pkg:github/actions/checkout",
+              "name": "actions/checkout",
+              "version": "v7.0.1",
+              "purl": "pkg:github/actions/checkout@v7.0.1",
+              "cpes": [
+                "cpe:2.3:a:actions\\/checkout:actions\\/checkout:v7.0.1:*:*:*:*:*:*:*"
+              ],
+              "bom-ref": "pkg:github/actions/checkout@v7.0.1?package-id=062b97dfdcdff99f",
+              "type": "library",
+              "locations": [
+                "/.github/workflows/validate-github-actions.yaml"
+              ]
+            },
+            {
+              "id": "pkg:github/actions/checkout",
+              "name": "actions/checkout",
+              "version": "v7.0.1",
+              "purl": "pkg:github/actions/checkout@v7.0.1",
+              "cpes": [
+                "cpe:2.3:a:actions\\/checkout:actions\\/checkout:v7.0.1:*:*:*:*:*:*:*"
+              ],
+              "bom-ref": "pkg:github/actions/checkout@v7.0.1?package-id=3b74fc2874009c20",
+              "type": "library",
+              "locations": [
+                "/.github/workflows/validations.yaml"
+              ]
+            },
+            {
+              "id": "pkg:github/actions/checkout",
+              "name": "actions/checkout",
+              "version": "v7.0.1",
+              "purl": "pkg:github/actions/checkout@v7.0.1",
+              "cpes": [
+                "cpe:2.3:a:actions\\/checkout:actions\\/checkout:v7.0.1:*:*:*:*:*:*:*"
+              ],
+              "bom-ref": "pkg:github/actions/checkout@v7.0.1?package-id=8aacae6b26a1120f",
+              "type": "library",
+              "locations": [
+                "/.github/workflows/release.yaml"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pkg:github/anchore/go-make#.github/actions/setup",
+          "name": "anchore/go-make/.github/actions/setup",
+          "versions": [
+            "v0.9.3"
+          ],
+          "components": [
+            {
+              "id": "pkg:github/anchore/go-make#.github/actions/setup",
+              "name": "anchore/go-make/.github/actions/setup",
+              "version": "v0.9.3",
+              "purl": "pkg:github/anchore/go-make@v0.9.3#.github/actions/setup",
+              "cpes": [
+                "cpe:2.3:a:anchore\\/go-make\\/.github\\/actions\\/setup:anchore\\/go-make\\/.github\\/actions\\/setup:v0.9.3:*:*:*:*:*:*:*"
+              ],
+              "bom-ref": "pkg:github/anchore/go-make@v0.9.3?package-id=467cf6d8aa4bea83#.github/actions/setup",
+              "type": "library",
+              "locations": [
+                "/.github/actions/bootstrap/action.yaml"
+              ]
+            },
+            {
+              "id": "pkg:github/anchore/go-make#.github/actions/setup",
+              "name": "anchore/go-make/.github/actions/setup",
+              "version": "v0.9.3",
+              "purl": "pkg:github/anchore/go-make@v0.9.3#.github/actions/setup",
+              "cpes": [
+                "cpe:2.3:a:anchore\\/go-make\\/.github\\/actions\\/setup:anchore\\/go-make\\/.github\\/actions\\/setup:v0.9.3:*:*:*:*:*:*:*"
+              ],
+              "bom-ref": "pkg:github/anchore/go-make@v0.9.3?package-id=f85a2ac334504f05#.github/actions/setup",
+              "type": "library",
+              "locations": [
+                "/.github/workflows/validations.yaml"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pkg:golang/github.com/bmatcuk/doublestar/v4",
+          "name": "github.com/bmatcuk/doublestar/v4",
+          "versions": [
+            "v4.10.2"
+          ],
+          "components": [
+            {
+              "id": "pkg:golang/github.com/bmatcuk/doublestar/v4",
+              "name": "github.com/bmatcuk/doublestar/v4",
+              "version": "v4.10.2",
+              "purl": "pkg:golang/github.com/bmatcuk/doublestar/v4@v4.10.2",
+              "cpes": [
+                "cpe:2.3:a:bmatcuk:doublestar\\/v4:v4.10.2:*:*:*:*:*:*:*"
+              ],
+              "digests": {
+                "go-h1": "h1:eF7W7HWKg3z9NrWV9pTLnNeoXaqq3Tq9DNKXVMfoCnw="
+              },
+              "bom-ref": "pkg:golang/github.com/bmatcuk/doublestar/v4@v4.10.2?package-id=5fa04512449baf6a",
+              "type": "library",
+              "locations": [
+                "/.make/go.mod"
+              ]
+            },
+            {
+              "id": "pkg:golang/github.com/bmatcuk/doublestar/v4",
+              "name": "github.com/bmatcuk/doublestar/v4",
+              "version": "v4.10.2",
+              "purl": "pkg:golang/github.com/bmatcuk/doublestar/v4@v4.10.2",
+              "cpes": [
+                "cpe:2.3:a:bmatcuk:doublestar\\/v4:v4.10.2:*:*:*:*:*:*:*"
+              ],
+              "digests": {
+                "go-h1": "h1:eF7W7HWKg3z9NrWV9pTLnNeoXaqq3Tq9DNKXVMfoCnw="
+              },
+              "bom-ref": "pkg:golang/github.com/bmatcuk/doublestar/v4@v4.10.2?package-id=86adfb224e15d2f0",
+              "type": "library",
+              "locations": [
+                "/go.mod"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pkg:golang/github.com/goccy/go-yaml",
+          "name": "github.com/goccy/go-yaml",
+          "versions": [
+            "v1.19.2"
+          ],
+          "components": [
+            {
+              "id": "pkg:golang/github.com/goccy/go-yaml",
+              "name": "github.com/goccy/go-yaml",
+              "version": "v1.19.2",
+              "purl": "pkg:golang/github.com/goccy/go-yaml@v1.19.2",
+              "cpes": [
+                "cpe:2.3:a:goccy:go-yaml:v1.19.2:*:*:*:*:*:*:*"
+              ],
+              "digests": {
+                "go-h1": "h1:PmFC1S6h8ljIz6gMRBopkjP1TVT7xuwrButHID66PoM="
+              },
+              "bom-ref": "pkg:golang/github.com/goccy/go-yaml@v1.19.2?package-id=46f9bf440b91e2a0",
+              "type": "library",
+              "locations": [
+                "/.make/go.mod"
+              ]
+            },
+            {
+              "id": "pkg:golang/github.com/goccy/go-yaml",
+              "name": "github.com/goccy/go-yaml",
+              "version": "v1.19.2",
+              "purl": "pkg:golang/github.com/goccy/go-yaml@v1.19.2",
+              "cpes": [
+                "cpe:2.3:a:goccy:go-yaml:v1.19.2:*:*:*:*:*:*:*"
+              ],
+              "digests": {
+                "go-h1": "h1:PmFC1S6h8ljIz6gMRBopkjP1TVT7xuwrButHID66PoM="
+              },
+              "bom-ref": "pkg:golang/github.com/goccy/go-yaml@v1.19.2?package-id=efc377de37bce13b",
+              "type": "library",
+              "locations": [
+                "/go.mod"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pkg:golang/golang.org/x/mod",
+          "name": "golang.org/x/mod",
+          "versions": [
+            "v0.41.0"
+          ],
+          "components": [
+            {
+              "id": "pkg:golang/golang.org/x/mod",
+              "name": "golang.org/x/mod",
+              "version": "v0.41.0",
+              "purl": "pkg:golang/golang.org/x/mod@v0.41.0",
+              "cpes": [
+                "cpe:2.3:a:golang:x\\/mod:v0.41.0:*:*:*:*:*:*:*"
+              ],
+              "digests": {
+                "go-h1": "h1:qJmnOUb4YB+FsEuM3HcWucdZASCPGhsX6uljO6pog0c="
+              },
+              "bom-ref": "pkg:golang/golang.org/x/mod@v0.41.0?package-id=56d232e7120c3a8b",
+              "type": "library",
+              "locations": [
+                "/go.mod"
+              ]
+            },
+            {
+              "id": "pkg:golang/golang.org/x/mod",
+              "name": "golang.org/x/mod",
+              "version": "v0.41.0",
+              "purl": "pkg:golang/golang.org/x/mod@v0.41.0",
+              "cpes": [
+                "cpe:2.3:a:golang:x\\/mod:v0.41.0:*:*:*:*:*:*:*"
+              ],
+              "digests": {
+                "go-h1": "h1:qJmnOUb4YB+FsEuM3HcWucdZASCPGhsX6uljO6pog0c="
+              },
+              "bom-ref": "pkg:golang/golang.org/x/mod@v0.41.0?package-id=c11f50fe32495f81",
+              "type": "library",
+              "locations": [
+                "/.make/go.mod"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pkg:golang/golang.org/x/sys",
+          "name": "golang.org/x/sys",
+          "versions": [
+            "v0.48.0",
+            "v0.49.0"
+          ],
+          "components": [
+            {
+              "id": "pkg:golang/golang.org/x/sys",
+              "name": "golang.org/x/sys",
+              "version": "v0.48.0",
+              "purl": "pkg:golang/golang.org/x/sys@v0.48.0",
+              "cpes": [
+                "cpe:2.3:a:golang:x\\/sys:v0.48.0:*:*:*:*:*:*:*"
+              ],
+              "digests": {
+                "go-h1": "h1:bbX/i/6MgT9BVLM9RT1thmxL04yeTAhbEz4SyadbXoo="
+              },
+              "bom-ref": "pkg:golang/golang.org/x/sys@v0.48.0?package-id=e8a9a7aa8a5b6bf3",
+              "type": "library",
+              "locations": [
+                "/.make/go.mod"
+              ]
+            },
+            {
+              "id": "pkg:golang/golang.org/x/sys",
+              "name": "golang.org/x/sys",
+              "version": "v0.49.0",
+              "purl": "pkg:golang/golang.org/x/sys@v0.49.0",
+              "cpes": [
+                "cpe:2.3:a:golang:x\\/sys:v0.49.0:*:*:*:*:*:*:*"
+              ],
+              "digests": {
+                "go-h1": "h1:XbzkgYJHdqh/8m2Uu0W/dQv8nktxx4BFHp1M0gROTXA="
+              },
+              "bom-ref": "pkg:golang/golang.org/x/sys@v0.49.0?package-id=aec8e4adcf0dcac2",
+              "type": "library",
+              "locations": [
+                "/go.mod"
+              ]
+            }
+          ]
+        }
+      ],
+      "after": [
+        {
+          "id": "cpe:.\\/.github\\/actions\\/bootstrap:.\\/.github\\/actions\\/bootstrap",
+          "name": "./.github/actions/bootstrap",
+          "versions": [
+            "UNKNOWN"
+          ],
+          "components": [
+            {
+              "id": "cpe:.\\/.github\\/actions\\/bootstrap:.\\/.github\\/actions\\/bootstrap",
+              "name": "./.github/actions/bootstrap",
+              "version": "UNKNOWN",
+              "cpes": [
+                "cpe:2.3:a:.\\/.github\\/actions\\/bootstrap:.\\/.github\\/actions\\/bootstrap:*:*:*:*:*:*:*:*"
+              ],
+              "bom-ref": "68c61397fd92924c",
+              "type": "library",
+              "locations": [
+                "/.github/workflows/validations.yaml"
+              ]
+            },
+            {
+              "id": "cpe:.\\/.github\\/actions\\/bootstrap:.\\/.github\\/actions\\/bootstrap",
+              "name": "./.github/actions/bootstrap",
+              "version": "UNKNOWN",
+              "cpes": [
+                "cpe:2.3:a:.\\/.github\\/actions\\/bootstrap:.\\/.github\\/actions\\/bootstrap:*:*:*:*:*:*:*:*"
+              ],
+              "bom-ref": "a7d3cafcd05cc99e",
+              "type": "library",
+              "locations": [
+                "/.github/workflows/release.yaml"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pkg:github/actions/checkout",
+          "name": "actions/checkout",
+          "versions": [
+            "v7.0.1"
+          ],
+          "components": [
+            {
+              "id": "pkg:github/actions/checkout",
+              "name": "actions/checkout",
+              "version": "v7.0.1",
+              "purl": "pkg:github/actions/checkout@v7.0.1",
+              "cpes": [
+                "cpe:2.3:a:actions\\/checkout:actions\\/checkout:v7.0.1:*:*:*:*:*:*:*"
+              ],
+              "bom-ref": "pkg:github/actions/checkout@v7.0.1?package-id=062b97dfdcdff99f",
+              "type": "library",
+              "locations": [
+                "/.github/workflows/validate-github-actions.yaml"
+              ]
+            },
+            {
+              "id": "pkg:github/actions/checkout",
+              "name": "actions/checkout",
+              "version": "v7.0.1",
+              "purl": "pkg:github/actions/checkout@v7.0.1",
+              "cpes": [
+                "cpe:2.3:a:actions\\/checkout:actions\\/checkout:v7.0.1:*:*:*:*:*:*:*"
+              ],
+              "bom-ref": "pkg:github/actions/checkout@v7.0.1?package-id=3b74fc2874009c20",
+              "type": "library",
+              "locations": [
+                "/.github/workflows/validations.yaml"
+              ]
+            },
+            {
+              "id": "pkg:github/actions/checkout",
+              "name": "actions/checkout",
+              "version": "v7.0.1",
+              "purl": "pkg:github/actions/checkout@v7.0.1",
+              "cpes": [
+                "cpe:2.3:a:actions\\/checkout:actions\\/checkout:v7.0.1:*:*:*:*:*:*:*"
+              ],
+              "bom-ref": "pkg:github/actions/checkout@v7.0.1?package-id=8aacae6b26a1120f",
+              "type": "library",
+              "locations": [
+                "/.github/workflows/release.yaml"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pkg:github/anchore/go-make#.github/actions/setup",
+          "name": "anchore/go-make/.github/actions/setup",
+          "versions": [
+            "v0.9.6"
+          ],
+          "components": [
+            {
+              "id": "pkg:github/anchore/go-make#.github/actions/setup",
+              "name": "anchore/go-make/.github/actions/setup",
+              "version": "v0.9.6",
+              "purl": "pkg:github/anchore/go-make@v0.9.6#.github/actions/setup",
+              "cpes": [
+                "cpe:2.3:a:anchore\\/go-make\\/.github\\/actions\\/setup:anchore\\/go-make\\/.github\\/actions\\/setup:v0.9.6:*:*:*:*:*:*:*"
+              ],
+              "bom-ref": "pkg:github/anchore/go-make@v0.9.6?package-id=8b554b8f7b14afab#.github/actions/setup",
+              "type": "library",
+              "locations": [
+                "/.github/workflows/validations.yaml"
+              ]
+            },
+            {
+              "id": "pkg:github/anchore/go-make#.github/actions/setup",
+              "name": "anchore/go-make/.github/actions/setup",
+              "version": "v0.9.6",
+              "purl": "pkg:github/anchore/go-make@v0.9.6#.github/actions/setup",
+              "cpes": [
+                "cpe:2.3:a:anchore\\/go-make\\/.github\\/actions\\/setup:anchore\\/go-make\\/.github\\/actions\\/setup:v0.9.6:*:*:*:*:*:*:*"
+              ],
+              "bom-ref": "pkg:github/anchore/go-make@v0.9.6?package-id=c1bf7b6db85a678c#.github/actions/setup",
+              "type": "library",
+              "locations": [
+                "/.github/actions/bootstrap/action.yaml"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pkg:golang/github.com/bmatcuk/doublestar/v4",
+          "name": "github.com/bmatcuk/doublestar/v4",
+          "versions": [
+            "v4.10.3"
+          ],
+          "components": [
+            {
+              "id": "pkg:golang/github.com/bmatcuk/doublestar/v4",
+              "name": "github.com/bmatcuk/doublestar/v4",
+              "version": "v4.10.3",
+              "purl": "pkg:golang/github.com/bmatcuk/doublestar/v4@v4.10.3",
+              "cpes": [
+                "cpe:2.3:a:bmatcuk:doublestar\\/v4:v4.10.3:*:*:*:*:*:*:*"
+              ],
+              "digests": {
+                "go-h1": "h1:1UIv1+fqH3++ViVkpnaPTB+Pi1UHycnPFAq14zgK+gI="
+              },
+              "bom-ref": "pkg:golang/github.com/bmatcuk/doublestar/v4@v4.10.3?package-id=6fd187a94708c41e",
+              "type": "library",
+              "locations": [
+                "/.make/go.mod"
+              ]
+            },
+            {
+              "id": "pkg:golang/github.com/bmatcuk/doublestar/v4",
+              "name": "github.com/bmatcuk/doublestar/v4",
+              "version": "v4.10.3",
+              "purl": "pkg:golang/github.com/bmatcuk/doublestar/v4@v4.10.3",
+              "cpes": [
+                "cpe:2.3:a:bmatcuk:doublestar\\/v4:v4.10.3:*:*:*:*:*:*:*"
+              ],
+              "digests": {
+                "go-h1": "h1:1UIv1+fqH3++ViVkpnaPTB+Pi1UHycnPFAq14zgK+gI="
+              },
+              "bom-ref": "pkg:golang/github.com/bmatcuk/doublestar/v4@v4.10.3?package-id=937a2b30137b1650",
+              "type": "library",
+              "locations": [
+                "/go.mod"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pkg:golang/github.com/goccy/go-yaml",
+          "name": "github.com/goccy/go-yaml",
+          "versions": [
+            "v1.19.2"
+          ],
+          "components": [
+            {
+              "id": "pkg:golang/github.com/goccy/go-yaml",
+              "name": "github.com/goccy/go-yaml",
+              "version": "v1.19.2",
+              "purl": "pkg:golang/github.com/goccy/go-yaml@v1.19.2",
+              "cpes": [
+                "cpe:2.3:a:goccy:go-yaml:v1.19.2:*:*:*:*:*:*:*"
+              ],
+              "digests": {
+                "go-h1": "h1:PmFC1S6h8ljIz6gMRBopkjP1TVT7xuwrButHID66PoM="
+              },
+              "bom-ref": "pkg:golang/github.com/goccy/go-yaml@v1.19.2?package-id=46f9bf440b91e2a0",
+              "type": "library",
+              "locations": [
+                "/.make/go.mod"
+              ]
+            },
+            {
+              "id": "pkg:golang/github.com/goccy/go-yaml",
+              "name": "github.com/goccy/go-yaml",
+              "version": "v1.19.2",
+              "purl": "pkg:golang/github.com/goccy/go-yaml@v1.19.2",
+              "cpes": [
+                "cpe:2.3:a:goccy:go-yaml:v1.19.2:*:*:*:*:*:*:*"
+              ],
+              "digests": {
+                "go-h1": "h1:PmFC1S6h8ljIz6gMRBopkjP1TVT7xuwrButHID66PoM="
+              },
+              "bom-ref": "pkg:golang/github.com/goccy/go-yaml@v1.19.2?package-id=efc377de37bce13b",
+              "type": "library",
+              "locations": [
+                "/go.mod"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pkg:golang/golang.org/x/mod",
+          "name": "golang.org/x/mod",
+          "versions": [
+            "v0.42.0"
+          ],
+          "components": [
+            {
+              "id": "pkg:golang/golang.org/x/mod",
+              "name": "golang.org/x/mod",
+              "version": "v0.42.0",
+              "purl": "pkg:golang/golang.org/x/mod@v0.42.0",
+              "cpes": [
+                "cpe:2.3:a:golang:x\\/mod:v0.42.0:*:*:*:*:*:*:*"
+              ],
+              "digests": {
+                "go-h1": "h1:ICeL3t2L30ljSPHHxDnR4fqVcBt/zR2zJAb9juavmQg="
+              },
+              "bom-ref": "pkg:golang/golang.org/x/mod@v0.42.0?package-id=2679d6a5bc401bae",
+              "type": "library",
+              "locations": [
+                "/go.mod"
+              ]
+            },
+            {
+              "id": "pkg:golang/golang.org/x/mod",
+              "name": "golang.org/x/mod",
+              "version": "v0.42.0",
+              "purl": "pkg:golang/golang.org/x/mod@v0.42.0",
+              "cpes": [
+                "cpe:2.3:a:golang:x\\/mod:v0.42.0:*:*:*:*:*:*:*"
+              ],
+              "digests": {
+                "go-h1": "h1:ICeL3t2L30ljSPHHxDnR4fqVcBt/zR2zJAb9juavmQg="
+              },
+              "bom-ref": "pkg:golang/golang.org/x/mod@v0.42.0?package-id=da9832cedf7e9f2c",
+              "type": "library",
+              "locations": [
+                "/.make/go.mod"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pkg:golang/golang.org/x/sys",
+          "name": "golang.org/x/sys",
+          "versions": [
+            "v0.49.0"
+          ],
+          "components": [
+            {
+              "id": "pkg:golang/golang.org/x/sys",
+              "name": "golang.org/x/sys",
+              "version": "v0.49.0",
+              "purl": "pkg:golang/golang.org/x/sys@v0.49.0",
+              "cpes": [
+                "cpe:2.3:a:golang:x\\/sys:v0.49.0:*:*:*:*:*:*:*"
+              ],
+              "digests": {
+                "go-h1": "h1:XbzkgYJHdqh/8m2Uu0W/dQv8nktxx4BFHp1M0gROTXA="
+              },
+              "bom-ref": "pkg:golang/golang.org/x/sys@v0.49.0?package-id=aec8e4adcf0dcac2",
+              "type": "library",
+              "locations": [
+                "/go.mod"
+              ]
+            },
+            {
+              "id": "pkg:golang/golang.org/x/sys",
+              "name": "golang.org/x/sys",
+              "version": "v0.49.0",
+              "purl": "pkg:golang/golang.org/x/sys@v0.49.0",
+              "cpes": [
+                "cpe:2.3:a:golang:x\\/sys:v0.49.0:*:*:*:*:*:*:*"
+              ],
+              "digests": {
+                "go-h1": "h1:XbzkgYJHdqh/8m2Uu0W/dQv8nktxx4BFHp1M0gROTXA="
+              },
+              "bom-ref": "pkg:golang/golang.org/x/sys@v0.49.0?package-id=d38fabbb38154c30",
+              "type": "library",
+              "locations": [
+                "/.make/go.mod"
+              ]
+            }
+          ]
+        }
+      ],
+      "version_diff": {
+        "versions_added": {
+          "pkg:github/anchore/go-make#.github/actions/setup": [
+            "v0.9.6"
+          ],
+          "pkg:golang/github.com/bmatcuk/doublestar/v4": [
+            "v4.10.3"
+          ],
+          "pkg:golang/golang.org/x/mod": [
+            "v0.42.0"
+          ]
+        },
+        "versions_removed": {
+          "pkg:github/anchore/go-make#.github/actions/setup": [
+            "v0.9.3"
+          ],
+          "pkg:golang/github.com/bmatcuk/doublestar/v4": [
+            "v4.10.2"
+          ],
+          "pkg:golang/golang.org/x/mod": [
+            "v0.41.0"
+          ],
+          "pkg:golang/golang.org/x/sys": [
+            "v0.48.0"
+          ]
+        }
+      }
+    },
+    "drift_summary": {
+      "version_drift": 43,
+      "integrity_drift": 0,
+      "metadata_drift": 0,
+      "upgrades": 43,
+      "downgrades": 0,
+      "unknown_direction": 0,
+      "distinct_version_changes": 40,
+      "file_changes": 6,
+      "license_changes": 0,
+      "owned_file_drift": 0,
+      "owned_files_changed": 0
+    },
+    "digest_coverage": {
+      "same_version_pairs": 318,
+      "comparable": 302,
+      "before_only": 0,
+      "after_only": 0,
+      "disjoint_kinds": 0,
+      "by_kind": {
+        "go-h1": 302
+      },
+      "packages_total": 362
+    },
+    "file_coverage": {
+      "files_compared": 7,
+      "files_unverified": 0,
+      "ambiguous_paths": 0,
+      "owned_files_after": 0,
+      "unowned_files_after": 0,
+      "config_unknown": 0
+    },
+    "added_by_type": [
+      {
+        "type": "golang",
+        "total": 1,
+        "samples": [
+          {
+            "name": "github.com/varlink/go",
+            "version": "v0.4.1-0.20261015173642-c935be0c53f7",
+            "type": "golang",
+            "locations": [
+              "/go.mod"
+            ]
+          }
+        ]
+      }
+    ],
+    "removed_by_type": [
+      {
+        "type": "golang",
+        "total": 1,
+        "samples": [
+          {
+            "name": "github.com/becheran/wildmatch-go",
+            "version": "v1.0.0",
+            "type": "golang",
+            "locations": [
+              "/go.mod"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
