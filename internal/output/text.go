@@ -49,15 +49,27 @@ func PrintDiffOverview(overview analysis.DiffOverview) {
 	a := overview.After
 
 	sep := strings.Repeat("=", 70)
+	rows := [][3]string{
+		{"File:", filepath.Base(b.FileName), filepath.Base(a.FileName)},
+		{"File Size:", formatFileSize(b.FileSize), formatFileSize(a.FileSize)},
+		{"Format:", orNone(formatLabel(b.Info)), orNone(formatLabel(a.Info))},
+		{"Generator:", orNone(generatorLabel(b.Info)), orNone(generatorLabel(a.Info))},
+		{"OS:", orNone(b.Info.OSPrettyName), orNone(a.Info.OSPrettyName)},
+		{"Source:", orNone(b.Info.SourceName), orNone(a.Info.SourceName)},
+		{"Source Type:", orNone(b.Info.SourceType), orNone(a.Info.SourceType)},
+	}
+	// widen the Before column so long values never run together
+	w := 24
+	for _, r := range rows {
+		w = max(w, len(r[1])+2)
+	}
+	row := fmt.Sprintf("%%-24s%%-%ds%%s\n", w)
 	fmt.Printf("\nSBOM Comparison\n%s\n", sep)
-	fmt.Printf("%-24s%-24s%s\n", "", "Before", "After")
-	fmt.Printf("%-24s%-24s%s\n", "File:", filepath.Base(b.FileName), filepath.Base(a.FileName))
-	fmt.Printf("%-24s%-24s%s\n", "File Size:", formatFileSize(b.FileSize), formatFileSize(a.FileSize))
-	fmt.Printf("%-24s%-24s%s\n", "Format:", orNone(b.Info.ToolName), orNone(a.Info.ToolName))
-	fmt.Printf("%-24s%-24s%s\n", "OS:", orNone(b.Info.OSPrettyName), orNone(a.Info.OSPrettyName))
-	fmt.Printf("%-24s%-24s%s\n", "Source:", orNone(b.Info.SourceName), orNone(a.Info.SourceName))
-	fmt.Printf("%-24s%-24s%s\n", "Source Type:", orNone(b.Info.SourceType), orNone(a.Info.SourceType))
-	fmt.Printf("%-24s%-24s%s\n", "Total Components:",
+	fmt.Printf(row, "", "Before", "After")
+	for _, r := range rows {
+		fmt.Printf(row, r[0], r[1], r[2])
+	}
+	fmt.Printf(row, "Total Components:",
 		fmt.Sprintf("%d", b.Stats.TotalComponents),
 		fmt.Sprintf("%d", a.Stats.TotalComponents))
 
@@ -91,7 +103,7 @@ func PrintDiffOverview(overview analysis.DiffOverview) {
 				diffStr = fmt.Sprintf("%d", diff)
 			}
 			label := fmt.Sprintf("  %s:", t)
-			fmt.Printf("%-24s%-24s%-16s%s\n", label,
+			fmt.Printf(fmt.Sprintf("%%-24s%%-%ds%%-16s%%s\n", w), label,
 				fmt.Sprintf("%d", bCount),
 				fmt.Sprintf("%d", aCount),
 				diffStr)
@@ -99,16 +111,16 @@ func PrintDiffOverview(overview analysis.DiffOverview) {
 	}
 
 	fmt.Printf("Data Quality:\n")
-	fmt.Printf("%-24s%-24s%s\n", "  PURL Coverage:",
+	fmt.Printf(row, "  PURL Coverage:",
 		formatPct(b.Stats.WithPURL, b.Stats.TotalComponents),
 		formatPct(a.Stats.WithPURL, a.Stats.TotalComponents))
-	fmt.Printf("%-24s%-24s%s\n", "  License Coverage:",
+	fmt.Printf(row, "  License Coverage:",
 		formatPct(b.Stats.TotalComponents-b.Stats.WithoutLicense, b.Stats.TotalComponents),
 		formatPct(a.Stats.TotalComponents-a.Stats.WithoutLicense, a.Stats.TotalComponents))
-	fmt.Printf("%-24s%-24s%s\n", "  Hash Coverage:",
+	fmt.Printf(row, "  Hash Coverage:",
 		formatPct(b.Stats.WithHashes, b.Stats.TotalComponents),
 		formatPct(a.Stats.WithHashes, a.Stats.TotalComponents))
-	fmt.Printf("%-24s%-24s%s\n", "  CPE Coverage:",
+	fmt.Printf(row, "  CPE Coverage:",
 		formatPct(b.Stats.WithCPEs, b.Stats.TotalComponents),
 		formatPct(a.Stats.WithCPEs, a.Stats.TotalComponents))
 	fmt.Printf("%s\n", sep)
@@ -155,12 +167,14 @@ func PrintScanContext(overview analysis.DiffOverview) {
 		return
 	}
 
+	w := max(24, len(b.SchemaVersion)+2, len(b.SearchScope)+2)
+	row := fmt.Sprintf("  %%-24s%%-%ds%%s\n", w)
 	fmt.Printf("\nScan Context:\n")
 	if hasSchema {
-		fmt.Printf("  %-24s%-24s%s\n", "Schema:", orNone(b.SchemaVersion), orNone(a.SchemaVersion))
+		fmt.Printf(row, "Schema:", orNone(b.SchemaVersion), orNone(a.SchemaVersion))
 	}
 	if hasScope {
-		fmt.Printf("  %-24s%-24s%s\n", "Scan Scope:", orNone(b.SearchScope), orNone(a.SearchScope))
+		fmt.Printf(row, "Scan Scope:", orNone(b.SearchScope), orNone(a.SearchScope))
 	}
 }
 

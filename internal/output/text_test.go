@@ -246,3 +246,21 @@ func TestPrintViolations_WarningsOnly(t *testing.T) {
 		t.Error("expected Policy Warnings section")
 	}
 }
+
+func TestPrintDiffOverview_FormatGeneratorAndWideValues(t *testing.T) {
+	ov := analysis.DiffOverview{
+		Before: analysis.SBOMSide{FileName: "nginx-alpine-1.26.syft.json", Info: sbom.SBOMInfo{Format: "Syft JSON", SpecVersion: "16.1.12", ToolName: "syft", ToolVersion: "1.56.0", OSPrettyName: "Debian GNU/Linux 12 (bookworm)"}},
+		After:  analysis.SBOMSide{FileName: "nginx-alpine-1.28.syft.json", Info: sbom.SBOMInfo{Format: "CycloneDX", SpecVersion: "1.6", ToolName: "syft", ToolVersion: "1.57.0", OSPrettyName: "Debian GNU/Linux 13 (trixie)"}},
+	}
+	out := captureOutput(func() { PrintDiffOverview(ov) })
+	for _, want := range []string{"Syft JSON 16.1.12", "CycloneDX 1.6", "syft 1.56.0", "syft 1.57.0"} {
+		if !strings.Contains(out, want) {
+			t.Errorf("missing %q in:\n%s", want, out)
+		}
+	}
+	for _, glued := range []string{"(bookworm)Debian", "1.26.syft.jsonnginx"} {
+		if strings.Contains(out, glued) {
+			t.Errorf("columns run together (%q):\n%s", glued, out)
+		}
+	}
+}

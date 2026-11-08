@@ -2,6 +2,7 @@ package analysis
 
 import (
 	"fmt"
+	"slices"
 	"sort"
 	"strings"
 
@@ -37,6 +38,7 @@ func ComputeSingleFindings(stats Stats, info sbom.SBOMInfo, comps []sbom.Compone
 	findings = append(findings, detectLocationHotspots(comps)...)
 	findings = append(findings, detectLicenseRiskProfile(pkgStats)...)
 	findings = append(findings, detectDataQuality(pkgStats)...)
+	findings = append(findings, detectSplitLicenses(comps)...)
 	findings = append(findings, detectDuplicateWarning(stats)...)
 	findings = append(findings, detectCatalogerBreakdown(stats)...)
 
@@ -214,6 +216,25 @@ func detectDataQuality(stats Stats) []Finding {
 	return findings
 }
 
+// detectSplitLicenses: AND/OR/WITH alone as a license value
+func detectSplitLicenses(comps []sbom.Component) []Finding {
+	var names []string
+	for _, c := range comps {
+		if slices.ContainsFunc(c.Licenses, func(l string) bool { return l == "AND" || l == "OR" || l == "WITH" }) {
+			names = append(names, c.Name)
+		}
+	}
+	if len(names) == 0 {
+		return nil
+	}
+	limit := min(len(names), 5)
+	msg := fmt.Sprintf("%d packages list AND/OR/WITH as a license: the SBOM generator split a license expression (%s", len(names), strings.Join(names[:limit], ", "))
+	if len(names) > limit {
+		msg += fmt.Sprintf(" + %d more", len(names)-limit)
+	}
+	return []Finding{{Icon: "\u26a0\ufe0f", Message: msg + ")"}}
+}
+
 func detectDuplicateWarning(stats Stats) []Finding {
 	if stats.DuplicateCount == 0 {
 		return nil
@@ -255,7 +276,7 @@ func ComputeKeyFindings(result DiffResult, overview DiffOverview) KeyFindings {
 	findings = append(findings, detectVersionChangeAnalysis(result, overview)...)
 	findings = append(findings, detectIntegrityDriftContext(result)...)
 	findings = append(findings, detectFileChanges(result)...)
-	findings = append(findings, detectOwnedFileDrift(result)...)
+	findings = append(findings, detectOwnedFileDrift(result, overview)...)
 	findings = append(findings, detectDominantPathPattern(result)...)
 	findings = append(findings, detectRemovalHotspots(result)...)
 	findings = append(findings, detectStableTypes(overview, result)...)
@@ -683,8 +704,16 @@ func detectAttackSurfaceDelta(overview DiffOverview) []Finding {
 		return nil
 	}
 
+	// direction of the first non-zero delta: packages, files, relationships
+	delta := pkgDelta
+	if delta == 0 {
+		delta = aFiles - bFiles
+	}
+	if delta == 0 {
+		delta = aContains - bContains
+	}
 	icon := "\U0001f4c9" // chart decreasing
-	if pkgDelta > 0 {
+	if delta > 0 {
 		icon = "\U0001f4c8" // chart increasing
 	}
 
@@ -733,7 +762,7 @@ func pathHotspots(comps []sbom.Component, direction string) *Finding {
 }
 
 // detectOwnedFileDrift: same-ver file changes, identical upgrades
-func detectOwnedFileDrift(result DiffResult) []Finding {
+func detectOwnedFileDrift(result DiffResult, overview DiffOverview) []Finding {
 	var findings []Finding
 	if n := len(result.OwnedFileDrift); n > 0 {
 		limit := min(n, 5)
@@ -758,6 +787,10 @@ func detectOwnedFileDrift(result DiffResult) []Finding {
 		if config > 0 {
 			msg += fmt.Sprintf(" (%d config files only)", config)
 		}
+		// a new base OS release rebuilds packages under the same version
+		if from, to := osLabel(overview.Before.Info), osLabel(overview.After.Info); from != "" && to != "" && from != to {
+			msg += fmt.Sprintf(" \u2014 base OS changed (%s \u2192 %s), so same-version rebuilds are expected", from, to)
+		}
 		findings = append(findings, Finding{Icon: "\u26a0\ufe0f", Message: msg})
 	}
 
@@ -778,20 +811,54 @@ func detectOwnedFileDrift(result DiffResult) []Finding {
 	return findings
 }
 
+func osLabel(info sbom.SBOMInfo) string {
+	if info.OSPrettyName != "" {
+		return info.OSPrettyName
+	}
+	return strings.TrimSpace(info.OSName + " " + info.OSVersion)
+}
+
 // detectFileChanges: changed file entries, not pkg drift
 func detectFileChanges(result DiffResult) []Finding {
 	n := len(result.FileChanges)
 	if n == 0 {
 		return nil
 	}
-	limit := min(n, 5)
-	paths := make([]string, limit)
-	for i := 0; i < limit; i++ {
-		paths[i] = result.FileChanges[i].Path
+	sameVersion := make(map[string]bool)
+	for _, d := range result.OwnedFileDrift {
+		sameVersion[d.Name+"@"+d.Version] = true
 	}
-	msg := fmt.Sprintf("%d file entries changed content (not package integrity drift): %s", n, strings.Join(paths, ", "))
-	if n > limit {
-		msg += fmt.Sprintf(" + %d more", n-limit)
+	// split by owner: unowned and same-version files matter most
+	var unowned, same, upgraded []string
+	for _, f := range result.FileChanges {
+		switch {
+		case len(f.Owners) == 0:
+			unowned = append(unowned, f.Path)
+		case slices.ContainsFunc(f.Owners, func(o string) bool { return sameVersion[o] }):
+			same = append(same, f.Path)
+		default:
+			upgraded = append(upgraded, f.Path)
+		}
+	}
+	sample := func(paths []string) string {
+		limit := min(len(paths), 5)
+		s := strings.Join(paths[:limit], ", ")
+		if len(paths) > limit {
+			s += fmt.Sprintf(" + %d more", len(paths)-limit)
+		}
+		return s
+	}
+	if len(unowned) == n { // no ownership data (e.g. CycloneDX)
+		msg := fmt.Sprintf("%d file entries changed content (not package integrity drift): %s", n, sample(unowned))
+		return []Finding{{Icon: "\U0001f4c4", Message: msg}}
+	}
+	msg := fmt.Sprintf("%d file entries changed content: %d in packages that changed version, %d in same-version packages, %d not owned by any package",
+		n, len(upgraded), len(same), len(unowned))
+	switch {
+	case len(unowned) > 0:
+		msg += ": " + sample(unowned)
+	case len(same) > 0:
+		msg += ": " + sample(same)
 	}
 	return []Finding{{Icon: "\U0001f4c4", Message: msg}}
 }
