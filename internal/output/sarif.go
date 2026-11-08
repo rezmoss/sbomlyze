@@ -3,6 +3,7 @@ package output
 import (
 	"crypto/sha256"
 	"fmt"
+	"strings"
 
 	"github.com/rezmoss/sbomlyze/internal/analysis"
 	"github.com/rezmoss/sbomlyze/internal/policy"
@@ -86,21 +87,31 @@ func sarifFingerprint(kind, identity string) map[string]string {
 	}
 }
 
+// changedIdentity includes location: per-lockfile findings
 func changedIdentity(changed analysis.ChangedComponent) string {
-	if changed.ID != "" {
-		return changed.ID
+	id := changed.ID
+	if id == "" {
+		id = changed.Name
 	}
-	return changed.Name
+	if changed.Location != "" {
+		id += "\x00" + changed.Location
+	}
+	return id
 }
 
 func componentIdentity(component sbom.Component) string {
-	if component.ID != "" {
-		return component.ID
+	id := component.ID
+	if id == "" {
+		id = component.PURL
 	}
-	if component.PURL != "" {
-		return component.PURL
+	if id == "" {
+		id = component.Name
 	}
-	return component.Name
+	// version+location tell occurrences apart
+	if len(component.Locations) > 0 {
+		id += "\x00" + component.Version + "\x00" + strings.Join(component.Locations, "\x00")
+	}
+	return id
 }
 
 // GenerateSARIF creates a SARIF report.
@@ -110,6 +121,13 @@ func GenerateSARIF(result analysis.DiffResult, violations []policy.Violation, sb
 			ID:               "integrity-drift",
 			Name:             "Integrity Drift Detected",
 			ShortDescription: SARIFMessage{Text: "Component hash changed without version change"},
+			DefaultConfig:    SARIFRuleConfig{Level: "error"},
+			Properties:       &SARIFProperties{Tags: []string{"security", "supply-chain"}},
+		},
+		{
+			ID:               "owned-file-drift",
+			Name:             "Owned File Drift Detected",
+			ShortDescription: SARIFMessage{Text: "Files owned by a package changed without a version change"},
 			DefaultConfig:    SARIFRuleConfig{Level: "error"},
 			Properties:       &SARIFProperties{Tags: []string{"security", "supply-chain"}},
 		},
@@ -146,14 +164,14 @@ func GenerateSARIF(result analysis.DiffResult, violations []policy.Violation, sb
 		},
 	}
 
-	var results []SARIFResult
+	results := []SARIFResult{} // empty run is [], not null
 
 	for _, changed := range result.Changed {
 		if changed.Drift != nil && changed.Drift.Type == analysis.DriftTypeIntegrity {
 			results = append(results, SARIFResult{
 				RuleID:              "integrity-drift",
 				Level:               "error",
-				Message:             SARIFMessage{Text: fmt.Sprintf("Component %s has hash change without version change (potential supply chain attack)", changed.Name)},
+				Message:             SARIFMessage{Text: fmt.Sprintf("Component %s%s has hash change without version change (potential supply chain attack)", changed.Name, atLocation(changed.Location))},
 				PartialFingerprints: sarifFingerprint("integrity-drift", changedIdentity(changed)),
 				Locations: []SARIFLocation{{
 					PhysicalLocation: SARIFPhysicalLocation{
@@ -162,6 +180,28 @@ func GenerateSARIF(result analysis.DiffResult, violations []policy.Violation, sb
 				}},
 			})
 		}
+	}
+
+	for _, d := range result.OwnedFileDrift {
+		level := "error"
+		if len(d.GatedFiles(false)) == 0 {
+			level = "note" // config files only
+		}
+		paths := make([]string, 0, len(d.Files))
+		for _, f := range d.Files {
+			paths = append(paths, f.Change+" "+f.Path)
+		}
+		results = append(results, SARIFResult{
+			RuleID:              "owned-file-drift",
+			Level:               level,
+			Message:             SARIFMessage{Text: fmt.Sprintf("Package %s %s changed owned files without a version change: %s", d.Name, d.Version, strings.Join(paths, ", "))},
+			PartialFingerprints: sarifFingerprint("owned-file-drift", d.ID+"\x00"+d.Version+"\x00"+d.Location),
+			Locations: []SARIFLocation{{
+				PhysicalLocation: SARIFPhysicalLocation{
+					ArtifactLocation: SARIFArtifactLocation{URI: sbomFile},
+				},
+			}},
+		})
 	}
 
 	if result.Dependencies != nil {
@@ -215,7 +255,7 @@ func GenerateSARIF(result analysis.DiffResult, violations []policy.Violation, sb
 			results = append(results, SARIFResult{
 				RuleID:              "version-change",
 				Level:               "note",
-				Message:             SARIFMessage{Text: fmt.Sprintf("Component %s version changed: %s -> %s", changed.Name, changed.Before.Version, changed.After.Version)},
+				Message:             SARIFMessage{Text: versionChangeMessage(changed)},
 				PartialFingerprints: sarifFingerprint("version-change", changedIdentity(changed)),
 				Locations: []SARIFLocation{{
 					PhysicalLocation: SARIFPhysicalLocation{
@@ -259,4 +299,12 @@ func GenerateSARIF(result analysis.DiffResult, violations []policy.Violation, sb
 			Results: results,
 		}},
 	}
+}
+
+func versionChangeMessage(c analysis.ChangedComponent) string {
+	msg := fmt.Sprintf("Component %s%s version changed: %s -> %s", c.Name, atLocation(c.Location), c.Before.Version, c.After.Version)
+	if c.Drift != nil && (c.Drift.Direction == analysis.DirectionDowngrade || c.Drift.Direction == analysis.DirectionUnknown) {
+		msg += " (" + c.Drift.Direction + ")"
+	}
+	return msg
 }

@@ -69,6 +69,22 @@ func GenerateJUnit(result analysis.DiffResult, violations []policy.Violation) JU
 	}
 	testCases = append(testCases, tc)
 
+	if result.FileCoverage != nil && (result.FileCoverage.OwnedFilesAfter > 0 || len(result.OwnedFileDrift) > 0) {
+		tc = JUnitTestCase{
+			Name:      "No Owned File Drift",
+			ClassName: "sbomlyze.security",
+			Time:      0.001,
+		}
+		if n := len(result.OwnedFileDrift); n > 0 {
+			tc.Failure = &JUnitFailure{
+				Message: fmt.Sprintf("%d packages changed owned files without a version change", n),
+				Type:    "OwnedFileDrift",
+			}
+			failures++
+		}
+		testCases = append(testCases, tc)
+	}
+
 	deepDeps := 0
 	if result.Dependencies != nil && result.Dependencies.DepthSummary != nil {
 		deepDeps = result.Dependencies.DepthSummary.Depth3Plus

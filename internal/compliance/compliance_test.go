@@ -448,3 +448,14 @@ func TestEvaluate_BSICreatorRequiresContact(t *testing.T) {
 		}
 	}
 }
+
+func TestHasValidSPDXLicenses_NamedLicenseIsNotSPDX(t *testing.T) {
+	spdxID := sbom.Component{Licenses: []string{"MIT"}}
+	named := sbom.Component{Licenses: []string{"MIT"}, NonSPDXLicenses: []string{"MIT"}}
+	if !hasValidSPDXLicenses(spdxID) {
+		t.Error("license.id MIT should be SPDX-valid")
+	}
+	if hasValidSPDXLicenses(named) {
+		t.Error("license.name must not count as SPDX-valid, even when it spells an SPDX ID")
+	}
+}

@@ -42,7 +42,7 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 		return nil, SBOMInfo{}, err
 	}
 
-	var info SBOMInfo
+	info := SBOMInfo{Format: "Syft JSON", SpecVersion: doc.Schema.Version}
 	info.ToolName = doc.Descriptor.Name
 	info.ToolVersion = doc.Descriptor.Version
 	info.SchemaVersion = doc.Schema.Version
@@ -54,6 +54,8 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 			info.FilesCount = len(filesArr)
 		}
 	}
+	files, fileByID := parseSyftFiles(doc.Files)
+	info.Files = files
 
 	if len(doc.Source) > 0 {
 		var sourceInfo struct {
@@ -120,7 +122,10 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 			MetadataType string          `json:"metadataType"`
 			Metadata     json.RawMessage `json:"metadata"`
 			Locations    []struct {
-				Path string `json:"path"`
+				Path        string `json:"path"`
+				Annotations struct {
+					Evidence string `json:"evidence"`
+				} `json:"annotations"`
 			} `json:"locations"`
 			Licenses []struct {
 				Value          string `json:"value"`
@@ -147,6 +152,9 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 		for _, loc := range a.Locations {
 			if loc.Path != "" {
 				comp.Locations = append(comp.Locations, loc.Path)
+				if loc.Annotations.Evidence == "primary" {
+					comp.PrimaryLocations = append(comp.PrimaryLocations, loc.Path)
+				}
 			}
 		}
 		for _, lic := range a.Licenses {
@@ -165,6 +173,8 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 		}
 
 		extractSyftHashes(a.MetadataType, a.Metadata, comp.Hashes)
+		comp.Digests = extractSyftDigests(a.MetadataType, a.Metadata)
+		comp.ConfigFiles, comp.ConfigKnown = syftConfigFiles(a.MetadataType, a.Metadata)
 		comp.Supplier = extractSyftMaintainer(a.Metadata)
 
 		comp.ID = identity.ComputeID(comp.ToIdentity())
@@ -180,6 +190,14 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 	for _, rel := range doc.ArtifactRelationships {
 		if rel.Type != "" {
 			relCounts[rel.Type]++
+		}
+		// pkg->file ownership; evident-by (manifests) isn't
+		if rel.Type == "contains" {
+			if parentIdx, ok := syftIDToIdx[rel.Parent]; ok {
+				if path, ok := fileByID[rel.Child]; ok {
+					comps[parentIdx].OwnedFiles = append(comps[parentIdx].OwnedFiles, path)
+				}
+			}
 		}
 		if rel.Type == "dependency-of" {
 			parentIdx, parentOK := syftIDToIdx[rel.Parent]
@@ -211,6 +229,36 @@ func extractSyftMaintainer(metadata json.RawMessage) string {
 		return ""
 	}
 	return strings.TrimSpace(md.Maintainer)
+}
+
+// extractSyftDigests: Go h1, Cargo checksum
+func extractSyftDigests(metadataType string, metadata json.RawMessage) map[string]string {
+	if len(metadata) == 0 {
+		return nil
+	}
+	switch metadataType {
+	case "go-module-entry", "go-module-buildinfo-entry", "rust-cargo-lock-entry":
+	default:
+		return nil
+	}
+	var md struct {
+		H1Digest string `json:"h1Digest"`
+		Checksum string `json:"checksum"`
+	}
+	if json.Unmarshal(metadata, &md) != nil {
+		return nil
+	}
+	var out map[string]string
+	if md.H1Digest != "" {
+		out = map[string]string{DigestGoH1: md.H1Digest}
+	}
+	if md.Checksum != "" {
+		if out == nil {
+			out = make(map[string]string, 1)
+		}
+		out[DigestCargoChecksum] = md.Checksum
+	}
+	return out
 }
 
 // extractSyftHashes extracts hashes from Syft metadata.
@@ -249,23 +297,6 @@ func extractSyftHashes(metadataType string, metadata json.RawMessage, hashes map
 			}
 		}
 
-	case "rpm-db-entry", "rpm-archive", "python-package":
-		// metadata.files[].digest: {algorithm, value} — use first non-empty
-		var md struct {
-			Files []struct {
-				Digest struct {
-					Algorithm string `json:"algorithm"`
-					Value     string `json:"value"`
-				} `json:"digest"`
-			} `json:"files"`
-		}
-		if json.Unmarshal(metadata, &md) == nil {
-			for _, f := range md.Files {
-				if f.Digest.Algorithm != "" && f.Digest.Value != "" {
-					hashes[strings.ToUpper(f.Digest.Algorithm)] = f.Digest.Value
-					break // one representative hash is enough
-				}
-			}
-		}
+		// rpm/python file digests aren't package hashes
 	}
 }

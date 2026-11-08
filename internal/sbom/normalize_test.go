@@ -28,7 +28,7 @@ func TestNormalizeLicense(t *testing.T) {
 }
 
 func TestNormalizeComponent(t *testing.T) {
-	t.Run("normalizes name", func(t *testing.T) {
+	t.Run("trims name and keeps declared case", func(t *testing.T) {
 		comp := Component{
 			Name:    "  MyPackage  ",
 			Version: "  1.0.0  ",
@@ -36,8 +36,8 @@ func TestNormalizeComponent(t *testing.T) {
 
 		normalized := NormalizeComponent(comp)
 
-		if normalized.Name != "mypackage" {
-			t.Errorf("expected name=mypackage, got %s", normalized.Name)
+		if normalized.Name != "MyPackage" {
+			t.Errorf("expected name=MyPackage, got %s", normalized.Name)
 		}
 		if normalized.Version != "1.0.0" {
 			t.Errorf("expected version=1.0.0, got %s", normalized.Version)
@@ -82,8 +82,8 @@ func TestNormalizeComponents_BatchNormalization(t *testing.T) {
 	if len(result) != 3 {
 		t.Fatalf("expected 3 components, got %d", len(result))
 	}
-	if result[0].Name != "packagea" {
-		t.Errorf("expected 'packagea', got %q", result[0].Name)
+	if result[0].Name != "PackageA" {
+		t.Errorf("expected 'PackageA', got %q", result[0].Name)
 	}
 	if len(result[0].Licenses) != 1 || result[0].Licenses[0] != "MIT" {
 		t.Errorf("expected [MIT] after filtering, got %v", result[0].Licenses)

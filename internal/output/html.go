@@ -102,6 +102,7 @@ func GenerateHTML(result analysis.DiffResult, violations []policy.Violation, ove
 	if len(result.Changed) > 0 {
 		writeHTMLChangedSection(&sb, result.Changed)
 	}
+	writeHTMLOccurrenceSections(&sb, result)
 
 	sb.WriteString("<footer>Report produced by <strong>sbomlyze</strong> — SBOM diff &amp; analysis tool</footer>\n")
 	sb.WriteString("</body>\n</html>\n")
@@ -273,7 +274,9 @@ func writeHTMLOverview(sb *strings.Builder, overview analysis.DiffOverview) {
 	fmt.Fprintf(sb, "<tr><td><strong>File Size</strong></td><td>%s</td><td>%s</td></tr>\n",
 		formatFileSize(b.FileSize), formatFileSize(a.FileSize))
 	fmt.Fprintf(sb, "<tr><td><strong>Format</strong></td><td>%s</td><td>%s</td></tr>\n",
-		html.EscapeString(orNone(b.Info.ToolName)), html.EscapeString(orNone(a.Info.ToolName)))
+		html.EscapeString(orNone(formatLabel(b.Info))), html.EscapeString(orNone(formatLabel(a.Info))))
+	fmt.Fprintf(sb, "<tr><td><strong>Generator</strong></td><td>%s</td><td>%s</td></tr>\n",
+		html.EscapeString(orNone(generatorLabel(b.Info))), html.EscapeString(orNone(generatorLabel(a.Info))))
 	fmt.Fprintf(sb, "<tr><td><strong>Components</strong></td><td>%d</td><td>%d</td></tr>\n",
 		b.Stats.TotalComponents, a.Stats.TotalComponents)
 	fmt.Fprintf(sb, "<tr><td><strong>PURL Coverage</strong></td><td>%s</td><td>%s</td></tr>\n",
@@ -293,8 +296,17 @@ func writeHTMLSummaryCards(sb *strings.Builder, result analysis.DiffResult) {
 	writeHTMLCard(sb, fmt.Sprintf("%d", len(result.Added)), "Added")
 	writeHTMLCard(sb, fmt.Sprintf("%d", len(result.Removed)), "Removed")
 	writeHTMLCard(sb, fmt.Sprintf("%d", len(result.Changed)), "Changed")
+	if len(result.Moved) > 0 {
+		writeHTMLCard(sb, fmt.Sprintf("%d", len(result.Moved)), "Moved")
+	}
+	if len(result.FileChanges) > 0 {
+		writeHTMLCard(sb, fmt.Sprintf("%d", len(result.FileChanges)), "File Changes")
+	}
 	if result.DriftSummary != nil && result.DriftSummary.IntegrityDrift > 0 {
 		writeHTMLCardStyled(sb, fmt.Sprintf("%d", result.DriftSummary.IntegrityDrift), "Integrity Drift", "var(--red)")
+	}
+	if len(result.OwnedFileDrift) > 0 {
+		writeHTMLCardStyled(sb, fmt.Sprintf("%d", len(result.OwnedFileDrift)), "Owned File Drift", "var(--red)")
 	}
 	sb.WriteString("</div>\n")
 }
@@ -320,6 +332,15 @@ func writeHTMLDriftSummary(sb *strings.Builder, result analysis.DiffResult) {
 	}
 	fmt.Fprintf(sb, "<tr><td>Integrity</td><td>%d</td><td>%s</td></tr>\n", ds.IntegrityDrift, intStatus)
 	fmt.Fprintf(sb, "<tr><td>Metadata</td><td>%d</td><td><span class=\"badge badge-ok\">✅ OK</span></td></tr>\n", ds.MetadataDrift)
+	if ds.OwnedFileDrift > 0 {
+		fmt.Fprintf(sb, "<tr><td>Owned file drift (same version, files changed)</td><td>%d</td><td><span class=\"badge badge-error\">⚠️ Review Required</span></td></tr>\n", ds.OwnedFileDrift)
+	}
+	if ds.UnknownDirection > 0 {
+		fmt.Fprintf(sb, "<tr><td>Version (unknown direction)</td><td>%d</td><td><span class=\"badge badge-ok\">ℹ️ Review</span></td></tr>\n", ds.UnknownDirection)
+	}
+	if ds.FileChanges > 0 {
+		fmt.Fprintf(sb, "<tr><td>File entries changed (not package drift)</td><td>%d</td><td><span class=\"badge badge-ok\">ℹ️ Info</span></td></tr>\n", ds.FileChanges)
+	}
 	sb.WriteString("</table>\n")
 }
 
@@ -408,7 +429,7 @@ func writeHTMLChangedSection(sb *strings.Builder, changed []analysis.ChangedComp
 			driftHTML = fmt.Sprintf("<span class=\"badge %s\">%s</span>", driftClass, html.EscapeString(drift))
 		}
 		fmt.Fprintf(sb, "<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n",
-			html.EscapeString(c.Name), html.EscapeString(c.Before.Version),
+			html.EscapeString(c.Name+atLocation(c.Location)), html.EscapeString(c.Before.Version),
 			html.EscapeString(c.After.Version), driftHTML)
 	}
 	sb.WriteString("</table>\n</details>\n")
@@ -426,4 +447,63 @@ func writeHTMLCard(sb *strings.Builder, num, label string) {
 func writeHTMLCardStyled(sb *strings.Builder, num, label, color string) {
 	fmt.Fprintf(sb, "<div class=\"summary-card\" style=\"border-color: %s;\"><div class=\"num\" style=\"color: %s;\">%s</div><div class=\"label\">%s</div></div>\n",
 		color, color, html.EscapeString(num), html.EscapeString(label))
+}
+
+// formatLabel: e.g. "CycloneDX 1.6", "SPDX 2.3"
+func formatLabel(info sbom.SBOMInfo) string {
+	if info.Format == "" {
+		return ""
+	}
+	return strings.TrimSpace(info.Format + " " + strings.TrimPrefix(info.SpecVersion, "SPDX-"))
+}
+
+// generatorLabel: e.g. "syft 1.57.0"
+func generatorLabel(info sbom.SBOMInfo) string {
+	if info.ToolVersion == "" {
+		return info.ToolName
+	}
+	return strings.TrimSpace(info.ToolName + " " + info.ToolVersion)
+}
+
+// writeHTMLOccurrenceSections: moved, version-set, file changes
+func writeHTMLOccurrenceSections(sb *strings.Builder, result analysis.DiffResult) {
+	if len(result.OwnedFileDrift) > 0 {
+		fmt.Fprintf(sb, "<details open>\n<summary>⚠️ Owned File Drift (%d packages, same version, files changed)</summary>\n<table>\n", len(result.OwnedFileDrift))
+		sb.WriteString("<tr><th>Package</th><th>Version</th><th>File</th><th>Change</th><th>Config</th></tr>\n")
+		for _, d := range result.OwnedFileDrift {
+			for _, f := range d.Files {
+				fmt.Fprintf(sb, "<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n",
+					html.EscapeString(d.Name), html.EscapeString(d.Version), html.EscapeString(f.Path),
+					html.EscapeString(f.Change), html.EscapeString(f.Config))
+			}
+		}
+		sb.WriteString("</table>\n</details>\n")
+	}
+	if len(result.Moved) > 0 {
+		fmt.Fprintf(sb, "<details>\n<summary>↪️ Moved Components (%d)</summary>\n<table>\n", len(result.Moved))
+		sb.WriteString("<tr><th>Name</th><th>Version</th><th>From</th><th>To</th></tr>\n")
+		for _, m := range result.Moved {
+			fmt.Fprintf(sb, "<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n",
+				html.EscapeString(m.Name), html.EscapeString(m.Version), html.EscapeString(m.From), html.EscapeString(m.To))
+		}
+		sb.WriteString("</table>\n</details>\n")
+	}
+	if len(result.VersionSetChanges) > 0 {
+		fmt.Fprintf(sb, "<details>\n<summary>± Version Set Changes (%d, listed in added/removed)</summary>\n<table>\n", len(result.VersionSetChanges))
+		sb.WriteString("<tr><th>Name</th><th>Location</th><th>Removed</th><th>Added</th></tr>\n")
+		for _, v := range result.VersionSetChanges {
+			fmt.Fprintf(sb, "<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n",
+				html.EscapeString(v.Name), html.EscapeString(v.Location),
+				html.EscapeString(strings.Join(v.RemovedVersions, ", ")), html.EscapeString(strings.Join(v.AddedVersions, ", ")))
+		}
+		sb.WriteString("</table>\n</details>\n")
+	}
+	if len(result.FileChanges) > 0 {
+		fmt.Fprintf(sb, "<details>\n<summary>📄 File Changes (%d, not package drift)</summary>\n<table>\n", len(result.FileChanges))
+		sb.WriteString("<tr><th>Path</th></tr>\n")
+		for _, f := range result.FileChanges {
+			fmt.Fprintf(sb, "<tr><td>%s</td></tr>\n", html.EscapeString(f.Path))
+		}
+		sb.WriteString("</table>\n</details>\n")
+	}
 }

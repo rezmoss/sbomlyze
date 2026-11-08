@@ -3,7 +3,10 @@
     "before": {
       "file_name": "TESTDATA/cyclonedx-before.json",
       "file_size": 921,
-      "info": {},
+      "info": {
+        "format": "CycloneDX",
+        "spec_version": "1.4"
+      },
       "stats": {
         "total_components": 3,
         "by_type": {
@@ -35,7 +38,9 @@
       "file_size": 1474,
       "info": {
         "tool_name": "test",
-        "sbom_timestamp": "TIMESTAMP"
+        "sbom_timestamp": "TIMESTAMP",
+        "format": "SPDX",
+        "spec_version": "SPDX-2.3"
       },
       "stats": {
         "total_components": 2,
@@ -133,6 +138,15 @@
         "type": "library"
       }
     ],
+    "digest_coverage": {
+      "same_version_pairs": 0,
+      "comparable": 0,
+      "before_only": 0,
+      "after_only": 0,
+      "disjoint_kinds": 0,
+      "by_kind": {},
+      "packages_total": 2
+    },
     "added_by_type": [
       {
         "type": "npm",

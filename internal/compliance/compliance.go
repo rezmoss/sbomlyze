@@ -276,7 +276,7 @@ func hasLookupIdentifier(c sbom.Component) bool {
 // hasValidSPDXLicenses: all licences are valid SPDX exprs (§6.1).
 // NONE/NOASSERTION/free-text fail.
 func hasValidSPDXLicenses(c sbom.Component) bool {
-	if len(c.Licenses) == 0 {
+	if len(c.Licenses) == 0 || len(c.NonSPDXLicenses) > 0 {
 		return false
 	}
 	valid, _ := spdxexp.ValidateLicenses(c.Licenses)

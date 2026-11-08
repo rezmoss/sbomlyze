@@ -20,9 +20,13 @@ type SBOMInfo struct {
 	ToolVersion        string         `json:"tool_version,omitempty"`
 	SchemaVersion      string         `json:"schema_version,omitempty"`
 	SBOMTimestamp      string         `json:"sbom_timestamp,omitempty"`
+	Format             string         `json:"format,omitempty"`       // CycloneDX, SPDX, Syft JSON
+	SpecVersion        string         `json:"spec_version,omitempty"` // e.g. 1.6, SPDX-2.3
 	SBOMAuthor         string         `json:"sbom_author,omitempty"`
 	SearchScope        string         `json:"search_scope,omitempty"`
 	FilesCount         int            `json:"files_count,omitempty"`
+	// file inventory (Syft JSON, SPDX); not output
+	Files []FileEntry `json:"-"`
 }
 
 // Component is a normalized SBOM component.
@@ -34,6 +38,7 @@ type Component struct {
 	Licenses     []string          `json:"licenses,omitempty"`
 	CPEs         []string          `json:"cpes,omitempty"`
 	Hashes       map[string]string `json:"hashes,omitempty"`
+	Digests      map[string]string `json:"digests,omitempty"` // extra pkg digests by kind (go-h1, cargo-checksum)
 	Dependencies []string          `json:"dependencies,omitempty"`
 	DepsDeclared bool              `json:"-"` // deps declared by format, even if empty
 	BOMRef       string            `json:"bom-ref,omitempty"`
@@ -45,13 +50,48 @@ type Component struct {
 	Type         string            `json:"type,omitempty"`      // pkg type
 	Locations    []string          `json:"locations,omitempty"` // file paths
 	RawJSON      json.RawMessage   `json:"-"`                   // original JSON, excluded from output
+	// license.name entries; never SPDX-valid
+	NonSPDXLicenses []string `json:"-"`
+	// Syft primary-evidence locations
+	PrimaryLocations []string `json:"-"`
+	// owned file paths (contains/CONTAINS); may be shared
+	OwnedFiles []string `json:"-"`
+	// dpkg conffiles; ConfigKnown false if no flag
+	ConfigFiles []string `json:"-"`
+	ConfigKnown bool     `json:"-"`
+}
+
+// Digest kinds stored in Component.Digests.
+const (
+	DigestGoH1          = "go-h1"          // Go module h1 checksum (go.sum)
+	DigestCargoChecksum = "cargo-checksum" // Cargo.lock crate checksum
+)
+
+// IsEvidence: file/os entries, not packages
+func (c Component) IsEvidence() bool {
+	return c.Type == "file" || c.Type == "operating-system"
+}
+
+// DigestSet: Hashes + Digests, keyed by kind
+func (c Component) DigestSet() map[string]string {
+	if len(c.Digests) == 0 {
+		return c.Hashes
+	}
+	out := make(map[string]string, len(c.Hashes)+len(c.Digests))
+	for k, v := range c.Hashes {
+		out[k] = v
+	}
+	for k, v := range c.Digests {
+		out[k] = v
+	}
+	return out
 }
 
 // PackageComponents drops file/os entries — they're evidence, not packages.
 func PackageComponents(comps []Component) []Component {
 	out := make([]Component, 0, len(comps))
 	for _, c := range comps {
-		if c.Type == "file" || c.Type == "operating-system" {
+		if c.IsEvidence() {
 			continue
 		}
 		out = append(out, c)

@@ -239,7 +239,10 @@ func SortedByValue(m map[string]int) []string {
 		keys = append(keys, k)
 	}
 	sort.Slice(keys, func(i, j int) bool {
-		return m[keys[i]] > m[keys[j]]
+		if m[keys[i]] != m[keys[j]] {
+			return m[keys[i]] > m[keys[j]]
+		}
+		return keys[i] < keys[j] // ties by name, deterministic
 	})
 	return keys
 }

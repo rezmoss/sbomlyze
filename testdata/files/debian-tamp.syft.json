@@ -1,0 +1,6813 @@
+{
+ "artifacts": [
+  {
+   "id": "c02171bf930643dd",
+   "name": "adduser",
+   "version": "3.134",
+   "type": "deb",
+   "foundBy": "dpkg-db-cataloger",
+   "locations": [
+    {
+     "path": "/var/lib/dpkg/status",
+     "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17",
+     "accessPath": "/var/lib/dpkg/status",
+     "annotations": {
+      "evidence": "primary"
+     }
+    },
+    {
+     "path": "/usr/share/doc/adduser/copyright",
+     "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17",
+     "accessPath": "/usr/share/doc/adduser/copyright",
+     "annotations": {
+      "evidence": "supporting"
+     }
+    },
+    {
+     "path": "/var/lib/dpkg/info/adduser.conffiles",
+     "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17",
+     "accessPath": "/var/lib/dpkg/info/adduser.conffiles",
+     "annotations": {
+      "evidence": "supporting"
+     }
+    },
+    {
+     "path": "/var/lib/dpkg/info/adduser.md5sums",
+     "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17",
+     "accessPath": "/var/lib/dpkg/info/adduser.md5sums",
+     "annotations": {
+      "evidence": "supporting"
+     }
+    },
+    {
+     "path": "/var/lib/dpkg/info/adduser.list",
+     "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17",
+     "accessPath": "/var/lib/dpkg/info/adduser.list"
+    },
+    {
+     "path": "/var/lib/dpkg/info/adduser.postrm",
+     "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17",
+     "accessPath": "/var/lib/dpkg/info/adduser.postrm"
+    },
+    {
+     "path": "/var/lib/dpkg/info/adduser.preinst",
+     "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17",
+     "accessPath": "/var/lib/dpkg/info/adduser.preinst"
+    }
+   ],
+   "licenses": [
+    {
+     "value": "GPL-2",
+     "spdxExpression": "GPL-2.0-only",
+     "type": "declared",
+     "urls": [],
+     "locations": [
+      {
+       "path": "/usr/share/doc/adduser/copyright",
+       "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17",
+       "accessPath": "/usr/share/doc/adduser/copyright"
+      }
+     ]
+    },
+    {
+     "value": "GPL-2+",
+     "spdxExpression": "GPL-2.0-or-later",
+     "type": "declared",
+     "urls": [],
+     "locations": [
+      {
+       "path": "/usr/share/doc/adduser/copyright",
+       "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17",
+       "accessPath": "/usr/share/doc/adduser/copyright"
+      }
+     ]
+    }
+   ],
+   "language": "",
+   "cpes": [
+    {
+     "cpe": "cpe:2.3:a:adduser:adduser:3.134:*:*:*:*:*:*:*",
+     "source": "syft-generated"
+    }
+   ],
+   "purl": "pkg:deb/debian/adduser@3.134?arch=all&distro=debian-12.8",
+   "metadataType": "dpkg-db-entry",
+   "metadata": {
+    "package": "adduser",
+    "source": "",
+    "version": "3.134",
+    "sourceVersion": "",
+    "architecture": "all",
+    "maintainer": "Debian Adduser Developers <adduser@packages.debian.org>",
+    "installedSize": 686,
+    "depends": [
+     "passwd"
+    ],
+    "files": [
+     {
+      "path": "/etc/adduser.conf",
+      "digest": {
+       "algorithm": "md5",
+       "value": "cc3493ecd2d09837ffdcc3e25fdfff18"
+      },
+      "isConfigFile": true
+     },
+     {
+      "path": "/etc/deluser.conf",
+      "digest": {
+       "algorithm": "md5",
+       "value": "11a06baf8245fd8d690b99024d228c1f"
+      },
+      "isConfigFile": true
+     },
+     {
+      "path": "/usr/sbin/adduser",
+      "digest": {
+       "algorithm": "md5",
+       "value": "2ba08fece3b3434a669f3c529bbea383"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/sbin/deluser",
+      "digest": {
+       "algorithm": "md5",
+       "value": "808647b72aa26222070ae241158f22bf"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/share/doc/adduser/copyright",
+      "digest": {
+       "algorithm": "md5",
+       "value": "ad1acbe264ddc19bf4f50095c1ca50e5"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/share/perl5/Debian/AdduserCommon.pm",
+      "digest": {
+       "algorithm": "md5",
+       "value": "840faf09c56199b8c10c4ef15e376224"
+      },
+      "isConfigFile": false
+     }
+    ]
+   }
+  },
+  {
+   "id": "eca37691b87c0860",
+   "name": "coreutils",
+   "version": "9.1-1",
+   "type": "deb",
+   "foundBy": "dpkg-db-cataloger",
+   "locations": [
+    {
+     "path": "/var/lib/dpkg/status",
+     "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17",
+     "accessPath": "/var/lib/dpkg/status",
+     "annotations": {
+      "evidence": "primary"
+     }
+    },
+    {
+     "path": "/usr/share/doc/coreutils/copyright",
+     "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17",
+     "accessPath": "/usr/share/doc/coreutils/copyright",
+     "annotations": {
+      "evidence": "supporting"
+     }
+    },
+    {
+     "path": "/var/lib/dpkg/info/coreutils.md5sums",
+     "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17",
+     "accessPath": "/var/lib/dpkg/info/coreutils.md5sums",
+     "annotations": {
+      "evidence": "supporting"
+     }
+    },
+    {
+     "path": "/var/lib/dpkg/info/coreutils.list",
+     "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17",
+     "accessPath": "/var/lib/dpkg/info/coreutils.list"
+    },
+    {
+     "path": "/var/lib/dpkg/info/coreutils.postinst",
+     "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17",
+     "accessPath": "/var/lib/dpkg/info/coreutils.postinst"
+    },
+    {
+     "path": "/var/lib/dpkg/info/coreutils.postrm",
+     "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17",
+     "accessPath": "/var/lib/dpkg/info/coreutils.postrm"
+    }
+   ],
+   "licenses": [
+    {
+     "value": "BSD-4-clause-UC",
+     "spdxExpression": "BSD-4-Clause-UC",
+     "type": "declared",
+     "urls": [],
+     "locations": [
+      {
+       "path": "/usr/share/doc/coreutils/copyright",
+       "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17",
+       "accessPath": "/usr/share/doc/coreutils/copyright"
+      }
+     ]
+    },
+    {
+     "value": "FSFULLR",
+     "spdxExpression": "FSFULLR",
+     "type": "declared",
+     "urls": [],
+     "locations": [
+      {
+       "path": "/usr/share/doc/coreutils/copyright",
+       "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17",
+       "accessPath": "/usr/share/doc/coreutils/copyright"
+      }
+     ]
+    },
+    {
+     "value": "GFDL-1.3",
+     "spdxExpression": "GFDL-1.3-only",
+     "type": "declared",
+     "urls": [],
+     "locations": [
+      {
+       "path": "/usr/share/doc/coreutils/copyright",
+       "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17",
+       "accessPath": "/usr/share/doc/coreutils/copyright"
+      }
+     ]
+    },
+    {
+     "value": "GFDL-NIV-1.3",
+     "spdxExpression": "",
+     "type": "declared",
+     "urls": [],
+     "locations": [
+      {
+       "path": "/usr/share/doc/coreutils/copyright",
+       "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17",
+       "accessPath": "/usr/share/doc/coreutils/copyright"
+      }
+     ]
+    },
+    {
+     "value": "GPL-3",
+     "spdxExpression": "GPL-3.0-only",
+     "type": "declared",
+     "urls": [],
+     "locations": [
+      {
+       "path": "/usr/share/doc/coreutils/copyright",
+       "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17",
+       "accessPath": "/usr/share/doc/coreutils/copyright"
+      }
+     ]
+    },
+    {
+     "value": "GPL-3+",
+     "spdxExpression": "GPL-3.0-or-later",
+     "type": "declared",
+     "urls": [],
+     "locations": [
+      {
+       "path": "/usr/share/doc/coreutils/copyright",
+       "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17",
+       "accessPath": "/usr/share/doc/coreutils/copyright"
+      }
+     ]
+    },
+    {
+     "value": "ISC",
+     "spdxExpression": "ISC",
+     "type": "declared",
+     "urls": [],
+     "locations": [
+      {
+       "path": "/usr/share/doc/coreutils/copyright",
+       "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17",
+       "accessPath": "/usr/share/doc/coreutils/copyright"
+      }
+     ]
+    }
+   ],
+   "language": "",
+   "cpes": [
+    {
+     "cpe": "cpe:2.3:a:coreutils:coreutils:9.1-1:*:*:*:*:*:*:*",
+     "source": "syft-generated"
+    }
+   ],
+   "purl": "pkg:deb/debian/coreutils@9.1-1?arch=amd64&distro=debian-12.8",
+   "metadataType": "dpkg-db-entry",
+   "metadata": {
+    "package": "coreutils",
+    "source": "",
+    "version": "9.1-1",
+    "sourceVersion": "",
+    "architecture": "amd64",
+    "maintainer": "Michael Stone <mstone@debian.org>",
+    "installedSize": 18062,
+    "preDepends": [
+     "libacl1 (>= 2.2.23)",
+     "libattr1 (>= 1:2.4.44)",
+     "libc6 (>= 2.34)",
+     "libgmp10 (>= 2:6.2.1+dfsg1)",
+     "libselinux1 (>= 3.1~)"
+    ],
+    "files": [
+     {
+      "path": "/usr/bin/[",
+      "digest": {
+       "algorithm": "md5",
+       "value": "3820701e433d98542a3ffbc8cdcc5b14"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/arch",
+      "digest": {
+       "algorithm": "md5",
+       "value": "c1afea0b50deca49fa182cccde3d6dc7"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/b2sum",
+      "digest": {
+       "algorithm": "md5",
+       "value": "5885ca8a381dd17e7b206ecf49b96cb0"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/base32",
+      "digest": {
+       "algorithm": "md5",
+       "value": "bd348898c2e6708a6c7d27608286324b"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/base64",
+      "digest": {
+       "algorithm": "md5",
+       "value": "2247fcf18921c9c8e1f150008ee531f7"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/basename",
+      "digest": {
+       "algorithm": "md5",
+       "value": "4e76f7ad024f7e11761d8d277243cf2d"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/basenc",
+      "digest": {
+       "algorithm": "md5",
+       "value": "7d451e33629df473270c0dec7356871e"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/chcon",
+      "digest": {
+       "algorithm": "md5",
+       "value": "8ea42e74053933bfd5277c8c2b2a9864"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/cksum",
+      "digest": {
+       "algorithm": "md5",
+       "value": "65de23dae89373f1ebf27e903134b566"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/comm",
+      "digest": {
+       "algorithm": "md5",
+       "value": "6c314b19c4863d8e7293a38dd8144052"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/csplit",
+      "digest": {
+       "algorithm": "md5",
+       "value": "4f0e2e8b6ee0723cb5177241233f233e"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/cut",
+      "digest": {
+       "algorithm": "md5",
+       "value": "b8dd9174ed8627d7868bfa0541901692"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/dircolors",
+      "digest": {
+       "algorithm": "md5",
+       "value": "0aee5fb04432114be160d13731bf0ca9"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/dirname",
+      "digest": {
+       "algorithm": "md5",
+       "value": "62baaa622242d1b44616908c7a575710"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/du",
+      "digest": {
+       "algorithm": "md5",
+       "value": "950a30cd1a578b27d638c2b189d2cdeb"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/env",
+      "digest": {
+       "algorithm": "md5",
+       "value": "1b55b9073f3d6afd23952113797e3d8d"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/expand",
+      "digest": {
+       "algorithm": "md5",
+       "value": "b89256b8476649c8f25106a2c8cee112"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/expr",
+      "digest": {
+       "algorithm": "md5",
+       "value": "d3ec650c5240018ab19d03a4bf898480"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/factor",
+      "digest": {
+       "algorithm": "md5",
+       "value": "3d98321c5f0198c5a9ba221693ad4d31"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/fmt",
+      "digest": {
+       "algorithm": "md5",
+       "value": "51e15362e4ad4fed1340c54547ba369f"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/fold",
+      "digest": {
+       "algorithm": "md5",
+       "value": "0d4d1a3ebb2bb676cb65ace73a7391a0"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/groups",
+      "digest": {
+       "algorithm": "md5",
+       "value": "9fd1559a3d8959bfcdd67b9f30079855"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/head",
+      "digest": {
+       "algorithm": "md5",
+       "value": "ef30f5ee62ba71d373af486fc3119d78"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/hostid",
+      "digest": {
+       "algorithm": "md5",
+       "value": "3d28e190ef5f9e0229cfe40b92381931"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/id",
+      "digest": {
+       "algorithm": "md5",
+       "value": "5a2ca6d0a7cffd7d5df8b4617beb9e43"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/install",
+      "digest": {
+       "algorithm": "md5",
+       "value": "a21d765038f77f69d324d3da05d9d116"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/join",
+      "digest": {
+       "algorithm": "md5",
+       "value": "9b5dc4a5a3b13a9a40b90f4d0c4aa8ac"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/link",
+      "digest": {
+       "algorithm": "md5",
+       "value": "ec58606891bf7b2cfdd6ddefffeda76e"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/logname",
+      "digest": {
+       "algorithm": "md5",
+       "value": "5e0cfcc574f5c171f2daeb8edc9e5cd8"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/md5sum",
+      "digest": {
+       "algorithm": "md5",
+       "value": "84da1678e490fb1bc3183e4aa02aa7cb"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/mkfifo",
+      "digest": {
+       "algorithm": "md5",
+       "value": "8c9a48d5c60759d162797867d079ae95"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/nice",
+      "digest": {
+       "algorithm": "md5",
+       "value": "ae29da82d30e5b6c352ec4dee4c5d594"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/nl",
+      "digest": {
+       "algorithm": "md5",
+       "value": "946c3e959d8bd9bfe2df4faa34a27323"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/nohup",
+      "digest": {
+       "algorithm": "md5",
+       "value": "4a99a4bb67a8e1866dcd9544e7834674"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/nproc",
+      "digest": {
+       "algorithm": "md5",
+       "value": "7e9541668d2506f6d2eb9dffd9303afa"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/numfmt",
+      "digest": {
+       "algorithm": "md5",
+       "value": "6279fb99b28c5110e3a0cb6aa7ad4cb1"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/od",
+      "digest": {
+       "algorithm": "md5",
+       "value": "fdce3c8042e8abe0463ad60fa05b1951"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/paste",
+      "digest": {
+       "algorithm": "md5",
+       "value": "08acc08095d0aa68480a5c109bb2811b"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/pathchk",
+      "digest": {
+       "algorithm": "md5",
+       "value": "ff3a0528dcdc7fc9ce37a22f9d33eb8c"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/pinky",
+      "digest": {
+       "algorithm": "md5",
+       "value": "e0590cc3a0e0b4bffe9c4b617d7d8cbe"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/pr",
+      "digest": {
+       "algorithm": "md5",
+       "value": "f2595ba3e3de660a31e32a4f1882e419"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/printenv",
+      "digest": {
+       "algorithm": "md5",
+       "value": "b611567a5ede050cc56a7ebef162cc3f"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/printf",
+      "digest": {
+       "algorithm": "md5",
+       "value": "8bddf6a7a22498b8db40938441b6feb3"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/ptx",
+      "digest": {
+       "algorithm": "md5",
+       "value": "0e7c073097d41ae15b77a09a9324dfa9"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/realpath",
+      "digest": {
+       "algorithm": "md5",
+       "value": "7e3bf63f1ddc5b7319e8dd22ba3ddade"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/runcon",
+      "digest": {
+       "algorithm": "md5",
+       "value": "ae36ec0a0c18f753de3cd74a2a0012f1"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/seq",
+      "digest": {
+       "algorithm": "md5",
+       "value": "e33e457493af30ba6d87e91e1f21fd82"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/sha1sum",
+      "digest": {
+       "algorithm": "md5",
+       "value": "219a268fcc35d6f586c963e3945381f3"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/sha224sum",
+      "digest": {
+       "algorithm": "md5",
+       "value": "7d8e605f403dc63ec5f71458eea0bcc2"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/sha256sum",
+      "digest": {
+       "algorithm": "md5",
+       "value": "57aa3f86e559f6e8d211da0c1f737739"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/sha384sum",
+      "digest": {
+       "algorithm": "md5",
+       "value": "f9c90c9d5a6d4ea4480457e89bc05b09"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/sha512sum",
+      "digest": {
+       "algorithm": "md5",
+       "value": "cc9736a157e7ca4c6950c70797d42628"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/shred",
+      "digest": {
+       "algorithm": "md5",
+       "value": "4f1ba6b0f0e7cd7e536c40d1c055d91c"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/shuf",
+      "digest": {
+       "algorithm": "md5",
+       "value": "21160d1dbabf4f6ca986591c5bb96bcb"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/sort",
+      "digest": {
+       "algorithm": "md5",
+       "value": "8b7634d32e91facd5800d2d97ef5a4fb"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/split",
+      "digest": {
+       "algorithm": "md5",
+       "value": "a6eb2b789023c70c3994ab428354f9bd"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/stat",
+      "digest": {
+       "algorithm": "md5",
+       "value": "fc1de59c99c31cde0cba7f3d8a0009dc"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/stdbuf",
+      "digest": {
+       "algorithm": "md5",
+       "value": "779343475dc276cec469abaf03b01c69"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/sum",
+      "digest": {
+       "algorithm": "md5",
+       "value": "89723f6d65ca3ef1774c47a9f33d87e1"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/tac",
+      "digest": {
+       "algorithm": "md5",
+       "value": "68fdf0860a9d4b22a7ab0bfeff386e9a"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/tail",
+      "digest": {
+       "algorithm": "md5",
+       "value": "2d9323649cd3618f15f6a20185cf55a9"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/tee",
+      "digest": {
+       "algorithm": "md5",
+       "value": "8303f4a474cf16ba8d9603ca8adbdfd5"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/test",
+      "digest": {
+       "algorithm": "md5",
+       "value": "2b0d8f6da5bc97e313ded93f0bbbb239"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/timeout",
+      "digest": {
+       "algorithm": "md5",
+       "value": "68a5dbef05db76e205bd1757e3e20f88"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/tr",
+      "digest": {
+       "algorithm": "md5",
+       "value": "391a765192fcbe17e0bc6fdf8999d737"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/truncate",
+      "digest": {
+       "algorithm": "md5",
+       "value": "8f64cab438265bd7f96ff77a5c027bb3"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/tsort",
+      "digest": {
+       "algorithm": "md5",
+       "value": "73b8ae4ba13ac793b58130756bf3f1f3"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/tty",
+      "digest": {
+       "algorithm": "md5",
+       "value": "b3f168bd022e4b9f67872464722dd989"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/unexpand",
+      "digest": {
+       "algorithm": "md5",
+       "value": "edf89c2a5a9bee4b20250b43923c5a21"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/uniq",
+      "digest": {
+       "algorithm": "md5",
+       "value": "8242181286fa015e0b9cf71fad7007d6"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/unlink",
+      "digest": {
+       "algorithm": "md5",
+       "value": "e0d7d80b812e94dea41d173790139322"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/users",
+      "digest": {
+       "algorithm": "md5",
+       "value": "62952c72a6d11c503733d4f68ea1fd39"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/wc",
+      "digest": {
+       "algorithm": "md5",
+       "value": "1ba73ec5f15bb880732fe6e78456fc3e"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/who",
+      "digest": {
+       "algorithm": "md5",
+       "value": "1070b879f0cd690ce287d50ea614c894"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/whoami",
+      "digest": {
+       "algorithm": "md5",
+       "value": "3449871cc8b6da567a47d6d689d6f651"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/bin/yes",
+      "digest": {
+       "algorithm": "md5",
+       "value": "cc2001ddacaf74be91c4ef7939938f88"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/libexec/coreutils/libstdbuf.so",
+      "digest": {
+       "algorithm": "md5",
+       "value": "519f9acc4b24d86bcbe85e0806f67cf0"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/sbin/chroot",
+      "digest": {
+       "algorithm": "md5",
+       "value": "e365b748bb85882f88f09f3a86f40d9d"
+      },
+      "isConfigFile": false
+     },
+     {
+      "path": "/usr/share/doc/coreutils/copyright",
+      "digest": {
+       "algorithm": "md5",
+       "value": "0aee8b1b7b90b42b577fe8562f37c1b5"
+      },
+      "isConfigFile": false
+     }
+    ]
+   }
+  }
+ ],
+ "artifactRelationships": [
+  {
+   "parent": "c02171bf930643dd",
+   "child": "02e7f092083ed3eb",
+   "type": "contains"
+  },
+  {
+   "parent": "c02171bf930643dd",
+   "child": "23cfe152a57a1260",
+   "type": "evident-by",
+   "metadata": {
+    "kind": "supporting"
+   }
+  },
+  {
+   "parent": "c02171bf930643dd",
+   "child": "29f881b9d5ddba21",
+   "type": "evident-by",
+   "metadata": {
+    "kind": "supporting"
+   }
+  },
+  {
+   "parent": "c02171bf930643dd",
+   "child": "34ab8e495917a4b5",
+   "type": "contains"
+  },
+  {
+   "parent": "c02171bf930643dd",
+   "child": "43b9aa4d3a08ac6d",
+   "type": "contains"
+  },
+  {
+   "parent": "c02171bf930643dd",
+   "child": "67fceca217d87e3b",
+   "type": "evident-by",
+   "metadata": {
+    "kind": "supporting"
+   }
+  },
+  {
+   "parent": "c02171bf930643dd",
+   "child": "846850370a50f039",
+   "type": "contains"
+  },
+  {
+   "parent": "c02171bf930643dd",
+   "child": "846850370a50f039",
+   "type": "evident-by",
+   "metadata": {
+    "kind": "supporting"
+   }
+  },
+  {
+   "parent": "c02171bf930643dd",
+   "child": "84c819f10097952c",
+   "type": "evident-by",
+   "metadata": {
+    "kind": "primary"
+   }
+  },
+  {
+   "parent": "c02171bf930643dd",
+   "child": "b58a0f5bc248994d",
+   "type": "evident-by",
+   "metadata": {
+    "kind": "supporting"
+   }
+  },
+  {
+   "parent": "c02171bf930643dd",
+   "child": "c90454d80499b60b",
+   "type": "evident-by",
+   "metadata": {
+    "kind": "supporting"
+   }
+  },
+  {
+   "parent": "c02171bf930643dd",
+   "child": "ddc8294fe9fab182",
+   "type": "contains"
+  },
+  {
+   "parent": "c02171bf930643dd",
+   "child": "e808b5c374927ddf",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "00b9ad0f8dbdfb3e",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "01c9e20f6e9d9035",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "03539a6a8fdcdd6f",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "06460f49ead8826e",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "09f5156020f71498",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "0f64a17e04cda465",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "0ffcd6e66db5901b",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "10c7829cf8ebc107",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "122710b7d97747b1",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "14a97201d619003a",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "1e8dd5f7478e6a02",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "1f518c945406d7f9",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "23010bfb7618d8c7",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "24fc594a120c2bfb",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "2b5ba560702e2b02",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "3221a28ea63a795b",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "32fff79ebd02f288",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "342578b37393a751",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "34ad57992cd9d5d6",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "361acf59a47701ab",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "3702e1aa9805b5b6",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "3729e6fa0b34c6db",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "3afe4dd618dfaeed",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "3bcb5a71eacfaffb",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "3d08150bbc691a38",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "425216ec572cd74e",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "447b8e0400194179",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "450587e89b2e0591",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "4642cc917607252b",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "511637f18a84f5ef",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "51f147b19b1fb0b8",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "51f147b19b1fb0b8",
+   "type": "evident-by",
+   "metadata": {
+    "kind": "supporting"
+   }
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "52fb458a86aa80ab",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "5338f0a4c17e747e",
+   "type": "evident-by",
+   "metadata": {
+    "kind": "supporting"
+   }
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "561dc50efda1a444",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "569a1a47251ab9d7",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "57d37955ef482fc1",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "57f689551642073c",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "5958b594644c8e11",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "5b32bc069a4ba17c",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "5b75b471a4db9c70",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "5ec6ecff4abdcb33",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "5fccdc427bb815c5",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "627bd62f40cb2293",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "628f8006fe9282e7",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "6369b4cb27051e67",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "638a072a692332d7",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "65d609071adb18e8",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "6c3717f259fbee3e",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "6e765ece77efde2e",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "70e2e71d88c56407",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "717d97e7991837a3",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "7812bbc24f23f2a6",
+   "type": "evident-by",
+   "metadata": {
+    "kind": "supporting"
+   }
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "8138b4e11cdb7f84",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "84c819f10097952c",
+   "type": "evident-by",
+   "metadata": {
+    "kind": "primary"
+   }
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "8686fa79ec884f1c",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "870f26e842fe08e9",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "8899b319cc917223",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "93b4babcd1d5d129",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "93c59c989b952892",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "93fdc9f215c4e9e1",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "94041f452acbd4cc",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "9bbaf7f54e2711f6",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "9e4bff9bbcb1f9e3",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "9ed360972f36fb35",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "a2097dc76c817da6",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "a3642788660e52ce",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "a3ef709eab4226dc",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "a438ee5addc94ba7",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "a90a4065030a95d9",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "ad2e810fc156a572",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "b1544055a6b35ef9",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "b272f0d655758c42",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "b2c701b5ab48c505",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "b3430c1ed56ca2b5",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "b5bc825606adb42d",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "b63f8d6182ec567a",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "b80157b88fdea871",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "bc679f4d2d9a071f",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "be367084434b60bc",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "bf33622ef63c23f5",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "bf4d4a615ab3e3a4",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "c123a8228caa00cc",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "c934392236e3ae84",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "cea79c20c3479608",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "cede57959b91e7c9",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "d183f72da2857412",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "d1b01f82c1bd4130",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "d23db912e791d430",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "d29abd4dfbe9d1e7",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "d4ec04707828b2e0",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "db3abd7fab168abc",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "dceff7e263341413",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "defe4c2067c19eb3",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "df5889da7ef84f2c",
+   "type": "evident-by",
+   "metadata": {
+    "kind": "supporting"
+   }
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "e6b510dc461fd3c8",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "e851a7bd321650b8",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "ec4796737996211c",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "edfb6c0b55c58d04",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "eea330d6fbdc4fa8",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "f0348b80c984a321",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "f0a9c2717119c009",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "f1a16cf3218bc265",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "f1eb78599701c511",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "f550df8340776eb6",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "f5db47a19eef10e1",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "f61c8a2a9c1c6774",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "f6e51f0ee4eef4e7",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "f748126248d86f48",
+   "type": "evident-by",
+   "metadata": {
+    "kind": "supporting"
+   }
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "f7bd2120935074fb",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "faa53d0f69e0e1c2",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "fb3c08e35468ba80",
+   "type": "contains"
+  },
+  {
+   "parent": "eca37691b87c0860",
+   "child": "fb693dd2c3b7dc92",
+   "type": "contains"
+  }
+ ],
+ "files": [
+  {
+   "id": "ddc8294fe9fab182",
+   "location": {
+    "path": "/etc/adduser.conf",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 644,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/plain",
+    "size": 3040
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "adbe4156651a19ea8c9c7254e41de7e90fff7498"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "d59e8e5e6b3abc22f1143c316c5248f30bb4e15291eed6953a3b90b65dfda2c8"
+    }
+   ]
+  },
+  {
+   "id": "43b9aa4d3a08ac6d",
+   "location": {
+    "path": "/etc/deluser.conf",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 644,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/plain",
+    "size": 1706
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "45a29bceec577f9e83befcfa0cc3c7b36665c586"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "348c114422e9e28c8b24775cf39e785d02600445c0ac1c38fe7976c377fba6e5"
+    }
+   ]
+  },
+  {
+   "id": "ec4796737996211c",
+   "location": {
+    "path": "/usr/bin/[",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 68496
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "8e16295450481ca6f4c8e4d607be406c8846d54d"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "0ab2918ea6c958649c78f366e281d1c242eb4463e83c7725ad84e2a0f7ec2903"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "361acf59a47701ab",
+   "location": {
+    "path": "/usr/bin/arch",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 43888
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "e81e001422d7c6e86520ae0de198ca71ede302ac"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "cc7ca3ebd8f5f398b275ad7be6fda7b49f8a7b1c7dfa3d32d9f3aa26ffda6f03"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "32fff79ebd02f288",
+   "location": {
+    "path": "/usr/bin/b2sum",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 60400
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "f6b1cba8eb738810a53e8795cf1bf2ec52f4c557"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "c52220dbef49c19fbb16cbb53e7de82861c193a27bf9c252985a8377af872ddc"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "65d609071adb18e8",
+   "location": {
+    "path": "/usr/bin/base32",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 48016
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "624d6e3023beffae61bbd9e9e64db733b6232116"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "3500cde59df225b1f7988ad6331b875265d739fba3be0444e131bb362eb0d87e"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "638a072a692332d7",
+   "location": {
+    "path": "/usr/bin/base64",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 48016
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "d213ebfde2a7244c470153b119b3f6238cce081b"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "ae021af1f99f233eef24c17f9d43843ac36a7c5de1025af794682a89938312e5"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "d29abd4dfbe9d1e7",
+   "location": {
+    "path": "/usr/bin/basename",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 43856
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "86edc421bcc77624b184ad10ca774a9514adb5e8"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "bc0828b09781a8b19a6d31f23f3f6e0d4e2f216490dc1d1e98321f684cbfe0a2"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "10c7829cf8ebc107",
+   "location": {
+    "path": "/usr/bin/basenc",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 56208
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "97416c2d7badb21e936e9ac3be11249461fba3f4"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "7d442ffc72c528a707d7e8bb43816e65de23a88cc8c896c9b88e1dafe4787ab8"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "09f5156020f71498",
+   "location": {
+    "path": "/usr/bin/cat",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 44016
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "827602d01c310784544309212d9eda4eb9f89904"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "008f819498fe591f3cc920d543709347d8d14a139bb3482bc2cd8635c1b3162e"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "122710b7d97747b1",
+   "location": {
+    "path": "/usr/bin/chcon",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 68720
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "185497fe390afa6260c541e92e15c0cbd67ed21f"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "fc72162c58c5633b64ed326766997ab5d573833f2f610ed87ad0a72f9375271b"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libselinux.so.1",
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "d4ec04707828b2e0",
+   "location": {
+    "path": "/usr/bin/chgrp",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 68656
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "54a44f1ff9dd67c8693114eb188b9c78ce6ca3f5"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "bbee32e3ce054742f944124cd9859b4bf872e8d602f66e0f17c2838214e78aa0"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "34ad57992cd9d5d6",
+   "location": {
+    "path": "/usr/bin/chmod",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 64496
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "17268a4f4a174d206885ac8c1a0803c219adab73"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "623fdf73612f898ec829e529ffd143520fb617a75bca84e242030f48d2144645"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "57f689551642073c",
+   "location": {
+    "path": "/usr/bin/chown",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 72752
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "803052d461a6beee1201011c03e7f9ad603af342"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "02769de8f96b96de9b917224b0eca3fbf757f622211a901b0ce323ee1145a3d4"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "23010bfb7618d8c7",
+   "location": {
+    "path": "/usr/bin/cksum",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 142384
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "92b53f7a79ca33636fa8efcce569b19beb0b523c"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "d9b1aa09d173192d3324cf4be0e27b2119d035785d4c83e58f06538694f24470"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "a3642788660e52ce",
+   "location": {
+    "path": "/usr/bin/comm",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 48048
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "0622bb7ffcc83a7ffa72597f5b97ab02d3545a05"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "5ba2fd25a7ec1ef5a4fb82eabf6be796d1afba42c795fbf59727582d4d77d6a2"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "00b9ad0f8dbdfb3e",
+   "location": {
+    "path": "/usr/bin/cp",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 151152
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "d11e60003669bb66fef9f178e37bb34619840399"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "e296487a3a8f10a1c55e56056ba4bbb2d3ca22ae625af9f0d5cebaed28e55fa4"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libselinux.so.1",
+     "libacl.so.1",
+     "libattr.so.1",
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "9e4bff9bbcb1f9e3",
+   "location": {
+    "path": "/usr/bin/csplit",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 122032
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "ba48d4ccf286602e4386b0d92a9292ecf83d1993"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "e8882a91822c82375d60a4187118c4d23ee3fca18ca6364a6cb5acffc2cc509e"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "01c9e20f6e9d9035",
+   "location": {
+    "path": "/usr/bin/cut",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 48112
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "2af25112484625404a9cf0a3ab0c3c5bad5db2c2"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "fd54b387a71e9c2f774997d0fe7aff65416a85cb9b39f921fa13ee98f3eca809"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "b272f0d655758c42",
+   "location": {
+    "path": "/usr/bin/date",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 121904
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "ee6b019973996fc6ccf680787ca85c41b2940526"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "b047bec6f8fed78ad9c59c8eda24d6772d51baa766fc0f71f5936d45267e4036"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "627bd62f40cb2293",
+   "location": {
+    "path": "/usr/bin/dd",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 89240
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "29895ac9e42b48f6f3a184c30d5e8dd92901ab00"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "9f3cb6157563063827c7a8c1e191db13ad1d2a3c6821270e4dc520f6cbfb766d"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "1f518c945406d7f9",
+   "location": {
+    "path": "/usr/bin/df",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 102200
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "0f26ce7330ec86f751c0d02d3eb3d838550ad406"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "44741cf49aded8a77eb97499f9d9e42e572918513560e2c0a033c0860c3b36cd"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "f6e51f0ee4eef4e7",
+   "location": {
+    "path": "/usr/bin/dir",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 151344
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "a16e9ea0cdbf1256595cf254699b6351d321ed3d"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "54df57d9237f2d3f15a61d00fd2398d65099f64ac49129f7ce09f738a1e998c4"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libselinux.so.1",
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "c934392236e3ae84",
+   "location": {
+    "path": "/usr/bin/dircolors",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 52144
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "330017946902a1ab047547aef76bf4a6565629b5"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "fc001a80992e958df0198979131b608fd5ec92e57dcb4bbc89588f4f12f99758"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "9ed360972f36fb35",
+   "location": {
+    "path": "/usr/bin/dirname",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 39760
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "8867520e9672283271950bef22d324476aa43658"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "615bfa889dffb2c6cd9c76da6b4277310acf283743598eb71b9a5e058fd7bbae"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "b3430c1ed56ca2b5",
+   "location": {
+    "path": "/usr/bin/du",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 175440
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "8eeaf91096abd7def0f7a4dd3cbe9f2e903e52cc"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "8e9219020a27edb2e0d3f161e8ebba673a19aa05a88b6274dd5962a02f2eec2e"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "f7bd2120935074fb",
+   "location": {
+    "path": "/usr/bin/echo",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 43856
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "0dc9b9af06e4e0076cb8f8ea4ea4424e2bce98bb"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "a049fb47554c6cde2ee452e5d87f6386abb63af7cdcae9cd0dc99fc80e0bcf35"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "fb693dd2c3b7dc92",
+   "location": {
+    "path": "/usr/bin/env",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 48536
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "ab77a74630f0d12c248002f75909e34328e88f54"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "615c46b39130a04a08da04163542ce7ce1164fa4b35408efb43aac0a8a9f7ae5"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "cede57959b91e7c9",
+   "location": {
+    "path": "/usr/bin/expand",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 43952
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "ace704872f3633718d8ad660630ecdb59a68a6de"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "18303d60bad5cdf52eaa0e6b3ff2d21db8c975a9011d62bdd493381c90a4062c"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "b2c701b5ab48c505",
+   "location": {
+    "path": "/usr/bin/expr",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 117808
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "1ffd46d23b61797d1b2b1f0c93d0ba84c479f988"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "22998c5ef997f1f386f1a5acab96fce0c855944a9c14da79f5ca243bb19f8ade"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libgmp.so.10",
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "6c3717f259fbee3e",
+   "location": {
+    "path": "/usr/bin/factor",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 85200
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "8c03af3d7990755da38780d1b13cbe0f77f5c16a"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "84c037114720d0fb68eeca953bc2675ffd545770ee75fcace29052f126a5ffae"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libgmp.so.10",
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "94041f452acbd4cc",
+   "location": {
+    "path": "/usr/bin/false",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 35664
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "6e513baff732fcd0c397db6eb14d235bddb85a00"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "7faadececbd287e494595d6a8203bc521e4463c682a496569187a77e761156bc"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "717d97e7991837a3",
+   "location": {
+    "path": "/usr/bin/fmt",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 48016
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "7e65a32b5eb3ce58593c5a90bc2b2d7185f8a1f4"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "62cc5a8540901930b70ea6ee6419af7e5522f23bb6c08e92ac5121fca4a5628c"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "bf4d4a615ab3e3a4",
+   "location": {
+    "path": "/usr/bin/fold",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 43920
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "1108deae03f58e21033652a27f6896508e9383df"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "4526d6b5c40966b56b1de203f998beec4e00adf5e6105b8e064b2ac783a20abd"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "6369b4cb27051e67",
+   "location": {
+    "path": "/usr/bin/groups",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 43920
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "90d950e5cb27dc3a5e5ca7f6c155ad81e1d5f8db"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "67ad3a42ef1afd94119dcf214d67582be86a9464a20db5cf6cb9a67086979b83"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "52fb458a86aa80ab",
+   "location": {
+    "path": "/usr/bin/head",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 48080
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "484057ac5c1066d9c0e70be0d3c0f694959869dd"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "eb93339329ad9ecf68acf3e7cc3415cea3a1d25e1885b4a0e42bdb70063b7ca9"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "5fccdc427bb815c5",
+   "location": {
+    "path": "/usr/bin/hostid",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 39760
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "e3b412e456c55424abd94a3503aaddfe67bde26a"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "ce77fc236724c35505e73e97dc21e45e7d3ff6876a18eede29daa37d16e17eb9"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "93b4babcd1d5d129",
+   "location": {
+    "path": "/usr/bin/id",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 48144
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "d89764726e5849d6f6bc84a73a0d26b4edd39c86"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "a3d987dd3f9ec0610dc13b7fdccef84895628065434f44247a65ef0d2a341b3c"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libselinux.so.1",
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "db3abd7fab168abc",
+   "location": {
+    "path": "/usr/bin/install",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 159544
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "94489bbc9fd160cdc451f2e4e9533e3ebd90f539"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "9848c092188028f520c3742c609f7fdf2b16cbf5b4ac128fbf69c13b9620f124"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libselinux.so.1",
+     "libacl.so.1",
+     "libattr.so.1",
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "70e2e71d88c56407",
+   "location": {
+    "path": "/usr/bin/join",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 56304
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "adc31ccfbb7e29ea0ec9cf878f04e3fc89f7afef"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "8233e9e237d24c436cfe97af5ba2c95ac0b44742f9c4a3f9bdbad9e3d8868ddd"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "a438ee5addc94ba7",
+   "location": {
+    "path": "/usr/bin/link",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 39760
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "28b52f12046b1585af3042fe692e38850221d7be"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "913f86d046789715a1e60371e7434af359a737db8853c8a24dd79bd309a1b6d6"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "dceff7e263341413",
+   "location": {
+    "path": "/usr/bin/ln",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 72824
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "63c518e7dc0aca9b7dc93b5381ce89eae120da1c"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "26b4d4643e3791f277ee734b162428347164435a20456643e5346bfffb60d1a9"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "edfb6c0b55c58d04",
+   "location": {
+    "path": "/usr/bin/logname",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 39760
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "9adfc2b1f6a2115273a2ce07412933e3909d3546"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "924fa150fdb9389bbf51e5815b75225792894b69f575cb56f2fa91e119b96c21"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "8686fa79ec884f1c",
+   "location": {
+    "path": "/usr/bin/md5sum",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 52176
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "23638f9a1769034c0e29c4d2cc6bd67f59cc15e8"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "cedc25468f8df2346c58cd796c44a42560e08823890fc905b2454d0eea97426e"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "b80157b88fdea871",
+   "location": {
+    "path": "/usr/bin/mkdir",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 97552
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "0cab82abc61b9a4329801bc93ee43d6bbcbaf911"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "ba74b1a15a5b9b7929a595f45103d7fbe722840b7211d313dd4872893f031fb9"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libselinux.so.1",
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "3729e6fa0b34c6db",
+   "location": {
+    "path": "/usr/bin/mkfifo",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 68784
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "4bf3c3e9b11a9e5d620d9d374b12ae7d2ce43d34"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "8c5a9ba6fd9a07c26bb5e0930054a48e3ec1081c3a280432f9d8ea9fb09a3333"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libselinux.so.1",
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "5958b594644c8e11",
+   "location": {
+    "path": "/usr/bin/mknod",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 72912
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "449dbf5ea8caf13b19f82ab548ce6effff5f0574"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "02d5f0f8290119d9534627cb376b3fcab861130bbf6aedc80102563d7695665b"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libselinux.so.1",
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "d23db912e791d430",
+   "location": {
+    "path": "/usr/bin/mktemp",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 43952
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "4207d9de0ffd51ecd2b994c37cab04372a13c5d5"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "879a70d44241bc6704bb8baae38ebd8466ac95707c3b74ca598a9487a841bfb4"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "0ffcd6e66db5901b",
+   "location": {
+    "path": "/usr/bin/mv",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 142968
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "a554829fc4a05c161abcdd3ecdf60340a8ea4bb7"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "a781be46e6f27ca5d7e119225429a4a12ef941eea15ed2c44eea0c8bca7e4ebe"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libselinux.so.1",
+     "libacl.so.1",
+     "libattr.so.1",
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "3bcb5a71eacfaffb",
+   "location": {
+    "path": "/usr/bin/nice",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 43888
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "a9e0ba1d3fc9ecb8d9cb910a51d30566b3923b47"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "144ba2794c120a0347058d48081c9c13c2afe4321f1b44318538616295273060"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "e6b510dc461fd3c8",
+   "location": {
+    "path": "/usr/bin/nl",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 113776
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "579b5c06178b2e3413e17017c3328053e1694be5"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "8ec52ee2fb32e3e5c088b2d92d2e933256548be3376c1c752f0d6b0e994bae20"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "a2097dc76c817da6",
+   "location": {
+    "path": "/usr/bin/nohup",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 43920
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "0a8fcbdfd2591cfdfd0852c4907e3d2d2f4f5b5a"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "d290c0aae67eee4b37a86893cb0f4036f9bf1abe8ed19ecc6a529e7c681390f3"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "faa53d0f69e0e1c2",
+   "location": {
+    "path": "/usr/bin/nproc",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 43920
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "b8b38c97674bff0787ba78c562017b035795a3ae"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "716561bc24867a55b99ebb523e97ace733d12ffad0f8b55c29664431ac01d36a"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "a3ef709eab4226dc",
+   "location": {
+    "path": "/usr/bin/numfmt",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 68624
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "b1d224b806337ba57a92824fc358c2dd5e094c4b"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "bf48f9377ce2851931573d54bc74e19b1bf45c5e19ba108a8b3e153cd71235f2"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "d1b01f82c1bd4130",
+   "location": {
+    "path": "/usr/bin/od",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 80912
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "4deb4669329bb1a400590dd25d3bc4d388377f1e"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "e87e764bd447d6f10d0f3bd519fb62c111f9bf9242c5f7b2764267b8c26b1488"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "447b8e0400194179",
+   "location": {
+    "path": "/usr/bin/paste",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 43920
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "edbf07353ab6d7b7eaa91042879d28d22a50e49e"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "8ea6d9a0444faaee0c294f471d0de1194208900d4c0b50a6607ccb5a9fcee932"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "ad2e810fc156a572",
+   "location": {
+    "path": "/usr/bin/pathchk",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 43888
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "ed0e538da9c9e4b8e0e99b47c5ad2ef600abae17"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "531bd451b4f0dcf767a51ef56d926acdd26f88fcbc2d688c617d610f1ec7fd4c"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "d183f72da2857412",
+   "location": {
+    "path": "/usr/bin/pinky",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 48176
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "3fb2530743dc599d2a7902166dba63a0583ac0c0"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "5ea948c7ee616bb167ab8758899614202d712753acfca3eb430e98afb0f44d7f"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "5b75b471a4db9c70",
+   "location": {
+    "path": "/usr/bin/pr",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 81008
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "22150785b29c4ff0d861d5a24b79a210f853125e"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "d5b05f2fdd58a5908ffd23b9d827258cf3ed894481923f536f2312b2229f1def"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "5b32bc069a4ba17c",
+   "location": {
+    "path": "/usr/bin/printenv",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 35664
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "96ee66c9909802a89c8197b4ea009c946cdafec7"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "16a1af53235b0c5e51d95091859951dec0bd431c5761879ea4509aaf0c4e6f0c"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "bc679f4d2d9a071f",
+   "location": {
+    "path": "/usr/bin/printf",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 64432
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "db33348d259902367e4305d51012464621f294be"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "bf7cc8faa85842bb662243c5f945b03e284a823742d123ed7421a7f5c9c773e2"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "f5db47a19eef10e1",
+   "location": {
+    "path": "/usr/bin/ptx",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 138480
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "4486be87b12e78b55e0bedaf66870b3b1e868bce"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "2bf52c99c98b6569ade8c0a2ce08750334d4d5a512d6dafdc7c704cd7dba4663"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "b63f8d6182ec567a",
+   "location": {
+    "path": "/usr/bin/pwd",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 43952
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "8e7bcde972ae0700c803c0fd772529cfee5b4e21"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "14b89d92c7047e3cebb7b8e7b7249360a0979349125f5e567d59924cde59ac58"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "8899b319cc917223",
+   "location": {
+    "path": "/usr/bin/readlink",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 52112
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "b5b3d432f44449fdc5c5948806369e8044ddf0f7"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "bfeeebae7ec8362788bc6e58182d5d1f534e6f7ec970be28ef63590b74edc4a5"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "24fc594a120c2bfb",
+   "location": {
+    "path": "/usr/bin/realpath",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 52144
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "e2b9f56ced5456f3c631192cb14581437bc9c3da"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "54dfbffc86d9c0933f4ab4434915562c43d1d0a194efe128642fdef34cf11490"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "be367084434b60bc",
+   "location": {
+    "path": "/usr/bin/rm",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 72752
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "f8f6190adbc3798f77cf0b1d27bc8466b920ea4c"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "58e8be37049deaaacaf56196d507584b94e87a35a524db0c0459eb5ee6ae4b8c"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "03539a6a8fdcdd6f",
+   "location": {
+    "path": "/usr/bin/rmdir",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 56240
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "17aa109e00cc3ecd800d213b3392b297f73311e1"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "139377cd5fd9cdf4f6f049d09dc0a9e7113936790d65b82b7a25a0f147177024"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "e851a7bd321650b8",
+   "location": {
+    "path": "/usr/bin/runcon",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 43984
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "1cdaf72abe1c3449125ca5be3b30cd59e2fb5cab"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "28d2eff7359ce3f1c89b9db69388af62e79a7f932b67416144caf2e64af5a331"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libselinux.so.1",
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "14a97201d619003a",
+   "location": {
+    "path": "/usr/bin/seq",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 60336
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "e7b301ceb8e32de872f0b9f4f744c650e970c1e5"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "67ff4ae25eefd98243e80d9435b2c66954091e5f5dbcd134a42b611e54277ae2"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "342578b37393a751",
+   "location": {
+    "path": "/usr/bin/sha1sum",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 56272
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "84e39a35c245f5664cea84dfd4595768751dcfa2"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "7ffc8563edc733984221de22241ff72ee65d15c06dc337b6b85b01f340e2461d"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "511637f18a84f5ef",
+   "location": {
+    "path": "/usr/bin/sha224sum",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 60368
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "f29202c24f823b90e6dd588148b82b15cfd5c778"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "9b14f60b102b81f213eecf07586bb46b872c7ce9801e8c618942401688e086e5"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "5ec6ecff4abdcb33",
+   "location": {
+    "path": "/usr/bin/sha256sum",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 60368
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "9d82888b1eafee0e8cc8bf38c254c7525e7e85d5"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "6cd7c6bfc81d645ba13b927e31651a1466092a28ed0bd2632e82f8b27882b25e"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "bf33622ef63c23f5",
+   "location": {
+    "path": "/usr/bin/sha384sum",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 64464
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "8991f04d609c46efe96d2407fbb44bf89394d7c8"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "17d4c90d98dd17aead30b3154d18f5ed4fc3d7cb56a8c9efa5bc142691a6ac4a"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "fb3c08e35468ba80",
+   "location": {
+    "path": "/usr/bin/sha512sum",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 64464
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "09339c003fff79131cda8069443af20b90d196e3"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "951c8e889d1c3a4c2c5098912ee517203a00f89f1bb3b7f5d3b36e49cfdc157d"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "b1544055a6b35ef9",
+   "location": {
+    "path": "/usr/bin/shred",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 64656
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "4778f5471f2b332cff9cba638082b11362f0da19"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "df3e060af6fefde5ef7579833938dcca23b5c81f900ae0470a28ef96015d5897"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "f1a16cf3218bc265",
+   "location": {
+    "path": "/usr/bin/shuf",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 60400
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "bf1f7bf86551e19200bbc7a847f8c694c17e213e"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "6d845fc5f747178e9a4d7443fbd2495030a78e5790f796ceadaaaf61b5299f10"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "93fdc9f215c4e9e1",
+   "location": {
+    "path": "/usr/bin/sleep",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 43888
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "13a09ccdbb016617abe5c0e14bca38abc04294f1"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "4add4bb89d8ca0e3b1bd861130ddd7ae0fd9617a8055de0a38c8d2ca1ac95723"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "f0348b80c984a321",
+   "location": {
+    "path": "/usr/bin/sort",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 118456
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "1bb9867cf4814d28dedd7d5890d66e6acd4c4188"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "26d29d4f3f2a9537f9104b0e496c6110ec266682bfd5f00b312a8fff723ffc00"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "1e8dd5f7478e6a02",
+   "location": {
+    "path": "/usr/bin/split",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 60984
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "098063a3f23e48aad0810b70a33c9d0c08ccea5f"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "465258f620db346b6b0f85acba59f48130b7a1f87985f018da218b4ee6f5bdcd"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "06460f49ead8826e",
+   "location": {
+    "path": "/usr/bin/stat",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 97488
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "a9aff37170b354f01831e5661615a1c7d3ef4cb5"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "98fd8d3f1823896aa2613a4d38e7059c82506206725918666091d08272d78e95"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libselinux.so.1",
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "f550df8340776eb6",
+   "location": {
+    "path": "/usr/bin/stdbuf",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 60336
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "dfc95c5c69bb2479ab2ced1981f024babd1aaf62"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "6175f959028e67d73c0a394d5303d5f799492572f0e3317c47aabce6d19092b5"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "4642cc917607252b",
+   "location": {
+    "path": "/usr/bin/stty",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 85008
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "4c9da8ec1a8cd0bad28c568c9ccdb4574e873fdb"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "93386dd640d063e6cf024f4aa5707162db19a89ecd0e9d4bb0240a56f382957f"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "defe4c2067c19eb3",
+   "location": {
+    "path": "/usr/bin/sum",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 52184
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "4738cb641893203c74a40a4468f4784800617d2d"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "209faef4b3dc0bdd04b65fe2ec50e772229085d2e3a60bdc318578b3dc3a628f"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "628f8006fe9282e7",
+   "location": {
+    "path": "/usr/bin/sync",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 39824
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "9a35b84dcc06e95f96aff16dabfe1111a6076fb0"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "8ebfcf0eb6d1f19ef5b9db1c9dd945679a65c7a8d3589fdc3f9ce2ffd65933ed"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "569a1a47251ab9d7",
+   "location": {
+    "path": "/usr/bin/tac",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 113712
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "903011f73a2145b96b8f2b0550e41780a82ec4e2"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "3e40de614ae3383f4339c08b2dac81ac33fd3b00a30d319b932fd5966c186dd1"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "9bbaf7f54e2711f6",
+   "location": {
+    "path": "/usr/bin/tail",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 76944
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "30a591938825708e1ca40f4eab63e02e38637a1d"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "cd67c2baaef8395ae68a396b8ce0bd24dabd9272f501f1afb7f76f7ef0cfc083"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "450587e89b2e0591",
+   "location": {
+    "path": "/usr/bin/tee",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 43984
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "080b472a95e9ae60729791c1bd63f082d9a5e757"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "1613befc577b68e65c940d45a1db6e79b25074dc3d8ddb1f2b3cb3c60ce5fc4d"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "f0a9c2717119c009",
+   "location": {
+    "path": "/usr/bin/test",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 60304
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "1df15e7f50bd9f3b11b87f7432fa94dc5e48b869"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "9a9cb09f9f71ae289fd3a93a86c1b8189048ea01f6b956dfa4734bb74dc834f7"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "0f64a17e04cda465",
+   "location": {
+    "path": "/usr/bin/timeout",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 48632
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "7b1ce1fbe8244bad13aefb16d8a972090aa3c06c"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "5ef0eaaaa4220593add7716aad74da927ca3bb10605e964330de64fecc3ef15e"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "eea330d6fbdc4fa8",
+   "location": {
+    "path": "/usr/bin/touch",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 109616
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "a0d0c6248d07a8fa8e3b6a94e218ff9c8c372ad6"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "76100d3a8613237bf8b18bdd007c2881b749033ee89dd92d48b86f0ce8acfd54"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "f61c8a2a9c1c6774",
+   "location": {
+    "path": "/usr/bin/tr",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 56208
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "775867f7f48c5c832f6ac16d0f8e62927f4b7fbf"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "cf8a29847ff95b77fe6ef3d9ba3d750c7fd1c807763980e8c5f918da81acb1eb"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "2b5ba560702e2b02",
+   "location": {
+    "path": "/usr/bin/true",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 35664
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "8ae191681fa09d78923d555996d8746f8601146a"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "c79bf44242829108e323378531f4ac839513ca1fba45efd6583643526e1e9fd2"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "c123a8228caa00cc",
+   "location": {
+    "path": "/usr/bin/truncate",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 43920
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "45933d7eb674624abfc89d367ab593670973fb5a"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "4e5f263a7415b772646de61ea89d1ab62c21b2d64a15b0d426e618fee45e6e9b"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "3221a28ea63a795b",
+   "location": {
+    "path": "/usr/bin/tsort",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 56208
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "0fcdf720036961e9a1177801905a9551a6dec06b"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "ec90bbcb3047e5972a7614a1a99f368c64504ef50f7dcdcd0e3631f0c9ced4b6"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "3d08150bbc691a38",
+   "location": {
+    "path": "/usr/bin/tty",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 35696
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "fc56a872f44ffc9007f6ac0015d3e23b661eae07"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "ca27ae958bebe611fc2c3b097d216e5a7423c0dc7f317e9ab352fe307eeae298"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "93c59c989b952892",
+   "location": {
+    "path": "/usr/bin/uname",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 43888
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "a584352368eed069d639e8ea44b9f4795d278a76"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "ed210303cc81299ad2bf8804d4a2f1e2853ad34f6307a3114b48444ceb6c60da"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "8138b4e11cdb7f84",
+   "location": {
+    "path": "/usr/bin/unexpand",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 43952
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "7ecfce0e6b0a912e9f90908888099df290d335fd"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "dc3fbc72adb7efc0605511a1cc3d0b058e05ad38d675226c9dd5407b7845626e"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "425216ec572cd74e",
+   "location": {
+    "path": "/usr/bin/uniq",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 48080
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "6f50fa6db4cfb9eaea4b4289ecd6018badde9526"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "9960fd57f62c1ed283474722fde81d07aff25a6410256c8b5fefcedec1fe735b"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "561dc50efda1a444",
+   "location": {
+    "path": "/usr/bin/unlink",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 39760
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "fb121f23aa38b47c3b1a37b51b7240f9f64e0837"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "87c7a53f4293b6eb7ba8e983cb231e1562d38ad7068ca59bc63e4e42f9ce7586"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "cea79c20c3479608",
+   "location": {
+    "path": "/usr/bin/users",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 39824
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "403280c205e952b3a7694c0d7405d2a392e12431"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "f54bbf8c6f73a185a69f64b3d7b6aef9bbc6e5a1e5d82efa14db4312207aeb77"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "3afe4dd618dfaeed",
+   "location": {
+    "path": "/usr/bin/vdir",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 151344
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "680e61c37b06f2cd3dce55673447d17efe8ce4b9"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "27c28e4a1f793d6393c73b5640a9e997efe908ee5738a511539564a1d90cd208"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libselinux.so.1",
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "870f26e842fe08e9",
+   "location": {
+    "path": "/usr/bin/wc",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 52280
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "ef5d9e2d99b54688a78cdfa88a4c85e7675489ad"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "7480f7cb7110af0f45b6e04b50f8d1fb2c6392cf911cb3a28c516ef1b725823e"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "3702e1aa9805b5b6",
+   "location": {
+    "path": "/usr/bin/who",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 60432
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "c7b46d52b1ed32bb2ae553e7b14eb5832da81a2b"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "68f82786ee5cac14200766a4ad87d98d8a014a4614c412abb49f2d8c13df8da6"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "f1eb78599701c511",
+   "location": {
+    "path": "/usr/bin/whoami",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 39792
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "de6b1f2ebde10cfb75b99ec25e75c089c6462efb"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "6ca7710f382d2d9e4026c2b2b4299775880e290915599ddd5d0c7d60076186a8"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "57d37955ef482fc1",
+   "location": {
+    "path": "/usr/bin/yes",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 39760
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "7e8c740f1f26ee64d7e2eac971e42dcc92eecaa7"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "cf182e6211e04f7aadd80174f27124d44edf063c73828c91e31be1919551f23b"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "a90a4065030a95d9",
+   "location": {
+    "path": "/usr/libexec/coreutils/libstdbuf.so",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 14480
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "e652674bdc75953d4b6f8421b9fa84d556291ee2"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "9425cd01d9f9780a649c562ad6cdb427c6d95a9a3992bdda23bac793eaac3fa3"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": false,
+    "hasEntrypoint": false,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": false,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "02e7f092083ed3eb",
+   "location": {
+    "path": "/usr/sbin/adduser",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/x-perl",
+    "size": 48382
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "b04cd71b3ebce87e5a9a8e33dbd553190cd0acf5"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "ad8ec15dc661b2ccb236584721c8395a0dd910151d486b0c1440b715ba1beb70"
+    }
+   ]
+  },
+  {
+   "id": "b5bc825606adb42d",
+   "location": {
+    "path": "/usr/sbin/chroot",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 48112
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "5e3c35d0619d7f837f31d40ccf148646db070809"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "dc44f0ec5a5f7d2a881061b047b7bbd8e9de3b41db5daadbd672ebdbf24190b6"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "e808b5c374927ddf",
+   "location": {
+    "path": "/usr/sbin/deluser",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/x-perl",
+    "size": 16727
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "ea38483dfc706e8e1d6fd845ac7c7c341555d537"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "79352ddc341d192b8a9f50a8266229179dbad37618126fd4fc741e32aec2145b"
+    }
+   ]
+  },
+  {
+   "id": "846850370a50f039",
+   "location": {
+    "path": "/usr/share/doc/adduser/copyright",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 644,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/plain",
+    "size": 12432
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "6916aae01164aa1bad36bd92397e6346acc0e8e4"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "b143053a4862ab354831487b5f8bd31dc9ffdc589d15de9d9c764332a0209796"
+    }
+   ]
+  },
+  {
+   "id": "51f147b19b1fb0b8",
+   "location": {
+    "path": "/usr/share/doc/coreutils/copyright",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 644,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/plain",
+    "size": 5552
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "b2941c3034734f1bc8d0f3129e7cd8a25417e54a"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "24e86c5ca53d6bfd8e0c47988160daa62d10a74997fe11f651e1d9533c78bff6"
+    }
+   ]
+  },
+  {
+   "id": "34ab8e495917a4b5",
+   "location": {
+    "path": "/usr/share/perl5/Debian/AdduserCommon.pm",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 644,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/plain",
+    "size": 9521
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "ee33157412c0638ad02d92eb4abb99ffa2432e9d"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "f4a24f0721dde56f6836e005b736f932216b8c190ef007d554b9465a23065e7a"
+    }
+   ]
+  },
+  {
+   "id": "b58a0f5bc248994d",
+   "location": {
+    "path": "/var/lib/dpkg/info/adduser.conffiles",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 644,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/plain",
+    "size": 36
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "ece17a8d4ba14f39a579ad081ec06c944ea02010"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "27a1b4199a361534b8b86ec4ae26fed5efafffaa98296e73d2025151558e25a1"
+    }
+   ]
+  },
+  {
+   "id": "c90454d80499b60b",
+   "location": {
+    "path": "/var/lib/dpkg/info/adduser.list",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 644,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/plain",
+    "size": 4927
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "6b01b5cd3fca882a6532751f94c21ebde046231b"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "cf5b21cdee0b955d3c7403039a6a5472737321ccfc07d1e17bea6861771aa8df"
+    }
+   ]
+  },
+  {
+   "id": "67fceca217d87e3b",
+   "location": {
+    "path": "/var/lib/dpkg/info/adduser.md5sums",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 644,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/plain",
+    "size": 4899
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "b035ec4a77551d7c58bc1c367d5ab96507cf1b6a"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "44ded2aaecc7bf4d5a052455ed80eb6a1345be4a7d4c1791b55e7684633b1471"
+    }
+   ]
+  },
+  {
+   "id": "23cfe152a57a1260",
+   "location": {
+    "path": "/var/lib/dpkg/info/adduser.postrm",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/x-shellscript",
+    "size": 151
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "9f916cb6c2b173bd2a9518655e66091a18e55860"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "e917d60a2b71383d56d7fec793bf2a40912d4dc7ec45bcdf35aa09f9b0061ccf"
+    }
+   ]
+  },
+  {
+   "id": "29f881b9d5ddba21",
+   "location": {
+    "path": "/var/lib/dpkg/info/adduser.preinst",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/x-shellscript",
+    "size": 3990
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "9b2e62f8ce2c36a8a522ff60d62ad099a5b3868b"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "7f6b6affc5b83a6bbe3c620457d13a96671b8482b9389ebfc393548dff92dff5"
+    }
+   ]
+  },
+  {
+   "id": "7812bbc24f23f2a6",
+   "location": {
+    "path": "/var/lib/dpkg/info/coreutils.list",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 644,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/plain",
+    "size": 12777
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "c155c9cd3ba23a36e13404cfe56825d22e9fdd22"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "166d57e2dac19f5e1dac1bd93cb1439fe13711cd06a861c0587ae08b9b794789"
+    }
+   ]
+  },
+  {
+   "id": "5338f0a4c17e747e",
+   "location": {
+    "path": "/var/lib/dpkg/info/coreutils.md5sums",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 644,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/plain",
+    "size": 15775
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "c48f8a46510832e38701c05a95d7744fe86e324d"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "1514e790fe53fd303d1007ebf0c5ec7d48b4362f207e07281794c820d5c2fb1d"
+    }
+   ]
+  },
+  {
+   "id": "df5889da7ef84f2c",
+   "location": {
+    "path": "/var/lib/dpkg/info/coreutils.postinst",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/x-shellscript",
+    "size": 136
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "65b51f68b44371c0b567adbd7bb2925468aa6b51"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "c74c21800ef2a0462534b5a447e290b466832cfa81d631b5971578aa4a496faa"
+    }
+   ]
+  },
+  {
+   "id": "f748126248d86f48",
+   "location": {
+    "path": "/var/lib/dpkg/info/coreutils.postrm",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/x-shellscript",
+    "size": 117
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "a830f0e84f4b20e9cff668771217594068e622be"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "2efeae0a35844164b09d152a3d58e8b1d380aa4d4bd119dbc3938a90824b59ce"
+    }
+   ]
+  },
+  {
+   "id": "84c819f10097952c",
+   "location": {
+    "path": "/var/lib/dpkg/status",
+    "layerID": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17"
+   },
+   "metadata": {
+    "mode": 644,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/plain",
+    "size": 76870
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "c9ef30115f4036bfede09e1f64ff75684d593ac9"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "6aa7c28f3730513447666ea2a3b1f232d380de96aa74a8aaf37df185ceee4f27"
+    }
+   ]
+  },
+  {
+   "id": "6e765ece77efde2e",
+   "location": {
+    "path": "/usr/bin/ls",
+    "layerID": "sha256:e94f7c72a78ec27ff01f2f447e79f85f159dc509becefda9558e33be624251c9"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 151345
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "15eeb4bc18367af52d2bddbb363e892fde4e87f7"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "1a12c71a24126375b0f61308a372ab1f46e685c627e4ac00e34d35e0548dcbfa"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libselinux.so.1",
+     "libc.so.6"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "partial",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  }
+ ],
+ "source": {
+  "id": "10c9823b0dc83b17b3ec2e5373e886d129a5f6988baf2b9fad081c0eb89631d4",
+  "name": "sbz-tamper-debian",
+  "version": "sha256:10c9823b0dc83b17b3ec2e5373e886d129a5f6988baf2b9fad081c0eb89631d4",
+  "type": "image",
+  "metadata": {
+   "userInput": "sbz-tamper-debian",
+   "imageID": "sha256:febba0351c7ac7b6d4d77144010c8d8112b626b1dc3e27bd28c1147ed95f8e82",
+   "manifestDigest": "sha256:10c9823b0dc83b17b3ec2e5373e886d129a5f6988baf2b9fad081c0eb89631d4",
+   "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+   "tags": [
+    "sbz-tamper-debian:latest"
+   ],
+   "imageSize": 74962324,
+   "layers": [
+    {
+     "mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
+     "digest": "sha256:8b296f48696071aafb5a6286ca60d441a7e559b192fc7f94bb63ee93dae98f17",
+     "size": 74810979
+    },
+    {
+     "mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
+     "digest": "sha256:e94f7c72a78ec27ff01f2f447e79f85f159dc509becefda9558e33be624251c9",
+     "size": 151345
+    }
+   ],
+   "manifest": "eyJzY2hlbWFWZXJzaW9uIjoyLCJtZWRpYVR5cGUiOiJhcHBsaWNhdGlvbi92bmQuZG9ja2VyLmRpc3RyaWJ1dGlvbi5tYW5pZmVzdC52Mitqc29uIiwiY29uZmlnIjp7Im1lZGlhVHlwZSI6ImFwcGxpY2F0aW9uL3ZuZC5kb2NrZXIuY29udGFpbmVyLmltYWdlLnYxK2pzb24iLCJzaXplIjo2NzksImRpZ2VzdCI6InNoYTI1NjpmZWJiYTAzNTFjN2FjN2I2ZDRkNzcxNDQwMTBjOGQ4MTEyYjYyNmIxZGMzZTI3YmQyOGMxMTQ3ZWQ5NWY4ZTgyIn0sImxheWVycyI6W3sibWVkaWFUeXBlIjoiYXBwbGljYXRpb24vdm5kLmRvY2tlci5pbWFnZS5yb290ZnMuZGlmZi50YXIuZ3ppcCIsInNpemUiOjI4MjMxNTgxLCJkaWdlc3QiOiJzaGEyNTY6OGIyOTZmNDg2OTYwNzFhYWZiNWE2Mjg2Y2E2MGQ0NDFhN2U1NTliMTkyZmM3Zjk0YmI2M2VlOTNkYWU5OGYxNyJ9LHsibWVkaWFUeXBlIjoiYXBwbGljYXRpb24vdm5kLmRvY2tlci5pbWFnZS5yb290ZnMuZGlmZi50YXIuZ3ppcCIsInNpemUiOjcwNTMyLCJkaWdlc3QiOiJzaGEyNTY6ZTk0ZjdjNzJhNzhlYzI3ZmYwMWYyZjQ0N2U3OWY4NWYxNTlkYzUwOWJlY2VmZGE5NTU4ZTMzYmU2MjQyNTFjOSJ9XX0=",
+   "config": "eyJhcmNoaXRlY3R1cmUiOiJhbWQ2NCIsImNvbmZpZyI6eyJFbnYiOlsiUEFUSD0vdXNyL2xvY2FsL3NiaW46L3Vzci9sb2NhbC9iaW46L3Vzci9zYmluOi91c3IvYmluOi9zYmluOi9iaW4iXSwiQ21kIjpbImJhc2giXX0sImNyZWF0ZWQiOiIyMDI2LTExLTA4VDE4OjEwOjE3LjM3NTg4MzA5MloiLCJoaXN0b3J5IjpbeyJjcmVhdGVkIjoiMjAyNC0xMi0yM1QwMDowMDowMFoiLCJjcmVhdGVkX2J5IjoiIyBkZWJpYW4uc2ggLS1hcmNoICdhbWQ2NCcgb3V0LyAnYm9va3dvcm0nICdAMTczNDkxMjAwMCciLCJjb21tZW50IjoiZGVidWVycmVvdHlwZSAwLjE1In0seyJjcmVhdGVkIjoiMjAyNi0xMS0wOFQxODoxMDoxNy4zNzU4ODMwOTJaIiwiY3JlYXRlZF9ieSI6IlJVTiAvYmluL3NoIC1jIHByaW50ZiBcIlxcXFwwXCIgXHUwMDNlXHUwMDNlIC9iaW4vbHMgIyBidWlsZGtpdCIsImNvbW1lbnQiOiJidWlsZGtpdC5kb2NrZXJmaWxlLnYwIn1dLCJvcyI6ImxpbnV4Iiwicm9vdGZzIjp7InR5cGUiOiJsYXllcnMiLCJkaWZmX2lkcyI6WyJzaGEyNTY6OGIyOTZmNDg2OTYwNzFhYWZiNWE2Mjg2Y2E2MGQ0NDFhN2U1NTliMTkyZmM3Zjk0YmI2M2VlOTNkYWU5OGYxNyIsInNoYTI1NjplOTRmN2M3MmE3OGVjMjdmZjAxZjJmNDQ3ZTc5Zjg1ZjE1OWRjNTA5YmVjZWZkYTk1NThlMzNiZTYyNDI1MWM5Il19fQ==",
+   "repoDigests": [
+    "sbz-tamper-debian@sha256:13e29e0f039f7ba91782bb8f14d11cfbef932ae4445fafa023730fb366078fe0"
+   ],
+   "architecture": "amd64",
+   "os": "linux"
+  }
+ },
+ "distro": {
+  "prettyName": "Debian GNU/Linux 12 (bookworm)",
+  "name": "Debian GNU/Linux",
+  "id": "debian",
+  "version": "12 (bookworm)",
+  "versionID": "12.8",
+  "versionCodename": "bookworm",
+  "homeURL": "https://www.debian.org/",
+  "supportURL": "https://www.debian.org/support",
+  "bugReportURL": "https://bugs.debian.org/"
+ },
+ "descriptor": {
+  "name": "syft",
+  "version": "1.56.0",
+  "configuration": {
+   "archive": {
+    "include-indexed-archives": true,
+    "include-unindexed-archives": false,
+    "max-depth": 0,
+    "max-disk-bytes": 107374182400,
+    "max-memory-bytes": 2147483648
+   },
+   "catalogers": {
+    "requested": {
+     "default": [
+      "image",
+      "file"
+     ]
+    },
+    "used": [
+     "alpm-db-cataloger",
+     "apk-db-cataloger",
+     "apple-app-bundle-cataloger",
+     "binary-classifier-cataloger",
+     "bitnami-cataloger",
+     "cargo-auditable-binary-cataloger",
+     "conan-info-cataloger",
+     "dotnet-deps-binary-cataloger",
+     "dotnet-packages-lock-cataloger",
+     "dpkg-db-cataloger",
+     "elf-binary-package-cataloger",
+     "file-content-cataloger",
+     "file-digest-cataloger",
+     "file-executable-cataloger",
+     "file-metadata-cataloger",
+     "gguf-cataloger",
+     "go-module-binary-cataloger",
+     "graalvm-native-image-cataloger",
+     "homebrew-cataloger",
+     "java-archive-cataloger",
+     "java-jvm-cataloger",
+     "javascript-package-cataloger",
+     "linux-kernel-cataloger",
+     "lua-rock-cataloger",
+     "nix-cataloger",
+     "pe-binary-package-cataloger",
+     "perl-cpan-installed-cataloger",
+     "php-composer-installed-cataloger",
+     "php-interpreter-cataloger",
+     "php-pear-serialized-cataloger",
+     "portage-cataloger",
+     "python-installed-package-cataloger",
+     "r-package-cataloger",
+     "rpm-db-cataloger",
+     "ruby-installed-gemspec-cataloger",
+     "safetensors-cataloger",
+     "snap-cataloger",
+     "wordpress-plugins-cataloger"
+    ]
+   },
+   "data-generation": {
+    "generate-cpes": true
+   },
+   "files": {
+    "content": {
+     "globs": null,
+     "skip-files-above-size": 0
+    },
+    "hashers": [
+     "sha-1",
+     "sha-256"
+    ],
+    "selection": "owned-by-package"
+   },
+   "licenses": {
+    "coverage": 75,
+    "include-content": "none"
+   },
+   "packages": {
+    "binary": [
+     "python-binary",
+     "python-binary-lib",
+     "pypy-binary-lib",
+     "go-binary",
+     "julia-binary",
+     "julia-binary",
+     "helm",
+     "redis-binary",
+     "valkey-binary",
+     "nodejs-binary",
+     "busybox-binary",
+     "util-linux-binary",
+     "haproxy-binary",
+     "perl-binary",
+     "php-composer-binary",
+     "httpd-binary",
+     "memcached-binary",
+     "traefik-binary",
+     "arangodb-binary",
+     "postgresql-binary",
+     "mysql-binary",
+     "mysql-binary",
+     "mysql-binary",
+     "mysqld-mysql-cluster-legacy-binary",
+     "mysqld-binary",
+     "ndbd-binary",
+     "ndbmtd-binary",
+     "ndb_mgmd-binary",
+     "xtrabackup-binary",
+     "mariadb-binary",
+     "rust-standard-library-linux",
+     "rust-standard-library-macos",
+     "ruby-binary",
+     "erlang-binary",
+     "erlang-alpine-binary",
+     "erlang-library",
+     "swipl-binary",
+     "dart-binary",
+     "deno-binary",
+     "bun-binary",
+     "haskell-ghc-binary",
+     "haskell-cabal-binary",
+     "haskell-stack-binary",
+     "consul-binary",
+     "hashicorp-vault-binary",
+     "nginx-binary",
+     "bash-binary",
+     "openssl-binary",
+     "openldap-search-binary",
+     "qt-qtbase-lib",
+     "gcc-binary",
+     "fluent-bit-binary",
+     "wordpress-cli-binary",
+     "curl-binary",
+     "lighttpd-binary",
+     "proftpd-binary",
+     "zstd-binary",
+     "xz-binary",
+     "gzip-binary",
+     "sqlcipher-binary",
+     "jq-binary",
+     "chrome-binary",
+     "firefox-binary",
+     "ffmpeg-binary",
+     "ffmpeg-library",
+     "ffmpeg-library",
+     "elixir-binary",
+     "elixir-library",
+     "istio-binary",
+     "istio-binary",
+     "grafana-binary",
+     "grafana-binary",
+     "envoy-binary",
+     "mongodb-binary",
+     "ingress-nginx-binary",
+     "filebeat-binary",
+     "metricbeat-binary",
+     "heartbeat-binary",
+     "packetbeat-binary",
+     "auditbeat-binary",
+     "elastic-agent-binary",
+     "krb5-library",
+     "heimdal-krb5-library",
+     "java-binary",
+     "java-jdb-binary"
+    ],
+    "cpp": {
+     "vcpkg-allow-git-clone": false
+    },
+    "dotnet": {
+     "dep-packages-must-claim-dll": true,
+     "dep-packages-must-have-dll": false,
+     "exclude-project-references": true,
+     "propagate-dll-claims-to-parents": true,
+     "relax-dll-claims-when-bundling-detected": true
+    },
+    "golang": {
+     "capture-symbols": "none",
+     "local-mod-cache-dir": "/Users/rezmoss/go/pkg/mod",
+     "local-vendor-dir": "",
+     "main-module-version": {
+      "from-build-settings": true,
+      "from-contents": false,
+      "from-ld-flags": true
+     },
+     "proxies": [
+      "https://proxy.golang.org",
+      "direct"
+     ],
+     "search-local-mod-cache-licenses": false,
+     "search-local-vendor-licenses": false,
+     "search-remote-licenses": false,
+     "use-packages-lib": true
+    },
+    "java-archive": {
+     "include-indexed-archives": true,
+     "include-unindexed-archives": false,
+     "maven-base-url": "https://repo1.maven.org/maven2",
+     "maven-localrepository-dir": "/Users/rezmoss/.m2/repository",
+     "max-depth": 0,
+     "max-disk-bytes": 0,
+     "max-memory-bytes": 0,
+     "max-parent-recursive-depth": 0,
+     "resolve-transitive-dependencies": false,
+     "use-maven-localrepository": false,
+     "use-network": false
+    },
+    "javascript": {
+     "include-dev-dependencies": false,
+     "npm-base-url": "https://registry.npmjs.org",
+     "search-remote-licenses": false
+    },
+    "linux-kernel": {
+     "catalog-modules": true
+    },
+    "nix": {
+     "capture-owned-files": false
+    },
+    "python": {
+     "guess-unpinned-requirements": false,
+     "pypi-base-url": "https://pypi.org/pypi",
+     "search-remote-licenses": false
+    }
+   },
+   "relationships": {
+    "exclude-binary-packages-with-file-ownership-overlap": true,
+    "package-file-ownership": true,
+    "package-file-ownership-overlap": true
+   },
+   "search": {
+    "scope": "squashed"
+   }
+  }
+ },
+ "schema": {
+  "version": "16.1.12",
+  "url": "https://raw.githubusercontent.com/anchore/syft/main/schema/json/schema-16.1.12.json"
+ }
+}

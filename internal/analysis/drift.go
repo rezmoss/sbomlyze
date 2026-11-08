@@ -1,8 +1,11 @@
 package analysis
 
 import (
+	"maps"
+	"slices"
 	"sort"
 
+	"github.com/rezmoss/sbomlyze/internal/identity"
 	"github.com/rezmoss/sbomlyze/internal/sbom"
 )
 
@@ -18,14 +21,17 @@ const (
 
 // DriftInfo holds drift details for a component.
 type DriftInfo struct {
-	Type         DriftType `json:"type"`
-	HashChanges  *HashDiff `json:"hash_changes,omitempty"`
-	VersionFrom  string    `json:"version_from,omitempty"`
-	VersionTo    string    `json:"version_to,omitempty"`
-	LicensesDiff []string  `json:"licenses_diff,omitempty"`
+	Type         DriftType  `json:"type"`
+	HashChanges  *HashDiff  `json:"hash_changes,omitempty"`
+	VersionFrom  string     `json:"version_from,omitempty"`
+	VersionTo    string     `json:"version_to,omitempty"`
+	Direction    string     `json:"direction,omitempty"` // upgrade|downgrade|none|unknown; version drift only
+	Level        string     `json:"level,omitempty"`     // major|minor|patch|prerelease|revision|none|unknown
+	Files        *FileDelta `json:"files,omitempty"`     // owned-file changes, if ownership recorded
+	LicensesDiff []string   `json:"licenses_diff,omitempty"`
 }
 
-// HashDiff tracks hash changes.
+// HashDiff: digest changes by kind
 type HashDiff struct {
 	Added   map[string]string     `json:"added,omitempty"`
 	Removed map[string]string     `json:"removed,omitempty"`
@@ -38,21 +44,69 @@ type HashChange struct {
 	After  string `json:"after"`
 }
 
-// DriftSummary aggregates drift counts.
+// DriftSummary: drift counts, per occurrence
 type DriftSummary struct {
-	VersionDrift   int `json:"version_drift"`
-	IntegrityDrift int `json:"integrity_drift"`
-	MetadataDrift  int `json:"metadata_drift"`
+	VersionDrift int `json:"version_drift"`
+	// same-version, same-location pkg digest change; no files
+	IntegrityDrift         int `json:"integrity_drift"`
+	MetadataDrift          int `json:"metadata_drift"`
+	Upgrades               int `json:"upgrades"`
+	Downgrades             int `json:"downgrades"`
+	UnknownDirection       int `json:"unknown_direction"`
+	DistinctVersionChanges int `json:"distinct_version_changes"` // identity + from + to
+	FileChanges            int `json:"file_changes"`
+	LicenseChanges         int `json:"license_changes"`
+	// same-ver pkgs w/ changed owned files; distinct files
+	OwnedFileDrift    int `json:"owned_file_drift"`
+	OwnedFilesChanged int `json:"owned_files_changed"`
 }
 
-// ChangedComponent holds a changed component with before/after state.
+// ChangedComponent: changed pkg occurrence, before/after
 type ChangedComponent struct {
-	ID      string         `json:"id"`
-	Name    string         `json:"name"`
-	Before  sbom.Component `json:"before"`
-	After   sbom.Component `json:"after"`
-	Changes []string       `json:"changes"`
-	Drift   *DriftInfo     `json:"drift,omitempty"`
+	ID       string         `json:"id"`
+	Name     string         `json:"name"`
+	Location string         `json:"location,omitempty"`
+	Before   sbom.Component `json:"before"`
+	After    sbom.Component `json:"after"`
+	Changes  []string       `json:"changes"`
+	Drift    *DriftInfo     `json:"drift,omitempty"`
+}
+
+// MovedComponent: same version, other location
+type MovedComponent struct {
+	ID      string `json:"id"`
+	Name    string `json:"name"`
+	Version string `json:"version"`
+	From    string `json:"from"`
+	To      string `json:"to"`
+}
+
+// FileChange: file entry w/ changed content
+type FileChange struct {
+	Path         string            `json:"path"`
+	HashesBefore map[string]string `json:"hashes_before,omitempty"`
+	HashesAfter  map[string]string `json:"hashes_after,omitempty"`
+	Owners       []string          `json:"owners,omitempty"` // name@version of owners, if known
+}
+
+// VersionSetChange: versions changed at one loc, unpaired
+type VersionSetChange struct {
+	ID              string   `json:"id"`
+	Name            string   `json:"name"`
+	Location        string   `json:"location,omitempty"`
+	RemovedVersions []string `json:"removed_versions"`
+	AddedVersions   []string `json:"added_versions"`
+}
+
+// DigestCoverage: same-ver pairs checkable for integrity
+type DigestCoverage struct {
+	SameVersionPairs int            `json:"same_version_pairs"` // same id, non-empty ver, same loc
+	Comparable       int            `json:"comparable"`         // share >=1 digest kind
+	BeforeOnly       int            `json:"before_only"`        // digests only before
+	AfterOnly        int            `json:"after_only"`         // digests only after
+	DisjointKinds    int            `json:"disjoint_kinds"`     // both have digests, no common kind
+	ByKind           map[string]int `json:"by_kind"`            // comparable pairs per kind
+	PackagesTotal    int            `json:"packages_total"`     // pkg occurrences in after SBOM
 }
 
 // PackageSample is a display sample.
@@ -72,21 +126,39 @@ type PackageSamplesByType struct {
 
 // DiffResult holds the complete SBOM comparison.
 type DiffResult struct {
-	Added         []sbom.Component     `json:"added,omitempty"`
-	Removed       []sbom.Component     `json:"removed,omitempty"`
-	Changed       []ChangedComponent   `json:"changed,omitempty"`
-	Duplicates    *DuplicateReport     `json:"duplicates,omitempty"`
-	Dependencies  *DependencyDiff      `json:"dependencies,omitempty"`
-	DriftSummary  *DriftSummary        `json:"drift_summary,omitempty"`
-	AddedByType   []PackageSamplesByType `json:"added_by_type,omitempty"`
-	RemovedByType []PackageSamplesByType `json:"removed_by_type,omitempty"`
+	Added             []sbom.Component       `json:"added,omitempty"`
+	Removed           []sbom.Component       `json:"removed,omitempty"`
+	Changed           []ChangedComponent     `json:"changed,omitempty"`
+	Moved             []MovedComponent       `json:"moved,omitempty"`
+	VersionSetChanges []VersionSetChange     `json:"version_set_changes,omitempty"`
+	FileChanges       []FileChange           `json:"file_changes,omitempty"`
+	FilesAdded        []FileRef              `json:"files_added,omitempty"`
+	FilesRemoved      []FileRef              `json:"files_removed,omitempty"`
+	OwnedFileDrift    []OwnedFileDrift       `json:"owned_file_drift,omitempty"`
+	Duplicates        *DuplicateReport       `json:"duplicates,omitempty"`
+	Dependencies      *DependencyDiff        `json:"dependencies,omitempty"`
+	DriftSummary      *DriftSummary          `json:"drift_summary,omitempty"`
+	DigestCoverage    *DigestCoverage        `json:"digest_coverage,omitempty"`
+	FileCoverage      *FileCoverage          `json:"file_coverage,omitempty"`
+	AddedByType       []PackageSamplesByType `json:"added_by_type,omitempty"`
+	RemovedByType     []PackageSamplesByType `json:"removed_by_type,omitempty"`
+
+	// SharedPackages: pkgs on both sides (incl. moved)
+	SharedPackages int `json:"-"`
+}
+
+// HasChanges: any diff that fails a change gate
+func (r DiffResult) HasChanges() bool {
+	return len(r.Added) > 0 || len(r.Removed) > 0 || len(r.Changed) > 0 ||
+		len(r.Moved) > 0 || len(r.FileChanges) > 0 || len(r.FilesAdded) > 0 ||
+		len(r.FilesRemoved) > 0 || len(r.OwnedFileDrift) > 0
 }
 
 func (h *HashDiff) IsEmpty() bool {
 	return len(h.Added) == 0 && len(h.Removed) == 0 && len(h.Changed) == 0
 }
 
-// ClassifyDrift classifies drift. Priority: integrity > version > metadata > none
+// ClassifyDrift: integrity > version > metadata > none
 func ClassifyDrift(before, after sbom.Component) DriftInfo {
 	drift := DriftInfo{Type: DriftTypeNone}
 
@@ -94,29 +166,22 @@ func ClassifyDrift(before, after sbom.Component) DriftInfo {
 	if versionChanged {
 		drift.VersionFrom = before.Version
 		drift.VersionTo = after.Version
+		purl := after.PURL
+		if purl == "" {
+			purl = before.PURL
+		}
+		drift.Direction, drift.Level = ClassifyVersionChange(ExtractPURLType(purl), before.Version, after.Version)
 	}
 
-	hashDiff := DiffHashes(before.Hashes, after.Hashes)
+	hashDiff := DiffHashes(before.DigestSet(), after.DigestSet())
 	if !hashDiff.IsEmpty() {
 		drift.HashChanges = &hashDiff
 	}
 
-	if !EqualSlices(before.Licenses, after.Licenses) {
-		beforeSet := ToSet(before.Licenses)
-		afterSet := ToSet(after.Licenses)
-		for lic := range afterSet {
-			if !beforeSet[lic] {
-				drift.LicensesDiff = append(drift.LicensesDiff, "+"+lic)
-			}
-		}
-		for lic := range beforeSet {
-			if !afterSet[lic] {
-				drift.LicensesDiff = append(drift.LicensesDiff, "-"+lic)
-			}
-		}
-	}
+	drift.LicensesDiff = diffLicenses(before.Licenses, after.Licenses)
 
-	if !hashDiff.IsEmpty() && !versionChanged {
+	isPackage := !before.IsEvidence() && !after.IsEvidence()
+	if !versionChanged && before.Version != "" && isPackage && len(hashDiff.Changed) > 0 {
 		drift.Type = DriftTypeIntegrity
 		return drift
 	}
@@ -132,6 +197,26 @@ func ClassifyDrift(before, after sbom.Component) DriftInfo {
 	}
 
 	return drift
+}
+
+func diffLicenses(before, after []string) []string {
+	if EqualSlices(before, after) {
+		return nil
+	}
+	var out []string
+	beforeSet := ToSet(before)
+	afterSet := ToSet(after)
+	for _, lic := range slices.Sorted(maps.Keys(afterSet)) {
+		if !beforeSet[lic] {
+			out = append(out, "+"+lic)
+		}
+	}
+	for _, lic := range slices.Sorted(maps.Keys(beforeSet)) {
+		if !afterSet[lic] {
+			out = append(out, "-"+lic)
+		}
+	}
+	return out
 }
 
 func DiffHashes(before, after map[string]string) HashDiff {
@@ -160,25 +245,43 @@ func DiffHashes(before, after map[string]string) HashDiff {
 	return diff
 }
 
-// SummarizeDrift aggregates drift counts.
+// SummarizeDrift aggregates drift counts
 func SummarizeDrift(changes []ChangedComponent) DriftSummary {
 	summary := DriftSummary{}
+	distinct := make(map[string]bool)
 
 	for _, c := range changes {
 		if c.Drift == nil {
 			continue
 		}
+		if len(c.Drift.LicensesDiff) > 0 {
+			summary.LicenseChanges++
+		}
 		switch c.Drift.Type {
 		case DriftTypeVersion:
 			summary.VersionDrift++
+			distinct[identity.MatchKey(c.ID)+"\x00"+c.Drift.VersionFrom+"\x00"+c.Drift.VersionTo] = true
+			switch c.Drift.Direction {
+			case DirectionUpgrade:
+				summary.Upgrades++
+			case DirectionDowngrade:
+				summary.Downgrades++
+			case DirectionUnknown:
+				summary.UnknownDirection++
+			}
 		case DriftTypeIntegrity:
 			summary.IntegrityDrift++
 		case DriftTypeMetadata:
 			summary.MetadataDrift++
 		}
 	}
+	summary.DistinctVersionChanges = len(distinct)
 
 	return summary
+}
+
+func (s DriftSummary) isEmpty() bool {
+	return s == DriftSummary{}
 }
 
 func ToSet(slice []string) map[string]bool {
@@ -207,66 +310,44 @@ func EqualSlices(a, b []string) bool {
 	return true
 }
 
-// DiffComponents compares two component sets.
+// DiffComponents: DiffSBOMs w/o file inventories
 func DiffComponents(before, after []sbom.Component) DiffResult {
+	return DiffSBOMs(before, after, nil, nil)
+}
+
+// DiffSBOMs: occurrence + file diff, order-independent
+func DiffSBOMs(before, after []sbom.Component, beforeFiles, afterFiles []sbom.FileEntry) DiffResult {
 	beforeDups := DetectDuplicates(before)
 	afterDups := DetectDuplicates(after)
 
-	beforeMap := make(map[string]sbom.Component)
-	afterMap := make(map[string]sbom.Component)
-
-	for _, c := range before {
-		if _, exists := beforeMap[c.ID]; !exists {
-			beforeMap[c.ID] = c
-		}
-	}
-	for _, c := range after {
-		if _, exists := afterMap[c.ID]; !exists {
-			afterMap[c.ID] = c
-		}
-	}
-
 	var result DiffResult
 
-	for id, c := range afterMap {
-		if _, exists := beforeMap[id]; !exists {
-			result.Added = append(result.Added, c)
+	beforePkgs, beforeFileComps := splitFiles(before)
+	afterPkgs, afterFileComps := splitFiles(after)
+	bi, ai := newFileIndex(beforeFiles, beforePkgs), newFileIndex(afterFiles, afterPkgs)
+	var cov FileCoverage
+	matchPackages(beforePkgs, afterPkgs, bi, ai, &result)
+	matchFiles(beforeFileComps, afterFileComps, &result, &cov)
+	if bi.present || ai.present {
+		diffInventories(bi, ai, &result, &cov)
+	}
+	if bi.present || ai.present || len(beforeFileComps)+len(afterFileComps) > 0 {
+		result.FileCoverage = &cov
+	}
+	sortResult(&result)
+
+	summary := SummarizeDrift(result.Changed)
+	summary.FileChanges = len(result.FileChanges)
+	summary.OwnedFileDrift = len(result.OwnedFileDrift)
+	changedFiles := map[string]bool{}
+	for _, d := range result.OwnedFileDrift {
+		for _, f := range d.Files {
+			changedFiles[f.Path] = true
 		}
 	}
-
-	for id, c := range beforeMap {
-		if _, exists := afterMap[id]; !exists {
-			result.Removed = append(result.Removed, c)
-		}
-	}
-
-	for id, b := range beforeMap {
-		if a, exists := afterMap[id]; exists {
-			changes := sbom.CompareComponents(b, a)
-			if len(changes) > 0 {
-				drift := ClassifyDrift(b, a)
-				result.Changed = append(result.Changed, ChangedComponent{
-					ID:      id,
-					Name:    b.Name,
-					Before:  b,
-					After:   a,
-					Changes: changes,
-					Drift:   &drift,
-				})
-			}
-		}
-	}
-
-	sort.Slice(result.Added, func(i, j int) bool { return result.Added[i].ID < result.Added[j].ID })
-	sort.Slice(result.Removed, func(i, j int) bool { return result.Removed[i].ID < result.Removed[j].ID })
-	sort.Slice(result.Changed, func(i, j int) bool { return result.Changed[i].ID < result.Changed[j].ID })
-
-	// Compute drift summary
-	if len(result.Changed) > 0 {
-		summary := SummarizeDrift(result.Changed)
-		if summary.VersionDrift > 0 || summary.IntegrityDrift > 0 || summary.MetadataDrift > 0 {
-			result.DriftSummary = &summary
-		}
+	summary.OwnedFilesChanged = len(changedFiles)
+	if !summary.isEmpty() {
+		result.DriftSummary = &summary
 	}
 
 	if len(beforeDups) > 0 || len(afterDups) > 0 {
@@ -326,7 +407,10 @@ func groupSamplesByType(comps []sbom.Component, maxSamples int) []PackageSamples
 		types = append(types, t)
 	}
 	sort.Slice(types, func(i, j int) bool {
-		return len(typeMap[types[i]]) > len(typeMap[types[j]])
+		if len(typeMap[types[i]]) != len(typeMap[types[j]]) {
+			return len(typeMap[types[i]]) > len(typeMap[types[j]])
+		}
+		return types[i] < types[j]
 	})
 
 	var result []PackageSamplesByType

@@ -63,7 +63,7 @@ func parseSPDXData(data []byte) ([]Component, SBOMInfo, error) {
 		return nil, SBOMInfo{}, err
 	}
 
-	var info SBOMInfo
+	info := SBOMInfo{Format: "SPDX", SpecVersion: doc.SPDXVersion}
 	// creationInfo: Tool -> tool meta, Person/Org -> author
 	if doc.CreationInfo != nil {
 		info.SBOMTimestamp = doc.CreationInfo.Created
@@ -130,13 +130,56 @@ func parseSPDXData(data []byte) ([]Component, SBOMInfo, error) {
 		comps = append(comps, comp)
 	}
 
+	// file inventory
+	fileByID := make(map[string]string, len(doc.Files))
+	for _, f := range doc.Files {
+		if f == nil {
+			continue
+		}
+		path := NormalizeFilePath(f.FileName)
+		if path == "" {
+			continue
+		}
+		e := FileEntry{Path: path}
+		for _, cs := range f.Checksums {
+			if cs.Value != "" {
+				if e.Hashes == nil {
+					e.Hashes = make(map[string]string, len(f.Checksums))
+				}
+				e.Hashes[string(cs.Algorithm)] = cs.Value
+			}
+		}
+		info.Files = append(info.Files, e)
+		fileByID[string(f.FileSPDXIdentifier)] = path
+	}
+
 	// relationships -> dep edges. DEPENDS_ON: A dep B; DEPENDENCY_OF: A is dep of B
 	idToIdx := make(map[string]int, len(comps))
 	for i, c := range comps {
 		idToIdx[c.SPDXID] = i
 	}
+	// described root contains all files; not ownership
+	described := make(map[string]bool)
+	for _, rel := range doc.Relationships {
+		if rel != nil && rel.Relationship == "DESCRIBES" {
+			described[string(rel.RefB.ElementRefID)] = true
+		}
+	}
 	for _, rel := range doc.Relationships {
 		if rel == nil {
+			continue
+		}
+		// CONTAINS = ownership; CONTAINED_BY reversed
+		if rel.Relationship == "CONTAINS" || rel.Relationship == "CONTAINED_BY" {
+			pkgRef, fileRef := string(rel.RefA.ElementRefID), string(rel.RefB.ElementRefID)
+			if rel.Relationship == "CONTAINED_BY" {
+				pkgRef, fileRef = fileRef, pkgRef
+			}
+			if idx, ok := idToIdx[pkgRef]; ok && !described[pkgRef] {
+				if path, ok := fileByID[fileRef]; ok {
+					comps[idx].OwnedFiles = append(comps[idx].OwnedFiles, path)
+				}
+			}
 			continue
 		}
 		var parentRef, childRef string

@@ -215,7 +215,7 @@ func PrintPackageSamples(added, removed []analysis.PackageSamplesByType) {
 
 // PrintTextDiff prints the diff in text format.
 func PrintTextDiff(result analysis.DiffResult) {
-	if len(result.Added) == 0 && len(result.Removed) == 0 && len(result.Changed) == 0 && result.Duplicates == nil && result.Dependencies == nil {
+	if !result.HasChanges() && result.Duplicates == nil && result.Dependencies == nil {
 		fmt.Println("No differences found")
 		return
 	}
@@ -230,6 +230,15 @@ func PrintTextDiff(result analysis.DiffResult) {
 		}
 		if result.DriftSummary.MetadataDrift > 0 {
 			fmt.Printf("  📝 Metadata drift:  %d components\n", result.DriftSummary.MetadataDrift)
+		}
+		if result.DriftSummary.UnknownDirection > 0 {
+			fmt.Printf("  ❓ Unknown direction: %d version changes\n", result.DriftSummary.UnknownDirection)
+		}
+		if result.DriftSummary.FileChanges > 0 {
+			fmt.Printf("  📄 File changes:    %d file entries (not package drift)\n", result.DriftSummary.FileChanges)
+		}
+		if result.DriftSummary.OwnedFileDrift > 0 {
+			fmt.Printf("  ⚠️  Owned file drift: %d packages (%d files changed without a version change)\n", result.DriftSummary.OwnedFileDrift, result.DriftSummary.OwnedFilesChanged)
 		}
 	}
 
@@ -247,6 +256,48 @@ func PrintTextDiff(result analysis.DiffResult) {
 		}
 	}
 
+	if len(result.VersionSetChanges) > 0 {
+		fmt.Printf("\n± Version set changes (%d, listed in added/removed):\n", len(result.VersionSetChanges))
+		for _, v := range result.VersionSetChanges {
+			fmt.Printf("  ± %s %v -> %v%s\n", v.Name, v.RemovedVersions, v.AddedVersions, atLocation(v.Location))
+		}
+	}
+
+	if len(result.Moved) > 0 {
+		fmt.Printf("\n> Moved (%d):\n", len(result.Moved))
+		for _, m := range result.Moved {
+			fmt.Printf("  > %s %s: %s -> %s\n", m.Name, m.Version, m.From, m.To)
+		}
+	}
+
+	if len(result.OwnedFileDrift) > 0 {
+		fmt.Printf("\n⚠️  Owned file drift (%d packages, same version, files changed):\n", len(result.OwnedFileDrift))
+		for _, d := range result.OwnedFileDrift {
+			fmt.Printf("  ! %s %s%s\n", d.Name, d.Version, atLocation(d.Location))
+			for _, f := range d.Files {
+				cfg := ""
+				if f.Config == analysis.ConfigYes {
+					cfg = " (config)"
+				}
+				fmt.Printf("      %s %s%s\n", f.Change, f.Path, cfg)
+			}
+		}
+	}
+
+	if len(result.FileChanges) > 0 {
+		fmt.Printf("\n📄 File changes (%d):\n", len(result.FileChanges))
+		for _, f := range result.FileChanges {
+			owners := ""
+			if len(f.Owners) > 0 {
+				owners = " (" + strings.Join(f.Owners, ", ") + ")"
+			}
+			fmt.Printf("  ~ %s%s\n", f.Path, owners)
+		}
+	}
+	if n := len(result.FilesAdded) + len(result.FilesRemoved); n > 0 {
+		fmt.Printf("\n📄 Files added: %d, removed: %d\n", len(result.FilesAdded), len(result.FilesRemoved))
+	}
+
 	if len(result.Changed) > 0 {
 		fmt.Printf("\n~ Changed (%d):\n", len(result.Changed))
 		for _, c := range result.Changed {
@@ -256,12 +307,14 @@ func PrintTextDiff(result analysis.DiffResult) {
 				case analysis.DriftTypeIntegrity:
 					driftIndicator = " ⚠️  [INTEGRITY]"
 				case analysis.DriftTypeVersion:
-					driftIndicator = ""
+					if c.Drift.Direction == analysis.DirectionDowngrade || c.Drift.Direction == analysis.DirectionUnknown {
+						driftIndicator = " [" + c.Drift.Direction + "]"
+					}
 				case analysis.DriftTypeMetadata:
 					driftIndicator = " [metadata]"
 				}
 			}
-			fmt.Printf("  ~ %s%s\n", c.Name, driftIndicator)
+			fmt.Printf("  ~ %s%s%s\n", c.Name, atLocation(c.Location), driftIndicator)
 			for _, ch := range c.Changes {
 				fmt.Printf("      %s\n", ch)
 			}
@@ -428,4 +481,11 @@ func PrintViolationsTo(w io.Writer, violations []policy.Violation) {
 		}
 	}
 	_, _ = fmt.Fprintln(w)
+}
+
+func atLocation(loc string) string {
+	if loc == "" {
+		return ""
+	}
+	return " @ " + loc
 }

@@ -1,0 +1,1395 @@
+{
+ "artifacts": [
+  {
+   "id": "b9b938d306dff5db",
+   "name": "alpine-baselayout-data",
+   "version": "3.6.5-r0",
+   "type": "apk",
+   "foundBy": "apk-db-cataloger",
+   "locations": [
+    {
+     "path": "/lib/apk/db/installed",
+     "layerID": "sha256:08bc4e534116aa76b16015484b82eac51f9a593416feae9296c8a2d4bb7aa4a2",
+     "accessPath": "/lib/apk/db/installed",
+     "annotations": {
+      "evidence": "primary"
+     }
+    }
+   ],
+   "licenses": [
+    {
+     "value": "GPL-2.0-only",
+     "spdxExpression": "GPL-2.0-only",
+     "type": "declared",
+     "urls": [],
+     "locations": [
+      {
+       "path": "/lib/apk/db/installed",
+       "layerID": "sha256:08bc4e534116aa76b16015484b82eac51f9a593416feae9296c8a2d4bb7aa4a2",
+       "accessPath": "/lib/apk/db/installed",
+       "annotations": {
+        "evidence": "primary"
+       }
+      }
+     ]
+    }
+   ],
+   "language": "",
+   "cpes": [
+    {
+     "cpe": "cpe:2.3:a:alpine-baselayout-data:alpine-baselayout-data:3.6.5-r0:*:*:*:*:*:*:*",
+     "source": "syft-generated"
+    },
+    {
+     "cpe": "cpe:2.3:a:alpine-baselayout-data:alpine_baselayout_data:3.6.5-r0:*:*:*:*:*:*:*",
+     "source": "syft-generated"
+    },
+    {
+     "cpe": "cpe:2.3:a:alpine_baselayout_data:alpine-baselayout-data:3.6.5-r0:*:*:*:*:*:*:*",
+     "source": "syft-generated"
+    },
+    {
+     "cpe": "cpe:2.3:a:alpine_baselayout_data:alpine_baselayout_data:3.6.5-r0:*:*:*:*:*:*:*",
+     "source": "syft-generated"
+    },
+    {
+     "cpe": "cpe:2.3:a:alpine-baselayout:alpine-baselayout-data:3.6.5-r0:*:*:*:*:*:*:*",
+     "source": "syft-generated"
+    },
+    {
+     "cpe": "cpe:2.3:a:alpine-baselayout:alpine_baselayout_data:3.6.5-r0:*:*:*:*:*:*:*",
+     "source": "syft-generated"
+    },
+    {
+     "cpe": "cpe:2.3:a:alpine_baselayout:alpine-baselayout-data:3.6.5-r0:*:*:*:*:*:*:*",
+     "source": "syft-generated"
+    },
+    {
+     "cpe": "cpe:2.3:a:alpine_baselayout:alpine_baselayout_data:3.6.5-r0:*:*:*:*:*:*:*",
+     "source": "syft-generated"
+    },
+    {
+     "cpe": "cpe:2.3:a:alpine:alpine-baselayout-data:3.6.5-r0:*:*:*:*:*:*:*",
+     "source": "syft-generated"
+    },
+    {
+     "cpe": "cpe:2.3:a:alpine:alpine_baselayout_data:3.6.5-r0:*:*:*:*:*:*:*",
+     "source": "syft-generated"
+    }
+   ],
+   "purl": "pkg:apk/alpine/alpine-baselayout-data@3.6.5-r0?arch=x86_64&distro=alpine-3.20.10&upstream=alpine-baselayout",
+   "metadataType": "apk-db-entry",
+   "metadata": {
+    "package": "alpine-baselayout-data",
+    "originPackage": "alpine-baselayout",
+    "maintainer": "Natanael Copa <ncopa@alpinelinux.org>",
+    "version": "3.6.5-r0",
+    "architecture": "x86_64",
+    "url": "https://git.alpinelinux.org/cgit/aports/tree/main/alpine-baselayout",
+    "description": "Alpine base dir structure and init scripts",
+    "size": 11235,
+    "installedSize": 77824,
+    "pullDependencies": [],
+    "provides": [],
+    "pullChecksum": "Q17mim+wL35iMEtCiwQEovweL8NT0=",
+    "gitCommitOfApkPort": "66187892e05b03a41d08e9acabd19b7576a1c875",
+    "files": [
+     {
+      "path": "/etc/fstab",
+      "digest": {
+       "algorithm": "'Q1'+base64(sha1)",
+       "value": "Q11Q7hNe8QpDS531guqCdrXBzoA/o="
+      }
+     },
+     {
+      "path": "/etc/group",
+      "digest": {
+       "algorithm": "'Q1'+base64(sha1)",
+       "value": "Q12Otk4M39fP2Zjkobu0nC9FvlRI0="
+      }
+     },
+     {
+      "path": "/etc/hostname",
+      "digest": {
+       "algorithm": "'Q1'+base64(sha1)",
+       "value": "Q16nVwYVXP/tChvUPdukVD2ifXOmc="
+      }
+     },
+     {
+      "path": "/etc/hosts",
+      "digest": {
+       "algorithm": "'Q1'+base64(sha1)",
+       "value": "Q1BD6zJKZTRWyqGnPi4tSfd3krsMU="
+      }
+     },
+     {
+      "path": "/etc/inittab",
+      "digest": {
+       "algorithm": "'Q1'+base64(sha1)",
+       "value": "Q1zpWG0qzx2UYnZSWaIczE+WpAIVE="
+      }
+     },
+     {
+      "path": "/etc/modules",
+      "digest": {
+       "algorithm": "'Q1'+base64(sha1)",
+       "value": "Q1toogjUipHGcMgECgPJX64SwUT1M="
+      }
+     },
+     {
+      "path": "/etc/nsswitch.conf",
+      "digest": {
+       "algorithm": "'Q1'+base64(sha1)",
+       "value": "Q19DBsMnv0R2fajaTjoTv0C91NOqo="
+      }
+     },
+     {
+      "path": "/etc/passwd",
+      "digest": {
+       "algorithm": "'Q1'+base64(sha1)",
+       "value": "Q1r+bLonZkAyBix/HLgSeDsez22Zs="
+      }
+     },
+     {
+      "path": "/etc/profile",
+      "digest": {
+       "algorithm": "'Q1'+base64(sha1)",
+       "value": "Q1VN0dmawDg3mBE/ljB+6bUrC7Dzc="
+      }
+     },
+     {
+      "path": "/etc/protocols",
+      "digest": {
+       "algorithm": "'Q1'+base64(sha1)",
+       "value": "Q11fllRTkIm5bxsZVoSNeDUn2m+0c="
+      }
+     },
+     {
+      "path": "/etc/services",
+      "digest": {
+       "algorithm": "'Q1'+base64(sha1)",
+       "value": "Q1oNeiKb8En3/hfoRFImI25AJFNdA="
+      }
+     },
+     {
+      "path": "/etc/shadow",
+      "ownerUid": "0",
+      "ownerGid": "42",
+      "permissions": "640",
+      "digest": {
+       "algorithm": "'Q1'+base64(sha1)",
+       "value": "Q1miRFe6MuYCWAiVxqiFzhddegBq4="
+      }
+     },
+     {
+      "path": "/etc/shells",
+      "digest": {
+       "algorithm": "'Q1'+base64(sha1)",
+       "value": "Q1ojm2YdpCJ6B/apGDaZ/Sdb2xJkA="
+      }
+     },
+     {
+      "path": "/etc/sysctl.conf",
+      "digest": {
+       "algorithm": "'Q1'+base64(sha1)",
+       "value": "Q14upz3tfnNxZkIEsUhWn7Xoiw96g="
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "eb7a53da2e2526a9",
+   "name": "busybox",
+   "version": "1.36.1-r31",
+   "type": "apk",
+   "foundBy": "apk-db-cataloger",
+   "locations": [
+    {
+     "path": "/lib/apk/db/installed",
+     "layerID": "sha256:08bc4e534116aa76b16015484b82eac51f9a593416feae9296c8a2d4bb7aa4a2",
+     "accessPath": "/lib/apk/db/installed",
+     "annotations": {
+      "evidence": "primary"
+     }
+    }
+   ],
+   "licenses": [
+    {
+     "value": "GPL-2.0-only",
+     "spdxExpression": "GPL-2.0-only",
+     "type": "declared",
+     "urls": [],
+     "locations": [
+      {
+       "path": "/lib/apk/db/installed",
+       "layerID": "sha256:08bc4e534116aa76b16015484b82eac51f9a593416feae9296c8a2d4bb7aa4a2",
+       "accessPath": "/lib/apk/db/installed",
+       "annotations": {
+        "evidence": "primary"
+       }
+      }
+     ]
+    }
+   ],
+   "language": "",
+   "cpes": [
+    {
+     "cpe": "cpe:2.3:a:busybox:busybox:1.36.1-r31:*:*:*:*:*:*:*",
+     "source": "syft-generated"
+    }
+   ],
+   "purl": "pkg:apk/alpine/busybox@1.36.1-r31?arch=x86_64&distro=alpine-3.20.10",
+   "metadataType": "apk-db-entry",
+   "metadata": {
+    "package": "busybox",
+    "originPackage": "busybox",
+    "maintainer": "S\u00f6ren Tempel <soeren+alpine@soeren-tempel.net>",
+    "version": "1.36.1-r31",
+    "architecture": "x86_64",
+    "url": "https://busybox.net/",
+    "description": "Size optimized toolbox of many common UNIX utilities",
+    "size": 504644,
+    "installedSize": 929792,
+    "pullDependencies": [
+     "so:libc.musl-x86_64.so.1"
+    ],
+    "provides": [
+     "cmd:busybox=1.36.1-r31"
+    ],
+    "pullChecksum": "Q10x0SiWGr7WTkprUc9El8xZKQq28=",
+    "gitCommitOfApkPort": "5842f00d25a8fd0ecce5429c5748a037e05507db",
+    "files": [
+     {
+      "path": "/bin/busybox",
+      "ownerUid": "0",
+      "ownerGid": "0",
+      "permissions": "755",
+      "digest": {
+       "algorithm": "'Q1'+base64(sha1)",
+       "value": "Q1KTT9MySj4hlSAEAqUo6+q5TGjco="
+      }
+     },
+     {
+      "path": "/etc/securetty",
+      "digest": {
+       "algorithm": "'Q1'+base64(sha1)",
+       "value": "Q1DinOf6JRpCRgM6vNqjOexd3oSnU="
+      }
+     },
+     {
+      "path": "/etc/busybox-paths.d/busybox",
+      "digest": {
+       "algorithm": "'Q1'+base64(sha1)",
+       "value": "Q1r5ly2rkn+0v8v1dN6M+HBJKmZlc="
+      }
+     },
+     {
+      "path": "/etc/logrotate.d/acpid",
+      "digest": {
+       "algorithm": "'Q1'+base64(sha1)",
+       "value": "Q1TylyCINVmnS+A/Tead4vZhE7Bks="
+      }
+     },
+     {
+      "path": "/etc/network/if-up.d/dad",
+      "ownerUid": "0",
+      "ownerGid": "0",
+      "permissions": "775",
+      "digest": {
+       "algorithm": "'Q1'+base64(sha1)",
+       "value": "Q13dmbwZfDboqaq5Rjqu69pEp6gCk="
+      }
+     },
+     {
+      "path": "/etc/udhcpc/udhcpc.conf",
+      "digest": {
+       "algorithm": "'Q1'+base64(sha1)",
+       "value": "Q1m8Bp5DQijmykQYSL+3prrCP6FIo="
+      }
+     },
+     {
+      "path": "/usr/share/udhcpc/default.script",
+      "ownerUid": "0",
+      "ownerGid": "0",
+      "permissions": "755",
+      "digest": {
+       "algorithm": "'Q1'+base64(sha1)",
+       "value": "Q1HWpG3eQD8Uoi4mks2E3SSvOAUhY="
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "e4b41b4685cbca2e",
+   "name": "busybox-binsh",
+   "version": "1.36.1-r31",
+   "type": "apk",
+   "foundBy": "apk-db-cataloger",
+   "locations": [
+    {
+     "path": "/lib/apk/db/installed",
+     "layerID": "sha256:08bc4e534116aa76b16015484b82eac51f9a593416feae9296c8a2d4bb7aa4a2",
+     "accessPath": "/lib/apk/db/installed",
+     "annotations": {
+      "evidence": "primary"
+     }
+    }
+   ],
+   "licenses": [
+    {
+     "value": "GPL-2.0-only",
+     "spdxExpression": "GPL-2.0-only",
+     "type": "declared",
+     "urls": [],
+     "locations": [
+      {
+       "path": "/lib/apk/db/installed",
+       "layerID": "sha256:08bc4e534116aa76b16015484b82eac51f9a593416feae9296c8a2d4bb7aa4a2",
+       "accessPath": "/lib/apk/db/installed",
+       "annotations": {
+        "evidence": "primary"
+       }
+      }
+     ]
+    }
+   ],
+   "language": "",
+   "cpes": [
+    {
+     "cpe": "cpe:2.3:a:busybox-binsh:busybox-binsh:1.36.1-r31:*:*:*:*:*:*:*",
+     "source": "syft-generated"
+    },
+    {
+     "cpe": "cpe:2.3:a:busybox-binsh:busybox_binsh:1.36.1-r31:*:*:*:*:*:*:*",
+     "source": "syft-generated"
+    },
+    {
+     "cpe": "cpe:2.3:a:busybox_binsh:busybox-binsh:1.36.1-r31:*:*:*:*:*:*:*",
+     "source": "syft-generated"
+    },
+    {
+     "cpe": "cpe:2.3:a:busybox_binsh:busybox_binsh:1.36.1-r31:*:*:*:*:*:*:*",
+     "source": "syft-generated"
+    },
+    {
+     "cpe": "cpe:2.3:a:busybox:busybox-binsh:1.36.1-r31:*:*:*:*:*:*:*",
+     "source": "syft-generated"
+    },
+    {
+     "cpe": "cpe:2.3:a:busybox:busybox_binsh:1.36.1-r31:*:*:*:*:*:*:*",
+     "source": "syft-generated"
+    }
+   ],
+   "purl": "pkg:apk/alpine/busybox-binsh@1.36.1-r31?arch=x86_64&distro=alpine-3.20.10&upstream=busybox",
+   "metadataType": "apk-db-entry",
+   "metadata": {
+    "package": "busybox-binsh",
+    "originPackage": "busybox",
+    "maintainer": "S\u00f6ren Tempel <soeren+alpine@soeren-tempel.net>",
+    "version": "1.36.1-r31",
+    "architecture": "x86_64",
+    "url": "https://busybox.net/",
+    "description": "busybox ash /bin/sh",
+    "size": 1509,
+    "installedSize": 8192,
+    "pullDependencies": [
+     "busybox=1.36.1-r31"
+    ],
+    "provides": [
+     "/bin/sh",
+     "cmd:sh=1.36.1-r31"
+    ],
+    "pullChecksum": "Q1Wqw2SDAjJB4XladoZGL2so5Q6uQ=",
+    "gitCommitOfApkPort": "5842f00d25a8fd0ecce5429c5748a037e05507db",
+    "files": []
+   }
+  }
+ ],
+ "artifactRelationships": [
+  {
+   "parent": "b9b938d306dff5db",
+   "child": "10d903bc2070a2e5",
+   "type": "contains"
+  },
+  {
+   "parent": "b9b938d306dff5db",
+   "child": "2c60f19e0fb95f01",
+   "type": "contains"
+  },
+  {
+   "parent": "b9b938d306dff5db",
+   "child": "3a31d7a3efa5e251",
+   "type": "contains"
+  },
+  {
+   "parent": "b9b938d306dff5db",
+   "child": "3e37c6d4aff77c9a",
+   "type": "contains"
+  },
+  {
+   "parent": "b9b938d306dff5db",
+   "child": "4859338a63b983f5",
+   "type": "contains"
+  },
+  {
+   "parent": "b9b938d306dff5db",
+   "child": "6cbb7d0f3a1cf5bc",
+   "type": "contains"
+  },
+  {
+   "parent": "b9b938d306dff5db",
+   "child": "877796d4a3c33a21",
+   "type": "contains"
+  },
+  {
+   "parent": "b9b938d306dff5db",
+   "child": "92da544ac8b40cf9",
+   "type": "contains"
+  },
+  {
+   "parent": "b9b938d306dff5db",
+   "child": "9b236c1df9247182",
+   "type": "contains"
+  },
+  {
+   "parent": "b9b938d306dff5db",
+   "child": "a5a27b5386d00367",
+   "type": "evident-by",
+   "metadata": {
+    "kind": "primary"
+   }
+  },
+  {
+   "parent": "b9b938d306dff5db",
+   "child": "acadce894f3a14d5",
+   "type": "contains"
+  },
+  {
+   "parent": "b9b938d306dff5db",
+   "child": "aec53c54f82a4689",
+   "type": "contains"
+  },
+  {
+   "parent": "b9b938d306dff5db",
+   "child": "be3ce0965ef30907",
+   "type": "contains"
+  },
+  {
+   "parent": "b9b938d306dff5db",
+   "child": "cc7737fdc5010e0e",
+   "type": "contains"
+  },
+  {
+   "parent": "b9b938d306dff5db",
+   "child": "cea5e4571902daaf",
+   "type": "contains"
+  },
+  {
+   "parent": "e4b41b4685cbca2e",
+   "child": "a5a27b5386d00367",
+   "type": "evident-by",
+   "metadata": {
+    "kind": "primary"
+   }
+  },
+  {
+   "parent": "e4b41b4685cbca2e",
+   "child": "d12f0702ccc190b8",
+   "type": "contains"
+  },
+  {
+   "parent": "eb7a53da2e2526a9",
+   "child": "3034025b32a68fd8",
+   "type": "contains"
+  },
+  {
+   "parent": "eb7a53da2e2526a9",
+   "child": "41c602f6589887b4",
+   "type": "contains"
+  },
+  {
+   "parent": "eb7a53da2e2526a9",
+   "child": "5232c756a053df25",
+   "type": "contains"
+  },
+  {
+   "parent": "eb7a53da2e2526a9",
+   "child": "6e41c569786ae95b",
+   "type": "contains"
+  },
+  {
+   "parent": "eb7a53da2e2526a9",
+   "child": "88f8f95d3f8f275f",
+   "type": "contains"
+  },
+  {
+   "parent": "eb7a53da2e2526a9",
+   "child": "a5a27b5386d00367",
+   "type": "evident-by",
+   "metadata": {
+    "kind": "primary"
+   }
+  },
+  {
+   "parent": "eb7a53da2e2526a9",
+   "child": "d12f0702ccc190b8",
+   "type": "contains"
+  },
+  {
+   "parent": "eb7a53da2e2526a9",
+   "child": "e4b41b4685cbca2e",
+   "type": "dependency-of"
+  },
+  {
+   "parent": "eb7a53da2e2526a9",
+   "child": "e4d3d5ee2f461a18",
+   "type": "contains"
+  }
+ ],
+ "files": [
+  {
+   "id": "d12f0702ccc190b8",
+   "location": {
+    "path": "/bin/busybox",
+    "layerID": "sha256:08bc4e534116aa76b16015484b82eac51f9a593416feae9296c8a2d4bb7aa4a2"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "application/x-sharedlib",
+    "size": 808712
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "2934fd3324a3e2195200402a528ebeab94c68dca"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "b7de36c48f4c8b08a256200f3d6ccf20b9aade3219e356563a5ec3f12db78d7b"
+    }
+   ],
+   "executable": {
+    "format": "elf",
+    "hasExports": true,
+    "hasEntrypoint": true,
+    "importedLibraries": [
+     "libc.musl-x86_64.so.1"
+    ],
+    "elfSecurityFeatures": {
+     "symbolTableStripped": true,
+     "stackCanary": true,
+     "nx": true,
+     "relRO": "full",
+     "pie": true,
+     "dso": true,
+     "safeStack": false
+    }
+   }
+  },
+  {
+   "id": "41c602f6589887b4",
+   "location": {
+    "path": "/etc/busybox-paths.d/busybox",
+    "layerID": "sha256:08bc4e534116aa76b16015484b82eac51f9a593416feae9296c8a2d4bb7aa4a2"
+   },
+   "metadata": {
+    "mode": 644,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/plain",
+    "size": 3989
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "af9972dab927fb4bfcbf574de8cf870492a66657"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "e12e0822f5c6426b62f07799a0fc20394241535c5bc2cc8f10c8a25088b8defa"
+    }
+   ]
+  },
+  {
+   "id": "4859338a63b983f5",
+   "location": {
+    "path": "/etc/fstab",
+    "layerID": "sha256:08bc4e534116aa76b16015484b82eac51f9a593416feae9296c8a2d4bb7aa4a2"
+   },
+   "metadata": {
+    "mode": 644,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/csv",
+    "size": 89
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "d50ee135ef10a434b9df582ea8276b5c1ce803fa"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "a3efca2e8d62785c87517283092b4c800d88612b6f3f06b80a4c2f39d8e68841"
+    }
+   ]
+  },
+  {
+   "id": "6cbb7d0f3a1cf5bc",
+   "location": {
+    "path": "/etc/group",
+    "layerID": "sha256:08bc4e534116aa76b16015484b82eac51f9a593416feae9296c8a2d4bb7aa4a2"
+   },
+   "metadata": {
+    "mode": 644,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/plain",
+    "size": 510
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "d8eb64e0cdfd7cfd998e4a1bbb49c2f45be5448d"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "6fb6ab5a5526e6f4896b70c7e3c350fd475158a1f0d7b5fc0f3f9bd57f1c3be8"
+    }
+   ]
+  },
+  {
+   "id": "3a31d7a3efa5e251",
+   "location": {
+    "path": "/etc/hostname",
+    "layerID": "sha256:08bc4e534116aa76b16015484b82eac51f9a593416feae9296c8a2d4bb7aa4a2"
+   },
+   "metadata": {
+    "mode": 644,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/plain",
+    "size": 10
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "ea75706155cffed0a1bd43ddba4543da27d73a67"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "d906aecb61d076a967d9ffe8821c7b04b063f72df9d9e35b33ef36b1c0d98f16"
+    }
+   ]
+  },
+  {
+   "id": "92da544ac8b40cf9",
+   "location": {
+    "path": "/etc/hosts",
+    "layerID": "sha256:08bc4e534116aa76b16015484b82eac51f9a593416feae9296c8a2d4bb7aa4a2"
+   },
+   "metadata": {
+    "mode": 644,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/plain",
+    "size": 79
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "043eb324a653456caa1a73e2e2d49f77792bb0c5"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "e3998dbe02b51dada33de87ae43d18a93ab6915b9e34f5a751bf2b9b25a55492"
+    }
+   ]
+  },
+  {
+   "id": "877796d4a3c33a21",
+   "location": {
+    "path": "/etc/inittab",
+    "layerID": "sha256:08bc4e534116aa76b16015484b82eac51f9a593416feae9296c8a2d4bb7aa4a2"
+   },
+   "metadata": {
+    "mode": 644,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/plain",
+    "size": 570
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "ce9586d2acf1d9462765259a21ccc4f96a402151"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "7326d8ad56bf5fea63b1ca516a747ff6e6723e25ae84a93c31620b03de6c001d"
+    }
+   ]
+  },
+  {
+   "id": "e4d3d5ee2f461a18",
+   "location": {
+    "path": "/etc/logrotate.d/acpid",
+    "layerID": "sha256:08bc4e534116aa76b16015484b82eac51f9a593416feae9296c8a2d4bb7aa4a2"
+   },
+   "metadata": {
+    "mode": 644,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/plain",
+    "size": 140
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "4f29720883559a74be03f4de69de2f66113b064b"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "d608a3b7715886b5735def0cc50a6359fd364fac2e0e0a459c588c04be471031"
+    }
+   ]
+  },
+  {
+   "id": "acadce894f3a14d5",
+   "location": {
+    "path": "/etc/modules",
+    "layerID": "sha256:08bc4e534116aa76b16015484b82eac51f9a593416feae9296c8a2d4bb7aa4a2"
+   },
+   "metadata": {
+    "mode": 644,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/plain",
+    "size": 15
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "b68a208d48a91c670c8040a03c95fae12c144f53"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "2c881de75a5409c35d2433a24f180b8b02ba478ef2c1c60ea3434a35bcbc335d"
+    }
+   ]
+  },
+  {
+   "id": "5232c756a053df25",
+   "location": {
+    "path": "/etc/network/if-up.d/dad",
+    "layerID": "sha256:08bc4e534116aa76b16015484b82eac51f9a593416feae9296c8a2d4bb7aa4a2"
+   },
+   "metadata": {
+    "mode": 775,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/x-shellscript",
+    "size": 285
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "ddd99bc197c36e8a9aab9463aaeebda44a7a8029"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "2fd20d1bc67d9ee711990002b24f156635a73f56b8935b2f76592938817fa4e7"
+    }
+   ]
+  },
+  {
+   "id": "cea5e4571902daaf",
+   "location": {
+    "path": "/etc/nsswitch.conf",
+    "layerID": "sha256:08bc4e534116aa76b16015484b82eac51f9a593416feae9296c8a2d4bb7aa4a2"
+   },
+   "metadata": {
+    "mode": 644,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/plain",
+    "size": 205
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "f4306c327bf44767da8da4e3a13bf40bdd4d3aaa"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "0afd94c183d30a348b45057f6bf468e121aa448a7641109addb5bb8e282f514d"
+    }
+   ]
+  },
+  {
+   "id": "2c60f19e0fb95f01",
+   "location": {
+    "path": "/etc/passwd",
+    "layerID": "sha256:08bc4e534116aa76b16015484b82eac51f9a593416feae9296c8a2d4bb7aa4a2"
+   },
+   "metadata": {
+    "mode": 644,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/plain",
+    "size": 702
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "afe6cba27664032062c7f1cb812783b1ecf6d99b"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "31a94f06f17bc3b9085fccab1d0fa6ee9e79c4a1e4d91f617fa5de95863be015"
+    }
+   ]
+  },
+  {
+   "id": "be3ce0965ef30907",
+   "location": {
+    "path": "/etc/profile",
+    "layerID": "sha256:08bc4e534116aa76b16015484b82eac51f9a593416feae9296c8a2d4bb7aa4a2"
+   },
+   "metadata": {
+    "mode": 644,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/plain",
+    "size": 547
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "54dd1d99ac0383798113f96307ee9b52b0bb0f37"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "87e8643d3ce156de0c09370d4d39446f30bd00d264bea248abc191c4d7b9df3e"
+    }
+   ]
+  },
+  {
+   "id": "cc7737fdc5010e0e",
+   "location": {
+    "path": "/etc/protocols",
+    "layerID": "sha256:08bc4e534116aa76b16015484b82eac51f9a593416feae9296c8a2d4bb7aa4a2"
+   },
+   "metadata": {
+    "mode": 644,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/plain",
+    "size": 3144
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "d5f9654539089b96f1b1956848d783527da6fb47"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "4959498abbadaa1e50894a266f8d0d94500101cfe5b5f09dcad82e9d5bdfab46"
+    }
+   ]
+  },
+  {
+   "id": "6e41c569786ae95b",
+   "location": {
+    "path": "/etc/securetty",
+    "layerID": "sha256:08bc4e534116aa76b16015484b82eac51f9a593416feae9296c8a2d4bb7aa4a2"
+   },
+   "metadata": {
+    "mode": 644,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/plain",
+    "size": 156
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "0e29ce7fa251a4246033abcdaa339ec5dde84a75"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "713fcea5109728883b9147e822429133fcc8b5e253afd3c2a197b10cd0bc3b4d"
+    }
+   ]
+  },
+  {
+   "id": "10d903bc2070a2e5",
+   "location": {
+    "path": "/etc/services",
+    "layerID": "sha256:08bc4e534116aa76b16015484b82eac51f9a593416feae9296c8a2d4bb7aa4a2"
+   },
+   "metadata": {
+    "mode": 644,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/plain",
+    "size": 12813
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "a0d7a229bf049f7fe17e8445226236e4024535d0"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "f6183055fd949f9c53d49ee620f85d0150123ea691d25ed1bba0c641b4ee2f48"
+    }
+   ]
+  },
+  {
+   "id": "9b236c1df9247182",
+   "location": {
+    "path": "/etc/shadow",
+    "layerID": "sha256:08bc4e534116aa76b16015484b82eac51f9a593416feae9296c8a2d4bb7aa4a2"
+   },
+   "metadata": {
+    "mode": 640,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 42,
+    "mimeType": "text/plain",
+    "size": 260
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "fdcce813d9a3aa27fffcf07126d2deabf17cb057"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "d5992a27f05f380fc5faeb82a3359e2f230fd1d6ea6517b45892b771a2194ddb"
+    }
+   ]
+  },
+  {
+   "id": "aec53c54f82a4689",
+   "location": {
+    "path": "/etc/shells",
+    "layerID": "sha256:08bc4e534116aa76b16015484b82eac51f9a593416feae9296c8a2d4bb7aa4a2"
+   },
+   "metadata": {
+    "mode": 644,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/plain",
+    "size": 38
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "a239b661da4227a07f6a9183699fd275bdb12640"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "24be6ceb236610df45684c83b06c918ae45635be55f69975e43676b7595bbc5f"
+    }
+   ]
+  },
+  {
+   "id": "3e37c6d4aff77c9a",
+   "location": {
+    "path": "/etc/sysctl.conf",
+    "layerID": "sha256:08bc4e534116aa76b16015484b82eac51f9a593416feae9296c8a2d4bb7aa4a2"
+   },
+   "metadata": {
+    "mode": 644,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/plain",
+    "size": 53
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "e2ea73ded7e7371664204b148569fb5e88b0f7a8"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "8bba47da45bc8715c69ac904a60410eabffaa7bbbef640f9c1368ab9c48493d0"
+    }
+   ]
+  },
+  {
+   "id": "3034025b32a68fd8",
+   "location": {
+    "path": "/etc/udhcpc/udhcpc.conf",
+    "layerID": "sha256:08bc4e534116aa76b16015484b82eac51f9a593416feae9296c8a2d4bb7aa4a2"
+   },
+   "metadata": {
+    "mode": 644,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/plain",
+    "size": 287
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "9bc069e434228e6ca441848bfb7a6bac23fa148a"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "5b372209e01cda07c87b8afa6d1ab3d7e8daf18a1f2332d744203a6dc289eb1a"
+    }
+   ]
+  },
+  {
+   "id": "a5a27b5386d00367",
+   "location": {
+    "path": "/lib/apk/db/installed",
+    "layerID": "sha256:08bc4e534116aa76b16015484b82eac51f9a593416feae9296c8a2d4bb7aa4a2"
+   },
+   "metadata": {
+    "mode": 644,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/plain",
+    "size": 14206
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "305c07b4c8504cb9b9fd9ff775af7786f88a2f5c"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "67bc4d6b3ce175c4ef730883af87d7d8c075da45ec07cc19c2b7f8f049efa8f1"
+    }
+   ]
+  },
+  {
+   "id": "88f8f95d3f8f275f",
+   "location": {
+    "path": "/usr/share/udhcpc/default.script",
+    "layerID": "sha256:08bc4e534116aa76b16015484b82eac51f9a593416feae9296c8a2d4bb7aa4a2"
+   },
+   "metadata": {
+    "mode": 755,
+    "type": "RegularFile",
+    "userID": 0,
+    "groupID": 0,
+    "mimeType": "text/x-shellscript",
+    "size": 3688
+   },
+   "digests": [
+    {
+     "algorithm": "sha1",
+     "value": "1d6a46dde403f14a22e2692cd84dd24af3805216"
+    },
+    {
+     "algorithm": "sha256",
+     "value": "c4e5a7c4783a7a73dec48dee009ee687015d2de7ff86b269679b95bef2c60e13"
+    }
+   ]
+  }
+ ],
+ "source": {
+  "id": "d28f420968c5600cdf2ef3a9f7e6b64b361abaabb02d59a93e0f6f96d85a643e",
+  "name": "sbz-base-alpine",
+  "version": "sha256:d28f420968c5600cdf2ef3a9f7e6b64b361abaabb02d59a93e0f6f96d85a643e",
+  "type": "image",
+  "metadata": {
+   "userInput": "sbz-base-alpine",
+   "imageID": "sha256:bf8527eb54c3680e728d5b4b383a8ba730d72dae7236fbc8dff97ed6b224a731",
+   "manifestDigest": "sha256:d28f420968c5600cdf2ef3a9f7e6b64b361abaabb02d59a93e0f6f96d85a643e",
+   "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+   "tags": [
+    "sbz-base-alpine:latest"
+   ],
+   "imageSize": 7802737,
+   "layers": [
+    {
+     "mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
+     "digest": "sha256:08bc4e534116aa76b16015484b82eac51f9a593416feae9296c8a2d4bb7aa4a2",
+     "size": 7802737
+    }
+   ],
+   "manifest": "eyJzY2hlbWFWZXJzaW9uIjoyLCJtZWRpYVR5cGUiOiJhcHBsaWNhdGlvbi92bmQuZG9ja2VyLmRpc3RyaWJ1dGlvbi5tYW5pZmVzdC52Mitqc29uIiwiY29uZmlnIjp7Im1lZGlhVHlwZSI6ImFwcGxpY2F0aW9uL3ZuZC5kb2NrZXIuY29udGFpbmVyLmltYWdlLnYxK2pzb24iLCJzaXplIjo2MTIsImRpZ2VzdCI6InNoYTI1NjpiZjg1MjdlYjU0YzM2ODBlNzI4ZDViNGIzODNhOGJhNzMwZDcyZGFlNzIzNmZiYzhkZmY5N2VkNmIyMjRhNzMxIn0sImxheWVycyI6W3sibWVkaWFUeXBlIjoiYXBwbGljYXRpb24vdm5kLmRvY2tlci5pbWFnZS5yb290ZnMuZGlmZi50YXIuZ3ppcCIsInNpemUiOjM2MzAzMjEsImRpZ2VzdCI6InNoYTI1NjowOGJjNGU1MzQxMTZhYTc2YjE2MDE1NDg0YjgyZWFjNTFmOWE1OTM0MTZmZWFlOTI5NmM4YTJkNGJiN2FhNGEyIn1dfQ==",
+   "config": "eyJhcmNoaXRlY3R1cmUiOiJhbWQ2NCIsImNvbmZpZyI6eyJFbnYiOlsiUEFUSD0vdXNyL2xvY2FsL3NiaW46L3Vzci9sb2NhbC9iaW46L3Vzci9zYmluOi91c3IvYmluOi9zYmluOi9iaW4iXSwiQ21kIjpbIi9iaW4vc2giXSwiV29ya2luZ0RpciI6Ii8ifSwiY3JlYXRlZCI6IjIwMjYtMDQtMTZUMjM6NTM6MjYuODAzNTk5NjA4WiIsImhpc3RvcnkiOlt7ImNyZWF0ZWQiOiIyMDI2LTA0LTE2VDIzOjUzOjI2LjgwMzU5OTYwOFoiLCJjcmVhdGVkX2J5IjoiQUREIGFscGluZS1taW5pcm9vdGZzLTMuMjAuMTAteDg2XzY0LnRhci5neiAvICMgYnVpbGRraXQiLCJjb21tZW50IjoiYnVpbGRraXQuZG9ja2VyZmlsZS52MCJ9LHsiY3JlYXRlZCI6IjIwMjYtMDQtMTZUMjM6NTM6MjYuODAzNTk5NjA4WiIsImNyZWF0ZWRfYnkiOiJDTUQgW1wiL2Jpbi9zaFwiXSIsImNvbW1lbnQiOiJidWlsZGtpdC5kb2NrZXJmaWxlLnYwIiwiZW1wdHlfbGF5ZXIiOnRydWV9XSwib3MiOiJsaW51eCIsInJvb3RmcyI6eyJ0eXBlIjoibGF5ZXJzIiwiZGlmZl9pZHMiOlsic2hhMjU2OjA4YmM0ZTUzNDExNmFhNzZiMTYwMTU0ODRiODJlYWM1MWY5YTU5MzQxNmZlYWU5Mjk2YzhhMmQ0YmI3YWE0YTIiXX19",
+   "repoDigests": [
+    "sbz-base-alpine@sha256:8955df45e28331935934b7ae2ab94460da95418eac19bc17e7eb9ccbe40fdadc"
+   ],
+   "architecture": "amd64",
+   "os": "linux"
+  }
+ },
+ "distro": {
+  "prettyName": "Alpine Linux v3.20",
+  "name": "Alpine Linux",
+  "id": "alpine",
+  "versionID": "3.20.10",
+  "homeURL": "https://alpinelinux.org/",
+  "bugReportURL": "https://gitlab.alpinelinux.org/alpine/aports/-/issues"
+ },
+ "descriptor": {
+  "name": "syft",
+  "version": "1.56.0",
+  "configuration": {
+   "archive": {
+    "include-indexed-archives": true,
+    "include-unindexed-archives": false,
+    "max-depth": 0,
+    "max-disk-bytes": 107374182400,
+    "max-memory-bytes": 2147483648
+   },
+   "catalogers": {
+    "requested": {
+     "default": [
+      "image",
+      "file"
+     ]
+    },
+    "used": [
+     "alpm-db-cataloger",
+     "apk-db-cataloger",
+     "apple-app-bundle-cataloger",
+     "binary-classifier-cataloger",
+     "bitnami-cataloger",
+     "cargo-auditable-binary-cataloger",
+     "conan-info-cataloger",
+     "dotnet-deps-binary-cataloger",
+     "dotnet-packages-lock-cataloger",
+     "dpkg-db-cataloger",
+     "elf-binary-package-cataloger",
+     "file-content-cataloger",
+     "file-digest-cataloger",
+     "file-executable-cataloger",
+     "file-metadata-cataloger",
+     "gguf-cataloger",
+     "go-module-binary-cataloger",
+     "graalvm-native-image-cataloger",
+     "homebrew-cataloger",
+     "java-archive-cataloger",
+     "java-jvm-cataloger",
+     "javascript-package-cataloger",
+     "linux-kernel-cataloger",
+     "lua-rock-cataloger",
+     "nix-cataloger",
+     "pe-binary-package-cataloger",
+     "perl-cpan-installed-cataloger",
+     "php-composer-installed-cataloger",
+     "php-interpreter-cataloger",
+     "php-pear-serialized-cataloger",
+     "portage-cataloger",
+     "python-installed-package-cataloger",
+     "r-package-cataloger",
+     "rpm-db-cataloger",
+     "ruby-installed-gemspec-cataloger",
+     "safetensors-cataloger",
+     "snap-cataloger",
+     "wordpress-plugins-cataloger"
+    ]
+   },
+   "data-generation": {
+    "generate-cpes": true
+   },
+   "files": {
+    "content": {
+     "globs": null,
+     "skip-files-above-size": 0
+    },
+    "hashers": [
+     "sha-1",
+     "sha-256"
+    ],
+    "selection": "owned-by-package"
+   },
+   "licenses": {
+    "coverage": 75,
+    "include-content": "none"
+   },
+   "packages": {
+    "binary": [
+     "python-binary",
+     "python-binary-lib",
+     "pypy-binary-lib",
+     "go-binary",
+     "julia-binary",
+     "julia-binary",
+     "helm",
+     "redis-binary",
+     "valkey-binary",
+     "nodejs-binary",
+     "busybox-binary",
+     "util-linux-binary",
+     "haproxy-binary",
+     "perl-binary",
+     "php-composer-binary",
+     "httpd-binary",
+     "memcached-binary",
+     "traefik-binary",
+     "arangodb-binary",
+     "postgresql-binary",
+     "mysql-binary",
+     "mysql-binary",
+     "mysql-binary",
+     "mysqld-mysql-cluster-legacy-binary",
+     "mysqld-binary",
+     "ndbd-binary",
+     "ndbmtd-binary",
+     "ndb_mgmd-binary",
+     "xtrabackup-binary",
+     "mariadb-binary",
+     "rust-standard-library-linux",
+     "rust-standard-library-macos",
+     "ruby-binary",
+     "erlang-binary",
+     "erlang-alpine-binary",
+     "erlang-library",
+     "swipl-binary",
+     "dart-binary",
+     "deno-binary",
+     "bun-binary",
+     "haskell-ghc-binary",
+     "haskell-cabal-binary",
+     "haskell-stack-binary",
+     "consul-binary",
+     "hashicorp-vault-binary",
+     "nginx-binary",
+     "bash-binary",
+     "openssl-binary",
+     "openldap-search-binary",
+     "qt-qtbase-lib",
+     "gcc-binary",
+     "fluent-bit-binary",
+     "wordpress-cli-binary",
+     "curl-binary",
+     "lighttpd-binary",
+     "proftpd-binary",
+     "zstd-binary",
+     "xz-binary",
+     "gzip-binary",
+     "sqlcipher-binary",
+     "jq-binary",
+     "chrome-binary",
+     "firefox-binary",
+     "ffmpeg-binary",
+     "ffmpeg-library",
+     "ffmpeg-library",
+     "elixir-binary",
+     "elixir-library",
+     "istio-binary",
+     "istio-binary",
+     "grafana-binary",
+     "grafana-binary",
+     "envoy-binary",
+     "mongodb-binary",
+     "ingress-nginx-binary",
+     "filebeat-binary",
+     "metricbeat-binary",
+     "heartbeat-binary",
+     "packetbeat-binary",
+     "auditbeat-binary",
+     "elastic-agent-binary",
+     "krb5-library",
+     "heimdal-krb5-library",
+     "java-binary",
+     "java-jdb-binary"
+    ],
+    "cpp": {
+     "vcpkg-allow-git-clone": false
+    },
+    "dotnet": {
+     "dep-packages-must-claim-dll": true,
+     "dep-packages-must-have-dll": false,
+     "exclude-project-references": true,
+     "propagate-dll-claims-to-parents": true,
+     "relax-dll-claims-when-bundling-detected": true
+    },
+    "golang": {
+     "capture-symbols": "none",
+     "local-mod-cache-dir": "/Users/rezmoss/go/pkg/mod",
+     "local-vendor-dir": "",
+     "main-module-version": {
+      "from-build-settings": true,
+      "from-contents": false,
+      "from-ld-flags": true
+     },
+     "proxies": [
+      "https://proxy.golang.org",
+      "direct"
+     ],
+     "search-local-mod-cache-licenses": false,
+     "search-local-vendor-licenses": false,
+     "search-remote-licenses": false,
+     "use-packages-lib": true
+    },
+    "java-archive": {
+     "include-indexed-archives": true,
+     "include-unindexed-archives": false,
+     "maven-base-url": "https://repo1.maven.org/maven2",
+     "maven-localrepository-dir": "/Users/rezmoss/.m2/repository",
+     "max-depth": 0,
+     "max-disk-bytes": 0,
+     "max-memory-bytes": 0,
+     "max-parent-recursive-depth": 0,
+     "resolve-transitive-dependencies": false,
+     "use-maven-localrepository": false,
+     "use-network": false
+    },
+    "javascript": {
+     "include-dev-dependencies": false,
+     "npm-base-url": "https://registry.npmjs.org",
+     "search-remote-licenses": false
+    },
+    "linux-kernel": {
+     "catalog-modules": true
+    },
+    "nix": {
+     "capture-owned-files": false
+    },
+    "python": {
+     "guess-unpinned-requirements": false,
+     "pypi-base-url": "https://pypi.org/pypi",
+     "search-remote-licenses": false
+    }
+   },
+   "relationships": {
+    "exclude-binary-packages-with-file-ownership-overlap": true,
+    "package-file-ownership": true,
+    "package-file-ownership-overlap": true
+   },
+   "search": {
+    "scope": "squashed"
+   }
+  }
+ },
+ "schema": {
+  "version": "16.1.12",
+  "url": "https://raw.githubusercontent.com/anchore/syft/main/schema/json/schema-16.1.12.json"
+ }
+}

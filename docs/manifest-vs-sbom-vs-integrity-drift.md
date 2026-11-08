@@ -81,8 +81,9 @@ calls it unchanged—even if the component bytes are different.
 
 ## 3. Integrity drift: same identity and version, different bytes
 
-Integrity drift is the narrow condition where SBOMlyze matches a component in
-both SBOMs, sees the same version, and finds that its recorded hash set changed.
+Integrity drift is the narrow condition where SBOMlyze matches a package in
+both SBOMs at the same location, sees the same non-empty version, and finds that
+a digest of the same kind changed.
 
 ```text
 component: pkg:golang/example/project@1.4.2
@@ -108,6 +109,60 @@ Possible explanations include:
 Some explanations are benign. The point of the check is not to label every hash
 change an attack. It is to prevent a silent mismatch from passing as "no
 dependency change."
+
+### What does not count
+
+Generators also record evidence that is not a package. Syft directory scans,
+for example, emit `type: file` entries with the SHA-1/SHA-256 of every manifest
+they read: `go.mod`, `package-lock.json`, workflow files. Those bytes change
+whenever a dependency or workflow is edited, so treating them as integrity
+drift would fail every ordinary pull request. SBOMlyze reports them separately
+as `file_changes` (path, hashes before and after). They are not a warning and do
+not trigger `deny_integrity_drift`, though they still count as a change.
+
+Two more cases are coverage changes, not drift:
+
+- a digest present on one side only (a generator started or stopped recording
+  it);
+- digests of different kinds. SBOMlyze keeps kinds apart: CycloneDX and SPDX
+  hashes by algorithm (`SHA-256`), the Go module checksum from go.sum
+  (`go-h1`, which Syft writes as the `syft:metadata:h1Digest` property), and
+  the Cargo.lock crate checksum (`cargo-checksum`). A module h1 is never compared
+  with an archive SHA-256.
+
+### Know your coverage
+
+An integrity check can only see packages that carry a comparable digest. The
+`digest_coverage` block in the JSON report counts same-version package pairs
+and how many of them share a digest kind on both sides:
+
+```json
+"digest_coverage": {
+  "same_version_pairs": 318,
+  "comparable": 302,
+  "before_only": 0,
+  "after_only": 0,
+  "disjoint_kinds": 0,
+  "by_kind": { "go-h1": 302 },
+  "packages_total": 362
+}
+```
+
+In a Syft CycloneDX source scan of a Go project, CycloneDX `hashes` is empty
+for every package; the `go-h1` checksums are what make the check meaningful.
+Low `comparable` coverage means a clean integrity result says little.
+
+### Same version, different files inside
+
+A package digest is one number for the whole package. Images often carry no
+package digest at all, yet their SBOM records a hash for every installed file
+and which package owns it. SBOMlyze compares those files too: if a package keeps
+its version while a file it owns changes, gains or loses files, that is
+**owned-file drift** (`owned_file_drift` in the JSON report, opt-in policy
+`deny_owned_file_drift`). A tampered `/usr/bin/ls` in an image with the same
+`coreutils 9.1-1`, or an Alpine package rebuilt with the same `-rN`, shows up
+there. dpkg config files are marked `config: true` and skipped by the policy by
+default, because editing `/etc` after install is normal.
 
 ## A real blocked pull request
 

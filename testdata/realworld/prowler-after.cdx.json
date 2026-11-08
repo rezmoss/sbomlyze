@@ -1,0 +1,1073 @@
+{
+ "$schema": "http://cyclonedx.org/schema/bom-1.7.schema.json",
+ "bomFormat": "CycloneDX",
+ "specVersion": "1.7",
+ "serialNumber": "urn:uuid:7c20d147-a9fb-4058-9246-0a98fa39bf6e",
+ "version": 1,
+ "metadata": {
+  "timestamp": "2026-11-08T05:55:11Z",
+  "tools": {
+   "components": [
+    {
+     "type": "application",
+     "author": "anchore",
+     "name": "syft",
+     "version": "1.57.0"
+    }
+   ]
+  },
+  "component": {
+   "bom-ref": "becc958ad03d866e",
+   "type": "file",
+   "name": "prowler-cloud/prowler",
+   "version": "5.48.0"
+  }
+ },
+ "components": [
+  {
+   "bom-ref": "pkg:npm/brace-expansion@1.1.21?package-id=7dbc3b5d246490d9",
+   "type": "library",
+   "name": "brace-expansion",
+   "version": "1.1.21",
+   "cpe": "cpe:2.3:a:juliangruber:brace-expansion:1.1.21:*:*:*:*:node.js:*:*",
+   "purl": "pkg:npm/brace-expansion@1.1.21",
+   "properties": [
+    {
+     "name": "syft:package:foundBy",
+     "value": "javascript-lock-cataloger"
+    },
+    {
+     "name": "syft:package:language",
+     "value": "javascript"
+    },
+    {
+     "name": "syft:package:type",
+     "value": "npm"
+    },
+    {
+     "name": "syft:package:metadataType",
+     "value": "javascript-pnpm-lock-entry"
+    },
+    {
+     "name": "syft:location:0:path",
+     "value": "/ui/pnpm-lock.yaml"
+    }
+   ]
+  },
+  {
+   "bom-ref": "pkg:npm/brace-expansion@5.0.12?package-id=de9519373012fef3",
+   "type": "library",
+   "name": "brace-expansion",
+   "version": "5.0.12",
+   "cpe": "cpe:2.3:a:juliangruber:brace-expansion:5.0.12:*:*:*:*:node.js:*:*",
+   "purl": "pkg:npm/brace-expansion@5.0.12",
+   "properties": [
+    {
+     "name": "syft:package:foundBy",
+     "value": "javascript-lock-cataloger"
+    },
+    {
+     "name": "syft:package:language",
+     "value": "javascript"
+    },
+    {
+     "name": "syft:package:type",
+     "value": "npm"
+    },
+    {
+     "name": "syft:package:metadataType",
+     "value": "javascript-pnpm-lock-entry"
+    },
+    {
+     "name": "syft:location:0:path",
+     "value": "/ui/pnpm-lock.yaml"
+    }
+   ]
+  },
+  {
+   "bom-ref": "6074f9412d628f2e",
+   "type": "file",
+   "name": "/.github/actions/grype-scan/action.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "3d9d2dd63689563aee78c7ab67ab7623b9ff1aea"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "71cf68be59509b5dbf906e1d782f0f42f3fcbc3d7606870843020e6551496096"
+    }
+   ]
+  },
+  {
+   "bom-ref": "323ab51e4d28c8da",
+   "type": "file",
+   "name": "/.github/actions/osv-scanner/action.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "450bd195862eb7c86aed342f635e6bedc4fe259d"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "0a1996619e9f9af87df165d242e4d0b92e45264b726e15d2d78dbf0067f29713"
+    }
+   ]
+  },
+  {
+   "bom-ref": "e2bcf0fa93b389e2",
+   "type": "file",
+   "name": "/.github/actions/setup-python-uv/action.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "1e0bbb50781cb0650d3360684b30447541c05262"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "5db85601219335aeda109a1e2cc62d724afe1f41671655c5de3f5c62698b5b4d"
+    }
+   ]
+  },
+  {
+   "bom-ref": "ddc6200b2452aec6",
+   "type": "file",
+   "name": "/.github/actions/slack-notification/action.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "ee8a6db61ae6006238ae915c683e5e7f4ef6fe39"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "e84a06faed4db4a79bc8cbc36017aaeaf705ec0c61f0492d05042c3ee5b06774"
+    }
+   ]
+  },
+  {
+   "bom-ref": "2d1dbbf7689638e7",
+   "type": "file",
+   "name": "/.github/actions/trivy-scan/action.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "bc966dcd74dc1fedbd87bfa034e8936709b97d54"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "d50565b532fb18ec12b4df56476e6331fb9a776c77fc87b079bd39d33dc08a7d"
+    }
+   ]
+  },
+  {
+   "bom-ref": "1d2e31cb612e5eea",
+   "type": "file",
+   "name": "/.github/workflows/api-code-quality.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "1450ac9ab41c8ade1122923929afb628b0316ea4"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "7d6a1182b69b8e1219d8968a439b09dcca5891c3455be92daf0c09e17f66c008"
+    }
+   ]
+  },
+  {
+   "bom-ref": "f14ad12259827d97",
+   "type": "file",
+   "name": "/.github/workflows/api-codeql.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "88e781f917d399447d41e02cb7e55f0f5ad2efbf"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "0492a6544844b23118336a3cbb579fbf1ed3b03c3b84404cefb1f3aa45d55751"
+    }
+   ]
+  },
+  {
+   "bom-ref": "0cfd00f8e96916ce",
+   "type": "file",
+   "name": "/.github/workflows/api-container-build-push.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "510cc2ab383daa4578dd8f8201b0c9dc8050bf11"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "902d30b1a89016ff691cf7f226f17085458a4c47413358e3309f096d0234ce06"
+    }
+   ]
+  },
+  {
+   "bom-ref": "9498c77e45070402",
+   "type": "file",
+   "name": "/.github/workflows/api-container-checks.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "8189496fa4946b4159f84ce12f5ee23da5f90132"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "67d85e0810d8dd6f0090474b29562026b9e36f4fb6c3e2315c50aa44ec7e5a87"
+    }
+   ]
+  },
+  {
+   "bom-ref": "751f3965865148b3",
+   "type": "file",
+   "name": "/.github/workflows/api-security.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "2db8fa7371e10f3edd34b230612d64beeab4e2c4"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "f8dacef495c3fd3d9d9ecc78acb040b548cb1daee0a233adfd790fae348fcbd2"
+    }
+   ]
+  },
+  {
+   "bom-ref": "60f68a0df9d746ea",
+   "type": "file",
+   "name": "/.github/workflows/api-tests.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "29a6b7ea83e00f22203f24b6e5199c01a82cb678"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "9de40a1af74634e2179ff83d729513f21bc1d141736b115867980ec9f96a3441"
+    }
+   ]
+  },
+  {
+   "bom-ref": "32613741646b9bd0",
+   "type": "file",
+   "name": "/.github/workflows/backport.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "96fcb7aa5289b79c9d307a9fe0a19cb9f0559ae2"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "9ad06d9932b5cbc40819f9292f1bd5b47f27dc29ff786b361ad0957537a1a35c"
+    }
+   ]
+  },
+  {
+   "bom-ref": "5bd6a625275c9bce",
+   "type": "file",
+   "name": "/.github/workflows/bump-version.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "b2f4e3d241805124d9db46c024a513b7130b08a5"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "541905a0d470d686b314f10086e24799376dbae552c1d307bde610daaee126d3"
+    }
+   ]
+  },
+  {
+   "bom-ref": "59414b3e04123a9e",
+   "type": "file",
+   "name": "/.github/workflows/check-test-init-files.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "a6f28367d294431ae833598ebe4e8eec0f74299c"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "160c71979388c2571077bc42dceadbdd3cdb8af61d931ead1ad1b60483ff62cd"
+    }
+   ]
+  },
+  {
+   "bom-ref": "2b6d7ffe2cddaccc",
+   "type": "file",
+   "name": "/.github/workflows/ci-actionlint.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "35c22380f8226ffe4b6124c4ef6cf6fa8daa458e"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "e6d78d2413bcef77b58b0094aa9289552eb01b1db887c4525912215c97fe41a5"
+    }
+   ]
+  },
+  {
+   "bom-ref": "1ab8a77ca958f289",
+   "type": "file",
+   "name": "/.github/workflows/ci-zizmor.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "fdd457592aaaa0f0be92da8f1147eda293820573"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "d74bd31a42579d6ecbfe56c81ded5e784147e393d0abcd00fd9fd775edb31173"
+    }
+   ]
+  },
+  {
+   "bom-ref": "529fd981c6c729a7",
+   "type": "file",
+   "name": "/.github/workflows/comment-label-update.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "3e2d0879b63fc40586c9eacaaf6995fed5de792d"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "164e78a7b70279ec7cd6d12b05671502f7afba77ba3bc1f4c81ca3e69167920d"
+    }
+   ]
+  },
+  {
+   "bom-ref": "2eabf0d70e1b188d",
+   "type": "file",
+   "name": "/.github/workflows/compile-changelogs.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "d2887b0880f65c2b364476dd0ce1d4c40db4a066"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "4878568a3d9767bdd8dc15e13088cf1488883288f5d86cabba1204d827357689"
+    }
+   ]
+  },
+  {
+   "bom-ref": "867ec8bb1a2bb334",
+   "type": "file",
+   "name": "/.github/workflows/conventional-commit.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "da2a9f147dfe4303e5c70ad5f7c86a4d0ee1a31d"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "cfaceab9ff77066b74508f18580221eae7df9f9930883fbfee6abb96372cbb86"
+    }
+   ]
+  },
+  {
+   "bom-ref": "d7e0b223aa3f33e1",
+   "type": "file",
+   "name": "/.github/workflows/create-backport-label.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "640ef52a2e0d002bca0ecf673ba37a1f08eaa0c8"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "41fbdd6acf92ba32e7b2c0bb95139e1878c86953fb5842977102fdbdabe40163"
+    }
+   ]
+  },
+  {
+   "bom-ref": "b2fd25d395b0b228",
+   "type": "file",
+   "name": "/.github/workflows/dockerhub-descriptions.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "b8cf71260cfd8a2e46dc47e8d9ff4413a550687b"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "1e0672b91c35e83262938e302f705ca19e52d00da07f699927f7284a3e6f4115"
+    }
+   ]
+  },
+  {
+   "bom-ref": "280daa51f3ae502b",
+   "type": "file",
+   "name": "/.github/workflows/docs-check-provider-cards.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "b82a5cb1a98cb2584e2463c78de6ec5f2281bc50"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "aea273e0122e69f7477f26904980c6867950ccd4d41b3419f4efb71e5d50e4b3"
+    }
+   ]
+  },
+  {
+   "bom-ref": "560e8d930a17debc",
+   "type": "file",
+   "name": "/.github/workflows/find-secrets.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "07c22bdf576ef73354bae42129e31b92a90e1de2"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "63652b35f52d02da787b645d0b0e325b46af9aad38cc1dcb947a716534b5863e"
+    }
+   ]
+  },
+  {
+   "bom-ref": "45595410f65f44be",
+   "type": "file",
+   "name": "/.github/workflows/helm-chart-checks.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "e57f43bf180e646838c884662179e33a47f194b0"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "c24698abd8a5b090fce041a9510c5cae8793591cbfa28fb01e09bd62bff7096c"
+    }
+   ]
+  },
+  {
+   "bom-ref": "65c1293bcb7694f3",
+   "type": "file",
+   "name": "/.github/workflows/helm-chart-release.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "524afcaa2445c69295e302148a8ea776fab3ee5f"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "e16c2a255e3c750ea442f3bce677636ad0402303f818479be35a3a5fee8d43ed"
+    }
+   ]
+  },
+  {
+   "bom-ref": "b819d5fec77e4645",
+   "type": "file",
+   "name": "/.github/workflows/issue-lock-on-close.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "c8b22675bfcad13722bc9a5051b2878cfb6ee6f8"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "a2886fe0b124f5a555a7cbb1e15b15fcd29690e6875e2939e93c1099bbfe09c8"
+    }
+   ]
+  },
+  {
+   "bom-ref": "76a2a6106bb8fc22",
+   "type": "file",
+   "name": "/.github/workflows/issue-triage.lock.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "c37b9b81e4d0bc0995a6a7adfdb84a2af68a9eab"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "e9403dee364a186b32c9c4c3067daf9b5a3c5b5b8454a00cdd93f15c0e30dd56"
+    }
+   ]
+  },
+  {
+   "bom-ref": "01f131306d9c2765",
+   "type": "file",
+   "name": "/.github/workflows/labeler.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "cd7de9f6cc06d57f26b7894d29c9435d783c0dc8"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "ffbb1db7167f592de0fb822318c92477b46c11eb839036024f17089787442258"
+    }
+   ]
+  },
+  {
+   "bom-ref": "d45faf9b4e0c19e9",
+   "type": "file",
+   "name": "/.github/workflows/markdown-lint.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "c791db42042d34d5f003c22c819fd2ee701f9297"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "d3dff78b419aa04d1f398c607b6580623ca02067024a2862844779bfad61ae32"
+    }
+   ]
+  },
+  {
+   "bom-ref": "faad01def11b9e17",
+   "type": "file",
+   "name": "/.github/workflows/mcp-container-build-push.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "38cd5ab8159cabbb0638455cfe02179b6f5dfe43"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "21f25d9753088f9d722a4a80f3f6acf92e11b92fa5a83b6515e6b31503f5a283"
+    }
+   ]
+  },
+  {
+   "bom-ref": "19409afb0b3154d9",
+   "type": "file",
+   "name": "/.github/workflows/mcp-container-checks.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "521416ed5bf1fd178231fde5957babddd43427e0"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "f7b2f49479d82a89d2617b4bbe77b6b1c9a5ae63e384583587a9a5e977bf47ff"
+    }
+   ]
+  },
+  {
+   "bom-ref": "46bbe172859f5db3",
+   "type": "file",
+   "name": "/.github/workflows/mcp-pypi-release.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "7a5891dcd0c897ba906ff03ea1af2d69b63e135e"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "e0320761304ca8eceada41c179b106e17b9083df3ee8a989d7c068f45bb2771e"
+    }
+   ]
+  },
+  {
+   "bom-ref": "b4836bf34e801950",
+   "type": "file",
+   "name": "/.github/workflows/mcp-security.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "d1e02ef6f54136d86afa572f1dd9d9587e23ec65"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "2c87253f33f747d2d4ae10d2ef714473ad6b135858089892f3509ec93d250f25"
+    }
+   ]
+  },
+  {
+   "bom-ref": "dd082452bd914eda",
+   "type": "file",
+   "name": "/.github/workflows/mcp-tests.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "ce824c6338ba7d6d12b75004f8a88044c05ec762"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "be0d7a1770d7c5b202d31bd0c1b0f48da3058fdeb6c9a7ad9f2761803ee830ff"
+    }
+   ]
+  },
+  {
+   "bom-ref": "7243cecbc16ccf1f",
+   "type": "file",
+   "name": "/.github/workflows/nightly-arm64-container-builds.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "9548682cff8c15454dc839cb133725d07b13e62c"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "4347a0d700ff7bfad61ea3606c720c50c729d41b9c8cff259f5650e03e30cb21"
+    }
+   ]
+  },
+  {
+   "bom-ref": "6ac1430b582618a4",
+   "type": "file",
+   "name": "/.github/workflows/pr-check-changelog.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "600c21f8d7e7b4d0ee14945bc0af5473713139f7"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "8737c452a93ca82a6e7cc9a9ef77bbc6af525133376f9be73973a74cbdff1047"
+    }
+   ]
+  },
+  {
+   "bom-ref": "236c8d8422b031dd",
+   "type": "file",
+   "name": "/.github/workflows/pr-check-compliance-mapping.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "058c1cf7d6516d2dc982a47a218bcd0e12802a65"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "c6aae34c760fad99f3b4706611a6ad3610db79890d1bca37b5a8cfd87cf21910"
+    }
+   ]
+  },
+  {
+   "bom-ref": "883dc2508d24dbca",
+   "type": "file",
+   "name": "/.github/workflows/pr-conflict-checker.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "6e2da862800327d25fbd3444a3a2a8a97d49e124"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "0c7932d768435a1bae04d361c755179a025b1b8eb12981898092df801cfa1131"
+    }
+   ]
+  },
+  {
+   "bom-ref": "e0b4c4e765c207f0",
+   "type": "file",
+   "name": "/.github/workflows/pr-merged.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "7aaf6ca9dbc36abb36c1b02950eadfd16978b863"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "1b27b5cccbee21ed71c52ad7edbe0a8242f0cfbd3fb3ed264f07b018eb4b96e9"
+    }
+   ]
+  },
+  {
+   "bom-ref": "e7e0616ffe7b015f",
+   "type": "file",
+   "name": "/.github/workflows/prepare-release.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "9fff2ce7a2a7597b23731f97c43f60423a37b082"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "66c0bdf9e7612c704aa5e714bb951488f84cb2f5baeb31eef13ac879d588cb30"
+    }
+   ]
+  },
+  {
+   "bom-ref": "4ce37101b5bcdef7",
+   "type": "file",
+   "name": "/.github/workflows/release-freeze-gate.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "2d73c7f6f9df0094936eafffd04f91032464ada3"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "1f89f2fc1f6fc57ba88e7151e6b396b0a998295f05a6952853f1d89440be2a3a"
+    }
+   ]
+  },
+  {
+   "bom-ref": "15d04ad4dd39481f",
+   "type": "file",
+   "name": "/.github/workflows/release-freeze-lift.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "fdb7cfaebc431041ef1f13b9f4e37ca5f549d528"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "93513a4ab188a8b166415595b5472f876d54f78be6b30f7e6f97ce9f2467a56f"
+    }
+   ]
+  },
+  {
+   "bom-ref": "ed5c2bd4964889e8",
+   "type": "file",
+   "name": "/.github/workflows/renovate-config-validate.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "4c8720d0f5784941bd42dc74d2316539736f884f"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "8f333749c7905f3eedf6f1b926f777fd3b40b6b9d4689cadc2fd1e71e4091974"
+    }
+   ]
+  },
+  {
+   "bom-ref": "0e0303ba81554c33",
+   "type": "file",
+   "name": "/.github/workflows/sdk-check-duplicate-test-names.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "540c6533226d8559bf9c3f5f76b64202e647a66d"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "286db3e40c3f950674484f6ac5b5ca285e471480eb56de2c5f31867db2e99da5"
+    }
+   ]
+  },
+  {
+   "bom-ref": "2644dfa08852b321",
+   "type": "file",
+   "name": "/.github/workflows/sdk-code-quality.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "c1b2517e0c61d71c90c1c5701cef13f88c305ad4"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "c9ea5a0863bede55c9e733e9cffaf519c325ce4290921ced72886f84aa61d65c"
+    }
+   ]
+  },
+  {
+   "bom-ref": "ee0e1444b80d5d4d",
+   "type": "file",
+   "name": "/.github/workflows/sdk-codeql.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "e52970a808fedf8cbc244daf16b07b9fdd4a8aab"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "c30119a852cb9388da03a6f1929c012bccb45de707f0d073a3cf2b2f86c90752"
+    }
+   ]
+  },
+  {
+   "bom-ref": "ca6e8bbb6512a9dd",
+   "type": "file",
+   "name": "/.github/workflows/sdk-container-build-push.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "f216d838a7dba4526157c33f1b2c38cfe649139b"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "58d30b45147b7fd127a0c604009860fe02d64ff4112724633fa14f587b31e8d2"
+    }
+   ]
+  },
+  {
+   "bom-ref": "6f8f48128a0f8e19",
+   "type": "file",
+   "name": "/.github/workflows/sdk-container-checks.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "eaead0365ada01f8bd5bf3fc4049f00c500ff1ab"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "08c5f2beeab19784765ecd9e7d1535042021a772a7a963b23dde7f69b082f97e"
+    }
+   ]
+  },
+  {
+   "bom-ref": "e3b7b4b941619d2f",
+   "type": "file",
+   "name": "/.github/workflows/sdk-package-checks.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "ca00f06836b18a0c6e19374bd269ab4849c659fe"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "9f727e2e78c671634e805051510d6c97e4eceab2590a8256d7a84c1db9d4741e"
+    }
+   ]
+  },
+  {
+   "bom-ref": "4d1a11df7d11bac2",
+   "type": "file",
+   "name": "/.github/workflows/sdk-pypi-release.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "24b8c2211ad5cfe66321504e3d44d561efffda04"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "91e11504596d41cd3b4d72029297507e20caec00ee278d3ccd46db7aea1fbb07"
+    }
+   ]
+  },
+  {
+   "bom-ref": "bd460722d8c05827",
+   "type": "file",
+   "name": "/.github/workflows/sdk-refresh-aws-services-regions.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "c203972f4564cd419aec9cb2cd05dfd80b0bcd13"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "29f4e7500430d2148011750790fb760b0a50eafefeed24c9e92e3ba49e43e617"
+    }
+   ]
+  },
+  {
+   "bom-ref": "c949a23bf17c5977",
+   "type": "file",
+   "name": "/.github/workflows/sdk-refresh-oci-regions.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "a59780090dffae4253e356922f47f063eb4290b5"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "2c54de02a6b09be16e85f6a07f0cb2fffbd7295f5aeedc9653fcdbeea7901dd7"
+    }
+   ]
+  },
+  {
+   "bom-ref": "ba59a8183aaf1c15",
+   "type": "file",
+   "name": "/.github/workflows/sdk-security.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "751b82068123ad8041390a0a088e9f1337a6ad0f"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "bdc8ad78b8da53f1311a79cfe064d50255b25f54ddbbddefdff1099554d5c41c"
+    }
+   ]
+  },
+  {
+   "bom-ref": "c40a6372310217cc",
+   "type": "file",
+   "name": "/.github/workflows/sdk-tests.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "a2df16aa43ce85076b46208b0df40545bc67872d"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "562840bdf9534919d186d35f7290205596d96d2677330a3d6152a0a1e67ec3ba"
+    }
+   ]
+  },
+  {
+   "bom-ref": "bac92b342bfee4b9",
+   "type": "file",
+   "name": "/.github/workflows/test-impact-analysis.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "18a71a8a65a73754bb7caab9ff703056681b080a"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "8d4b1f7cb4266fe70eb59f172e3d2d02f260af35658c58a6c9679a52e5cb4717"
+    }
+   ]
+  },
+  {
+   "bom-ref": "42b9bbbf48c3c85e",
+   "type": "file",
+   "name": "/.github/workflows/ui-codeql.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "d52ea88680e84d0d65e491bce60b04f09e39c854"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "759cc98b36bf00b01f71f886da1687090222e481680469500de229ecad0b3d8c"
+    }
+   ]
+  },
+  {
+   "bom-ref": "d75c5bd85ab2d84c",
+   "type": "file",
+   "name": "/.github/workflows/ui-container-build-push.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "5a11144e3edf2d258e2252669a173f5031250315"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "78c67bcdf584e267b45bd7f09b7c564af227277959b4a6baf384ba5f4d6360ee"
+    }
+   ]
+  },
+  {
+   "bom-ref": "aeecda2a9e6aed7a",
+   "type": "file",
+   "name": "/.github/workflows/ui-container-checks.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "a76bd19d7c4c6e76da76bba470cced6820d67b5b"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "d81f9524c2a18d9ad6994e02d07008bb72f7585b949a61e84e944803e4f10df2"
+    }
+   ]
+  },
+  {
+   "bom-ref": "4607b32cdb51bf3a",
+   "type": "file",
+   "name": "/.github/workflows/ui-e2e-tests-v2.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "b3e0620504b50571a76649a829d2be4fdc4ea332"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "628ae006c60e48fc93e5b6f3e69521e3ebcf430f18188af4b077bb5ae0b193ea"
+    }
+   ]
+  },
+  {
+   "bom-ref": "a24295b21139312d",
+   "type": "file",
+   "name": "/.github/workflows/ui-security.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "cc7cc32152a315aeb7b69dd2bdad859562171119"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "da6b3d487464b47c6ca8efeb44f3a70fd7cd86f294113e9dcbd9f18440e61aa2"
+    }
+   ]
+  },
+  {
+   "bom-ref": "33ddddd3bd2bd863",
+   "type": "file",
+   "name": "/.github/workflows/ui-tests.yml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "0b8da32ddbb0b03a626f1c216e681424f1750522"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "ce508d75705d30507306fe555173c619f74f05df907fb9845de228e2247a8346"
+    }
+   ]
+  },
+  {
+   "bom-ref": "aff65d2e45ad3df9",
+   "type": "file",
+   "name": "/api/uv.lock",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "6fe36ffbbdca3dd81504bf9c19c02d8bbf38c207"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "abc46aa9fc955ee5c31f135a99d94a381be355cb8be3e2f09994970676a2cd7a"
+    }
+   ]
+  },
+  {
+   "bom-ref": "6d8b27a2d074c975",
+   "type": "file",
+   "name": "/mcp_server/uv.lock",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "46be767687e6190541c3eec052ba621e9ab80204"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "a0f984ee46f53e8c481ebc5d6d1537538ff5860c910a35f4a762d65dc02db444"
+    }
+   ]
+  },
+  {
+   "bom-ref": "97437963a4cc4d39",
+   "type": "file",
+   "name": "/ui/pnpm-lock.yaml",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "62c191d0a31049095d966885eaeac69106473aa0"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "f97ab1b510042cd28985b3b59d8fe9111b66176ac4bc691f7e6c034a4e3fca8c"
+    }
+   ]
+  },
+  {
+   "bom-ref": "3717ae13dd3eb744",
+   "type": "file",
+   "name": "/uv.lock",
+   "hashes": [
+    {
+     "alg": "SHA-1",
+     "content": "8f61afe252b7c90e5a647efbc4a1d40eb15a7483"
+    },
+    {
+     "alg": "SHA-256",
+     "content": "f7755fcf504b5a5ddbb8761674e96f5105b84a18c9dd4d3d93e1240b672de975"
+    }
+   ]
+  }
+ ],
+ "dependencies": [
+  {
+   "ref": "pkg:npm/brace-expansion@1.1.21?package-id=7dbc3b5d246490d9",
+   "dependsOn": []
+  },
+  {
+   "ref": "pkg:npm/brace-expansion@5.0.12?package-id=de9519373012fef3",
+   "dependsOn": []
+  }
+ ]
+}

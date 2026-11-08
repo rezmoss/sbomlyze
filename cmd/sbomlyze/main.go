@@ -244,7 +244,7 @@ func main() {
 	comps2 = sbom.NormalizeComponents(comps2)
 
 	overview := analysis.ComputeDiffOverview(file1, file2, comps1, comps2, info1, info2)
-	result := analysis.DiffComponents(comps1, comps2)
+	result := analysis.DiffSBOMs(comps1, comps2, info1.Files, info2.Files)
 	analysis.ComputePackageSamples(&result)
 	findings := analysis.ComputeKeyFindings(result, overview)
 	spin.Done("Done")
@@ -361,7 +361,7 @@ func main() {
 
 	p.Stop()
 
-	hasDiff := len(result.Added) > 0 || len(result.Removed) > 0 || len(result.Changed) > 0
+	hasDiff := result.HasChanges()
 	hasPolicyErrors := policy.HasErrors(violations)
 	if hasDiff || hasPolicyErrors {
 		os.Exit(1)

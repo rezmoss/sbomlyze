@@ -5,7 +5,7 @@ import (
 	"sort"
 )
 
-// CompareComponents returns a list of field changes.
+// CompareComponents: field changes; shared digest kinds only
 func CompareComponents(before, after Component) []string {
 	var changes []string
 	if before.Version != after.Version {
@@ -14,9 +14,16 @@ func CompareComponents(before, after Component) []string {
 	if !equalSlices(before.Licenses, after.Licenses) {
 		changes = append(changes, fmt.Sprintf("licenses: %v -> %v", before.Licenses, after.Licenses))
 	}
-	for algo, hash := range before.Hashes {
-		if newHash, exists := after.Hashes[algo]; exists && hash != newHash {
-			changes = append(changes, fmt.Sprintf("hash[%s]: %s -> %s", algo, hash, newHash))
+	beforeDigests, afterDigests := before.DigestSet(), after.DigestSet()
+	kinds := make([]string, 0, len(beforeDigests))
+	for kind := range beforeDigests {
+		kinds = append(kinds, kind)
+	}
+	sort.Strings(kinds)
+	for _, kind := range kinds {
+		hash := beforeDigests[kind]
+		if newHash, exists := afterDigests[kind]; exists && hash != newHash {
+			changes = append(changes, fmt.Sprintf("hash[%s]: %s -> %s", kind, hash, newHash))
 		}
 	}
 	return changes

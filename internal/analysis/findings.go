@@ -2,15 +2,12 @@ package analysis
 
 import (
 	"fmt"
-	"regexp"
 	"sort"
-	"strconv"
 	"strings"
 
+	"github.com/rezmoss/sbomlyze/internal/identity"
 	"github.com/rezmoss/sbomlyze/internal/sbom"
 )
-
-var versionNumRe = regexp.MustCompile(`^(\d+)`)
 
 // Finding is a single insight.
 type Finding struct {
@@ -257,9 +254,11 @@ func ComputeKeyFindings(result DiffResult, overview DiffOverview) KeyFindings {
 	findings = append(findings, detectOSChange(overview)...)
 	findings = append(findings, detectVersionChangeAnalysis(result, overview)...)
 	findings = append(findings, detectIntegrityDriftContext(result)...)
+	findings = append(findings, detectFileChanges(result)...)
+	findings = append(findings, detectOwnedFileDrift(result)...)
 	findings = append(findings, detectDominantPathPattern(result)...)
 	findings = append(findings, detectRemovalHotspots(result)...)
-	findings = append(findings, detectStableTypes(overview)...)
+	findings = append(findings, detectStableTypes(overview, result)...)
 	findings = append(findings, detectLicenseCategoryShift(overview)...)
 	findings = append(findings, detectCatalogerGaps(overview)...)
 
@@ -303,7 +302,10 @@ func detectVanishedEcosystems(overview DiffOverview) []Finding {
 		}
 	}
 	sort.Slice(vanished, func(i, j int) bool {
-		return bTypes[vanished[i]] > bTypes[vanished[j]]
+		if bTypes[vanished[i]] != bTypes[vanished[j]] {
+			return bTypes[vanished[i]] > bTypes[vanished[j]]
+		}
+		return vanished[i] < vanished[j]
 	})
 	for _, t := range vanished {
 		findings = append(findings, Finding{
@@ -319,7 +321,10 @@ func detectVanishedEcosystems(overview DiffOverview) []Finding {
 		}
 	}
 	sort.Slice(appeared, func(i, j int) bool {
-		return aTypes[appeared[i]] > aTypes[appeared[j]]
+		if aTypes[appeared[i]] != aTypes[appeared[j]] {
+			return aTypes[appeared[i]] > aTypes[appeared[j]]
+		}
+		return appeared[i] < appeared[j]
 	})
 	for _, t := range appeared {
 		findings = append(findings, Finding{
@@ -410,7 +415,8 @@ func dominantPattern(comps []sbom.Component, direction string) *Finding {
 	var bestKey typePathKey
 	var bestCount int
 	for k, v := range counts {
-		if v > bestCount {
+		// ties: smallest type/path, deterministic
+		if v > bestCount || (v == bestCount && (k.ptype < bestKey.ptype || (k.ptype == bestKey.ptype && k.path < bestKey.path))) {
 			bestKey = k
 			bestCount = v
 		}
@@ -441,196 +447,205 @@ func topPathPrefix(locations []string) string {
 	return "/" + strings.Join(parts, "/")
 }
 
-func detectStableTypes(overview DiffOverview) []Finding {
+// componentType: PURL type for grouping findings
+func componentType(c sbom.Component) string {
+	ptype := ExtractPURLType(c.PURL)
+	if ptype == "unknown" && c.PURL == "" {
+		ptype = ExtractPURLType(c.ID)
+	}
+	return ptype
+}
+
+// changesByType: per-type changed and any-change counts
+func changesByType(result DiffResult) (changed map[string]int, any map[string]int) {
+	changed = make(map[string]int)
+	any = make(map[string]int)
+	for _, c := range result.Changed {
+		t := componentType(c.Before)
+		changed[t]++
+		any[t]++
+	}
+	for _, c := range result.Added {
+		any[componentType(c)]++
+	}
+	for _, c := range result.Removed {
+		any[componentType(c)]++
+	}
+	for _, m := range result.Moved {
+		any[ExtractPURLType(m.ID)]++
+	}
+	return changed, any
+}
+
+// detectStableTypes: "unchanged" only w/ zero changes
+func detectStableTypes(overview DiffOverview, result DiffResult) []Finding {
 	bTypes := overview.Before.Stats.ByType
 	aTypes := overview.After.Stats.ByType
+	changed, anyChange := changesByType(result)
 
-	var stable []string
+	var stable, sameCount []string
 	for t, bCount := range bTypes {
 		if bCount > 10 && aTypes[t] == bCount {
-			stable = append(stable, t)
+			if anyChange[t] == 0 {
+				stable = append(stable, t)
+			} else {
+				sameCount = append(sameCount, t)
+			}
 		}
 	}
-
-	if len(stable) == 0 {
-		return nil
+	byCount := func(list []string) {
+		sort.Slice(list, func(i, j int) bool {
+			if bTypes[list[i]] != bTypes[list[j]] {
+				return bTypes[list[i]] > bTypes[list[j]]
+			}
+			return list[i] < list[j]
+		})
 	}
+	byCount(stable)
+	byCount(sameCount)
 
-	sort.Slice(stable, func(i, j int) bool {
-		return bTypes[stable[i]] > bTypes[stable[j]]
-	})
-
-	parts := make([]string, len(stable))
-	for i, t := range stable {
-		parts[i] = fmt.Sprintf("%s (%s)", t, fmtCount(bTypes[t]))
-	}
-
-	return []Finding{{
-		Icon:    "\u2705",
-		Message: fmt.Sprintf("Core system packages stable: %s unchanged", strings.Join(parts, ", ")),
-	}}
-}
-
-func parseVersionParts(v string) []int {
-	parts := regexp.MustCompile(`[.\-_]`).Split(v, -1)
-	var nums []int
-	for _, p := range parts {
-		m := versionNumRe.FindString(p)
-		if m != "" {
-			n, _ := strconv.Atoi(m)
-			nums = append(nums, n)
+	var findings []Finding
+	if len(stable) > 0 {
+		parts := make([]string, len(stable))
+		for i, t := range stable {
+			parts[i] = fmt.Sprintf("%s (%s)", t, fmtCount(bTypes[t]))
 		}
+		findings = append(findings, Finding{
+			Icon:    "\u2705",
+			Message: fmt.Sprintf("Core system packages stable: %s unchanged", strings.Join(parts, ", ")),
+		})
 	}
-	return nums
-}
-
-// compareVersions returns 1 if b>a (upgrade), -1 if b<a (downgrade), 0 if equal/unclear
-func compareVersions(from, to string) int {
-	pf := parseVersionParts(from)
-	pt := parseVersionParts(to)
-	if len(pf) == 0 || len(pt) == 0 {
-		return 0
-	}
-	maxLen := len(pf)
-	if len(pt) > maxLen {
-		maxLen = len(pt)
-	}
-	for i := 0; i < maxLen; i++ {
-		var a, b int
-		if i < len(pf) {
-			a = pf[i]
+	for _, t := range sameCount {
+		detail := fmt.Sprintf("%d version changes", changed[t])
+		if other := anyChange[t] - changed[t]; other > 0 {
+			detail += fmt.Sprintf(", %d added/removed/moved", other)
 		}
-		if i < len(pt) {
-			b = pt[i]
-		}
-		if b > a {
-			return 1
-		}
-		if b < a {
-			return -1
-		}
+		findings = append(findings, Finding{
+			Icon:    "\U0001f504",
+			Message: fmt.Sprintf("%s: %s packages before and after (%s)", t, fmtCount(bTypes[t]), detail),
+		})
 	}
-	return 0
-}
-
-func classifySemVerChange(from, to string) string {
-	pf := parseVersionParts(from)
-	pt := parseVersionParts(to)
-	if len(pf) == 0 || len(pt) == 0 {
-		return "unknown"
-	}
-	var fMajor, tMajor int
-	fMajor = pf[0]
-	tMajor = pt[0]
-	if fMajor != tMajor {
-		return "major"
-	}
-	var fMinor, tMinor int
-	if len(pf) > 1 {
-		fMinor = pf[1]
-	}
-	if len(pt) > 1 {
-		tMinor = pt[1]
-	}
-	if fMinor != tMinor {
-		return "minor"
-	}
-	return "patch"
+	return findings
 }
 
 func detectVersionChangeAnalysis(result DiffResult, overview DiffOverview) []Finding {
-	totalBefore := overview.Before.Stats.TotalComponents
-	removed := len(result.Removed)
-	shared := totalBefore - removed
+	shared := result.SharedPackages
 	if shared <= 0 {
 		return nil
 	}
 
-	var upgrades, downgrades, unclear int
-	var majorUp, minorUp, patchUp int
-	type downgradeInfo struct {
-		name    string
-		from    string
-		to      string
+	type change struct{ name, from, to string }
+	type tally struct {
+		occurrences int
+		distinct    map[string]bool
+		samples     []change
 	}
-	var topDowngrades []downgradeInfo
+	newTally := func() *tally { return &tally{distinct: make(map[string]bool)} }
+	up, down, unknown, none := newTally(), newTally(), newTally(), newTally()
+	levels := make(map[string]int) // distinct upgrades per level
 
 	for _, c := range result.Changed {
 		if c.Drift == nil || c.Drift.Type != DriftTypeVersion {
 			continue
 		}
-		vFrom := c.Before.Version
-		vTo := c.After.Version
-		dir := compareVersions(vFrom, vTo)
-		switch dir {
-		case 1:
-			upgrades++
-			switch classifySemVerChange(vFrom, vTo) {
-			case "major":
-				majorUp++
-			case "minor":
-				minorUp++
-			default:
-				patchUp++
-			}
-		case -1:
-			downgrades++
-			if len(topDowngrades) < 5 {
-				topDowngrades = append(topDowngrades, downgradeInfo{c.Name, vFrom, vTo})
-			}
+		var t *tally
+		switch c.Drift.Direction {
+		case DirectionUpgrade:
+			t = up
+		case DirectionDowngrade:
+			t = down
+		case DirectionNone:
+			t = none
 		default:
-			unclear++
+			t = unknown
+		}
+		t.occurrences++
+		key := identityKey(c.ID) + "\x00" + c.Drift.VersionFrom + "\x00" + c.Drift.VersionTo
+		if t.distinct[key] {
+			continue
+		}
+		t.distinct[key] = true
+		if t == up {
+			levels[c.Drift.Level]++
+		}
+		if len(t.samples) < 5 {
+			t.samples = append(t.samples, change{c.Name, c.Drift.VersionFrom, c.Drift.VersionTo})
 		}
 	}
 
-	totalChanges := upgrades + downgrades + unclear
-	if totalChanges == 0 {
+	if up.occurrences+down.occurrences+unknown.occurrences+none.occurrences == 0 {
 		return []Finding{{
 			Icon:    "\U0001f504",
 			Message: fmt.Sprintf("0 version changes among %s shared packages \u2014 no actual upgrades", fmtCount(shared)),
 		}}
 	}
 
-	var findings []Finding
-
-	if downgrades > 0 {
-		names := make([]string, len(topDowngrades))
-		for i, d := range topDowngrades {
+	// occurrences: note when a change hits many locs
+	occurrences := func(t *tally) string {
+		if t.occurrences == len(t.distinct) {
+			return ""
+		}
+		return fmt.Sprintf(" across %d occurrences", t.occurrences)
+	}
+	list := func(t *tally) string {
+		names := make([]string, len(t.samples))
+		for i, d := range t.samples {
 			names[i] = fmt.Sprintf("%s %s\u2192%s", d.name, d.from, d.to)
 		}
-		msg := fmt.Sprintf("%d version downgrades detected: %s", downgrades, strings.Join(names, ", "))
-		if downgrades > len(topDowngrades) {
-			msg += fmt.Sprintf(" + %d more", downgrades-len(topDowngrades))
+		msg := strings.Join(names, ", ")
+		if n := len(t.distinct) - len(t.samples); n > 0 {
+			msg += fmt.Sprintf(" + %d more", n)
 		}
+		return msg
+	}
+
+	var findings []Finding
+
+	if len(down.distinct) > 0 {
 		findings = append(findings, Finding{
 			Icon:    "\U0001f6a8",
-			Message: msg,
+			Message: fmt.Sprintf("%d version downgrades detected%s: %s", len(down.distinct), occurrences(down), list(down)),
 		})
 	}
 
-	if upgrades > 0 {
-		msg := fmt.Sprintf("%d version upgrades", upgrades)
-		if majorUp > 0 || minorUp > 0 {
-			parts := make([]string, 0, 3)
-			if majorUp > 0 {
-				parts = append(parts, fmt.Sprintf("%d major", majorUp))
-			}
-			if minorUp > 0 {
-				parts = append(parts, fmt.Sprintf("%d minor", minorUp))
-			}
-			if patchUp > 0 {
-				parts = append(parts, fmt.Sprintf("%d patch", patchUp))
+	if len(up.distinct) > 0 {
+		msg := fmt.Sprintf("%d version upgrades", len(up.distinct))
+		if levels[LevelMajor] > 0 || levels[LevelMinor] > 0 || levels[LevelPrerelease] > 0 {
+			parts := make([]string, 0, 4)
+			for _, l := range []string{LevelMajor, LevelMinor, LevelPatch, LevelPrerelease} {
+				if levels[l] > 0 {
+					parts = append(parts, fmt.Sprintf("%d %s", levels[l], l))
+				}
 			}
 			msg += fmt.Sprintf(" (%s)", strings.Join(parts, ", "))
 		}
-		msg += fmt.Sprintf(" among %s shared packages", fmtCount(shared))
+		msg += fmt.Sprintf("%s among %s shared packages", occurrences(up), fmtCount(shared))
 		findings = append(findings, Finding{
 			Icon:    "\U0001f504",
 			Message: msg,
 		})
 	}
 
+	if len(unknown.distinct) > 0 {
+		findings = append(findings, Finding{
+			Icon:    "\u2753",
+			Message: fmt.Sprintf("%d version changes with unknown direction%s: %s", len(unknown.distinct), occurrences(unknown), list(unknown)),
+		})
+	}
+
+	if len(none.distinct) > 0 {
+		findings = append(findings, Finding{
+			Icon:    "\U0001f504",
+			Message: fmt.Sprintf("%d version label changes with equal precedence%s: %s", len(none.distinct), occurrences(none), list(none)),
+		})
+	}
+
 	return findings
+}
+
+// identityKey: case-folded ID for distinct counts
+func identityKey(id string) string {
+	return identity.MatchKey(id)
 }
 
 func detectAttackSurfaceDelta(overview DiffOverview) []Finding {
@@ -715,6 +730,70 @@ func pathHotspots(comps []sbom.Component, direction string) *Finding {
 		Icon:    "\U0001f4c1",
 		Message: fmt.Sprintf("Top %s areas: %s", direction, strings.Join(parts, ", ")),
 	}
+}
+
+// detectOwnedFileDrift: same-ver file changes, identical upgrades
+func detectOwnedFileDrift(result DiffResult) []Finding {
+	var findings []Finding
+	if n := len(result.OwnedFileDrift); n > 0 {
+		limit := min(n, 5)
+		parts := make([]string, limit)
+		config := 0
+		for _, d := range result.OwnedFileDrift {
+			if len(d.GatedFiles(false)) == 0 {
+				config++
+			}
+		}
+		for i, d := range result.OwnedFileDrift[:limit] {
+			parts[i] = fmt.Sprintf("%s %s (%s %s", d.Name, d.Version, d.Files[0].Change, d.Files[0].Path)
+			if len(d.Files) > 1 {
+				parts[i] += fmt.Sprintf(" +%d", len(d.Files)-1)
+			}
+			parts[i] += ")"
+		}
+		msg := fmt.Sprintf("%d packages changed owned files without a version change: %s", n, strings.Join(parts, ", "))
+		if n > limit {
+			msg += fmt.Sprintf(" + %d more", n-limit)
+		}
+		if config > 0 {
+			msg += fmt.Sprintf(" (%d config files only)", config)
+		}
+		findings = append(findings, Finding{Icon: "\u26a0\ufe0f", Message: msg})
+	}
+
+	var same []string
+	for _, c := range result.Changed {
+		if c.Drift != nil && c.Drift.Files != nil && c.Drift.Files.AllMatch {
+			same = append(same, fmt.Sprintf("%s %s\u2192%s", c.Name, c.Drift.VersionFrom, c.Drift.VersionTo))
+		}
+	}
+	if len(same) > 0 {
+		limit := min(len(same), 5)
+		msg := fmt.Sprintf("%d version changes where all recorded owned files are byte-identical: %s", len(same), strings.Join(same[:limit], ", "))
+		if len(same) > limit {
+			msg += fmt.Sprintf(" + %d more", len(same)-limit)
+		}
+		findings = append(findings, Finding{Icon: "\u2139\ufe0f", Message: msg})
+	}
+	return findings
+}
+
+// detectFileChanges: changed file entries, not pkg drift
+func detectFileChanges(result DiffResult) []Finding {
+	n := len(result.FileChanges)
+	if n == 0 {
+		return nil
+	}
+	limit := min(n, 5)
+	paths := make([]string, limit)
+	for i := 0; i < limit; i++ {
+		paths[i] = result.FileChanges[i].Path
+	}
+	msg := fmt.Sprintf("%d file entries changed content (not package integrity drift): %s", n, strings.Join(paths, ", "))
+	if n > limit {
+		msg += fmt.Sprintf(" + %d more", n-limit)
+	}
+	return []Finding{{Icon: "\U0001f4c4", Message: msg}}
 }
 
 func detectIntegrityDriftContext(result DiffResult) []Finding {

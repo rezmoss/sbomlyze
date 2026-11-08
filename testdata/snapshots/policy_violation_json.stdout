@@ -3,7 +3,10 @@
     "before": {
       "file_name": "TESTDATA/cyclonedx-before.json",
       "file_size": 921,
-      "info": {},
+      "info": {
+        "format": "CycloneDX",
+        "spec_version": "1.4"
+      },
       "stats": {
         "total_components": 3,
         "by_type": {
@@ -33,7 +36,10 @@
     "after": {
       "file_name": "TESTDATA/cyclonedx-after.json",
       "file_size": 1037,
-      "info": {},
+      "info": {
+        "format": "CycloneDX",
+        "spec_version": "1.4"
+      },
       "stats": {
         "total_components": 3,
         "by_type": {
@@ -145,14 +151,33 @@
             }
           },
           "version_from": "4.17.20",
-          "version_to": "4.17.21"
+          "version_to": "4.17.21",
+          "direction": "upgrade",
+          "level": "patch"
         }
       }
     ],
     "drift_summary": {
       "version_drift": 1,
       "integrity_drift": 0,
-      "metadata_drift": 0
+      "metadata_drift": 0,
+      "upgrades": 1,
+      "downgrades": 0,
+      "unknown_direction": 0,
+      "distinct_version_changes": 1,
+      "file_changes": 0,
+      "license_changes": 0,
+      "owned_file_drift": 0,
+      "owned_files_changed": 0
+    },
+    "digest_coverage": {
+      "same_version_pairs": 1,
+      "comparable": 0,
+      "before_only": 0,
+      "after_only": 0,
+      "disjoint_kinds": 0,
+      "by_kind": {},
+      "packages_total": 3
     },
     "added_by_type": [
       {

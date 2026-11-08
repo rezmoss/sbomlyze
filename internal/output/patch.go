@@ -18,7 +18,7 @@ type JSONPatchOp struct {
 
 // GenerateJSONPatch creates a JSON Patch from a diff.
 func GenerateJSONPatch(result analysis.DiffResult) []JSONPatchOp {
-	var ops []JSONPatchOp
+	ops := []JSONPatchOp{} // an empty diff is [], not null
 
 	for i, c := range result.Added {
 		ops = append(ops, JSONPatchOp{
@@ -36,10 +36,15 @@ func GenerateJSONPatch(result analysis.DiffResult) []JSONPatchOp {
 	}
 
 	for _, c := range result.Changed {
+		// one pkg, two locations: two entries
+		ref := c.ID
+		if c.Location != "" {
+			ref += "@" + c.Location
+		}
 		if c.Before.Version != c.After.Version {
 			ops = append(ops, JSONPatchOp{
 				Op:    "replace",
-				Path:  fmt.Sprintf("/components/%s/version", c.ID),
+				Path:  fmt.Sprintf("/components/%s/version", ref),
 				Value: c.After.Version,
 			})
 		}
@@ -47,7 +52,7 @@ func GenerateJSONPatch(result analysis.DiffResult) []JSONPatchOp {
 		if !slices.Equal(c.Before.Licenses, c.After.Licenses) {
 			ops = append(ops, JSONPatchOp{
 				Op:    "replace",
-				Path:  fmt.Sprintf("/components/%s/licenses", c.ID),
+				Path:  fmt.Sprintf("/components/%s/licenses", ref),
 				Value: c.After.Licenses,
 			})
 		}
@@ -55,10 +60,35 @@ func GenerateJSONPatch(result analysis.DiffResult) []JSONPatchOp {
 		if !maps.Equal(c.Before.Hashes, c.After.Hashes) {
 			ops = append(ops, JSONPatchOp{
 				Op:    "replace",
-				Path:  fmt.Sprintf("/components/%s/hashes", c.ID),
+				Path:  fmt.Sprintf("/components/%s/hashes", ref),
 				Value: c.After.Hashes,
 			})
 		}
+
+		// go-h1 and cargo-checksum live outside Hashes
+		if !maps.Equal(c.Before.Digests, c.After.Digests) {
+			ops = append(ops, JSONPatchOp{
+				Op:    "replace",
+				Path:  fmt.Sprintf("/components/%s/digests", ref),
+				Value: c.After.Digests,
+			})
+		}
+	}
+
+	for _, m := range result.Moved {
+		ops = append(ops, JSONPatchOp{
+			Op:   "move",
+			From: fmt.Sprintf("/components/%s@%s", m.ID, m.From),
+			Path: fmt.Sprintf("/components/%s@%s", m.ID, m.To),
+		})
+	}
+
+	for _, f := range result.FileChanges {
+		ops = append(ops, JSONPatchOp{
+			Op:    "replace",
+			Path:  fmt.Sprintf("/files/%s/hashes", f.Path),
+			Value: f.HashesAfter,
+		})
 	}
 
 	return ops
