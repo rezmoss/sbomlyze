@@ -73,7 +73,7 @@
     "findings": [
       {
         "icon": "📉",
-        "message": "Attack surface: -1 packages (-33.3%)"
+        "message": "Inventory: -1 components (-33.3%)"
       }
     ]
   },

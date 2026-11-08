@@ -10,13 +10,13 @@ import (
 )
 
 type syftDocument struct {
-	Artifacts             []syftArtifact      `json:"artifacts"`
-	ArtifactRelationships []syftRelationship  `json:"artifactRelationships"`
-	Files                 []any               `json:"files"`
-	Source                syftSource          `json:"source"`
-	Distro                syftDistro          `json:"distro"`
-	Descriptor            syftDescriptor      `json:"descriptor"`
-	Schema                syftSchema          `json:"schema"`
+	Artifacts             []syftArtifact     `json:"artifacts"`
+	ArtifactRelationships []syftRelationship `json:"artifactRelationships"`
+	Files                 []any              `json:"files"`
+	Source                syftSource         `json:"source"`
+	Distro                syftDistro         `json:"distro"`
+	Descriptor            syftDescriptor     `json:"descriptor"`
+	Schema                syftSchema         `json:"schema"`
 }
 
 type syftArtifact struct {
@@ -52,16 +52,18 @@ type syftRelationship struct {
 }
 
 type syftSource struct {
-	ID     string      `json:"id"`
-	Name   string      `json:"name"`
-	Type   string      `json:"type"`
-	Target any `json:"target"`
+	ID      string `json:"id"`
+	Name    string `json:"name"`
+	Type    string `json:"type"`
+	Version string `json:"version,omitempty"`
+	Target  any    `json:"target"`
 }
 
 type syftDistro struct {
 	Name       string   `json:"name"`
 	Version    string   `json:"version"`
 	PrettyName string   `json:"prettyName"`
+	VersionID  string   `json:"versionID,omitempty"`
 	IDLike     []string `json:"idLike"`
 }
 
@@ -82,14 +84,16 @@ func WriteSyft(w io.Writer, comps []sbom.Component, info sbom.SBOMInfo) error {
 		ArtifactRelationships: make([]syftRelationship, 0),
 		Files:                 make([]any, 0),
 		Source: syftSource{
-			ID:   info.SourceID,
-			Name: info.SourceName,
-			Type: info.SourceType,
+			ID:      info.SourceID,
+			Name:    info.SourceName,
+			Type:    info.SourceType,
+			Version: info.SourceVersion,
 		},
 		Distro: syftDistro{
 			Name:       info.OSName,
 			Version:    info.OSVersion,
 			PrettyName: info.OSPrettyName,
+			VersionID:  info.OSVersionID,
 			IDLike:     info.OSIDLike,
 		},
 		Descriptor: syftDescriptor{
@@ -135,12 +139,12 @@ func WriteSyft(w io.Writer, comps []sbom.Component, info sbom.SBOMInfo) error {
 
 func componentToSyftArtifact(c sbom.Component, index int) syftArtifact {
 	a := syftArtifact{
-		ID:      syftArtifactID(c, index),
-		Name:    c.Name,
-		Version: c.Version,
-		Type:    syftTypeFor(c),
-		FoundBy: c.FoundBy,
-		PURL:    c.PURL,
+		ID:       syftArtifactID(c, index),
+		Name:     c.Name,
+		Version:  c.Version,
+		Type:     syftTypeFor(c),
+		FoundBy:  c.FoundBy,
+		PURL:     c.PURL,
 		Language: c.Language,
 	}
 

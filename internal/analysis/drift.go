@@ -135,6 +135,7 @@ type DiffResult struct {
 	FilesAdded        []FileRef              `json:"files_added,omitempty"`
 	FilesRemoved      []FileRef              `json:"files_removed,omitempty"`
 	OwnedFileDrift    []OwnedFileDrift       `json:"owned_file_drift,omitempty"`
+	SourceChange      *SourceChange          `json:"source_change,omitempty"`
 	Duplicates        *DuplicateReport       `json:"duplicates,omitempty"`
 	Dependencies      *DependencyDiff        `json:"dependencies,omitempty"`
 	DriftSummary      *DriftSummary          `json:"drift_summary,omitempty"`
@@ -151,7 +152,22 @@ type DiffResult struct {
 func (r DiffResult) HasChanges() bool {
 	return len(r.Added) > 0 || len(r.Removed) > 0 || len(r.Changed) > 0 ||
 		len(r.Moved) > 0 || len(r.FileChanges) > 0 || len(r.FilesAdded) > 0 ||
-		len(r.FilesRemoved) > 0 || len(r.OwnedFileDrift) > 0
+		len(r.FilesRemoved) > 0 || len(r.OwnedFileDrift) > 0 || r.SourceChange != nil
+}
+
+// SourceChange: scanned image/source version or digest changed
+type SourceChange struct {
+	Name string `json:"name,omitempty"`
+	From string `json:"from"`
+	To   string `json:"to"`
+}
+
+// SourceChangeOf: nil unless both versions known and differ
+func SourceChangeOf(before, after sbom.SBOMInfo) *SourceChange {
+	if before.SourceVersion == "" || after.SourceVersion == "" || before.SourceVersion == after.SourceVersion {
+		return nil
+	}
+	return &SourceChange{Name: after.SourceName, From: before.SourceVersion, To: after.SourceVersion}
 }
 
 func (h *HashDiff) IsEmpty() bool {
@@ -251,7 +267,8 @@ func SummarizeDrift(changes []ChangedComponent) DriftSummary {
 	distinct := make(map[string]bool)
 
 	for _, c := range changes {
-		if c.Drift == nil {
+		// OS release change is reported as an OS change
+		if c.Drift == nil || c.Before.IsEvidence() {
 			continue
 		}
 		if len(c.Drift.LicensesDiff) > 0 {

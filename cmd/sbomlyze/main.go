@@ -245,6 +245,7 @@ func main() {
 
 	overview := analysis.ComputeDiffOverview(file1, file2, comps1, comps2, info1, info2)
 	result := analysis.DiffSBOMs(comps1, comps2, info1.Files, info2.Files)
+	result.SourceChange = analysis.SourceChangeOf(info1, info2)
 	analysis.ComputePackageSamples(&result)
 	findings := analysis.ComputeKeyFindings(result, overview)
 	spin.Done("Done")

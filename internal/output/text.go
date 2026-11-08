@@ -3,7 +3,9 @@ package output
 import (
 	"fmt"
 	"io"
+	"maps"
 	"path/filepath"
+	"slices"
 	"strings"
 
 	"github.com/rezmoss/sbomlyze/internal/analysis"
@@ -54,14 +56,17 @@ func PrintDiffOverview(overview analysis.DiffOverview) {
 		{"File Size:", formatFileSize(b.FileSize), formatFileSize(a.FileSize)},
 		{"Format:", orNone(formatLabel(b.Info)), orNone(formatLabel(a.Info))},
 		{"Generator:", orNone(generatorLabel(b.Info)), orNone(generatorLabel(a.Info))},
-		{"OS:", orNone(b.Info.OSPrettyName), orNone(a.Info.OSPrettyName)},
+		{"OS:", orNone(analysis.OSLabel(b.Info)), orNone(analysis.OSLabel(a.Info))},
 		{"Source:", orNone(b.Info.SourceName), orNone(a.Info.SourceName)},
 		{"Source Type:", orNone(b.Info.SourceType), orNone(a.Info.SourceType)},
 	}
-	// widen the Before column so long values never run together
+	// widen Before column to fit, capped; longer values keep their tail
 	w := 24
 	for _, r := range rows {
-		w = max(w, len(r[1])+2)
+		w = max(w, min(len(r[1])+2, 40))
+	}
+	for i := range rows {
+		rows[i][1] = tailTrim(rows[i][1], w-2)
 	}
 	row := fmt.Sprintf("%%-24s%%-%ds%%s\n", w)
 	fmt.Printf("\nSBOM Comparison\n%s\n", sep)
@@ -389,13 +394,15 @@ func PrintTextDiff(result analysis.DiffResult) {
 	if result.Dependencies != nil {
 		if len(result.Dependencies.AddedDeps) > 0 {
 			fmt.Printf("\n>> Added dependencies:\n")
-			for comp, deps := range result.Dependencies.AddedDeps {
+			for _, comp := range slices.Sorted(maps.Keys(result.Dependencies.AddedDeps)) {
+				deps := result.Dependencies.AddedDeps[comp]
 				fmt.Printf("  %s: +%v\n", comp, deps)
 			}
 		}
 		if len(result.Dependencies.RemovedDeps) > 0 {
 			fmt.Printf("\n<< Removed dependencies:\n")
-			for comp, deps := range result.Dependencies.RemovedDeps {
+			for _, comp := range slices.Sorted(maps.Keys(result.Dependencies.RemovedDeps)) {
+				deps := result.Dependencies.RemovedDeps[comp]
 				fmt.Printf("  %s: -%v\n", comp, deps)
 			}
 		}
@@ -502,4 +509,13 @@ func atLocation(loc string) string {
 		return ""
 	}
 	return " @ " + loc
+}
+
+// tailTrim shortens s to n runes, keeping the end ("…/app/proxy").
+func tailTrim(s string, n int) string {
+	r := []rune(s)
+	if len(r) <= n {
+		return s
+	}
+	return "…" + string(r[len(r)-n+1:])
 }

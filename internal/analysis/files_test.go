@@ -189,3 +189,25 @@ func TestFileDiffIndependentOfOrder(t *testing.T) {
 		}
 	}
 }
+
+func TestOwnedFileDelta_Counts(t *testing.T) {
+	files := func(h string) []sbom.FileEntry {
+		return []sbom.FileEntry{
+			{Path: "/same", Hashes: map[string]string{"sha256": "aa"}},
+			{Path: "/mod", Hashes: map[string]string{"sha256": h}},
+			{Path: "/nohash"},
+		}
+	}
+	pkg := sbom.Component{Name: "p", OwnedFiles: []string{"/same", "/mod", "/nohash"}}
+	bf, af := files("bb"), files("cc")
+	bi, ai := newFileIndex(bf, []sbom.Component{pkg}), newFileIndex(af, []sbom.Component{pkg})
+	_, d := ownedFileDelta(pkg, pkg, bi, ai)
+	if d.Unchanged != 1 || d.Modified != 1 || d.Unverified != 1 || d.AllMatch {
+		t.Errorf("got %+v", d)
+	}
+	ai = newFileIndex(files("bb"), []sbom.Component{pkg})
+	_, d = ownedFileDelta(pkg, pkg, bi, ai)
+	if d.Unchanged != 2 || d.AllMatch {
+		t.Errorf("unhashed file must block all_match: %+v", d)
+	}
+}

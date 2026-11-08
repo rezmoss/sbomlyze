@@ -270,11 +270,13 @@ func ComputeKeyFindings(result DiffResult, overview DiffOverview) KeyFindings {
 	var findings []Finding
 
 	findings = append(findings, detectScanContextMismatch(overview)...)
-	findings = append(findings, detectAttackSurfaceDelta(overview)...)
+	findings = append(findings, detectSourceChange(result)...)
+	findings = append(findings, detectInventoryDelta(overview)...)
 	findings = append(findings, detectVanishedEcosystems(overview)...)
 	findings = append(findings, detectOSChange(overview)...)
 	findings = append(findings, detectVersionChangeAnalysis(result, overview)...)
 	findings = append(findings, detectIntegrityDriftContext(result)...)
+	findings = append(findings, detectLowDigestCoverage(result)...)
 	findings = append(findings, detectFileChanges(result)...)
 	findings = append(findings, detectOwnedFileDrift(result, overview)...)
 	findings = append(findings, detectDominantPathPattern(result)...)
@@ -284,6 +286,41 @@ func ComputeKeyFindings(result DiffResult, overview DiffOverview) KeyFindings {
 	findings = append(findings, detectCatalogerGaps(overview)...)
 
 	return KeyFindings{Findings: findings}
+}
+
+// detectSourceChange: same source, different digest (retag)
+func detectSourceChange(result DiffResult) []Finding {
+	c := result.SourceChange
+	if c == nil {
+		return nil
+	}
+	name := c.Name
+	if name == "" {
+		name = "source"
+	}
+	return []Finding{{
+		Icon:    "\U0001f504",
+		Message: fmt.Sprintf("Scanned %s changed: %s \u2192 %s", name, c.From, c.To),
+	}}
+}
+
+// detectLowDigestCoverage: integrity check mostly blind
+func detectLowDigestCoverage(result DiffResult) []Finding {
+	c := result.DigestCoverage
+	if c == nil || c.SameVersionPairs < 5 || c.Comparable*2 >= c.SameVersionPairs {
+		return nil
+	}
+	return []Finding{{
+		Icon:    "\U0001f648",
+		Message: fmt.Sprintf("Integrity drift checked only %d of %d same-version packages; the rest carry no comparable digest", c.Comparable, c.SameVersionPairs),
+	}}
+}
+
+func plural(n int, word string) string {
+	if n == 1 {
+		return "1 " + word
+	}
+	return fmt.Sprintf("%d %ss", n, word)
 }
 
 func detectScanContextMismatch(overview DiffOverview) []Finding {
@@ -358,14 +395,7 @@ func detectVanishedEcosystems(overview DiffOverview) []Finding {
 }
 
 func detectOSChange(overview DiffOverview) []Finding {
-	bOS := overview.Before.Info.OSPrettyName
-	aOS := overview.After.Info.OSPrettyName
-	if bOS == "" {
-		bOS = overview.Before.Info.OSName
-	}
-	if aOS == "" {
-		aOS = overview.After.Info.OSName
-	}
+	bOS, aOS := OSLabel(overview.Before.Info), OSLabel(overview.After.Info)
 
 	if bOS == aOS {
 		return nil
@@ -566,7 +596,7 @@ func detectVersionChangeAnalysis(result DiffResult, overview DiffOverview) []Fin
 	levels := make(map[string]int) // distinct upgrades per level
 
 	for _, c := range result.Changed {
-		if c.Drift == nil || c.Drift.Type != DriftTypeVersion {
+		if c.Drift == nil || c.Drift.Type != DriftTypeVersion || c.Before.IsEvidence() {
 			continue
 		}
 		var t *tally
@@ -669,7 +699,7 @@ func identityKey(id string) string {
 	return identity.MatchKey(id)
 }
 
-func detectAttackSurfaceDelta(overview DiffOverview) []Finding {
+func detectInventoryDelta(overview DiffOverview) []Finding {
 	bTotal := overview.Before.Stats.TotalComponents
 	aTotal := overview.After.Stats.TotalComponents
 	if bTotal == 0 && aTotal == 0 {
@@ -681,7 +711,7 @@ func detectAttackSurfaceDelta(overview DiffOverview) []Finding {
 	pkgDelta := aTotal - bTotal
 	if pkgDelta != 0 {
 		pct := float64(pkgDelta) / float64(bTotal) * 100
-		parts = append(parts, fmt.Sprintf("%+d packages (%.1f%%)", pkgDelta, pct))
+		parts = append(parts, fmt.Sprintf("%+d components (%.1f%%)", pkgDelta, pct))
 	}
 
 	bFiles := overview.Before.Info.FilesCount
@@ -704,7 +734,7 @@ func detectAttackSurfaceDelta(overview DiffOverview) []Finding {
 		return nil
 	}
 
-	// direction of the first non-zero delta: packages, files, relationships
+	// direction of the first non-zero delta: components, files, relationships
 	delta := pkgDelta
 	if delta == 0 {
 		delta = aFiles - bFiles
@@ -719,7 +749,7 @@ func detectAttackSurfaceDelta(overview DiffOverview) []Finding {
 
 	return []Finding{{
 		Icon:    icon,
-		Message: fmt.Sprintf("Attack surface: %s", strings.Join(parts, ", ")),
+		Message: fmt.Sprintf("Inventory: %s", strings.Join(parts, ", ")),
 	}}
 }
 
@@ -788,7 +818,7 @@ func detectOwnedFileDrift(result DiffResult, overview DiffOverview) []Finding {
 			msg += fmt.Sprintf(" (%d config files only)", config)
 		}
 		// a new base OS release rebuilds packages under the same version
-		if from, to := osLabel(overview.Before.Info), osLabel(overview.After.Info); from != "" && to != "" && from != to {
+		if from, to := OSLabel(overview.Before.Info), OSLabel(overview.After.Info); from != "" && to != "" && from != to {
 			msg += fmt.Sprintf(" \u2014 base OS changed (%s \u2192 %s), so same-version rebuilds are expected", from, to)
 		}
 		findings = append(findings, Finding{Icon: "\u26a0\ufe0f", Message: msg})
@@ -796,13 +826,13 @@ func detectOwnedFileDrift(result DiffResult, overview DiffOverview) []Finding {
 
 	var same []string
 	for _, c := range result.Changed {
-		if c.Drift != nil && c.Drift.Files != nil && c.Drift.Files.AllMatch {
-			same = append(same, fmt.Sprintf("%s %s\u2192%s", c.Name, c.Drift.VersionFrom, c.Drift.VersionTo))
+		if d := c.Drift; d != nil && d.Files != nil && d.Files.AllMatch {
+			same = append(same, fmt.Sprintf("%s %s\u2192%s (%s)", c.Name, d.VersionFrom, d.VersionTo, plural(d.Files.Unchanged, "file")))
 		}
 	}
 	if len(same) > 0 {
 		limit := min(len(same), 5)
-		msg := fmt.Sprintf("%d version changes where all recorded owned files are byte-identical: %s", len(same), strings.Join(same[:limit], ", "))
+		msg := fmt.Sprintf("%d version changes where every hashed owned file is byte-identical: %s", len(same), strings.Join(same[:limit], ", "))
 		if len(same) > limit {
 			msg += fmt.Sprintf(" + %d more", len(same)-limit)
 		}
@@ -811,11 +841,16 @@ func detectOwnedFileDrift(result DiffResult, overview DiffOverview) []Finding {
 	return findings
 }
 
-func osLabel(info sbom.SBOMInfo) string {
-	if info.OSPrettyName != "" {
-		return info.OSPrettyName
+// OSLabel: OS name plus exact VERSION_ID (12.10)
+func OSLabel(info sbom.SBOMInfo) string {
+	l := info.OSPrettyName
+	if l == "" {
+		l = strings.TrimSpace(info.OSName + " " + info.OSVersion)
 	}
-	return strings.TrimSpace(info.OSName + " " + info.OSVersion)
+	if v := info.OSVersionID; v != "" && !strings.Contains(l, v) {
+		l = strings.TrimSpace(l + " " + v)
+	}
+	return l
 }
 
 // detectFileChanges: changed file entries, not pkg drift

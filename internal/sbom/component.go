@@ -11,10 +11,12 @@ type SBOMInfo struct {
 	OSName             string         `json:"os_name,omitempty"`
 	OSVersion          string         `json:"os_version,omitempty"`
 	OSPrettyName       string         `json:"os_pretty_name,omitempty"`
+	OSVersionID        string         `json:"os_version_id,omitempty"` // os-release VERSION_ID, e.g. 12.10
 	OSIDLike           []string       `json:"os_id_like,omitempty"`
 	SourceType         string         `json:"source_type,omitempty"`
 	SourceName         string         `json:"source_name,omitempty"`
 	SourceID           string         `json:"source_id,omitempty"`
+	SourceVersion      string         `json:"source_version,omitempty"` // e.g. image digest
 	RelationshipCounts map[string]int `json:"relationship_counts,omitempty"`
 	ToolName           string         `json:"tool_name,omitempty"`
 	ToolVersion        string         `json:"tool_version,omitempty"`
@@ -103,6 +105,10 @@ func PackageComponents(comps []Component) []Component {
 
 // ToIdentity converts to ComponentIdentity.
 func (c Component) ToIdentity() identity.ComponentIdentity {
+	// OS bom-ref embeds the version (os:debian@12.10)
+	if c.Type == "operating-system" && c.PURL == "" && len(c.CPEs) == 0 {
+		return identity.ComponentIdentity{Name: "os:" + c.Name}
+	}
 	return identity.ComponentIdentity{
 		PURL:      c.PURL,
 		CPEs:      c.CPEs,
