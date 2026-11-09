@@ -19,7 +19,7 @@ node "$ROOT/scripts/webui-shot.mjs" "http://127.0.0.1:$port/" "$IN/nginx-1.28.0-
 
 tape() { # name, then tape body on stdin
   { printf 'Output "%s/%s.gif"\nSet Shell bash\nSet FontSize 15\nSet Width 1280\nSet Height 720\nSet Padding 18\nSet Theme "Dracula"\nSet TypingSpeed 35ms\n' "$OUT" "$1"
-    printf 'Hide\nType `export PATH=%s/bin:$PATH PS1="$ "; cd %s; clear`\nEnter\nSleep 300ms\nShow\n' "$WORK" "$WORK/demo"
+    printf 'Hide\nType `unset CI GITHUB_ACTIONS; export PATH=%s/bin:$PATH PS1="$ "; cd %s; clear`\nEnter\nSleep 300ms\nShow\n' "$WORK" "$WORK/demo"
     cat; } > "$WORK/$1.tape"
   vhs "$WORK/$1.tape"
 }
