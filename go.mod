@@ -12,7 +12,7 @@ require (
 	github.com/masahiro331/go-mvn-version v0.0.0-20260119054159-d21fcd2e7de1
 	github.com/mattn/go-isatty v0.0.24
 	github.com/spdx/tools-golang v0.5.7
-	go.yaml.in/yaml/v3 v3.0.5
+	go.yaml.in/yaml/v3 v3.0.6
 	golang.org/x/mod v0.42.0
 )
 
