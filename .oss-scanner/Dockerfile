@@ -4,10 +4,11 @@
 # threat_model.md, next to this file, says what is in scope and how to exercise it.
 
 # Node runtime for the GitHub Action under action/ (action.yml runs it with node24).
-FROM node:24-bookworm-slim AS node
+# Images pinned by multi-platform digest; Dependabot (docker, /.oss-scanner) bumps them.
+FROM node:24-bookworm-slim@sha256:01d566e8d94d8c619591d78652babfccd3c6992a3dffa9ed5ab39e11cf6c70e9 AS node
 
 # The Go line go.mod and CI (setup-go with go-version-file) use. The image has git and gcc, which -race needs.
-FROM golang:1.25-bookworm
+FROM golang:1.25-bookworm@sha256:3b4a11519ad929d1e1d261a12cff056f0c85b735253d7d861346b9c6f8b36437
 COPY --from=node /usr/local/bin/node /usr/local/bin/node
 
 # scanner contract: the checkout lives inside the image, at /src
