@@ -1,0 +1,372 @@
+{
+  "info": {
+    "source_type": "image",
+    "source_name": "index.docker.io/library/nginx",
+    "source_version": "sha256:3b03dfd827515a07ccf4946000f0bbdd2a4fb6aca7499249fcb6b1f9726823d6",
+    "tool_name": "syft",
+    "tool_version": "1.56.0",
+    "sbom_timestamp": "2026-11-09T01:24:49Z",
+    "format": "SPDX",
+    "spec_version": "SPDX-2.3",
+    "sbom_author": "Anchore, Inc"
+  },
+  "findings": {
+    "findings": [
+      {
+        "icon": "📦",
+        "message": "Dominated by deb: 149 of 150 packages (99.3%)"
+      },
+      {
+        "icon": "📁",
+        "message": "Top directories: /var/lib/dpkg (149), /usr/share/java (1)"
+      },
+      {
+        "icon": "📜",
+        "message": "License profile: 22% permissive, 57% copyleft, 20% unknown"
+      },
+      {
+        "icon": "⚠️",
+        "message": "Low hash coverage: 0.7% (149 of 150 missing)"
+      }
+    ]
+  },
+  "stats": {
+    "total_components": 150,
+    "by_type": {
+      "deb": 149,
+      "maven": 1
+    },
+    "by_license": {
+      "Apache-2.0": 2,
+      "Apache-2.0 AND Apache-2.0 AND BSD-3-Clause AND LicenseRef-GPL AND GPL-2.0-only AND GPL-2.0-or-later AND ISC AND Kazlib AND LGPL-2.0-only AND Latex2e": 5,
+      "Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND LicenseRef-custom-1": 1,
+      "Apache-2.0 AND BSD-3-Clause": 1,
+      "Apache-2.0 AND BSD-3-Clause AND ISC AND LicenseRef-ISC-IBM AND LGPL-2.1-only AND LGPL-2.1-or-later AND LicenseRef-permissive-like-automake-output AND LicenseRef-same-as-rest-of-p11kit": 1,
+      "Apache-2.0 AND BSD-3-Clause AND LicenseRef-BSD-like-with-advertising-clause AND GPL-2.0-only AND GPL-2.0-or-later AND LicenseRef-expat AND Libpng": 1,
+      "Apache-2.0 AND LicenseRef-Artistic AND GPL-1.0-only AND GPL-1.0-or-later": 2,
+      "BSD-1-Clause AND HPND AND HPND-sell-variant AND MIT": 2,
+      "BSD-2-Clause": 6,
+      "BSD-2-Clause AND BSD-2-Clause AND BSD-3-Clause AND LicenseRef-BSD-3-clause-Aaron-D-Gifford AND Beerware AND ISC AND LicenseRef-public-domain-md4 AND LicenseRef-public-domain-md5 AND LicenseRef-public-domain-sha1": 1,
+      "BSD-2-Clause AND BSD-2-Clause AND BSD-3-Clause AND LicenseRef-Expat AND ISC AND LicenseRef-public-domain-md5": 1,
+      "BSD-2-Clause AND BSD-2-Clause AND GPL-2.0-only AND GPL-2.0-or-later": 1,
+      "BSD-2-Clause AND BSD-2-Clause AND ISC": 1,
+      "BSD-2-Clause AND BSD-2-Clause AND LicenseRef-BSD-2-clause-author AND LicenseRef-BSD-2-clause-verbatim AND BSD-3-Clause AND LicenseRef-BSD-3-clause-John-Birrell AND LicenseRef-BSD-3-clause-Regents AND LicenseRef-BSD-3-clause-author AND LicenseRef-BSD-4-clause-Niels-Provos AND Beerware AND LicenseRef-Expat AND ISC AND LicenseRef-ISC-Original AND libutil-David-Nugent AND LicenseRef-public-domain": 1,
+      "BSD-2-Clause AND BSD-3-Clause AND LicenseRef-BSD-3-clause-Cambridge AND X11 AND LicenseRef-public-domain": 1,
+      "BSD-2-Clause AND BSD-3-Clause-Clear AND BSD-3-Clause AND LicenseRef-Expat AND ISC AND LGPL-2.1-only AND LGPL-2.1-or-later": 1,
+      "BSD-2-Clause AND GPL-2.0-only": 1,
+      "BSD-2-Clause AND GPL-2.0-only AND GPL-2.0-or-later": 1,
+      "BSD-2-Clause AND GPL-2.0-only AND GPL-2.0-or-later AND LicenseRef-public-domain-s-s-d": 1,
+      "BSD-2-Clause AND ISC AND LicenseRef-public-domain": 1,
+      "BSD-2-Clause AND LicenseRef-BSD-2.2-clause AND BSD-3-Clause AND LicenseRef-BSD-3-clause-JANET AND LicenseRef-BSD-3-clause-PADL AND BSD-4-Clause AND LicenseRef-BSD-4-clause-KTH AND BSD-4-Clause-UC AND FSFULLR AND GPL-3.0-only AND GPL-3.0-or-later AND LicenseRef-IBM-as-is AND MIT-CMU AND LicenseRef-MIT-Export AND LicenseRef-MIT-OpenVision AND LicenseRef-OpenLDAP AND OpenSSL AND RSA-MD AND LicenseRef-SSLeay": 2,
+      "BSD-2-Clause AND LicenseRef-Expat AND GPL-3.0-only AND GPL-3.0-or-later AND MIT AND LicenseRef-all-permissive": 1,
+      "BSD-3-Clause": 2,
+      "BSD-3-Clause AND BSD-3-Clause AND BSD-4-Clause-UC AND FSFULLR AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-or-later AND ISC AND OLDAP-2.8 AND X11 AND curl": 2,
+      "BSD-3-Clause AND BSD-3-Clause AND GPL-2.0-only AND GPL-2.0-or-later AND LicenseRef-public-domain": 1,
+      "BSD-3-Clause AND BSD-4-Clause AND LicenseRef-BSLA AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND LicenseRef-LGPL AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND MIT AND LicenseRef-public-domain": 8,
+      "BSD-3-Clause AND BSL-1.0 AND FSFAP AND FTL AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND MIT AND LicenseRef-OpenGroup-BSD-like AND LicenseRef-Public-Domain AND Zlib": 1,
+      "BSD-3-Clause AND CC0-1.0 AND LicenseRef-Expat AND GPL-3.0-only AND GPL-3.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND LicenseRef-RFC-Reference AND LicenseRef-TinySCHEME AND LicenseRef-permissive": 1,
+      "BSD-3-Clause AND FSFAP AND FSFULLR AND GFDL-1.3-only AND LicenseRef-GFDL-NIV-1.3- AND LicenseRef-GPL AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND ISC AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND X11 AND LicenseRef-public-domain": 1,
+      "BSD-3-Clause AND GPL-1.0-only AND GPL-2.0-only AND GPL-2.0-or-later AND LicenseRef-public-domain": 2,
+      "BSD-3-Clause AND GPL-2.0-only AND GPL-2.0-or-later": 2,
+      "BSD-3-Clause AND GPL-3.0-only AND GPL-3.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LicenseRef-g10-permissive": 1,
+      "BSD-3-Clause AND LicenseRef-BSD-3-clause-California AND LicenseRef-BSD-3-clause-variant AND LicenseRef-BSD-4-clause-California AND Beerware AND LicenseRef-Expat AND LicenseRef-Expat-ISC AND LicenseRef-Expat-UNM AND LicenseRef-F5 AND LicenseRef-FSF-unlimited AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND LicenseRef-JCG AND LicenseRef-MIT-XC AND LicenseRef-NeoSoft-permissive AND LicenseRef-OpenLDAP-2.8 AND LicenseRef-UMich AND LicenseRef-public-domain": 1,
+      "BSD-3-Clause AND LicenseRef-BSD-BY-LC-NE AND LicenseRef-Expat AND NTP AND Zlib": 1,
+      "BSD-3-Clause AND LicenseRef-BSD-tcp-wrappers AND Beerware AND LicenseRef-GPL AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND LGPL-2.0-only AND LGPL-2.0-or-later AND LicenseRef-public-domain": 4,
+      "BSD-3-Clause AND LicenseRef-Expat AND GPL-2.0-only AND GPL-2.0-or-later": 2,
+      "BSD-3-Clause AND LicenseRef-Expat AND GPL-2.0-only AND Zlib": 1,
+      "BSD-3-Clause AND LicenseRef-MIT-X11 AND X11": 3,
+      "BSD-3-Clause AND LicenseRef-public-domain": 1,
+      "BSD-4-Clause AND GPL-3.0-only AND GPL-3.0-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND LicenseRef-other-1 AND LicenseRef-public-domain-1": 1,
+      "BSD-4-Clause-UC AND BSL-1.0 AND GFDL-1.3-only AND LicenseRef-GFDL-NIV-1.3- AND GPL-3.0-only AND GPL-3.0-or-later AND ISC AND X11 AND LicenseRef-pcre": 1,
+      "BSD-4-Clause-UC AND FSFULLR AND GFDL-1.3-only AND LicenseRef-GFDL-NIV-1.3 AND GPL-3.0-only AND GPL-3.0-or-later AND ISC": 1,
+      "BSD-4-Clause-UC AND GFDL-1.3-only AND LicenseRef-GFDL-NIV-1.3 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND Latex2e AND LicenseRef-MIT-like AND LicenseRef-permissive": 1,
+      "CC-BY-3.0 AND GPL-2.0-only AND X11": 1,
+      "CC0-1.0 AND LicenseRef-Expat AND GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LicenseRef-public-domain": 2,
+      "FSFAP AND FSFULLR AND GFDL-1.3-only AND LicenseRef-GFDL-NIV-1.3 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND X11 AND LicenseRef-public-domain": 1,
+      "GPL-1.0-only AND GPL-2.0-only AND LGPL-2.1-only": 2,
+      "GPL-2.0-only": 1,
+      "GPL-2.0-only AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-only": 1,
+      "GPL-2.0-only AND GPL-2.0-or-later": 3,
+      "GPL-2.0-only AND GPL-2.0-or-later AND Bitstream-Vera": 1,
+      "GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later": 2,
+      "GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND LicenseRef-Unicode": 1,
+      "GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.1-only AND LGPL-2.1-or-later": 1,
+      "GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.0-only AND LGPL-2.0-or-later": 1,
+      "GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-only": 2,
+      "GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND Zlib": 1,
+      "GPL-2.0-only AND GPL-2.0-or-later AND MPL-2.0": 1,
+      "GPL-2.0-only AND GPL-2.0-or-later AND SMAIL-GPL AND LicenseRef-public-domain": 1,
+      "GPL-2.0-only AND LicenseRef-public-domain": 1,
+      "GPL-3.0-only AND GPL-3.0-or-later": 1,
+      "GPL-3.0-only AND MIT": 1,
+      "HPND-sell-variant": 2,
+      "ISC AND LGPL-2.1-only AND LGPL-2.1-or-later": 1,
+      "ISC AND LicenseRef-MIT-1": 1,
+      "LGPL-2.1-only": 1,
+      "LicenseRef-118dd263a7b91c8f21c489f949bf13281dff9e766deea92b829dac4dce66601a": 1,
+      "LicenseRef-179c34f5e56cd0b6b73dd7970a97357ee784e2236e8293826656c7ebb3bface7": 1,
+      "LicenseRef-1bcbb50f8603fe8b86d330bfa460b772ea04fbd3c70e4499f0768b5340b9fd6e": 1,
+      "LicenseRef-2af485dd05ff2f402caedc35973eb8bf60a639c4877949d19ad2054c1002984c": 1,
+      "LicenseRef-40c7e1f2118531f038ca22999bd976901254e1bc5cd1b0f0211bdd064c599987": 2,
+      "LicenseRef-4302abcc1ea1b6cbe8d19c79b892acf78878030220210707c19006828866207c": 1,
+      "LicenseRef-4b82c8dd6e55001a5921bea1d6db20be5c51e5976d892e870324026c23f37b6f": 1,
+      "LicenseRef-4f7cb9db6bf6542f5417e3d674c780d3a5fd12291a54d63054fb576ee0cfae80": 1,
+      "LicenseRef-53c9aa3ebfa5ab3aa28a5467aca74c10446b2e7ed21d68bdc8cc372f32d551ee": 1,
+      "LicenseRef-572ad60ad184d8f52c6dc66d83a61a68f137db560b3452ce00588c9ecf128a65": 1,
+      "LicenseRef-5a5e7ca0e9f3f9679977e3a3e9ede45ad92885a3297ea78e766979f9866c5a16": 1,
+      "LicenseRef-641806738b0c6a3d03168c2649e6b94205198bb66cd557e6bae3a20b71c9bb0b": 1,
+      "LicenseRef-936728f4181718f42951b881c1e8f1386bf6b2723c4fbc533c374d6f42c71816": 4,
+      "LicenseRef-95db2f9da663f2bfe2aabe9c72fce9d6c9ae767b912f397d7823f50bd55a1a7d": 1,
+      "LicenseRef-Artistic AND Artistic-2.0 AND Artistic-dist AND BSD-3-Clause AND LicenseRef-BSD-3-clause-GENERIC AND LicenseRef-BSD-3-clause-with-weird-numbering AND LicenseRef-BSD-4-clause-POWERDOG AND LicenseRef-BZIP AND LicenseRef-DONT-CHANGE-THE-GPL AND LicenseRef-Expat AND GPL-1.0-only AND GPL-1.0-or-later AND GPL-2.0-only AND GPL-2.0-or-later AND LicenseRef-GPL-3--WITH-BISON-EXCEPTION AND LicenseRef-HSIEH-BSD AND LicenseRef-HSIEH-DERIVATIVE AND LGPL-2.1-only AND LicenseRef-REGCOMP AND LicenseRef-REGCOMP- AND LicenseRef-RRA-KEEP-THIS-NOTICE AND LicenseRef-SDBM-PUBLIC-DOMAIN AND LicenseRef-TEXT-TABS AND LicenseRef-Unicode AND Zlib": 1,
+      "LicenseRef-Artistic AND BSD-3-Clause AND LicenseRef-BSD-3-clause-fjord AND LicenseRef-GPL AND GPL-3.0-only AND LicenseRef-MIT-old AND MS-PL AND Sleepycat AND LicenseRef-TCL-like AND X11 AND Zlib": 1,
+      "LicenseRef-Autoconf AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.1-only AND LGPL-2.1-or-later AND LicenseRef-PD AND LicenseRef-PD-debian AND LicenseRef-config-h AND LicenseRef-noderivs AND LicenseRef-permissive-fsf AND LicenseRef-permissive-nowarranty AND LicenseRef-probably-PD": 1,
+      "LicenseRef-BOOST-1.0 AND BSD-3-Clause AND BSD-4-Clause AND GPL-3.0-only AND GPL-3.0-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND MIT": 1,
+      "LicenseRef-BSD-variant AND GPL-2.0-only": 1,
+      "LicenseRef-BSD3": 1,
+      "LicenseRef-Chromium AND MIT AND LicenseRef-gnulib": 1,
+      "LicenseRef-Expat": 1,
+      "LicenseRef-Expat AND GPL-2.0-only AND GPL-2.0-or-later AND ISC AND LGPL-2.1-only AND LGPL-2.1-or-later": 1,
+      "LicenseRef-Expat AND LicenseRef-GAP AND LicenseRef-GPL AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-or-later AND LicenseRef-LGPL AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-3.0-or-later AND LicenseRef-public-domain": 2,
+      "LicenseRef-Expat AND LicenseRef-GPL AND GPL-2.0-or-later AND GPL-3.0-or-later AND MPL-1.1 AND X11 AND LicenseRef-public-domain": 1,
+      "LicenseRef-FSF-manpages AND LicenseRef-GFDL-1.3--no-invariant AND LicenseRef-GFDL-3 AND GPL-3.0-only AND GPL-3.0-or-later": 1,
+      "LicenseRef-FreeSoftware AND GFDL-1.2-only AND GFDL-1.2-or-later AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND MIT": 1,
+      "LicenseRef-Hylafax": 1,
+      "LicenseRef-b32aecaae84643700a33bc9ee83fa9b36938d35aa7b61b5042092eca77ddb732": 1,
+      "LicenseRef-bb7e5c24b3e27bbba5671dd710d159a0066833bda4caa1d55d8027ffed539337": 1,
+      "LicenseRef-da8191658b3452ce9caf31638ba61dab31a38c619fa39df119812e050f592fd3": 3,
+      "LicenseRef-e00e6a86c598f9e24ced0180a70a5f2f2e45e133d93adf2b17ce8a06ce4b1b51": 2,
+      "LicenseRef-fd7e4aae7e7b05f217bcf2d02322825c360e66c52c4c2f1b28d784d6297a1c23": 1,
+      "LicenseRef-public-domain": 1,
+      "MIT": 3,
+      "Zlib": 1
+    },
+    "without_license": 1,
+    "with_hashes": 1,
+    "without_hashes": 149,
+    "total_dependencies": 400,
+    "with_dependencies": 140,
+    "duplicate_count": 0,
+    "license_categories": {
+      "copyleft": 86,
+      "permissive": 33,
+      "public_domain": 1,
+      "unknown": 30
+    },
+    "with_cpes": 150,
+    "without_cpes": 0,
+    "with_purl": 150,
+    "without_purl": 0
+  },
+  "compliance": {
+    "ntia": {
+      "standard": "NTIA",
+      "score": 71,
+      "max_score": 100,
+      "passed": 5,
+      "total": 7,
+      "checks": [
+        {
+          "id": "ntia-name",
+          "name": "Component Name",
+          "description": "NTIA Minimum Elements (2021) requires the name assigned to each component by its supplier",
+          "passed": true,
+          "details": "All 150 components"
+        },
+        {
+          "id": "ntia-version",
+          "name": "Component Version",
+          "description": "NTIA Minimum Elements (2021) requires a version identifier for each component",
+          "passed": true,
+          "details": "All 150 components"
+        },
+        {
+          "id": "ntia-supplier",
+          "name": "Supplier Name",
+          "description": "NTIA Minimum Elements (2021) requires the name of the entity that creates and identifies each component",
+          "passed": false,
+          "details": "74/150 components"
+        },
+        {
+          "id": "ntia-unique-id",
+          "name": "Other Unique Identifiers",
+          "description": "NTIA Minimum Elements (2021) lists lookup identifiers (PURL, CPE, SWID) to include where they exist",
+          "passed": true,
+          "details": "All 150 components"
+        },
+        {
+          "id": "ntia-dep-relation",
+          "name": "Dependency Relationship",
+          "description": "NTIA Minimum Elements (2021) requires dependency relationships covering at least all top-level dependencies",
+          "passed": false,
+          "details": "148/150 components"
+        },
+        {
+          "id": "ntia-author",
+          "name": "SBOM Author",
+          "description": "NTIA Minimum Elements (2021) requires the entity (or tool) that created the SBOM data",
+          "passed": true,
+          "details": "Anchore, Inc"
+        },
+        {
+          "id": "ntia-timestamp",
+          "name": "SBOM Timestamp",
+          "description": "NTIA Minimum Elements (2021) requires the date and time of SBOM data assembly",
+          "passed": true,
+          "details": "2026-11-09T01:24:49Z"
+        }
+      ]
+    },
+    "cisa": {
+      "standard": "CISA",
+      "score": 60,
+      "max_score": 100,
+      "passed": 6,
+      "total": 10,
+      "checks": [
+        {
+          "id": "cisa-name",
+          "name": "Component Name",
+          "description": "CISA 2025 Minimum Elements requires a component name for each entry",
+          "passed": true,
+          "details": "All 150 components"
+        },
+        {
+          "id": "cisa-version",
+          "name": "Component Version",
+          "description": "CISA 2025 Minimum Elements requires a version identifier for each component",
+          "passed": true,
+          "details": "All 150 components"
+        },
+        {
+          "id": "cisa-supplier",
+          "name": "Software Producer",
+          "description": "CISA 2025 Minimum Elements requires identifying the producer of each component",
+          "passed": false,
+          "details": "74/150 components"
+        },
+        {
+          "id": "cisa-unique-id",
+          "name": "Software Identifiers",
+          "description": "CISA 2025 Minimum Elements requires at least one software identifier per component (PURL and CPE preferred)",
+          "passed": true,
+          "details": "All 150 components"
+        },
+        {
+          "id": "cisa-dep-relation",
+          "name": "Dependency Relationship",
+          "description": "CISA 2025 Minimum Elements requires a dependency graph covering components and their dependencies",
+          "passed": false,
+          "details": "148/150 components"
+        },
+        {
+          "id": "cisa-license",
+          "name": "License Information",
+          "description": "CISA 2025 Minimum Elements adds license data per component (an explicit 'unknown' is permitted)",
+          "passed": false,
+          "details": "149/150 components"
+        },
+        {
+          "id": "cisa-hash",
+          "name": "Component Hash",
+          "description": "CISA 2025 Minimum Elements adds a cryptographic hash per component where the artifact is available",
+          "passed": false,
+          "details": "1/150 components"
+        },
+        {
+          "id": "cisa-tool",
+          "name": "Tool Name",
+          "description": "CISA 2025 Minimum Elements adds the name of the tool(s) used to generate the SBOM",
+          "passed": true,
+          "details": "syft"
+        },
+        {
+          "id": "cisa-author",
+          "name": "SBOM Author",
+          "description": "CISA 2025 Minimum Elements requires the person or organization that created the SBOM (distinct from the tool)",
+          "passed": true,
+          "details": "Anchore, Inc"
+        },
+        {
+          "id": "cisa-timestamp",
+          "name": "SBOM Timestamp",
+          "description": "CISA 2025 Minimum Elements requires an ISO 8601 timestamp of SBOM creation",
+          "passed": true,
+          "details": "2026-11-09T01:24:49Z"
+        }
+      ]
+    },
+    "bsi_tr03183": {
+      "standard": "BSI-TR-03183",
+      "score": 44,
+      "max_score": 100,
+      "passed": 4,
+      "total": 9,
+      "checks": [
+        {
+          "id": "bsi-name",
+          "name": "Component Name",
+          "description": "BSI TR-03183-2 §5.2.2 requires a component name (or the actual filename if unnamed)",
+          "passed": true,
+          "details": "All 150 components"
+        },
+        {
+          "id": "bsi-version",
+          "name": "Component Version",
+          "description": "BSI TR-03183-2 §5.2.2 requires a version identifier",
+          "passed": true,
+          "details": "All 150 components"
+        },
+        {
+          "id": "bsi-creator",
+          "name": "Component Creator",
+          "description": "BSI TR-03183-2 §5.2.2 requires the creator of each component (email or URL contact)",
+          "passed": false,
+          "details": "74/150 components"
+        },
+        {
+          "id": "bsi-unique-id",
+          "name": "Unique Identifiers",
+          "description": "BSI TR-03183-2 §5.2.4 requires identifiers such as CPE or PURL where they exist",
+          "passed": true,
+          "details": "All 150 components"
+        },
+        {
+          "id": "bsi-license",
+          "name": "Distribution Licences",
+          "description": "BSI TR-03183-2 §5.2.2 requires distribution licences, expressed as SPDX identifiers per §6.1",
+          "passed": false,
+          "details": "149/150 components"
+        },
+        {
+          "id": "bsi-sha512",
+          "name": "SHA-512 Hash",
+          "description": "BSI TR-03183-2 §5.2.2 requires a SHA-512 checksum of each deployable component",
+          "passed": false,
+          "details": "0/150 components"
+        },
+        {
+          "id": "bsi-dep-relation",
+          "name": "Dependency Relationship",
+          "description": "BSI TR-03183-2 §5.2.2 requires per-component dependency enumeration with completeness indication",
+          "passed": false,
+          "details": "148/150 components"
+        },
+        {
+          "id": "bsi-author",
+          "name": "SBOM Creator Contact",
+          "description": "BSI TR-03183-2 §5.2.1 requires the email address (or URL) of the SBOM creator — a tool name does not qualify",
+          "passed": false,
+          "details": "missing"
+        },
+        {
+          "id": "bsi-timestamp",
+          "name": "SBOM Timestamp",
+          "description": "BSI TR-03183-2 §5.2.1 requires the date/time of SBOM compilation",
+          "passed": true,
+          "details": "2026-11-09T01:24:49Z"
+        }
+      ]
+    },
+    "overall_score": 58
+  }
+}

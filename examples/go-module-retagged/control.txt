@@ -1,0 +1,161 @@
+
+SBOM Comparison
+======================================================================
+                        Before                        After
+File:                   syft-1.55.0.syft.json         syft-1.57.0.syft.json
+File Size:              325 KB                        326 KB
+Format:                 Syft JSON 16.1.12             Syft JSON 16.1.12
+Generator:              syft 1.56.0                   syft 1.56.0
+OS:                     (none)                        (none)
+Source:                 index.docker.io/anchore/syft  index.docker.io/anchore/syft
+Source Type:            image                         image
+Total Components:       296                           297
+  golang:               296                           297             +1
+Data Quality:
+  PURL Coverage:        100.0%                        100.0%
+  License Coverage:     0.3%                          0.3%
+  Hash Coverage:        0.0%                          0.0%
+  CPE Coverage:         96.3%                         96.3%
+======================================================================
+
+Scan Context:
+  Schema:                 16.1.12                 16.1.12
+  Scan Scope:             squashed                squashed
+
+Key Findings:
+  🔄 Scanned index.docker.io/anchore/syft changed: sha256:b83763ae05df444f7f768655ce2ea6d7c2f8280d58f9bee221a69d2971d98883 → sha256:1fe67f9ac8c4c86cbc0075bda33b97a2a804500ee03d450a88721411e133068a
+  📈 Inventory: +1 components (0.3%), +1 relationships (0.3%)
+  🔄 33 version upgrades (1 major, 15 minor, 16 patch, 1 prerelease) among 295 shared packages
+  📄 1 file entries changed content (not package integrity drift): /syft
+
++ Added by type (up to 5 samples each):
+  golang (2 total):
+    + github.com/apparentlymart/go-textseg/v17 v17.0.1
+      /syft
+    + github.com/varlink/go v0.4.1-0.20261015173642-c935be0c53f7
+      /syft
+
+- Removed by type (up to 5 samples each):
+  golang (1 total):
+    - github.com/becheran/wildmatch-go v1.0.0
+      /syft
+
+📊 Drift Summary:
+  📦 Version drift:   33 components
+  📄 File changes:    1 file entries (not package drift)
+
++ Added (2):
+  + github.com/apparentlymart/go-textseg/v17 v17.0.1
+  + github.com/varlink/go v0.4.1-0.20261015173642-c935be0c53f7
+
+- Removed (1):
+  - github.com/becheran/wildmatch-go v1.0.0
+
+📄 File changes (1):
+  ~ /syft
+
+~ Changed (33):
+  ~ github.com/ProtonMail/go-crypto @ /syft
+      version: v1.4.1 -> v1.5.2
+      hash[go-h1]: h1:9RfcZHqEQUvP8RzecWEUafnZVtEvrBVL9BiF67IQOfM= -> h1:cucYnvqcY7UOXVD//mSyjeaPY0SSN3v5cDkYPxumINk=
+  ~ github.com/anchore/clio @ /syft
+      version: v0.1.1 -> v0.1.2
+      hash[go-h1]: h1:9bkYnaFbpT0J3G0qSHyQqa/lpK5zV0C9Gtgh82H/jj0= -> h1:kCWNUkJsRJ5A103fFSLG+CSqIP9bOIFX2X5GEnup0HM=
+  ~ github.com/anchore/stereoscope @ /syft
+      version: v0.3.4 -> v0.4.1
+      hash[go-h1]: h1:dT5AfjCTXUJowMiRIc+VBQVwvwnIEwnxxwA1GwAkMxw= -> h1:7mxw24JCabbJIAcyvQDjBd2pbzo+0HSFVgjYlE8Zm+k=
+  ~ github.com/anchore/syft @ /syft
+      version: v1.55.0 -> v1.57.0
+  ~ github.com/bmatcuk/doublestar/v4 @ /syft
+      version: v4.10.2 -> v4.10.3
+      hash[go-h1]: h1:eF7W7HWKg3z9NrWV9pTLnNeoXaqq3Tq9DNKXVMfoCnw= -> h1:1UIv1+fqH3++ViVkpnaPTB+Pi1UHycnPFAq14zgK+gI=
+  ~ github.com/containerd/containerd/v2 @ /syft
+      version: v2.4.1 -> v2.4.2
+      hash[go-h1]: h1:DUx/ZJN7cEu0WuzHClDB+68H/bqMEH5pWoEjf0ae4hc= -> h1:p6Qg+xbEz8lvwdhHDx0U469xENvp4LgGBx+E7djXkGw=
+  ~ github.com/containerd/stargz-snapshotter/estargz @ /syft
+      version: v0.18.2 -> v0.19.0
+      hash[go-h1]: h1:yXkZFYIzz3eoLwlTUZKz2iQ4MrckBxJjkmD16ynUTrw= -> h1:tak4qAx648jBAgZmywkd+6kaJ5pqSOVzKYB5DcVSHxk=
+  ~ github.com/deitch/magic @ /syft
+      version: v0.0.0-20230404182410-1ff89d7342da -> v1.0.0
+      hash[go-h1]: h1:ZOjWpVsFZ06eIhnh4mkaceTiVoktdU67+M7KDHJ268M= -> h1:Nma1YAj7EB8Mlv4pVhbPpUp0CV1luYj2NOnE2+2xPNE=
+  ~ github.com/docker/cli @ /syft
+      version: v29.8.2+incompatible -> v29.9.2+incompatible
+      hash[go-h1]: h1:2zgdFuoFst2T80oS42vhKGxkd0JRo305eIEKTsxR7pQ= -> h1:trup/vUxx5uUo2t+87Cd9AmITR+DvKUe4H2tTtZN8FY=
+  ~ github.com/docker/docker-credential-helpers @ /syft
+      version: v0.9.8 -> v0.9.10
+      hash[go-h1]: h1:bIREROb7So6PRlq6KTtdS9MPEjC29OQRkFNlvK2OX8Q= -> h1:LCWwv7UmS7fQVmdKDWeMuureOeY5kkbC5kZfkzxkS6k=
+  ~ github.com/docker/go-connections @ /syft
+      version: v0.8.1 -> v0.8.2
+      hash[go-h1]: h1:JibmG5hULs5qXSr/cp/w3Pw5fZuStt4MOHMUExb29/M= -> h1:9d9DEokx5W7qlr0shkFXIxEA7+TTD+llwzcykSlxMNc=
+  ~ github.com/gabriel-vasile/mimetype @ /syft
+      version: v1.4.15 -> v1.4.16
+      hash[go-h1]: h1:05iP/CYtZ/w455R/KZM6rZ5ieAdh99UPtd+d3YzLmaI= -> h1:5izNFuvA37st1dDRAcA7TtmngBmRgiIPDmTtiEvjx1E=
+  ~ github.com/github/go-spdx/v2 @ /syft
+      version: v2.7.1 -> v2.8.0
+      hash[go-h1]: h1:+siV9wnsncI5pg4otH/sKvqGL8UkcLdPh16TSJYY1V4= -> h1:WKCnF2Ee/x+zwSIEeQdm6+be0H6PiCNLQmSZ5CFmxMI=
+  ~ github.com/go-jose/go-jose/v4 @ /syft
+      version: v4.1.5 -> v4.1.6
+      hash[go-h1]: h1:RjgjO2LOtWOJKUC5wpwY9LR3B3vwVAz6JS2YHfYU6eA= -> h1:sNRkftxFJxwsILiQukqp5z83QBSmntVwmgRY7AqBDO4=
+  ~ github.com/google/pprof @ /syft
+      version: v0.0.0-20260802141513-ef3492d7dac3 -> v0.0.0-20261016150608-1facf8f91b50
+      hash[go-h1]: h1:LMLX+LgTNWpfvCBdFebv6EsYotImrt/Ppc5cXIriCSo= -> h1:PlNWJRxu5APSV0pWqfIsZ0qt9OOGHSWfZQ4zvx+WgWs=
+  ~ github.com/gookit/color @ /syft
+      version: v1.6.2 -> v1.6.3
+      hash[go-h1]: h1:M6TJRJMuDFPYkrWmjOvMj+E0xIjcHq8lMPy7+vv0z1Y= -> h1:m6E49x+KftGaspcLtPLMsyci2ARhWIUW0PUV1owMlhs=
+  ~ github.com/gpustack/gguf-parser-go @ /syft
+      version: v0.26.4 -> v0.27.0
+      hash[go-h1]: h1:B9CRrQBcIB7I/MJFZvzPZ+e+cbc1xBzQJcmpi9l/mKU= -> h1:eXFU9pmJEMQHOTL9qI742lXHWSa1CtlMWUU3gFce7nM=
+  ~ github.com/klauspost/compress @ /syft
+      version: v1.20.1 -> v1.20.3
+      hash[go-h1]: h1:T7kKElXUMXrUJ2E9QhQhxFtcK5rPyLdsGZvdbLMPdiQ= -> h1:zWNoFqq/lSuYQRim3dUXlXeA0IqwuZGicdG5ZTfY5j4=
+  ~ github.com/klauspost/pgzip @ /syft
+      version: v1.2.6 -> v1.2.7
+      hash[go-h1]: h1:8RXeL5crjEUFnR2/Sn6GJNWtSQ3Dk8pq4CL3jvdDyjU= -> h1:02QB3Ttao6zOWDnSsv3bIvjN24bX0eGjWniQ8vuBfkA=
+  ~ github.com/mattn/go-runewidth @ /syft
+      version: v0.0.27 -> v0.0.31
+      hash[go-h1]: h1:Feg/Oou5zI/wnpgDF6omIU0OokC9GxLC/WRknhVlIR0= -> h1:1oCV4ReTlosDBc6rYRw5cL8S/4y8iv5oRl4SJ5IBgwo=
+  ~ github.com/mattn/go-sqlite3 @ /syft
+      version: v1.14.48 -> v1.14.52
+      hash[go-h1]: h1:7XHIgl0a8HwOaiK4E47ozLkST78rR9+OtNGx27D/TFs= -> h1:wVbm2Qnf4OXkqhBTSPuCRZDRnxfbVrrmiCEroVdog8U=
+  ~ github.com/moby/moby/api @ /syft
+      version: v1.56.0 -> v1.56.1
+      hash[go-h1]: h1:GQzua3NA599ASSIICx0iFgiJeO9YkdDARvQsm23ZZuQ= -> h1:PpWkvVPB7Fr/No8w+TfyJ/I6rWZ2YPZhT3JorIg+06c=
+  ~ github.com/moby/moby/client @ /syft
+      version: v0.6.0 -> v0.6.2
+      hash[go-h1]: h1:AJjEB21QPbXSXjDsZorFBoDZPhMrfbpaPLgSMAW9Bgs= -> h1:ekSPlMccrZGcw6Scb8T9D39qE0mB+XupU/yS0zNw9N4=
+  ~ github.com/sigstore/fulcio @ /syft
+      version: v1.8.7 -> v1.8.8
+      hash[go-h1]: h1:d7QJQxukgXarqPCT9uDNeyzt1Bbt/biw58/VfOnwI/o= -> h1:AtVoVQ4R7YaP6RHIH9puHyB398CHS/9WYc6d+gKf5Y0=
+  ~ github.com/vbauerster/cupwriter @ /syft
+      version: v0.0.4 -> v0.0.5
+      hash[go-h1]: h1:9sBPe0uXWLZuWQU5lqVbhyFlxX6c09asST/YfatFAys= -> h1:pxlPgxPLIebXh8lJPOZmn2TmjPE8+PqJIFkKkr7hI9I=
+  ~ github.com/vbauerster/mpb/v8 @ /syft
+      version: v8.14.0 -> v8.16.2
+      hash[go-h1]: h1:55SR80dptMfASxIG/oCEkBXgBhxeSu4GrVsjl16oKmA= -> h1:+UH2Nhn6asKkdX58hSgN+5Jqg/JcFSqCcU+8z0IiYYo=
+  ~ go.podman.io/image/v5 @ /syft
+      version: v5.41.2 -> v5.42.0
+      hash[go-h1]: h1:YnVaFrGLPWSBmipKfNvlOsGcBtk5bUxlPxQ+A6CS/uo= -> h1:C//Ix0Thj2LYOQO6++NjU3McLFLQbf4czgUyH98R9gc=
+  ~ go.podman.io/storage @ /syft
+      version: v1.64.1 -> v1.65.0
+      hash[go-h1]: h1:DqbG8scW/bD3xHiSRzV7O5fzn46qVC+SwmUN6C6Fr5w= -> h1:GgY5VibEw6coVhOGYWuxZ4F7H2AaTfPiwL7E1CJ2dnM=
+  ~ golang.org/x/mod @ /syft
+      version: v0.41.0 -> v0.42.0
+      hash[go-h1]: h1:qJmnOUb4YB+FsEuM3HcWucdZASCPGhsX6uljO6pog0c= -> h1:ICeL3t2L30ljSPHHxDnR4fqVcBt/zR2zJAb9juavmQg=
+  ~ golang.org/x/tools @ /syft
+      version: v0.51.0 -> v0.52.0
+      hash[go-h1]: h1:k4Xc/1Om9jwkBJBo4NVLMSARBoWtK10mx+W5BnXCeAI= -> h1:ryxg4U63oaUYk7uOLTF37n43f4qgtGvqV4Ioit1BaEs=
+  ~ modernc.org/libc @ /syft
+      version: v1.77.1 -> v1.79.0
+      hash[go-h1]: h1:Ct8j47QtiZ1Enj2DtFXQtUqrPCAjdCmPjtCuvrYQ0Hs= -> h1:9Dvvv++bAMSkSuBzuOFAatbTV5OIoq6Y6FohmD3e7q8=
+  ~ modernc.org/sqlite @ /syft
+      version: v1.60.1 -> v1.61.0
+      hash[go-h1]: h1:/blz53O951KWFOso4QQvEs/Fq6cDBKLtMVrYNSeJVKw= -> h1:sQi63oLQ9uquAUA4CzOisH35Q3pEszkPBuHM0tFL8CY=
+  ~ stdlib @ /syft
+      version: go1.26.8 -> go1.27.3
+
+>> Added dependencies:
+  pkg:golang/github.com/anchore/syft: +[pkg:golang/github.com/apparentlymart/go-textseg/v17 pkg:golang/github.com/varlink/go]
+
+<< Removed dependencies:
+  pkg:golang/github.com/anchore/syft: -[pkg:golang/github.com/becheran/wildmatch-go]
+

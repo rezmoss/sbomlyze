@@ -1,0 +1,476 @@
+{
+  "info": {
+    "os_name": "Debian GNU/Linux",
+    "os_version": "12 (bookworm)",
+    "os_pretty_name": "Debian GNU/Linux 12 (bookworm)",
+    "os_version_id": "12.12",
+    "source_type": "image",
+    "source_name": "index.docker.io/library/nginx",
+    "source_id": "3b03dfd827515a07ccf4946000f0bbdd2a4fb6aca7499249fcb6b1f9726823d6",
+    "source_version": "sha256:3b03dfd827515a07ccf4946000f0bbdd2a4fb6aca7499249fcb6b1f9726823d6",
+    "relationship_counts": {
+      "contains": 3543,
+      "dependency-of": 400,
+      "evident-by": 620,
+      "ownership-by-file-overlap": 1
+    },
+    "tool_name": "syft",
+    "tool_version": "1.56.0",
+    "schema_version": "16.1.12",
+    "format": "Syft JSON",
+    "spec_version": "16.1.12",
+    "search_scope": "squashed",
+    "files_count": 3715
+  },
+  "findings": {
+    "findings": [
+      {
+        "icon": "💻",
+        "message": "OS/Distro: Debian GNU/Linux 12 (bookworm)"
+      },
+      {
+        "icon": "📦",
+        "message": "Dominated by deb: 149 of 150 packages (99.3%)"
+      },
+      {
+        "icon": "📂",
+        "message": "3,715 files tracked on filesystem"
+      },
+      {
+        "icon": "🔗",
+        "message": "Relationships: 3,543 containment + 400 dependency"
+      },
+      {
+        "icon": "📁",
+        "message": "Top directories: /var/lib/dpkg (149), /usr/share/java (1)"
+      },
+      {
+        "icon": "📜",
+        "message": "License profile: 22% permissive, 57% copyleft, 20% unknown"
+      },
+      {
+        "icon": "⚠️",
+        "message": "Low hash coverage: 0.7% (149 of 150 missing)"
+      },
+      {
+        "icon": "🔍",
+        "message": "Top catalogers: dpkg-db-cataloger (149), java-archive-cataloger (1)"
+      }
+    ]
+  },
+  "stats": {
+    "total_components": 150,
+    "by_type": {
+      "deb": 149,
+      "maven": 1
+    },
+    "by_license": {
+      "Apache-2.0": 18,
+      "Artistic": 4,
+      "Artistic-2.0": 1,
+      "Artistic-dist": 1,
+      "Autoconf": 1,
+      "BOOST-1.0": 1,
+      "BSD-1-Clause": 2,
+      "BSD-2-Clause": 26,
+      "BSD-2-clause-author": 1,
+      "BSD-2-clause-verbatim": 1,
+      "BSD-2.2-clause": 2,
+      "BSD-3-Clause": 56,
+      "BSD-3-Clause-Clear": 1,
+      "BSD-3-clause-Aaron-D-Gifford": 1,
+      "BSD-3-clause-California": 1,
+      "BSD-3-clause-Cambridge": 1,
+      "BSD-3-clause-GENERIC": 1,
+      "BSD-3-clause-JANET": 2,
+      "BSD-3-clause-John-Birrell": 1,
+      "BSD-3-clause-PADL": 2,
+      "BSD-3-clause-Regents": 1,
+      "BSD-3-clause-author": 1,
+      "BSD-3-clause-fjord": 1,
+      "BSD-3-clause-variant": 1,
+      "BSD-3-clause-with-weird-numbering": 1,
+      "BSD-4-Clause": 12,
+      "BSD-4-Clause-UC": 7,
+      "BSD-4-clause-California": 1,
+      "BSD-4-clause-KTH": 2,
+      "BSD-4-clause-Niels-Provos": 1,
+      "BSD-4-clause-POWERDOG": 1,
+      "BSD-BY-LC-NE": 1,
+      "BSD-like-with-advertising-clause": 1,
+      "BSD-tcp_wrappers": 4,
+      "BSD-variant": 1,
+      "BSD3": 1,
+      "BSL-1.0": 2,
+      "BSLA": 8,
+      "BZIP": 1,
+      "Beerware": 7,
+      "Bitstream-Vera": 1,
+      "CC-BY-3.0": 1,
+      "CC0-1.0": 4,
+      "Chromium": 1,
+      "DONT-CHANGE-THE-GPL": 1,
+      "Expat": 18,
+      "Expat-ISC": 1,
+      "Expat-UNM": 1,
+      "F5": 1,
+      "FSF-manpages": 1,
+      "FSF-unlimited": 1,
+      "FSFAP": 3,
+      "FSFULLR": 7,
+      "FTL": 1,
+      "FreeSoftware": 1,
+      "GAP": 2,
+      "GFDL-1.2-only": 1,
+      "GFDL-1.2-or-later": 1,
+      "GFDL-1.3+-no-invariant": 1,
+      "GFDL-1.3-only": 5,
+      "GFDL-3": 1,
+      "GFDL-NIV-1.3": 3,
+      "GFDL-NIV-1.3+": 2,
+      "GPL": 14,
+      "GPL-1.0-only": 7,
+      "GPL-1.0-or-later": 3,
+      "GPL-2.0-only": 67,
+      "GPL-2.0-or-later": 59,
+      "GPL-3+-WITH-BISON-EXCEPTION": 1,
+      "GPL-3.0-only": 38,
+      "GPL-3.0-or-later": 37,
+      "HPND": 2,
+      "HPND-sell-variant": 4,
+      "HSIEH-BSD": 1,
+      "HSIEH-DERIVATIVE": 1,
+      "Hylafax": 1,
+      "IBM-as-is": 2,
+      "ISC": 20,
+      "ISC+IBM": 1,
+      "ISC-Original": 1,
+      "JCG": 1,
+      "Kazlib": 5,
+      "LGPL": 10,
+      "LGPL-2.0-only": 23,
+      "LGPL-2.0-or-later": 19,
+      "LGPL-2.1-only": 27,
+      "LGPL-2.1-or-later": 21,
+      "LGPL-3.0-only": 17,
+      "LGPL-3.0-or-later": 19,
+      "Latex2e": 6,
+      "Libpng": 1,
+      "MIT": 19,
+      "MIT-1": 1,
+      "MIT-CMU": 2,
+      "MIT-Export": 2,
+      "MIT-OpenVision": 2,
+      "MIT-XC": 1,
+      "MIT-like": 1,
+      "MIT-old": 1,
+      "MIT/X11": 3,
+      "MPL-1.1": 1,
+      "MPL-2.0": 1,
+      "MS-PL": 1,
+      "NTP": 1,
+      "NeoSoft-permissive": 1,
+      "OLDAP-2.8": 2,
+      "OpenGroup-BSD-like": 1,
+      "OpenLDAP": 2,
+      "OpenLDAP-2.8": 1,
+      "OpenSSL": 2,
+      "PD": 1,
+      "PD-debian": 1,
+      "Public-Domain": 1,
+      "REGCOMP": 1,
+      "REGCOMP,": 1,
+      "RFC-Reference": 1,
+      "RRA-KEEP-THIS-NOTICE": 1,
+      "RSA-MD": 2,
+      "SDBM-PUBLIC-DOMAIN": 1,
+      "SMAIL-GPL": 1,
+      "SSLeay": 2,
+      "Sleepycat": 1,
+      "TCL-like": 1,
+      "TEXT-TABS": 1,
+      "TinySCHEME": 1,
+      "UMich": 1,
+      "Unicode": 2,
+      "X11": 12,
+      "Zlib": 7,
+      "all-permissive": 1,
+      "config-h": 1,
+      "curl": 2,
+      "custom-1": 1,
+      "expat": 1,
+      "g10-permissive": 1,
+      "gnulib": 1,
+      "libutil-David-Nugent": 1,
+      "noderivs": 1,
+      "other-1": 1,
+      "pcre": 1,
+      "permissive": 2,
+      "permissive-fsf": 1,
+      "permissive-like-automake-output": 1,
+      "permissive-nowarranty": 1,
+      "probably-PD": 1,
+      "public-domain": 30,
+      "public-domain-1": 1,
+      "public-domain-md4": 1,
+      "public-domain-md5": 2,
+      "public-domain-s-s-d": 1,
+      "public-domain-sha1": 1,
+      "same-as-rest-of-p11kit": 1,
+      "sha256:118dd263a7b91c8f21c489f949bf13281dff9e766deea92b829dac4dce66601a": 1,
+      "sha256:179c34f5e56cd0b6b73dd7970a97357ee784e2236e8293826656c7ebb3bface7": 1,
+      "sha256:1bcbb50f8603fe8b86d330bfa460b772ea04fbd3c70e4499f0768b5340b9fd6e": 1,
+      "sha256:2af485dd05ff2f402caedc35973eb8bf60a639c4877949d19ad2054c1002984c": 1,
+      "sha256:40c7e1f2118531f038ca22999bd976901254e1bc5cd1b0f0211bdd064c599987": 2,
+      "sha256:4302abcc1ea1b6cbe8d19c79b892acf78878030220210707c19006828866207c": 1,
+      "sha256:4b82c8dd6e55001a5921bea1d6db20be5c51e5976d892e870324026c23f37b6f": 1,
+      "sha256:4f7cb9db6bf6542f5417e3d674c780d3a5fd12291a54d63054fb576ee0cfae80": 1,
+      "sha256:53c9aa3ebfa5ab3aa28a5467aca74c10446b2e7ed21d68bdc8cc372f32d551ee": 1,
+      "sha256:572ad60ad184d8f52c6dc66d83a61a68f137db560b3452ce00588c9ecf128a65": 1,
+      "sha256:5a5e7ca0e9f3f9679977e3a3e9ede45ad92885a3297ea78e766979f9866c5a16": 1,
+      "sha256:641806738b0c6a3d03168c2649e6b94205198bb66cd557e6bae3a20b71c9bb0b": 1,
+      "sha256:936728f4181718f42951b881c1e8f1386bf6b2723c4fbc533c374d6f42c71816": 4,
+      "sha256:95db2f9da663f2bfe2aabe9c72fce9d6c9ae767b912f397d7823f50bd55a1a7d": 1,
+      "sha256:b32aecaae84643700a33bc9ee83fa9b36938d35aa7b61b5042092eca77ddb732": 1,
+      "sha256:bb7e5c24b3e27bbba5671dd710d159a0066833bda4caa1d55d8027ffed539337": 1,
+      "sha256:da8191658b3452ce9caf31638ba61dab31a38c619fa39df119812e050f592fd3": 3,
+      "sha256:e00e6a86c598f9e24ced0180a70a5f2f2e45e133d93adf2b17ce8a06ce4b1b51": 2,
+      "sha256:fd7e4aae7e7b05f217bcf2d02322825c360e66c52c4c2f1b28d784d6297a1c23": 1
+    },
+    "without_license": 1,
+    "with_hashes": 1,
+    "without_hashes": 149,
+    "total_dependencies": 400,
+    "with_dependencies": 140,
+    "duplicate_count": 0,
+    "by_language": {
+      "java": 1
+    },
+    "by_found_by": {
+      "dpkg-db-cataloger": 149,
+      "java-archive-cataloger": 1
+    },
+    "license_categories": {
+      "copyleft": 86,
+      "permissive": 33,
+      "public_domain": 1,
+      "unknown": 30
+    },
+    "with_cpes": 150,
+    "without_cpes": 0,
+    "with_purl": 150,
+    "without_purl": 0
+  },
+  "compliance": {
+    "ntia": {
+      "standard": "NTIA",
+      "score": 57,
+      "max_score": 100,
+      "passed": 4,
+      "total": 7,
+      "checks": [
+        {
+          "id": "ntia-name",
+          "name": "Component Name",
+          "description": "NTIA Minimum Elements (2021) requires the name assigned to each component by its supplier",
+          "passed": true,
+          "details": "All 150 components"
+        },
+        {
+          "id": "ntia-version",
+          "name": "Component Version",
+          "description": "NTIA Minimum Elements (2021) requires a version identifier for each component",
+          "passed": true,
+          "details": "All 150 components"
+        },
+        {
+          "id": "ntia-supplier",
+          "name": "Supplier Name",
+          "description": "NTIA Minimum Elements (2021) requires the name of the entity that creates and identifies each component",
+          "passed": false,
+          "details": "149/150 components"
+        },
+        {
+          "id": "ntia-unique-id",
+          "name": "Other Unique Identifiers",
+          "description": "NTIA Minimum Elements (2021) lists lookup identifiers (PURL, CPE, SWID) to include where they exist",
+          "passed": true,
+          "details": "All 150 components"
+        },
+        {
+          "id": "ntia-dep-relation",
+          "name": "Dependency Relationship",
+          "description": "NTIA Minimum Elements (2021) requires dependency relationships covering at least all top-level dependencies",
+          "passed": false,
+          "details": "148/150 components"
+        },
+        {
+          "id": "ntia-author",
+          "name": "SBOM Author",
+          "description": "NTIA Minimum Elements (2021) requires the entity (or tool) that created the SBOM data",
+          "passed": true,
+          "details": "syft"
+        },
+        {
+          "id": "ntia-timestamp",
+          "name": "SBOM Timestamp",
+          "description": "NTIA Minimum Elements (2021) requires the date and time of SBOM data assembly",
+          "passed": false,
+          "details": "missing"
+        }
+      ]
+    },
+    "cisa": {
+      "standard": "CISA",
+      "score": 40,
+      "max_score": 100,
+      "passed": 4,
+      "total": 10,
+      "checks": [
+        {
+          "id": "cisa-name",
+          "name": "Component Name",
+          "description": "CISA 2025 Minimum Elements requires a component name for each entry",
+          "passed": true,
+          "details": "All 150 components"
+        },
+        {
+          "id": "cisa-version",
+          "name": "Component Version",
+          "description": "CISA 2025 Minimum Elements requires a version identifier for each component",
+          "passed": true,
+          "details": "All 150 components"
+        },
+        {
+          "id": "cisa-supplier",
+          "name": "Software Producer",
+          "description": "CISA 2025 Minimum Elements requires identifying the producer of each component",
+          "passed": false,
+          "details": "149/150 components"
+        },
+        {
+          "id": "cisa-unique-id",
+          "name": "Software Identifiers",
+          "description": "CISA 2025 Minimum Elements requires at least one software identifier per component (PURL and CPE preferred)",
+          "passed": true,
+          "details": "All 150 components"
+        },
+        {
+          "id": "cisa-dep-relation",
+          "name": "Dependency Relationship",
+          "description": "CISA 2025 Minimum Elements requires a dependency graph covering components and their dependencies",
+          "passed": false,
+          "details": "148/150 components"
+        },
+        {
+          "id": "cisa-license",
+          "name": "License Information",
+          "description": "CISA 2025 Minimum Elements adds license data per component (an explicit 'unknown' is permitted)",
+          "passed": false,
+          "details": "149/150 components"
+        },
+        {
+          "id": "cisa-hash",
+          "name": "Component Hash",
+          "description": "CISA 2025 Minimum Elements adds a cryptographic hash per component where the artifact is available",
+          "passed": false,
+          "details": "1/150 components"
+        },
+        {
+          "id": "cisa-tool",
+          "name": "Tool Name",
+          "description": "CISA 2025 Minimum Elements adds the name of the tool(s) used to generate the SBOM",
+          "passed": true,
+          "details": "syft"
+        },
+        {
+          "id": "cisa-author",
+          "name": "SBOM Author",
+          "description": "CISA 2025 Minimum Elements requires the person or organization that created the SBOM (distinct from the tool)",
+          "passed": false,
+          "details": "missing"
+        },
+        {
+          "id": "cisa-timestamp",
+          "name": "SBOM Timestamp",
+          "description": "CISA 2025 Minimum Elements requires an ISO 8601 timestamp of SBOM creation",
+          "passed": false,
+          "details": "missing"
+        }
+      ]
+    },
+    "bsi_tr03183": {
+      "standard": "BSI-TR-03183",
+      "score": 33,
+      "max_score": 100,
+      "passed": 3,
+      "total": 9,
+      "checks": [
+        {
+          "id": "bsi-name",
+          "name": "Component Name",
+          "description": "BSI TR-03183-2 §5.2.2 requires a component name (or the actual filename if unnamed)",
+          "passed": true,
+          "details": "All 150 components"
+        },
+        {
+          "id": "bsi-version",
+          "name": "Component Version",
+          "description": "BSI TR-03183-2 §5.2.2 requires a version identifier",
+          "passed": true,
+          "details": "All 150 components"
+        },
+        {
+          "id": "bsi-creator",
+          "name": "Component Creator",
+          "description": "BSI TR-03183-2 §5.2.2 requires the creator of each component (email or URL contact)",
+          "passed": false,
+          "details": "149/150 components"
+        },
+        {
+          "id": "bsi-unique-id",
+          "name": "Unique Identifiers",
+          "description": "BSI TR-03183-2 §5.2.4 requires identifiers such as CPE or PURL where they exist",
+          "passed": true,
+          "details": "All 150 components"
+        },
+        {
+          "id": "bsi-license",
+          "name": "Distribution Licences",
+          "description": "BSI TR-03183-2 §5.2.2 requires distribution licences, expressed as SPDX identifiers per §6.1",
+          "passed": false,
+          "details": "48/150 components"
+        },
+        {
+          "id": "bsi-sha512",
+          "name": "SHA-512 Hash",
+          "description": "BSI TR-03183-2 §5.2.2 requires a SHA-512 checksum of each deployable component",
+          "passed": false,
+          "details": "0/150 components"
+        },
+        {
+          "id": "bsi-dep-relation",
+          "name": "Dependency Relationship",
+          "description": "BSI TR-03183-2 §5.2.2 requires per-component dependency enumeration with completeness indication",
+          "passed": false,
+          "details": "148/150 components"
+        },
+        {
+          "id": "bsi-author",
+          "name": "SBOM Creator Contact",
+          "description": "BSI TR-03183-2 §5.2.1 requires the email address (or URL) of the SBOM creator — a tool name does not qualify",
+          "passed": false,
+          "details": "missing"
+        },
+        {
+          "id": "bsi-timestamp",
+          "name": "SBOM Timestamp",
+          "description": "BSI TR-03183-2 §5.2.1 requires the date/time of SBOM compilation",
+          "passed": false,
+          "details": "missing"
+        }
+      ]
+    },
+    "overall_score": 43
+  }
+}

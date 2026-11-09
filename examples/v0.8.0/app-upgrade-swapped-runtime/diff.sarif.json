@@ -1,0 +1,1382 @@
+{
+  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "sbomlyze",
+          "version": "dev",
+          "informationUri": "https://github.com/rezmoss/sbomlyze",
+          "rules": [
+            {
+              "id": "integrity-drift",
+              "name": "Integrity Drift Detected",
+              "shortDescription": {
+                "text": "Package digest changed without a version change"
+              },
+              "fullDescription": {
+                "text": ""
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "supply-chain"
+                ]
+              }
+            },
+            {
+              "id": "owned-file-drift",
+              "name": "Owned File Drift Detected",
+              "shortDescription": {
+                "text": "Files owned by a package changed without a version change"
+              },
+              "fullDescription": {
+                "text": ""
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "supply-chain"
+                ]
+              }
+            },
+            {
+              "id": "new-component",
+              "name": "New Component Added",
+              "shortDescription": {
+                "text": "A new component was added to the SBOM"
+              },
+              "fullDescription": {
+                "text": ""
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              }
+            },
+            {
+              "id": "removed-component",
+              "name": "Component Removed",
+              "shortDescription": {
+                "text": "A component was removed from the SBOM"
+              },
+              "fullDescription": {
+                "text": ""
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              }
+            },
+            {
+              "id": "version-change",
+              "name": "Version Changed",
+              "shortDescription": {
+                "text": "Component version was updated"
+              },
+              "fullDescription": {
+                "text": ""
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              }
+            },
+            {
+              "id": "deep-dependency",
+              "name": "Deep Transitive Dependency",
+              "shortDescription": {
+                "text": "New dependency introduced at depth 3 or greater"
+              },
+              "fullDescription": {
+                "text": ""
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "supply-chain"
+                ]
+              }
+            },
+            {
+              "id": "policy-violation",
+              "name": "Policy Violation",
+              "shortDescription": {
+                "text": "SBOM policy rule was violated"
+              },
+              "fullDescription": {
+                "text": ""
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "new-component",
+          "level": "note",
+          "message": {
+            "text": "New component added: netty-tcnative-boringssl-static 2.0.61.Final"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "922a50b6f468c79c0a1d005a1e687795:1"
+          }
+        },
+        {
+          "ruleId": "new-component",
+          "level": "note",
+          "message": {
+            "text": "New component added: netty-tcnative-boringssl-static 2.0.61.Final"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "fe65d385fa200624a31be6dcb2a19817:1"
+          }
+        },
+        {
+          "ruleId": "new-component",
+          "level": "note",
+          "message": {
+            "text": "New component added: netty-tcnative-boringssl-static 2.0.61.Final"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "e2f83696470f4c1407e454a12b73f90d:1"
+          }
+        },
+        {
+          "ruleId": "new-component",
+          "level": "note",
+          "message": {
+            "text": "New component added: netty-tcnative-boringssl-static 2.0.61.Final"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "5694609f0a972f6b585fac737a4cb53e:1"
+          }
+        },
+        {
+          "ruleId": "new-component",
+          "level": "note",
+          "message": {
+            "text": "New component added: netty-tcnative-boringssl-static 2.0.61.Final"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "c21d68abbc7c97f3fa6e0cbd4a41daf0:1"
+          }
+        },
+        {
+          "ruleId": "new-component",
+          "level": "note",
+          "message": {
+            "text": "New component added: netty-tcnative-boringssl-static 2.0.61.Final"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "2b753ebe6fcf177997432236daca89af:1"
+          }
+        },
+        {
+          "ruleId": "new-component",
+          "level": "note",
+          "message": {
+            "text": "New component added: netty-tcnative-classes 2.0.61.Final"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "07aa06d5459b12fa8a2de53cf9c4d0fb:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component apt @ /var/lib/dpkg/status version changed: 2.4.11 -\u003e 2.4.13"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "a49e859d4a339386ba061bb1bf9bdb74:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component base-files @ /var/lib/dpkg/status version changed: 12ubuntu4.6 -\u003e 12ubuntu4.7"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "7e7d05785d7cc81d62f57c7ab0c151cf:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component bash @ /var/lib/dpkg/status version changed: 5.1-6ubuntu1 -\u003e 5.1-6ubuntu1.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "5d4e19dfd7176852d04fe1b4ef9cbf63:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component bsdutils @ /var/lib/dpkg/status version changed: 1:2.37.2-4ubuntu3 -\u003e 1:2.37.2-4ubuntu3.4"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "ed51cf017ef0bddd2d64cc7f34afbb9a:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component ca-certificates @ /var/lib/dpkg/status version changed: 20230311ubuntu0.22.04.1 -\u003e 20240203~22.04.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "299dc83af9645175d5967a4833e48ec3:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component coreutils @ /var/lib/dpkg/status version changed: 8.32-4.1ubuntu1.1 -\u003e 8.32-4.1ubuntu1.2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "caae1a46b77b8e7df4e2dcb40f61cab0:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component curl @ /var/lib/dpkg/status version changed: 7.81.0-1ubuntu1.15 -\u003e 7.81.0-1ubuntu1.18"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "105d9241f2fceb23c8a19fe8a6108e5c:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component dpkg @ /var/lib/dpkg/status version changed: 1.21.1ubuntu2.2 -\u003e 1.21.1ubuntu2.3"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "d1d3059be2dac75935cb3b931599b680:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component e2fsprogs @ /var/lib/dpkg/status version changed: 1.46.5-2ubuntu1.1 -\u003e 1.46.5-2ubuntu1.2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "e59e0f1bd812443c15b8d3b3f128ffe0:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libapt-pkg6.0 @ /var/lib/dpkg/status version changed: 2.4.11 -\u003e 2.4.13"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "10e08f023e9ea5ad0f71569f8229d1cf:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libblkid1 @ /var/lib/dpkg/status version changed: 2.37.2-4ubuntu3 -\u003e 2.37.2-4ubuntu3.4"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "e8580b6eb011fb5160e19d41c064dd76:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libc-bin @ /var/lib/dpkg/status version changed: 2.35-0ubuntu3.6 -\u003e 2.35-0ubuntu3.8"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "91988c2055349b49df4b5d2b194a9922:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libc6 @ /var/lib/dpkg/status version changed: 2.35-0ubuntu3.6 -\u003e 2.35-0ubuntu3.8"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "ad290da1ecacbf24260c2bc042debbe1:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libcom-err2 @ /var/lib/dpkg/status version changed: 1.46.5-2ubuntu1.1 -\u003e 1.46.5-2ubuntu1.2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "8c67b07df8043c342b800dc6fda63097:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libcurl4 @ /var/lib/dpkg/status version changed: 7.81.0-1ubuntu1.15 -\u003e 7.81.0-1ubuntu1.18"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "dafe3e312d9bdd0e2fd4d40f3af7a4de:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libexpat1 @ /var/lib/dpkg/status version changed: 2.4.7-1ubuntu0.2 -\u003e 2.4.7-1ubuntu0.4"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "3a3e9adb935178754ba3aa06b551d4c7:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libext2fs2 @ /var/lib/dpkg/status version changed: 1.46.5-2ubuntu1.1 -\u003e 1.46.5-2ubuntu1.2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "28df124320b6e78a20f14972de2d892d:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libgnutls30 @ /var/lib/dpkg/status version changed: 3.7.3-4ubuntu1.4 -\u003e 3.7.3-4ubuntu1.5"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "05998c7c89df51d5ea01abb3b1e566fe:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libgssapi-krb5-2 @ /var/lib/dpkg/status version changed: 1.19.2-2ubuntu0.3 -\u003e 1.19.2-2ubuntu0.4"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "aba20b3febdc0a94c3552723e8de79e4:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libk5crypto3 @ /var/lib/dpkg/status version changed: 1.19.2-2ubuntu0.3 -\u003e 1.19.2-2ubuntu0.4"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b570e1612e18f405e38a60633d958a56:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libkrb5-3 @ /var/lib/dpkg/status version changed: 1.19.2-2ubuntu0.3 -\u003e 1.19.2-2ubuntu0.4"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "7a954a58850d09c485efd67eef419f63:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libkrb5support0 @ /var/lib/dpkg/status version changed: 1.19.2-2ubuntu0.3 -\u003e 1.19.2-2ubuntu0.4"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "1a0ccc561f42a150be4b3e62c36ae428:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libldap-2.5-0 @ /var/lib/dpkg/status version changed: 2.5.16+dfsg-0ubuntu0.22.04.2 -\u003e 2.5.18+dfsg-0ubuntu0.22.04.2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "2cfdd1f021bd27deae9c1508d6f8f104:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libmount1 @ /var/lib/dpkg/status version changed: 2.37.2-4ubuntu3 -\u003e 2.37.2-4ubuntu3.4"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "6fbc8dd9c669331083bbf04f74e5d820:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libnghttp2-14 @ /var/lib/dpkg/status version changed: 1.43.0-1ubuntu0.1 -\u003e 1.43.0-1ubuntu0.2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "76a513bc71b7cb126fe1ea9da4473502:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libsmartcols1 @ /var/lib/dpkg/status version changed: 2.37.2-4ubuntu3 -\u003e 2.37.2-4ubuntu3.4"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "cf93e75a85ff7567a6af8baf44c1fe6e:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libss2 @ /var/lib/dpkg/status version changed: 1.46.5-2ubuntu1.1 -\u003e 1.46.5-2ubuntu1.2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "3764654545c981d8caa4f32dca2a8b9a:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libssl3 @ /var/lib/dpkg/status version changed: 3.0.2-0ubuntu1.15 -\u003e 3.0.2-0ubuntu1.18"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "f0aa9f5660b7d4ba183926f58e913684:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libuuid1 @ /var/lib/dpkg/status version changed: 2.37.2-4ubuntu3 -\u003e 2.37.2-4ubuntu3.4"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "9dc308540e9118da3891af2466edb59b:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component locales @ /var/lib/dpkg/status version changed: 2.35-0ubuntu3.6 -\u003e 2.35-0ubuntu3.8"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "20403f5a669edf8e25adaf3e341b19a3:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component logsave @ /var/lib/dpkg/status version changed: 1.46.5-2ubuntu1.1 -\u003e 1.46.5-2ubuntu1.2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "fd9d1a72b979cd82bc20e80f7ec2bbac:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component mount @ /var/lib/dpkg/status version changed: 2.37.2-4ubuntu3 -\u003e 2.37.2-4ubuntu3.4"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "0206de43f007546c6ed7da3cfa623f1f:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component openssl @ /var/lib/dpkg/status version changed: 3.0.2-0ubuntu1.15 -\u003e 3.0.2-0ubuntu1.18"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "55bb7565b52f8541526a3fa7dedb6499:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component tzdata @ /var/lib/dpkg/status version changed: 2024a-0ubuntu0.22.04 -\u003e 2024a-0ubuntu0.22.04.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "6d5de2377cc0ac78f499ac2f06d24479:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component util-linux @ /var/lib/dpkg/status version changed: 2.37.2-4ubuntu3 -\u003e 2.37.2-4ubuntu3.4"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "cb9c23954ed4e875a59945f6edadae17:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component wget @ /var/lib/dpkg/status version changed: 1.21.2-2ubuntu1 -\u003e 1.21.2-2ubuntu1.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "e7e518772bdeae7046c8d8b8b52a9dc1:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component openjdk @ /opt/java/openjdk/release version changed: 11.0.22+7 -\u003e 17.0.13+11"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "3668dc14ea6bc1d0a48374ef6b12e457:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component logback-classic @ /apache-zookeeper-3.9.2-bin/lib/logback-classic-1.2.13.jar version changed: 1.2.10 -\u003e 1.2.13"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "54ec2356e2cbc4697ba96b591fd80b3d:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component logback-core @ /apache-zookeeper-3.9.2-bin/lib/logback-core-1.2.13.jar version changed: 1.2.10 -\u003e 1.2.13"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "d687426842f46c870ca6f6f17208a584:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component netty-buffer @ /apache-zookeeper-3.9.2-bin/lib/netty-buffer-4.1.105.Final.jar version changed: 4.1.94.Final -\u003e 4.1.105.Final"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "62f640a1643a343ae8251fca5c490bdd:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component netty-codec @ /apache-zookeeper-3.9.2-bin/lib/netty-codec-4.1.105.Final.jar version changed: 4.1.94.Final -\u003e 4.1.105.Final"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "d331f2dbdb91f26c80d6c86ea1034ea7:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component netty-common @ /apache-zookeeper-3.9.2-bin/lib/netty-common-4.1.105.Final.jar version changed: 4.1.94.Final -\u003e 4.1.105.Final"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "2ee201dfced230759bb2430590197db6:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component netty-handler @ /apache-zookeeper-3.9.2-bin/lib/netty-handler-4.1.105.Final.jar version changed: 4.1.94.Final -\u003e 4.1.105.Final"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "0aa68ada4091633d784a58758bcd21a7:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component netty-resolver @ /apache-zookeeper-3.9.2-bin/lib/netty-resolver-4.1.105.Final.jar version changed: 4.1.94.Final -\u003e 4.1.105.Final"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "d6cb08aedb4d2da7cc5d5fffa0995f8d:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component netty-transport @ /apache-zookeeper-3.9.2-bin/lib/netty-transport-4.1.105.Final.jar version changed: 4.1.94.Final -\u003e 4.1.105.Final"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "8790283057708ceae00ca1543c2d4633:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component netty-transport-classes-epoll @ /apache-zookeeper-3.9.2-bin/lib/netty-transport-classes-epoll-4.1.105.Final.jar version changed: 4.1.94.Final -\u003e 4.1.105.Final"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "225a68482c61ffae51571f5ad34cea21:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component netty-transport-native-epoll @ /apache-zookeeper-3.9.2-bin/lib/netty-transport-native-epoll-4.1.105.Final-linux-x86_64.jar version changed: 4.1.94.Final -\u003e 4.1.105.Final"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "29480151d3b73bf2bf5ebcaae7d9eccc:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component netty-transport-native-unix-common @ /apache-zookeeper-3.9.2-bin/lib/netty-transport-native-unix-common-4.1.105.Final.jar version changed: 4.1.94.Final -\u003e 4.1.105.Final"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "41835ec4470b9f24e3fa06c173dd6aea:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component jrt-fs @ /opt/java/openjdk/lib/jrt-fs.jar version changed: 11.0.22 -\u003e 17.0.13"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b7fb72438b64034d50e92bebd33357ff:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component zookeeper @ /apache-zookeeper-3.9.2-bin/lib/zookeeper-3.9.2.jar version changed: 3.8.3 -\u003e 3.9.2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "780ab65f3b071736b823b46707831dc1:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component zookeeper-jute @ /apache-zookeeper-3.9.2-bin/lib/zookeeper-jute-3.9.2.jar version changed: 3.8.3 -\u003e 3.9.2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "3f87c336a36d6257814d0110e6805f30:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component zookeeper-prometheus-metrics @ /apache-zookeeper-3.9.2-bin/lib/zookeeper-prometheus-metrics-3.9.2.jar version changed: 3.8.3 -\u003e 3.9.2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "7ab90c19bf6db6315622bda7532d2751:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component jetty-http @ /apache-zookeeper-3.9.2-bin/lib/jetty-http-9.4.53.v20231009.jar version changed: 9.4.52.v20230823 -\u003e 9.4.53.v20231009"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "81e6a9feeaf45c1cf516311133eadc9d:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component jetty-io @ /apache-zookeeper-3.9.2-bin/lib/jetty-io-9.4.53.v20231009.jar version changed: 9.4.52.v20230823 -\u003e 9.4.53.v20231009"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "341037ab3ddea360307c7c178e56d51f:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component jetty-security @ /apache-zookeeper-3.9.2-bin/lib/jetty-security-9.4.53.v20231009.jar version changed: 9.4.52.v20230823 -\u003e 9.4.53.v20231009"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "5355b545b9f81307547958e0e96c86d4:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component jetty-server @ /apache-zookeeper-3.9.2-bin/lib/jetty-server-9.4.53.v20231009.jar version changed: 9.4.52.v20230823 -\u003e 9.4.53.v20231009"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "999fd2c06d5f83c1e9b0c5adae19325d:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component jetty-servlet @ /apache-zookeeper-3.9.2-bin/lib/jetty-servlet-9.4.53.v20231009.jar version changed: 9.4.52.v20230823 -\u003e 9.4.53.v20231009"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "3c3f375a232022768490a79d76fd8e8b:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component jetty-util @ /apache-zookeeper-3.9.2-bin/lib/jetty-util-9.4.53.v20231009.jar version changed: 9.4.52.v20230823 -\u003e 9.4.53.v20231009"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "a510888e4c8bf25922dff4f2779a3427:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component jetty-util-ajax @ /apache-zookeeper-3.9.2-bin/lib/jetty-util-ajax-9.4.53.v20231009.jar version changed: 9.4.52.v20230823 -\u003e 9.4.53.v20231009"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "zookeeper-3.9.2.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "d7a3e6c3b9efbf09e724bb4f0234a9a2:1"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,2013 @@
+[
+  {
+    "op": "add",
+    "path": "/components/0",
+    "value": {
+      "id": "pkg:npm/%40npmcli/redact",
+      "name": "@npmcli/redact",
+      "version": "2.0.1",
+      "purl": "pkg:npm/%40npmcli/redact@2.0.1",
+      "licenses": [
+        "ISC"
+      ],
+      "cpes": [
+        "cpe:2.3:a:\\@npmcli\\/redact:\\@npmcli\\/redact:2.0.1:*:*:*:*:*:*:*",
+        "cpe:2.3:a:npm:\\@npmcli\\/redact:2.0.1:*:*:*:*:*:*:*"
+      ],
+      "language": "javascript",
+      "foundBy": "javascript-package-cataloger",
+      "type": "npm",
+      "locations": [
+        "/usr/local/lib/node_modules/npm/node_modules/@npmcli/redact/package.json"
+      ]
+    }
+  },
+  {
+    "op": "add",
+    "path": "/components/1",
+    "value": {
+      "id": "pkg:npm/%40sigstore/core",
+      "name": "@sigstore/core",
+      "version": "1.1.0",
+      "purl": "pkg:npm/%40sigstore/core@1.1.0",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "cpes": [
+        "cpe:2.3:a:\\@sigstore\\/core:\\@sigstore\\/core:1.1.0:*:*:*:*:*:*:*",
+        "cpe:2.3:a:sigstore:\\@sigstore\\/core:1.1.0:*:*:*:*:*:*:*"
+      ],
+      "language": "javascript",
+      "foundBy": "javascript-package-cataloger",
+      "type": "npm",
+      "locations": [
+        "/usr/local/lib/node_modules/npm/node_modules/@sigstore/core/package.json"
+      ]
+    }
+  },
+  {
+    "op": "add",
+    "path": "/components/2",
+    "value": {
+      "id": "pkg:npm/%40sigstore/verify",
+      "name": "@sigstore/verify",
+      "version": "1.2.1",
+      "purl": "pkg:npm/%40sigstore/verify@1.2.1",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "cpes": [
+        "cpe:2.3:a:\\@sigstore\\/verify:\\@sigstore\\/verify:1.2.1:*:*:*:*:*:*:*",
+        "cpe:2.3:a:sigstore:\\@sigstore\\/verify:1.2.1:*:*:*:*:*:*:*"
+      ],
+      "language": "javascript",
+      "foundBy": "javascript-package-cataloger",
+      "type": "npm",
+      "locations": [
+        "/usr/local/lib/node_modules/npm/node_modules/@sigstore/verify/package.json"
+      ]
+    }
+  },
+  {
+    "op": "add",
+    "path": "/components/3",
+    "value": {
+      "id": "pkg:npm/ansi-regex",
+      "name": "ansi-regex",
+      "version": "6.0.1",
+      "purl": "pkg:npm/ansi-regex@6.0.1",
+      "licenses": [
+        "MIT"
+      ],
+      "cpes": [
+        "cpe:2.3:a:ansi-regex_project:ansi-regex:6.0.1:*:*:*:*:node.js:*:*"
+      ],
+      "language": "javascript",
+      "foundBy": "javascript-package-cataloger",
+      "type": "npm",
+      "locations": [
+        "/usr/local/lib/node_modules/npm/node_modules/@isaacs/cliui/node_modules/ansi-regex/package.json"
+      ]
+    }
+  },
+  {
+    "op": "add",
+    "path": "/components/4",
+    "value": {
+      "id": "pkg:npm/ansi-regex",
+      "name": "ansi-regex",
+      "version": "6.0.1",
+      "purl": "pkg:npm/ansi-regex@6.0.1",
+      "licenses": [
+        "MIT"
+      ],
+      "cpes": [
+        "cpe:2.3:a:ansi-regex_project:ansi-regex:6.0.1:*:*:*:*:node.js:*:*"
+      ],
+      "language": "javascript",
+      "foundBy": "javascript-package-cataloger",
+      "type": "npm",
+      "locations": [
+        "/usr/local/lib/node_modules/npm/node_modules/wrap-ansi/node_modules/ansi-regex/package.json"
+      ]
+    }
+  },
+  {
+    "op": "add",
+    "path": "/components/5",
+    "value": {
+      "id": "pkg:npm/ip-address",
+      "name": "ip-address",
+      "version": "9.0.5",
+      "purl": "pkg:npm/ip-address@9.0.5",
+      "licenses": [
+        "MIT"
+      ],
+      "cpes": [
+        "cpe:2.3:a:beaugunderson:ip-address:9.0.5:*:*:*:*:node.js:*:*"
+      ],
+      "language": "javascript",
+      "foundBy": "javascript-package-cataloger",
+      "type": "npm",
+      "locations": [
+        "/usr/local/lib/node_modules/npm/node_modules/ip-address/package.json"
+      ]
+    }
+  },
+  {
+    "op": "add",
+    "path": "/components/6",
+    "value": {
+      "id": "pkg:npm/jsbn",
+      "name": "jsbn",
+      "version": "1.1.0",
+      "purl": "pkg:npm/jsbn@1.1.0",
+      "licenses": [
+        "MIT"
+      ],
+      "cpes": [
+        "cpe:2.3:a:andyperlitch:jsbn:1.1.0:*:*:*:*:*:*:*",
+        "cpe:2.3:a:jsbn:jsbn:1.1.0:*:*:*:*:*:*:*"
+      ],
+      "language": "javascript",
+      "foundBy": "javascript-package-cataloger",
+      "type": "npm",
+      "locations": [
+        "/usr/local/lib/node_modules/npm/node_modules/jsbn/package.json"
+      ]
+    }
+  },
+  {
+    "op": "add",
+    "path": "/components/7",
+    "value": {
+      "id": "pkg:npm/package-json-from-dist",
+      "name": "package-json-from-dist",
+      "version": "1.0.0",
+      "purl": "pkg:npm/package-json-from-dist@1.0.0",
+      "licenses": [
+        "BlueOak-1.0.0"
+      ],
+      "cpes": [
+        "cpe:2.3:a:package-json-from-dist:package-json-from-dist:1.0.0:*:*:*:*:*:*:*",
+        "cpe:2.3:a:package-json-from-dist:package_json_from_dist:1.0.0:*:*:*:*:*:*:*",
+        "cpe:2.3:a:package_json_from_dist:package-json-from-dist:1.0.0:*:*:*:*:*:*:*",
+        "cpe:2.3:a:package_json_from_dist:package_json_from_dist:1.0.0:*:*:*:*:*:*:*",
+        "cpe:2.3:a:package-json-from:package-json-from-dist:1.0.0:*:*:*:*:*:*:*",
+        "cpe:2.3:a:package-json-from:package_json_from_dist:1.0.0:*:*:*:*:*:*:*",
+        "cpe:2.3:a:package_json_from:package-json-from-dist:1.0.0:*:*:*:*:*:*:*",
+        "cpe:2.3:a:package_json_from:package_json_from_dist:1.0.0:*:*:*:*:*:*:*",
+        "cpe:2.3:a:package-json:package-json-from-dist:1.0.0:*:*:*:*:*:*:*",
+        "cpe:2.3:a:package-json:package_json_from_dist:1.0.0:*:*:*:*:*:*:*",
+        "cpe:2.3:a:package_json:package-json-from-dist:1.0.0:*:*:*:*:*:*:*",
+        "cpe:2.3:a:package_json:package_json_from_dist:1.0.0:*:*:*:*:*:*:*",
+        "cpe:2.3:a:package:package-json-from-dist:1.0.0:*:*:*:*:*:*:*",
+        "cpe:2.3:a:package:package_json_from_dist:1.0.0:*:*:*:*:*:*:*"
+      ],
+      "language": "javascript",
+      "foundBy": "javascript-package-cataloger",
+      "type": "npm",
+      "locations": [
+        "/usr/local/lib/node_modules/npm/node_modules/package-json-from-dist/package.json"
+      ]
+    }
+  },
+  {
+    "op": "add",
+    "path": "/components/8",
+    "value": {
+      "id": "pkg:npm/proc-log",
+      "name": "proc-log",
+      "version": "3.0.0",
+      "purl": "pkg:npm/proc-log@3.0.0",
+      "licenses": [
+        "ISC"
+      ],
+      "cpes": [
+        "cpe:2.3:a:proc-log:proc-log:3.0.0:*:*:*:*:*:*:*",
+        "cpe:2.3:a:proc-log:proc_log:3.0.0:*:*:*:*:*:*:*",
+        "cpe:2.3:a:proc_log:proc-log:3.0.0:*:*:*:*:*:*:*",
+        "cpe:2.3:a:proc_log:proc_log:3.0.0:*:*:*:*:*:*:*",
+        "cpe:2.3:a:proc:proc-log:3.0.0:*:*:*:*:*:*:*",
+        "cpe:2.3:a:proc:proc_log:3.0.0:*:*:*:*:*:*:*",
+        "cpe:2.3:a:npm:proc-log:3.0.0:*:*:*:*:*:*:*",
+        "cpe:2.3:a:npm:proc_log:3.0.0:*:*:*:*:*:*:*"
+      ],
+      "language": "javascript",
+      "foundBy": "javascript-package-cataloger",
+      "type": "npm",
+      "locations": [
+        "/usr/local/lib/node_modules/npm/node_modules/node-gyp/node_modules/proc-log/package.json"
+      ]
+    }
+  },
+  {
+    "op": "add",
+    "path": "/components/9",
+    "value": {
+      "id": "pkg:npm/proggy",
+      "name": "proggy",
+      "version": "2.0.0",
+      "purl": "pkg:npm/proggy@2.0.0",
+      "licenses": [
+        "ISC"
+      ],
+      "cpes": [
+        "cpe:2.3:a:proggy:proggy:2.0.0:*:*:*:*:*:*:*",
+        "cpe:2.3:a:npm:proggy:2.0.0:*:*:*:*:*:*:*"
+      ],
+      "language": "javascript",
+      "foundBy": "javascript-package-cataloger",
+      "type": "npm",
+      "locations": [
+        "/usr/local/lib/node_modules/npm/node_modules/proggy/package.json"
+      ]
+    }
+  },
+  {
+    "op": "add",
+    "path": "/components/10",
+    "value": {
+      "id": "pkg:npm/spdx-expression-parse",
+      "name": "spdx-expression-parse",
+      "version": "3.0.1",
+      "purl": "pkg:npm/spdx-expression-parse@3.0.1",
+      "licenses": [
+        "MIT"
+      ],
+      "cpes": [
+        "cpe:2.3:a:spdx-expression-parse:spdx-expression-parse:3.0.1:*:*:*:*:*:*:*",
+        "cpe:2.3:a:spdx-expression-parse:spdx_expression_parse:3.0.1:*:*:*:*:*:*:*",
+        "cpe:2.3:a:spdx_expression_parse:spdx-expression-parse:3.0.1:*:*:*:*:*:*:*",
+        "cpe:2.3:a:spdx_expression_parse:spdx_expression_parse:3.0.1:*:*:*:*:*:*:*",
+        "cpe:2.3:a:spdx-expression:spdx-expression-parse:3.0.1:*:*:*:*:*:*:*",
+        "cpe:2.3:a:spdx-expression:spdx_expression_parse:3.0.1:*:*:*:*:*:*:*",
+        "cpe:2.3:a:spdx_expression:spdx-expression-parse:3.0.1:*:*:*:*:*:*:*",
+        "cpe:2.3:a:spdx_expression:spdx_expression_parse:3.0.1:*:*:*:*:*:*:*",
+        "cpe:2.3:a:spdx:spdx-expression-parse:3.0.1:*:*:*:*:*:*:*",
+        "cpe:2.3:a:spdx:spdx_expression_parse:3.0.1:*:*:*:*:*:*:*"
+      ],
+      "language": "javascript",
+      "foundBy": "javascript-package-cataloger",
+      "type": "npm",
+      "locations": [
+        "/usr/local/lib/node_modules/npm/node_modules/spdx-correct/node_modules/spdx-expression-parse/package.json"
+      ]
+    }
+  },
+  {
+    "op": "add",
+    "path": "/components/11",
+    "value": {
+      "id": "pkg:npm/spdx-expression-parse",
+      "name": "spdx-expression-parse",
+      "version": "3.0.1",
+      "purl": "pkg:npm/spdx-expression-parse@3.0.1",
+      "licenses": [
+        "MIT"
+      ],
+      "cpes": [
+        "cpe:2.3:a:spdx-expression-parse:spdx-expression-parse:3.0.1:*:*:*:*:*:*:*",
+        "cpe:2.3:a:spdx-expression-parse:spdx_expression_parse:3.0.1:*:*:*:*:*:*:*",
+        "cpe:2.3:a:spdx_expression_parse:spdx-expression-parse:3.0.1:*:*:*:*:*:*:*",
+        "cpe:2.3:a:spdx_expression_parse:spdx_expression_parse:3.0.1:*:*:*:*:*:*:*",
+        "cpe:2.3:a:spdx-expression:spdx-expression-parse:3.0.1:*:*:*:*:*:*:*",
+        "cpe:2.3:a:spdx-expression:spdx_expression_parse:3.0.1:*:*:*:*:*:*:*",
+        "cpe:2.3:a:spdx_expression:spdx-expression-parse:3.0.1:*:*:*:*:*:*:*",
+        "cpe:2.3:a:spdx_expression:spdx_expression_parse:3.0.1:*:*:*:*:*:*:*",
+        "cpe:2.3:a:spdx:spdx-expression-parse:3.0.1:*:*:*:*:*:*:*",
+        "cpe:2.3:a:spdx:spdx_expression_parse:3.0.1:*:*:*:*:*:*:*"
+      ],
+      "language": "javascript",
+      "foundBy": "javascript-package-cataloger",
+      "type": "npm",
+      "locations": [
+        "/usr/local/lib/node_modules/npm/node_modules/validate-npm-package-license/node_modules/spdx-expression-parse/package.json"
+      ]
+    }
+  },
+  {
+    "op": "add",
+    "path": "/components/12",
+    "value": {
+      "id": "pkg:npm/sprintf-js",
+      "name": "sprintf-js",
+      "version": "1.1.3",
+      "purl": "pkg:npm/sprintf-js@1.1.3",
+      "licenses": [
+        "BSD-3-Clause"
+      ],
+      "cpes": [
+        "cpe:2.3:a:sprintf-js:sprintf-js:1.1.3:*:*:*:*:*:*:*",
+        "cpe:2.3:a:sprintf-js:sprintf_js:1.1.3:*:*:*:*:*:*:*",
+        "cpe:2.3:a:sprintf_js:sprintf-js:1.1.3:*:*:*:*:*:*:*",
+        "cpe:2.3:a:sprintf_js:sprintf_js:1.1.3:*:*:*:*:*:*:*",
+        "cpe:2.3:a:sprintf:sprintf-js:1.1.3:*:*:*:*:*:*:*",
+        "cpe:2.3:a:sprintf:sprintf_js:1.1.3:*:*:*:*:*:*:*",
+        "cpe:2.3:a:alexei:sprintf-js:1.1.3:*:*:*:*:*:*:*",
+        "cpe:2.3:a:alexei:sprintf_js:1.1.3:*:*:*:*:*:*:*"
+      ],
+      "language": "javascript",
+      "foundBy": "javascript-package-cataloger",
+      "type": "npm",
+      "locations": [
+        "/usr/local/lib/node_modules/npm/node_modules/sprintf-js/package.json"
+      ]
+    }
+  },
+  {
+    "op": "add",
+    "path": "/components/13",
+    "value": {
+      "id": "pkg:npm/strip-ansi",
+      "name": "strip-ansi",
+      "version": "7.1.0",
+      "purl": "pkg:npm/strip-ansi@7.1.0",
+      "licenses": [
+        "MIT"
+      ],
+      "cpes": [
+        "cpe:2.3:a:strip-ansi:strip-ansi:7.1.0:*:*:*:*:*:*:*",
+        "cpe:2.3:a:strip-ansi:strip_ansi:7.1.0:*:*:*:*:*:*:*",
+        "cpe:2.3:a:strip_ansi:strip-ansi:7.1.0:*:*:*:*:*:*:*",
+        "cpe:2.3:a:strip_ansi:strip_ansi:7.1.0:*:*:*:*:*:*:*",
+        "cpe:2.3:a:strip:strip-ansi:7.1.0:*:*:*:*:*:*:*",
+        "cpe:2.3:a:strip:strip_ansi:7.1.0:*:*:*:*:*:*:*"
+      ],
+      "language": "javascript",
+      "foundBy": "javascript-package-cataloger",
+      "type": "npm",
+      "locations": [
+        "/usr/local/lib/node_modules/npm/node_modules/@isaacs/cliui/node_modules/strip-ansi/package.json"
+      ]
+    }
+  },
+  {
+    "op": "add",
+    "path": "/components/14",
+    "value": {
+      "id": "pkg:npm/strip-ansi",
+      "name": "strip-ansi",
+      "version": "7.1.0",
+      "purl": "pkg:npm/strip-ansi@7.1.0",
+      "licenses": [
+        "MIT"
+      ],
+      "cpes": [
+        "cpe:2.3:a:strip-ansi:strip-ansi:7.1.0:*:*:*:*:*:*:*",
+        "cpe:2.3:a:strip-ansi:strip_ansi:7.1.0:*:*:*:*:*:*:*",
+        "cpe:2.3:a:strip_ansi:strip-ansi:7.1.0:*:*:*:*:*:*:*",
+        "cpe:2.3:a:strip_ansi:strip_ansi:7.1.0:*:*:*:*:*:*:*",
+        "cpe:2.3:a:strip:strip-ansi:7.1.0:*:*:*:*:*:*:*",
+        "cpe:2.3:a:strip:strip_ansi:7.1.0:*:*:*:*:*:*:*"
+      ],
+      "language": "javascript",
+      "foundBy": "javascript-package-cataloger",
+      "type": "npm",
+      "locations": [
+        "/usr/local/lib/node_modules/npm/node_modules/wrap-ansi/node_modules/strip-ansi/package.json"
+      ]
+    }
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:apk/libc-utils"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/%40colors/colors"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/%40npmcli/disparity-colors"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/abort-controller"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/ansi-regex"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/ansi-regex"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/ansi-regex"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/ansi-regex"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/ansi-regex"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/ansi-regex"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/ansi-regex"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/ansi-styles"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/are-we-there-yet"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/base64-js"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/buffer"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/builtins"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/cli-table3"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/clone"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/color-support"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/columnify"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/console-control-strings"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/defaults"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/delegates"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/event-target-shim"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/events"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/function-bind"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/gauge"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/has-unicode"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/hasown"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/ieee754"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/ip"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/is-core-module"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/lru-cache"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/minipass"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/minipass"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/minipass-json-stream"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/npmlog"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/process"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/read-package-json"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/readable-stream"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/safe-buffer"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/set-blocking"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/string_decoder"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/strip-ansi"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/strip-ansi"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/strip-ansi"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/strip-ansi"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/strip-ansi"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/strip-ansi"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/wcwidth"
+  },
+  {
+    "op": "remove",
+    "path": "/components/pkg:npm/wide-align"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:apk/alpine-baselayout@/lib/apk/db/installed/version",
+    "value": "3.6.5-r0"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:apk/alpine-baselayout-data@/lib/apk/db/installed/version",
+    "value": "3.6.5-r0"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:apk/apk-tools@/lib/apk/db/installed/version",
+    "value": "2.14.4-r0"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:apk/busybox@/lib/apk/db/installed/version",
+    "value": "1.36.1-r29"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:apk/busybox-binsh@/lib/apk/db/installed/version",
+    "value": "1.36.1-r29"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:apk/ca-certificates-bundle@/lib/apk/db/installed/version",
+    "value": "20240705-r0"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:apk/libcrypto3@/lib/apk/db/installed/version",
+    "value": "3.3.2-r0"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:apk/libgcc@/lib/apk/db/installed/version",
+    "value": "13.2.1_git20240309-r0"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:apk/libssl3@/lib/apk/db/installed/version",
+    "value": "3.3.2-r0"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:apk/libstdc%2B%2B@/lib/apk/db/installed/version",
+    "value": "13.2.1_git20240309-r0"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:apk/musl@/lib/apk/db/installed/version",
+    "value": "1.2.5-r0"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:apk/musl-utils@/lib/apk/db/installed/version",
+    "value": "1.2.5-r0"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:apk/ssl_client@/lib/apk/db/installed/version",
+    "value": "1.36.1-r29"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:apk/zlib@/lib/apk/db/installed/version",
+    "value": "1.3.1-r1"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:generic/node@/usr/local/bin/node/version",
+    "value": "20.18.0"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/%40npmcli/agent@/usr/local/lib/node_modules/npm/node_modules/@npmcli/agent/package.json/version",
+    "value": "2.2.2"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/%40npmcli/arborist@/usr/local/lib/node_modules/npm/node_modules/@npmcli/arborist/package.json/version",
+    "value": "7.5.4"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/%40npmcli/config@/usr/local/lib/node_modules/npm/node_modules/@npmcli/config/package.json/version",
+    "value": "8.3.4"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/%40npmcli/fs@/usr/local/lib/node_modules/npm/node_modules/@npmcli/fs/package.json/version",
+    "value": "3.1.1"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/%40npmcli/git@/usr/local/lib/node_modules/npm/node_modules/@npmcli/git/package.json/version",
+    "value": "5.0.8"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/%40npmcli/installed-package-contents@/usr/local/lib/node_modules/npm/node_modules/@npmcli/installed-package-contents/package.json/version",
+    "value": "2.1.0"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/%40npmcli/map-workspaces@/usr/local/lib/node_modules/npm/node_modules/@npmcli/map-workspaces/package.json/version",
+    "value": "3.0.6"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/%40npmcli/metavuln-calculator@/usr/local/lib/node_modules/npm/node_modules/@npmcli/metavuln-calculator/package.json/version",
+    "value": "7.1.1"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/%40npmcli/package-json@/usr/local/lib/node_modules/npm/node_modules/@npmcli/package-json/package.json/version",
+    "value": "5.2.0"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/%40npmcli/promise-spawn@/usr/local/lib/node_modules/npm/node_modules/@npmcli/promise-spawn/package.json/version",
+    "value": "7.0.2"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/%40npmcli/query@/usr/local/lib/node_modules/npm/node_modules/@npmcli/query/package.json/version",
+    "value": "3.1.0"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/%40npmcli/run-script@/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/package.json/version",
+    "value": "8.1.0"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/%40sigstore/bundle@/usr/local/lib/node_modules/npm/node_modules/@sigstore/bundle/package.json/version",
+    "value": "2.3.2"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/%40sigstore/protobuf-specs@/usr/local/lib/node_modules/npm/node_modules/@sigstore/protobuf-specs/package.json/version",
+    "value": "0.3.2"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/%40sigstore/sign@/usr/local/lib/node_modules/npm/node_modules/@sigstore/sign/package.json/version",
+    "value": "2.3.2"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/%40sigstore/tuf@/usr/local/lib/node_modules/npm/node_modules/@sigstore/tuf/package.json/version",
+    "value": "2.3.4"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/%40tufjs/models@/usr/local/lib/node_modules/npm/node_modules/@tufjs/models/package.json/version",
+    "value": "2.0.1"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/agent-base@/usr/local/lib/node_modules/npm/node_modules/agent-base/package.json/version",
+    "value": "7.1.1"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/ansi-regex@/usr/local/lib/node_modules/npm/node_modules/ansi-regex/package.json/version",
+    "value": "5.0.1"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/bin-links@/usr/local/lib/node_modules/npm/node_modules/bin-links/package.json/version",
+    "value": "4.0.4"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/binary-extensions@/usr/local/lib/node_modules/npm/node_modules/binary-extensions/package.json/version",
+    "value": "2.3.0"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/cacache@/usr/local/lib/node_modules/npm/node_modules/cacache/package.json/version",
+    "value": "18.0.3"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/cidr-regex@/usr/local/lib/node_modules/npm/node_modules/cidr-regex/package.json/version",
+    "value": "4.1.1"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/cmd-shim@/usr/local/lib/node_modules/npm/node_modules/cmd-shim/package.json/version",
+    "value": "6.0.3"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/corepack@/usr/local/lib/node_modules/corepack/package.json/version",
+    "value": "0.29.3"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/debug@/usr/local/lib/node_modules/npm/node_modules/debug/package.json/version",
+    "value": "4.3.5"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/diff@/usr/local/lib/node_modules/npm/node_modules/diff/package.json/version",
+    "value": "5.2.0"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/foreground-child@/usr/local/lib/node_modules/npm/node_modules/foreground-child/package.json/version",
+    "value": "3.2.1"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/glob@/usr/local/lib/node_modules/npm/node_modules/glob/package.json/version",
+    "value": "10.4.2"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/hosted-git-info@/usr/local/lib/node_modules/npm/node_modules/hosted-git-info/package.json/version",
+    "value": "7.0.2"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/http-proxy-agent@/usr/local/lib/node_modules/npm/node_modules/http-proxy-agent/package.json/version",
+    "value": "7.0.2"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/https-proxy-agent@/usr/local/lib/node_modules/npm/node_modules/https-proxy-agent/package.json/version",
+    "value": "7.0.5"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/ignore-walk@/usr/local/lib/node_modules/npm/node_modules/ignore-walk/package.json/version",
+    "value": "6.0.5"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/ini@/usr/local/lib/node_modules/npm/node_modules/ini/package.json/version",
+    "value": "4.1.3"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/init-package-json@/usr/local/lib/node_modules/npm/node_modules/init-package-json/package.json/version",
+    "value": "6.0.3"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/is-cidr@/usr/local/lib/node_modules/npm/node_modules/is-cidr/package.json/version",
+    "value": "5.1.0"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/jackspeak@/usr/local/lib/node_modules/npm/node_modules/jackspeak/package.json/version",
+    "value": "3.4.0"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/json-parse-even-better-errors@/usr/local/lib/node_modules/npm/node_modules/json-parse-even-better-errors/package.json/version",
+    "value": "3.0.2"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/libnpmaccess@/usr/local/lib/node_modules/npm/node_modules/libnpmaccess/package.json/version",
+    "value": "8.0.6"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/libnpmdiff@/usr/local/lib/node_modules/npm/node_modules/libnpmdiff/package.json/version",
+    "value": "6.1.4"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/libnpmexec@/usr/local/lib/node_modules/npm/node_modules/libnpmexec/package.json/version",
+    "value": "8.1.3"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/libnpmfund@/usr/local/lib/node_modules/npm/node_modules/libnpmfund/package.json/version",
+    "value": "5.0.12"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/libnpmhook@/usr/local/lib/node_modules/npm/node_modules/libnpmhook/package.json/version",
+    "value": "10.0.5"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/libnpmorg@/usr/local/lib/node_modules/npm/node_modules/libnpmorg/package.json/version",
+    "value": "6.0.6"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/libnpmpack@/usr/local/lib/node_modules/npm/node_modules/libnpmpack/package.json/version",
+    "value": "7.0.4"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/libnpmpublish@/usr/local/lib/node_modules/npm/node_modules/libnpmpublish/package.json/version",
+    "value": "9.0.9"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/libnpmsearch@/usr/local/lib/node_modules/npm/node_modules/libnpmsearch/package.json/version",
+    "value": "7.0.6"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/libnpmteam@/usr/local/lib/node_modules/npm/node_modules/libnpmteam/package.json/version",
+    "value": "6.0.5"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/libnpmversion@/usr/local/lib/node_modules/npm/node_modules/libnpmversion/package.json/version",
+    "value": "6.0.3"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/lru-cache@/usr/local/lib/node_modules/npm/node_modules/lru-cache/package.json/version",
+    "value": "10.2.2"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/make-fetch-happen@/usr/local/lib/node_modules/npm/node_modules/make-fetch-happen/package.json/version",
+    "value": "13.0.1"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/minimatch@/usr/local/lib/node_modules/npm/node_modules/minimatch/package.json/version",
+    "value": "9.0.5"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/minipass@/usr/local/lib/node_modules/npm/node_modules/minipass/package.json/version",
+    "value": "7.1.2"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/minipass-collect@/usr/local/lib/node_modules/npm/node_modules/minipass-collect/package.json/version",
+    "value": "2.0.1"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/minipass-fetch@/usr/local/lib/node_modules/npm/node_modules/minipass-fetch/package.json/version",
+    "value": "3.0.5"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/node-gyp@/usr/local/lib/node_modules/npm/node_modules/node-gyp/package.json/version",
+    "value": "10.1.0"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/nopt@/usr/local/lib/node_modules/npm/node_modules/nopt/package.json/version",
+    "value": "7.2.1"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/normalize-package-data@/usr/local/lib/node_modules/npm/node_modules/normalize-package-data/package.json/version",
+    "value": "6.0.2"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/npm@/usr/local/lib/node_modules/npm/package.json/version",
+    "value": "10.8.2"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/npm-bundled@/usr/local/lib/node_modules/npm/node_modules/npm-bundled/package.json/version",
+    "value": "3.0.1"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/npm-package-arg@/usr/local/lib/node_modules/npm/node_modules/npm-package-arg/package.json/version",
+    "value": "11.0.2"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/npm-packlist@/usr/local/lib/node_modules/npm/node_modules/npm-packlist/package.json/version",
+    "value": "8.0.2"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/npm-pick-manifest@/usr/local/lib/node_modules/npm/node_modules/npm-pick-manifest/package.json/version",
+    "value": "9.1.0"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/npm-profile@/usr/local/lib/node_modules/npm/node_modules/npm-profile/package.json/version",
+    "value": "10.0.0"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/npm-registry-fetch@/usr/local/lib/node_modules/npm/node_modules/npm-registry-fetch/package.json/version",
+    "value": "17.1.0"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/npm-user-validate@/usr/local/lib/node_modules/npm/node_modules/npm-user-validate/package.json/version",
+    "value": "2.0.1"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/pacote@/usr/local/lib/node_modules/npm/node_modules/pacote/package.json/version",
+    "value": "18.0.6"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/path-scurry@/usr/local/lib/node_modules/npm/node_modules/path-scurry/package.json/version",
+    "value": "1.11.1"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/postcss-selector-parser@/usr/local/lib/node_modules/npm/node_modules/postcss-selector-parser/package.json/version",
+    "value": "6.1.0"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/proc-log@/usr/local/lib/node_modules/npm/node_modules/proc-log/package.json/version",
+    "value": "4.2.0"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/promise-call-limit@/usr/local/lib/node_modules/npm/node_modules/promise-call-limit/package.json/version",
+    "value": "3.0.1"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/promzard@/usr/local/lib/node_modules/npm/node_modules/promzard/package.json/version",
+    "value": "1.0.2"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/read@/usr/local/lib/node_modules/npm/node_modules/read/package.json/version",
+    "value": "3.0.1"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/semver@/usr/local/lib/node_modules/npm/node_modules/semver/package.json/version",
+    "value": "7.6.2"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/sigstore@/usr/local/lib/node_modules/npm/node_modules/sigstore/package.json/version",
+    "value": "2.3.1"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/socks@/usr/local/lib/node_modules/npm/node_modules/socks/package.json/version",
+    "value": "2.8.3"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/socks-proxy-agent@/usr/local/lib/node_modules/npm/node_modules/socks-proxy-agent/package.json/version",
+    "value": "8.0.4"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/spdx-exceptions@/usr/local/lib/node_modules/npm/node_modules/spdx-exceptions/package.json/version",
+    "value": "2.5.0"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/spdx-expression-parse@/usr/local/lib/node_modules/npm/node_modules/spdx-expression-parse/package.json/version",
+    "value": "4.0.0"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/spdx-license-ids@/usr/local/lib/node_modules/npm/node_modules/spdx-license-ids/package.json/version",
+    "value": "3.0.18"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/ssri@/usr/local/lib/node_modules/npm/node_modules/ssri/package.json/version",
+    "value": "10.0.6"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/strip-ansi@/usr/local/lib/node_modules/npm/node_modules/strip-ansi/package.json/version",
+    "value": "6.0.1"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/tar@/usr/local/lib/node_modules/npm/node_modules/tar/package.json/version",
+    "value": "6.2.1"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/tuf-js@/usr/local/lib/node_modules/npm/node_modules/tuf-js/package.json/version",
+    "value": "2.2.1"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/validate-npm-package-name@/usr/local/lib/node_modules/npm/node_modules/validate-npm-package-name/package.json/version",
+    "value": "5.0.1"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:npm/yarn@/opt/yarn-v1.22.22/package.json/version",
+    "value": "1.22.22"
+  },
+  {
+    "op": "replace",
+    "path": "/files//bin/busybox/hashes",
+    "value": {
+      "sha1": "cabb8c59fff147813b4ab4feb08dbce348445909",
+      "sha256": "42de297577993675efecf295acf0260e26128458048b3081451e1ac43f611b49"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//etc/group/hashes",
+    "value": {
+      "sha1": "dc6e6b1538d61a41cba8c8f162a8fb5fd003e466",
+      "sha256": "29801ae01972de45938b5b096d78d10770a7861546da8ea228e35a73ec7ab626"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//etc/inittab/hashes",
+    "value": {
+      "sha1": "ce9586d2acf1d9462765259a21ccc4f96a402151",
+      "sha256": "7326d8ad56bf5fea63b1ca516a747ff6e6723e25ae84a93c31620b03de6c001d"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//etc/network/if-up.d/dad/hashes",
+    "value": {
+      "sha1": "ddd99bc197c36e8a9aab9463aaeebda44a7a8029",
+      "sha256": "2fd20d1bc67d9ee711990002b24f156635a73f56b8935b2f76592938817fa4e7"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//etc/passwd/hashes",
+    "value": {
+      "sha1": "6772221d1e89497448f7fe5e4130550a1a99cd13",
+      "sha256": "447432656a9052f15e6ad7b479b1449b314b6e590dbab209b7fee10973cdccf5"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//etc/shadow/hashes",
+    "value": {
+      "sha1": "468434802e14d8e115c896cc072d54ca9327f8c4",
+      "sha256": "f5d0787147931b8be69080a9cc213c07883c5bcb7e4b4e51517129cf7f910c59"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//etc/ssl/certs/ca-certificates.crt/hashes",
+    "value": {
+      "sha1": "6262cc94ca9aa5867cdfd40c3e470a7bba480a45",
+      "sha256": "d40f1b9654876b5216800715c205dcf182cf2d5c363e5f16c051e08979b6be10"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//etc/ssl/openssl.cnf/hashes",
+    "value": {
+      "sha1": "c6aaa437fab0d4186ff361da58952c45447f0181",
+      "sha256": "3a0c65ff954aff207420846926d31d1b6056be525a0f3d38dff21f5b89f90688"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//etc/ssl/openssl.cnf.dist/hashes",
+    "value": {
+      "sha1": "c6aaa437fab0d4186ff361da58952c45447f0181",
+      "sha256": "3a0c65ff954aff207420846926d31d1b6056be525a0f3d38dff21f5b89f90688"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//lib/apk/db/installed/hashes",
+    "value": {
+      "sha1": "b851226948f31168d78d79d64f875694898f2616",
+      "sha256": "ff92f413b565a645f6dd78393d69e850232020e68e8cc402477827e6cfb95125"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//lib/ld-musl-x86_64.so.1/hashes",
+    "value": {
+      "sha1": "1d903b77e2cfd10dd3cc010277e301f69d4fc505",
+      "sha256": "60d0ed88672b260b8337bf1e5b721f9ca9c877f4d901886472b8195a38ff3630"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//lib/libapk.so.2.14.0/hashes",
+    "value": {
+      "sha1": "8876d1f5cdae96ff56e540bb2014ded20936a6ad",
+      "sha256": "d44e8dd23f66a2dc103b7c71d74a9f4f7c254d1c7b403d159705d53adca6f5e8"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//lib/libcrypto.so.3/hashes",
+    "value": {
+      "sha1": "ec12a4df227f1e6ca2157b1cf1f4a32331e6e819",
+      "sha256": "5ea15f5f0c4f5470d82fbb9f678b37dd729469f2bf3be838e686817733f417e4"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//lib/libssl.so.3/hashes",
+    "value": {
+      "sha1": "129098cbfb7f387a1c55a45adfe924bdd002757c",
+      "sha256": "92df611def45275fffa6573e022f0eb196841080fc80cabfeeb6fd93f5b2943a"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//lib/libz.so.1.3.1/hashes",
+    "value": {
+      "sha1": "a85ac60762017d7ffffa98382ad4a3d8afdd7f18",
+      "sha256": "5134dcc47a23d1bfa7cd0f8046343e9268d4d3f1827dce295713d3b10ada5e0a"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//sbin/apk/hashes",
+    "value": {
+      "sha1": "dc75b1b4c8f97147d4602d9faaf82c96ce5688f8",
+      "sha256": "4aeb685c2f8d180b559fb9f9654e91286f312a3755771d8fd3f7594a7defdc82"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/bin/getconf/hashes",
+    "value": {
+      "sha1": "9f7f5998a6e69986e0bb9bc074202bf774db8e9e",
+      "sha256": "85fea2e4b434a1e5008d025b55bfeeba72a5dcf792e68861e6dfac9950bd75b4"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/bin/getent/hashes",
+    "value": {
+      "sha1": "620fe7d515de85c214156f5b6014cae72f344bbb",
+      "sha256": "12ddd36590b1c8e2dfd906df6cfdac411863a6ad67c86d20849e55e510adf766"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/bin/iconv/hashes",
+    "value": {
+      "sha1": "ed20fe78256163d0e5e233c8d758f523300c6501",
+      "sha256": "4826a18fe4337665f778e0377eee92f704e2f578fde268e45f9e0e0ea5da3628"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/bin/scanelf/hashes",
+    "value": {
+      "sha1": "23fea552ef4aa7235a26ce61ade7df9bdc677cf1",
+      "sha256": "4d0a125e450889fbcf70e867c6ef1575ad0d6911925bf6c2edf2af5de3a9dc78"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/bin/ssl_client/hashes",
+    "value": {
+      "sha1": "ede6b607ff67bf8bb9aab945cc0895ea9386f550",
+      "sha256": "0c977fe6f05c192fec8d669b04e5694b2b5a2fb1b2ef24be07a685cce469aafd"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/lib/engines-3/afalg.so/hashes",
+    "value": {
+      "sha1": "cb28769fcaa6c67f75d7a8362577ea66ef8b26d8",
+      "sha256": "5fda8dd0e71f7f99fd150444db4aaf450045fe420b50f4a74992be21b75cc7cb"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/lib/engines-3/capi.so/hashes",
+    "value": {
+      "sha1": "2a7e2a61b971b23faa75d79643509f73464024e4",
+      "sha256": "efe548022cb0016cd99e50cbb0979f8a00a6eecf7336b63414c275c7e06d1c5b"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/lib/engines-3/loader_attic.so/hashes",
+    "value": {
+      "sha1": "7fe430f8ebcedb86e9f75794d3ea43ee3d977d29",
+      "sha256": "9c18bdab0aae6faf05c3b88436087f874661593fd9ba10b178392e4464804916"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/lib/engines-3/padlock.so/hashes",
+    "value": {
+      "sha1": "96e18a1bccf1bf94f447efc4fb2dc51ad16921b9",
+      "sha256": "991a8bd7dd351fb60b22ccd5f8ec0fd7476be740b445d99e66131d9ee9498b27"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/lib/libgcc_s.so.1/hashes",
+    "value": {
+      "sha1": "b4947683692f09ca4b268e96824199bade1e7a21",
+      "sha256": "a0b57c2050c244d16b5df8e227fd2f5d701ea6cdf779bd26602b9c20072217b4"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/lib/libstdc++.so.6.0.32/hashes",
+    "value": {
+      "sha1": "75f57fd1dccf0f135c46adb168b04b8cc29f86fd",
+      "sha256": "0d31ccbed6db7af1b0c3799025ecfef909f097f8d688ac0a8b467f70e176f0fc"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/lib/ossl-modules/legacy.so/hashes",
+    "value": {
+      "sha1": "516030e8d42e3e9a72e1b7cacabc5d3f0c9dd011",
+      "sha256": "fb69419b8f992fb81023538a1f5088330f1a2f8dc212f66eaa1ee6546da3d5b1"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/bin/node/hashes",
+    "value": {
+      "sha1": "35e41db06c279020bfbb580d8e3fa22e5ab04090",
+      "sha256": "07b6c68d5f8bab02b775f8a81ab709d445829d37b36c1f72911d9e79b3961ea0"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/corepack/package.json/hashes",
+    "value": {
+      "sha1": "4dd4e98fd2ed7b7f9e608cb9d541acaf4035bbf2",
+      "sha256": "8ee6f3a0b60b846bde25603c6640fbb3e78e87ed72e0e61b43d08f9ed6367de1"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/@npmcli/agent/package.json/hashes",
+    "value": {
+      "sha1": "18b998cc100abe9fad97255c3891e66c60bb092c",
+      "sha256": "d2168040ce23751cb50582f0ac2bee9f5003dc07115ba8576b4a14c6f256cbe6"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/@npmcli/arborist/package.json/hashes",
+    "value": {
+      "sha1": "8dac1ea331745160f204aedf66d7dc13eb7479a0",
+      "sha256": "f83b87a66eba684116c1bde4701f6ebd9dd88022d917be3405f84f1adb603397"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/@npmcli/config/package.json/hashes",
+    "value": {
+      "sha1": "94ceff9b1e6b7122d9c405d4ca48af25ed7ec7d1",
+      "sha256": "f1ae035e341e028a645e9cba56caf67be72da2a2fd81bc2e5e4adc5960cee13c"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/@npmcli/fs/package.json/hashes",
+    "value": {
+      "sha1": "4fa9566fd59f0ef4b6296a294ba3be9d1968a742",
+      "sha256": "34ee08c2c72df77369db2cb7d7e5a601f74886a97655c8df3b63e1a0d3f87efd"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/@npmcli/git/package.json/hashes",
+    "value": {
+      "sha1": "d639fe4956a07e1dfcefe50ced3f1e73ba4fc15d",
+      "sha256": "639e54dbac91530630b518fffa80193ae6eda7b1f212e38945fbd95dc2f43517"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/@npmcli/installed-package-contents/package.json/hashes",
+    "value": {
+      "sha1": "c5d65a10442798db8df0bf767aa7bca352fe3807",
+      "sha256": "7cc985c432068a321878b041de81b3b53846edc0247bc37961205d9e8fa1eb4f"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/@npmcli/map-workspaces/package.json/hashes",
+    "value": {
+      "sha1": "6ffbaebf4a6655b5f5d08cea4922d086cdeda370",
+      "sha256": "9d893753480b9008c2019ccb51d0feabfad4aad5a0a2a3f8b814118d32023d64"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/@npmcli/metavuln-calculator/package.json/hashes",
+    "value": {
+      "sha1": "b5abf9f350220ce67039b4a8146140ba2da7d616",
+      "sha256": "8cbcdad515883df4cdfa82cfc4bee37bf6220a450d8f4cf07e4a9e196d6aa45a"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/@npmcli/package-json/package.json/hashes",
+    "value": {
+      "sha1": "a6baebaf4213ea4db6fb482be180da20b341cf90",
+      "sha256": "f8e438cfa65054e5422349bbb0ce8e75d861eba771d4ce81d69546aa4fb86d61"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/@npmcli/promise-spawn/package.json/hashes",
+    "value": {
+      "sha1": "52194f1cc1514d2471bea31f651dc1a581437cee",
+      "sha256": "cdfcbee603a69bc287d454abac4342b5b67263bb990e875d1bb4f00221eea056"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/@npmcli/query/package.json/hashes",
+    "value": {
+      "sha1": "16d280c5a564513a15971883270f0617a374cf72",
+      "sha256": "e72a9c6f2b4edc2337806e963f5619808b5a32e557b903f906b9c29db6d2e4bb"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/package.json/hashes",
+    "value": {
+      "sha1": "88f90ae20638e404147627bb8eb97804e833954c",
+      "sha256": "40d30f8119f8cdab376883cf59a83f0e224fedee62b9535600d56629251f8b7b"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/@sigstore/bundle/package.json/hashes",
+    "value": {
+      "sha1": "0ec4b64ac1c68e44b360e565f0d0d01106c6d32b",
+      "sha256": "5ba3f083edd0f7dccd814de2e74e0b4b5c96fd060652e61d53bfe422b0173f7e"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/@sigstore/protobuf-specs/package.json/hashes",
+    "value": {
+      "sha1": "2d889aba4ac0b69090ba6d56b1e6ef7f1960b56e",
+      "sha256": "3202389cb3e8a8f0cd8ccb074d9ea557b516a7d35f796e284b8e93448ff3c460"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/@sigstore/sign/package.json/hashes",
+    "value": {
+      "sha1": "67e7dd76ac6a16bf0d434419b6fee4ffb6fcd874",
+      "sha256": "a814b20f8532d06c142653393a163e5cf483494a5dbec5d1ec07270a9df9b398"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/@sigstore/tuf/package.json/hashes",
+    "value": {
+      "sha1": "7cf89da1e2ca13b5ad8bc307151cb9433bc2a285",
+      "sha256": "1659c8b16b3eef82b95c03900eab01936c1446d31e4a9d6ab88281ff2e11c25a"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/@tufjs/models/package.json/hashes",
+    "value": {
+      "sha1": "a5038d57ec0715bbf5a9d802f2c2658ad8eb29e1",
+      "sha256": "f9550f107a6215bdc1ee07fead47994152fb55753eb3024591d734bcef3992a6"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/agent-base/package.json/hashes",
+    "value": {
+      "sha1": "d46c20996e760ac8d984ecd59cb8b35cce36230d",
+      "sha256": "bbc72bd43c55aadcaedcfa30e8bf445f0bfd4142b7609725d013878822e576dc"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/ansi-regex/package.json/hashes",
+    "value": {
+      "sha1": "f1b78e043012e1ab5689d57377093e88f1400677",
+      "sha256": "8b2dc166f2b74d5098bad38bdd3dd2f4d4775c626199872f5e36dbb48c40931d"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/bin-links/package.json/hashes",
+    "value": {
+      "sha1": "6f05cb3992980936ebd7493a873b07b37146301f",
+      "sha256": "c1061b650a58a22ca6599cd8f2c62f3b6efd716f54a36765a9038cfeeac2cb3d"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/binary-extensions/package.json/hashes",
+    "value": {
+      "sha1": "09235a3c2fdebe7e975f19f4930e1fb7dec29410",
+      "sha256": "f775eb159a64b320a9a62aaa831ae67e13ab05bd9ca375b8ec830a1e53cbc56d"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/cacache/package.json/hashes",
+    "value": {
+      "sha1": "0985efdc7c054181012cfd42e03451b686a4b545",
+      "sha256": "68529d328f10db08a8b5758e8f857f45fa552c30093a17935d35f507af6faa00"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/cidr-regex/package.json/hashes",
+    "value": {
+      "sha1": "7b577551c7cc8f109440f0845911f4f9d87140bf",
+      "sha256": "c08e9e387431c3ee5c6c04c6db0fb7dffb3c9680415586879445386b0d6aa5fa"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/cmd-shim/package.json/hashes",
+    "value": {
+      "sha1": "96a1af48fdb82db6259eae7dd728d7b17a61821b",
+      "sha256": "f6839aa5a39a5f29a437e4ccae42be84318ede37d951873d9cda88e00df1634f"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/debug/package.json/hashes",
+    "value": {
+      "sha1": "0e255d8fc204ddfe2f49b257cf527a973af7859e",
+      "sha256": "952ea1ef23d0acb5e23274fb4a50e6dc408b417f23015e81d139c3bce0e9af4e"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/diff/package.json/hashes",
+    "value": {
+      "sha1": "2b717df89b22675fcc6596e64499baf22c97bcff",
+      "sha256": "5d73faac59da5fea33dd9622ef6232b5a3b8e0e162a8f8c084caeb0d6c473341"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/foreground-child/package.json/hashes",
+    "value": {
+      "sha1": "5d9e5d1d6a03b002c516f67646e1111f46f4d102",
+      "sha256": "b30a6f354d42bf65e2ac0f50574fc236c9b253d11c2e8be86f7bb4450caeb4ed"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/glob/package.json/hashes",
+    "value": {
+      "sha1": "50e495a65fb14747125f8d9d257e3253cf7b5f2e",
+      "sha256": "6ac9d0f98273589620dfce6918b3d597075a8a8d5f47cb15aa88a01314a93edf"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/hosted-git-info/package.json/hashes",
+    "value": {
+      "sha1": "a97689f05cce54de6ff424d24cde1313c3dee505",
+      "sha256": "e4e1c5513670524380044d466340fe6d1ff1a7f050020bb7afa8c3493bb80e73"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/http-proxy-agent/package.json/hashes",
+    "value": {
+      "sha1": "f8b2b2bf2f3e2f8491496f9efe80b96442a803a9",
+      "sha256": "38b61961aa0ba3028f2e120b3d883179281f6ba25fe22ff2214bf9f363161b65"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/https-proxy-agent/package.json/hashes",
+    "value": {
+      "sha1": "26d87d45b9b83a23b8c2ab62ab446bfd863916aa",
+      "sha256": "56bfa0110c17fbf84ef0025d0ebd4bc195183a845a4b512b6646d7e3178613f8"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/ignore-walk/package.json/hashes",
+    "value": {
+      "sha1": "2fb63c281b54428081b1c26c165d3e2fe7a94fd5",
+      "sha256": "fcefa81bca6da1f39fd817bb0f259c8a277f43b5fb2eb5dd81a171b5b06911e2"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/ini/package.json/hashes",
+    "value": {
+      "sha1": "42a65028a1b17711f9ebbcb4712c058e557e0937",
+      "sha256": "2ee5266dba2338e901f29fd7069930441c4d59721ee6f6dee6e2fc03c9da9a27"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/init-package-json/package.json/hashes",
+    "value": {
+      "sha1": "ccdd40908525c9810ee43504c60dd52dd485d0d2",
+      "sha256": "8ef68ed3b48c1aec24857136733a976b9d24f2c30a91765f68f5cd43154b8f8e"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/is-cidr/package.json/hashes",
+    "value": {
+      "sha1": "98b85794b527eaa11ff4cda07ab5cbb0e91c0f2c",
+      "sha256": "1ae96b225495f728eae6b4707a2d8c5d15fdb6c599ed36c58dead8cf6a030126"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/jackspeak/package.json/hashes",
+    "value": {
+      "sha1": "e2d13aece4788c997eecfbb6d006cf3c0e23b9ae",
+      "sha256": "4a342476c3429936a1e590808fa0c7546e2a0dab5747d6bcb4b32bbc11cd771e"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/json-parse-even-better-errors/package.json/hashes",
+    "value": {
+      "sha1": "4765d8e1e6076153216ca15eed519dbd7a959e2e",
+      "sha256": "b524be8156402d3f2dff543d9ec9f7ff579c457a56efc9308a00bec2f141c45c"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/libnpmaccess/package.json/hashes",
+    "value": {
+      "sha1": "18b2e3284989fce92b9ce71ce7bc0a5304a2d080",
+      "sha256": "fd2004690b12817ca09a013fe2cc4fe1755a8ec09e3a28ba305a0c0e1bfa254d"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/libnpmdiff/package.json/hashes",
+    "value": {
+      "sha1": "18eb48e161bfeeb17ec7000bc4338567050a5fef",
+      "sha256": "337332dc3198a95e685a13d74225f2cc13543cdd7235c993431f3d1c036fa03c"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/libnpmexec/package.json/hashes",
+    "value": {
+      "sha1": "83f00b1fae5cdc527731e40ec10dea9ec646ffe9",
+      "sha256": "48020896a92c474e2425f200d2c8c2e20599baca57cab2db3c188356dc804cc5"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/libnpmfund/package.json/hashes",
+    "value": {
+      "sha1": "6fe2a1b2dee9b7126d9115ef0115dff4c030a7aa",
+      "sha256": "3a5e6927356ca7a1f86cf8845d65379643886183176b2b2e2e8d0a6b28b43658"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/libnpmhook/package.json/hashes",
+    "value": {
+      "sha1": "c1e35ec85c46dfaffbcb6910f31c31ed9f72db30",
+      "sha256": "1d90e5defcf4aa7046fbbf3d7f57f127b3b275d7515d1936649c705c85ef3deb"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/libnpmorg/package.json/hashes",
+    "value": {
+      "sha1": "74e8d7100758e2fd261452ba0a5f549e33e7fa9f",
+      "sha256": "c7494b6e54d896b4d07896371e809fd4ba8d5abd605ef47d52ff3f6fbcd7c876"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/libnpmpack/package.json/hashes",
+    "value": {
+      "sha1": "d3c81de8defae2c26c08edb28cef7a5806d9d46c",
+      "sha256": "c7c299a8e25bcdd5f1f04d2005a133ef3d19f957601c9da9181b8e7014d26f10"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/libnpmpublish/package.json/hashes",
+    "value": {
+      "sha1": "12de73b6587ea8db8a2d9b7fd43f6cdb12195a60",
+      "sha256": "aa662e458d8d88f4a3b622693d192f5ec8be8fcb109e69bb2272d9a9b931dafd"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/libnpmsearch/package.json/hashes",
+    "value": {
+      "sha1": "cbd6ec4febdd0bf4dd27b1a565163915dc28ad61",
+      "sha256": "508e1b4106252510c5dc7f27bddd1762bc98444577dbfb1cf71027db4933a7ac"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/libnpmteam/package.json/hashes",
+    "value": {
+      "sha1": "1aa8dcc5e264c86a0e6508e34c47770f08dd0149",
+      "sha256": "28d702b8eca33fcba80e4c05015e6fcd4ad77f259781769c76874b3bf529b2b0"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/libnpmversion/package.json/hashes",
+    "value": {
+      "sha1": "9af0d764fd79a20241e3260e67591511e14b597f",
+      "sha256": "24195ae11b811adefefd77be5772120c4f5c2f296c1e4301602912f7b700aeff"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/lru-cache/package.json/hashes",
+    "value": {
+      "sha1": "4ae334bb71cfbe082937363aa98c448a17189063",
+      "sha256": "e83561b8c919f4840e313cfce27bce7c670dc0cbab76f703a11b0366400ea60b"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/make-fetch-happen/package.json/hashes",
+    "value": {
+      "sha1": "185bfe58cb1dcb8dbec6289abd3263c32b22b5ff",
+      "sha256": "c4c70297af29c4cf89ee05c9fe9da63e555b6eae623e72d1b1ff9edbe18a1070"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/minimatch/package.json/hashes",
+    "value": {
+      "sha1": "fad71756ee05319a797b6ec51669df8e01e76379",
+      "sha256": "a10ab8ae3e75bfc4a70332c40d2a138ab1314e040edb84475610087206605e53"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/minipass-collect/package.json/hashes",
+    "value": {
+      "sha1": "7ca3a77ca7b795148ecee5d9ebbe96e968dddb15",
+      "sha256": "042ab826c5440a7d01a1cafae44c54840618319e2e64ed40df006c542b0768f8"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/minipass-fetch/package.json/hashes",
+    "value": {
+      "sha1": "b90cea15ce3befd90994c2e15707eead58daf161",
+      "sha256": "0dfc6ad7831258fd1c45e25fea68c1c34be39e515c7e32392959b855876e3e66"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/minipass/package.json/hashes",
+    "value": {
+      "sha1": "798df22ae1185484c372b4da30c4d75a0e7ea572",
+      "sha256": "f6cfe184c40e1c08eac8f614d7ca6888fee9654259668ad0670bb6011f74a005"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/node-gyp/package.json/hashes",
+    "value": {
+      "sha1": "f720cc6f9dec2edaafdbcc53fe750850c92f4cbc",
+      "sha256": "533069b5c7bb86444fcd1c9eef885f9b2a74b5cdd767fb825cf9c58ae9f73a43"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/nopt/package.json/hashes",
+    "value": {
+      "sha1": "1668c769e2b19743eed6798e2ef7ebfcb89fde64",
+      "sha256": "56b4f677373223df52f71a5c21476cc84cc7bf95c79cae65817eca3b6d381536"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/normalize-package-data/package.json/hashes",
+    "value": {
+      "sha1": "1ff17c4769b183537f711a3256b9789368588540",
+      "sha256": "8eb32ae82d89ec9ead9dd951a5bbb50d51aff1c57e0a2655dc2b3aaacb271b6e"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/npm-bundled/package.json/hashes",
+    "value": {
+      "sha1": "25fbfd9dea91046cea112b8465ef60329126a939",
+      "sha256": "2a6e3ded745342ce576982fb94c718cb8921a03855694bac67e4846ae49ab386"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/npm-package-arg/package.json/hashes",
+    "value": {
+      "sha1": "655d4f819af1a054adf1f3845eb8cfa4f53a0c59",
+      "sha256": "3fdd03dc81ee6ae62bdbf6c7f2d3a985f2c9bddcf9ca14e551822ca981374009"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/npm-packlist/package.json/hashes",
+    "value": {
+      "sha1": "6a496de34527604b2c5f67fd55fa4bffd894c455",
+      "sha256": "d8f4e0ae70ec9cb6e726e3234eff3f519704957f5c9effd9752facc97461049e"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/npm-pick-manifest/package.json/hashes",
+    "value": {
+      "sha1": "77c9751def8bd732587a29b4a7220d853d7a5068",
+      "sha256": "ce2e4f3a95eefedd98248d9838617a410607d90c3ba51fdf8e1acb9fe068c5de"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/npm-profile/package.json/hashes",
+    "value": {
+      "sha1": "36384d4e30c7357bfad251758a3f31d0571f28cf",
+      "sha256": "d191750623de8b2cc03b00b54d4a75226be2db7acd4fc390a880d2bf71a4f55c"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/npm-registry-fetch/package.json/hashes",
+    "value": {
+      "sha1": "d66bcbc7d9cf513ca5d3322b1c660baa7f1391bb",
+      "sha256": "737788941a61bba3077d9a4f3868a91c35ae15319f01b9dcfb89afa5f1e6a369"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/npm-user-validate/package.json/hashes",
+    "value": {
+      "sha1": "1923ae65ea6271173add67220b68db760f5ba755",
+      "sha256": "47f41cbb0f57ff62e266e16b6785eb4b9adbdca950a91cc57f0ef10e4d849555"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/pacote/package.json/hashes",
+    "value": {
+      "sha1": "be29c6a2e5540e7ca93c5b5c98f8185ba098ab97",
+      "sha256": "cdea9157b394e5316f671351fc12b6ad738350aa205ed7de8f79e6e1c1ced16b"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/path-scurry/package.json/hashes",
+    "value": {
+      "sha1": "57ceeacc9d50abbd7e370e6a697520cc0784baa6",
+      "sha256": "eda5ff683c26f88a134198fa2700b371abc9092c61a81474226bdfc6f9348c14"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/postcss-selector-parser/package.json/hashes",
+    "value": {
+      "sha1": "2240286708907351f165cca609980ba615f2b8c6",
+      "sha256": "4a845aedabd8bd79a473081c6da03f41207eed13457f70ed046786e70737f691"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/proc-log/package.json/hashes",
+    "value": {
+      "sha1": "2c8b6db58dea40d2965998ddf8fc863661c51d76",
+      "sha256": "6abd2dacadde503a8b0862c05a168085a84efbabd769f6ada0de539596a82266"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/promise-call-limit/package.json/hashes",
+    "value": {
+      "sha1": "1e54d0e6b32c2cf15a008328d1e29ba237997c21",
+      "sha256": "f57fa411b862b7648180db74b21d2c6c1141bdd304ff453fa6b907566930f126"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/promzard/package.json/hashes",
+    "value": {
+      "sha1": "f08b26175ce262828b3b04a332841995f9ccb9e0",
+      "sha256": "18a539e4dcef0ef14156899a5a2f49702f24f27a818cf1577f7dd81549519e14"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/read/package.json/hashes",
+    "value": {
+      "sha1": "d1f100b0b95bcd06b5c8a58092cf9d0a5e42b690",
+      "sha256": "f356f146cd5f2fa4b93077c337ab316182b59025ebef16dfd16c8e2c2e8034c8"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/semver/package.json/hashes",
+    "value": {
+      "sha1": "2ab74cf8896d37e28c11c8b375b1d7d3dea03af9",
+      "sha256": "dd838c686e2c41f7460768f16df16c0261fe425f240443c4c7361969df3f5c23"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/sigstore/package.json/hashes",
+    "value": {
+      "sha1": "447c6bdc9057807f2bc09e44ca4148d17b6bc779",
+      "sha256": "5988a09204464778934790167b76ced637ffc319e5d0bf5ea6a676d65b201d1a"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/socks-proxy-agent/package.json/hashes",
+    "value": {
+      "sha1": "0d6a883d97af71ff74d67ed8dafda137106fa0a4",
+      "sha256": "87f7374f424548ee609dac4e3b4569f2d472c69ecccdd4a3c18b337b908c1041"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/socks/package.json/hashes",
+    "value": {
+      "sha1": "ecbf3f3ed5712b86840941628b0b24bf3cc799a0",
+      "sha256": "2006096a329c7d70bcf071f9f6444192edce0d08a5757bfb897781604ab7234e"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/spdx-exceptions/package.json/hashes",
+    "value": {
+      "sha1": "0f731ec5551fde840e6213e20cd9fbdc53468290",
+      "sha256": "0af9bd4b68c9e3d1bc7a9208881cbde84da140d564a3bb42cf53184c6e83f2e3"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/spdx-expression-parse/package.json/hashes",
+    "value": {
+      "sha1": "3f1b1059652d04327b6b0513080e242935399c30",
+      "sha256": "3e8b59ed9c34d30597c8e5e3da963fe23ae97f5f20611ae523f842a7b243c044"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/spdx-license-ids/package.json/hashes",
+    "value": {
+      "sha1": "1a6c61bfeaddcb9c3423898d0fb5018c3a939bf1",
+      "sha256": "77904ba82ae1e28c694bc97b6242f8eefbc94bd1ed15676e6f67e567a250742b"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/ssri/package.json/hashes",
+    "value": {
+      "sha1": "31d4553deb7047a36baa682de8bc46f81bc00b6c",
+      "sha256": "83ae023d5673fd4f64c70ab492a954c94ce63db18d22de4569a2d7215ece2242"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/strip-ansi/package.json/hashes",
+    "value": {
+      "sha1": "892d549c672831716abe655f087946d2644f2852",
+      "sha256": "0130850b9da0584f54cc20d3dab6365c807e9436ac78e016d5009efa99bd0530"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/tar/package.json/hashes",
+    "value": {
+      "sha1": "8b9fbec9a68117d7405c65ab254846287a63a494",
+      "sha256": "89bd6d32c9e56eab63f3f62b96080aa43afa530675701610d74793d4719d1137"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/tuf-js/package.json/hashes",
+    "value": {
+      "sha1": "f6edefc3f2ea71d9b8988331a0fcc370649d63d5",
+      "sha256": "406118e668c8577c2579ca58d7fb9e7c893f5873b98977efae05897ae4df05e2"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/node_modules/validate-npm-package-name/package.json/hashes",
+    "value": {
+      "sha1": "c025f7e268400a35e5e69b698dec00ffb2e3bc94",
+      "sha256": "345040a89c5e1ba91291010517757d2cef30bb7a231ab673fa328df1dd206a26"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/local/lib/node_modules/npm/package.json/hashes",
+    "value": {
+      "sha1": "1a7b8e9568c1af29d7f7bc193ae1b828d1f67442",
+      "sha256": "5af906974b65fc1e48d709687e174a466614b9706f9479bea73c650bc3142fb5"
+    }
+  }
+]

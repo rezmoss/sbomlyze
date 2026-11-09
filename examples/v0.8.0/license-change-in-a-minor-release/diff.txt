@@ -1,0 +1,40 @@
+
+SBOM Comparison
+======================================================================
+                        Before                       After
+File:                   akka-actor-2.6.20.syft.json  akka-actor-2.7.0.syft.json
+File Size:              19 KB                        19 KB
+Format:                 Syft JSON 16.1.12            Syft JSON 16.1.12
+Generator:              syft 1.56.0                  syft 1.56.0
+OS:                     (none)                       (none)
+Source:                 akka-actor                   akka-actor
+Source Type:            directory                    directory
+Total Components:       1                            1
+  maven:                1                            1               
+Data Quality:
+  PURL Coverage:        100.0%                       100.0%
+  License Coverage:     100.0%                       100.0%
+  Hash Coverage:        100.0%                       100.0%
+  CPE Coverage:         100.0%                       100.0%
+======================================================================
+
+Scan Context:
+  Schema:                 16.1.12                 16.1.12
+  Scan Scope:             squashed                squashed
+
+Key Findings:
+  🔄 Scanned akka-actor changed: 2.6.20 → 2.7.0
+  🔄 1 version upgrades (1 minor) among 1 shared packages
+  📜 License shift: permissive -1
+
+📊 Drift Summary:
+  📦 Version drift:   1 components
+
+📄 Files added: 1, removed: 1
+
+~ Changed (1):
+  ~ akka-actor_2.13 @ /akka-actor_2.13-2.7.0.jar
+      version: 2.6.20 -> 2.7.0
+      licenses: [https://www.apache.org/licenses/LICENSE-2.0.html;description=Apache-2.0] -> [https://raw.githubusercontent.com/akka/akka/main/LICENSE;description=BUSL-1.1]
+      hash[SHA1]: 8dc5a2cef5a428c7b159f44486bed14cc964a227 -> a62a62a0011bc7651a84addb23b23ef1c7b32a6a
+

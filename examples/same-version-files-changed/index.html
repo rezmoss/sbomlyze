@@ -1,0 +1,287 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Same version, files changed inside — sbomlyze</title>
+<meta name=description content="scanelf 1.3.7-r2 has the same version in Alpine 3.19.9 and 3.20.10, but its binary /usr/bin/scanelf changed."><link rel=canonical href=https://sbomlyze.com/examples/same-version-files-changed/><meta name=sbomlyze-version content="v0.8.0"><meta property="og:title" content="Same version, files changed inside — sbomlyze"><meta property="og:description" content="scanelf 1.3.7-r2 has the same version in Alpine 3.19.9 and 3.20.10, but its binary /usr/bin/scanelf changed."><meta property="og:url" content="https://sbomlyze.com/examples/same-version-files-changed/"><meta property="og:type" content="website"><link rel=icon href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='12' fill='%234ade80'/%3E%3C/svg%3E"><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel=stylesheet><link rel=stylesheet href=/css/main.min.529c37046575bbd2c42eba5e324f8625737caa20f21aef7616660f878a6a1c3a.css></head><body><header class=site-header><div class=header-inner><a class=brand href=/><span class=brand-name>sbomlyze</span>
+<span class=brand-dot></span></a><nav class=nav><a class=nav-link href=/examples/>Examples</a>
+<a class=nav-link href=/integrity-drift/>Integrity drift</a>
+<a class=nav-link href=/action/>GitHub Action</a>
+<a class=nav-link href=/cli/>CLI reference</a>
+<a class=nav-link href=/compliance/>Compliance</a>
+<a class=nav-link href=/install/>Install</a>
+<a class=nav-link href=/changelog/>Changelog</a></nav><div class=header-meta><span class=header-version>v0.8.0</span>
+<a class=btn-gh href=https://github.com/rezmoss/sbomlyze>GitHub ★ 26</a></div></div></header><section class="section-hero bb"><div class=container-md><div class=eyebrow>Example 3 of 8 · real output · sbomlyze v0.8.0</div><h1 class=h-page style=max-width:26ch>Same version, files changed inside</h1><p class=lead-md style="max-width:68ch;margin:22px 0 0">scanelf 1.3.7-r2 has the same version in Alpine 3.19.9 and 3.20.10, but its binary /usr/bin/scanelf changed.</p><div style=display:flex;gap:8px;flex-wrap:wrap;margin-top:24px><span class=pill>container</span><span class=pill>apk</span>
+<span class=tag>Owned-file drift</span><span class=tag>deny_owned_file_drift policy</span><span class=tag>apk version ordering</span><span class=tag>File changes by owner</span></div><div id=stale class="callout callout-amber" style=display:none;margin-top:24px></div></div></section><section class=section-md><div class="container-md doc-body"><h2>What happened</h2><p>A version diff says <code>scanelf</code> did not change: <code>1.3.7-r2</code> before and after. Syft also records the hash of
+every installed file and which package owns it, and sbomlyze compares those: the package&rsquo;s
+<code>/usr/bin/scanelf</code> is a different file.</p><p>Here the explanation is benign. Each Alpine release branch has its own build of every package, so the
+same version can hold different bytes, and sbomlyze notes that the base OS changed and a rebuild is
+expected. The reverse case is also visible: alpine-baselayout changed version (3.4.3-r2 → 3.6.5-r0) while
+all 10 of its hashed files stayed byte-identical.</p><p>With <code>deny_owned_file_drift</code>, the same finding fails a pipeline, which is what you want where the base
+image is pinned and nothing should touch package files after install.</p><div class=callout style="margin:24px 0"><strong>What this does not prove.</strong> A same-version rebuild is expected across Alpine releases. Only the CycloneDX output lacks file ownership, so this check needs Syft JSON or SPDX.</div><h2>Inputs</h2><p>Generated once with Syft 1.56.0, linux/amd64, and kept unchanged in <a href=https://github.com/rezmoss/sbomlyze/tree/v0.8.0/testdata/showcase><code>testdata/showcase</code></a> in the repository. Every sbomlyze release re-runs the commands below on these exact files.</p><div class=codebox style="margin:18px 0"><div class=codebox-head>alpine 3.19.9</div><pre class=codebox-pre style=white-space:pre-wrap;word-break:break-all>syft scan registry:index.docker.io/library/alpine@sha256:b58899f069c47216f6002a6850143dc6fae0d35eb8b0df9300bbe6327b9c2171 -o syft-json=alpine-3.19.9.syft.json
+syft scan registry:index.docker.io/library/alpine@sha256:b58899f069c47216f6002a6850143dc6fae0d35eb8b0df9300bbe6327b9c2171 -o cyclonedx-json=alpine-3.19.9.cdx.json
+syft scan registry:index.docker.io/library/alpine@sha256:b58899f069c47216f6002a6850143dc6fae0d35eb8b0df9300bbe6327b9c2171 -o spdx-json=alpine-3.19.9.spdx.json
+</pre><div style="padding:0 24px 18px;font:13px/1.8 var(--mono)"><a href=https://github.com/rezmoss/sbomlyze/raw/v0.8.0/testdata/showcase/alpine-3.19.9.syft.json>alpine-3.19.9.syft.json</a> <span class=c-gray title="sha256 a208a11c16a6ccfad44654d05240585a5ddbe04a5beebe891f9437876a440fe5">a208a11c16a6…</span>&nbsp;&nbsp; <a href=https://github.com/rezmoss/sbomlyze/raw/v0.8.0/testdata/showcase/alpine-3.19.9.cdx.json>alpine-3.19.9.cdx.json</a> <span class=c-gray title="sha256 680bcbc3a9e332cbfe31385693ead374b1e149910a44fd52831583c465118eea">680bcbc3a9e3…</span>&nbsp;&nbsp; <a href=https://github.com/rezmoss/sbomlyze/raw/v0.8.0/testdata/showcase/alpine-3.19.9.spdx.json>alpine-3.19.9.spdx.json</a> <span class=c-gray title="sha256 0f874840114ce17cbedd63d89e68e8520fb082d4feb5592b74bdef1e48813104">0f874840114c…</span>&nbsp;&nbsp;</div></div><div class=codebox style="margin:18px 0"><div class=codebox-head>alpine 3.20.10</div><pre class=codebox-pre style=white-space:pre-wrap;word-break:break-all>syft scan registry:index.docker.io/library/alpine@sha256:c64c687cbea9300178b30c95835354e34c4e4febc4badfe27102879de0483b5e -o syft-json=alpine-3.20.10.syft.json
+syft scan registry:index.docker.io/library/alpine@sha256:c64c687cbea9300178b30c95835354e34c4e4febc4badfe27102879de0483b5e -o cyclonedx-json=alpine-3.20.10.cdx.json
+syft scan registry:index.docker.io/library/alpine@sha256:c64c687cbea9300178b30c95835354e34c4e4febc4badfe27102879de0483b5e -o spdx-json=alpine-3.20.10.spdx.json
+</pre><div style="padding:0 24px 18px;font:13px/1.8 var(--mono)"><a href=https://github.com/rezmoss/sbomlyze/raw/v0.8.0/testdata/showcase/alpine-3.20.10.syft.json>alpine-3.20.10.syft.json</a> <span class=c-gray title="sha256 c61fed04e254dcc9dcf9ccd1fd37b5028ffb259d0f46283c66a33512da51637d">c61fed04e254…</span>&nbsp;&nbsp; <a href=https://github.com/rezmoss/sbomlyze/raw/v0.8.0/testdata/showcase/alpine-3.20.10.cdx.json>alpine-3.20.10.cdx.json</a> <span class=c-gray title="sha256 acfac09128584edb31a8b30f34c887ce82b32665bf8201b9403d2f25e7c7eedd">acfac0912858…</span>&nbsp;&nbsp; <a href=https://github.com/rezmoss/sbomlyze/raw/v0.8.0/testdata/showcase/alpine-3.20.10.spdx.json>alpine-3.20.10.spdx.json</a> <span class=c-gray title="sha256 ce76708e8dc329bc35863aa1c1e2d33e0df8c2ad14208ed4131d507c0cfcf2a8">ce76708e8dc3…</span>&nbsp;&nbsp;</div></div><p>Policy files: <a href=/examples/same-version-files-changed/policy-files.json><code>policy-files.json</code></a></p><h2>Output</h2><h3 id=diff>Diff</h3><div class=term style="margin:14px 0"><div class=term-bar><span class=term-dot></span><span class=term-dot></span><span class=term-dot></span>
+<span class=term-title>$ sbomlyze alpine-3.19.9.syft.json alpine-3.20.10.syft.json · exit 1</span></div><pre class=term-pre style=max-height:560px;overflow:auto;white-space:pre-wrap>Key Findings:
+  🔄 Scanned index.docker.io/library/alpine changed: sha256:b58899f069c47216f6002a6850143dc6fae0d35eb8b0df9300bbe6327b9c2171 → sha256:c64c687cbea9300178b30c95835354e34c4e4febc4badfe27102879de0483b5e
+  📉 Inventory: -1 components (-6.7%), -3 files (-3.8%), -4 relationships (-4.2%)
+  💻 OS changed: Alpine Linux v3.19 3.19.9 → Alpine Linux v3.20 3.20.10
+  🔄 12 version upgrades (1 major, 4 minor, 3 patch, 4 revision) among 14 shared packages
+  📄 25 file entries changed content: 23 in packages that changed version, 1 in same-version packages, 1 not owned by any package: /lib/apk/db/installed
+  ⚠️ 1 packages changed owned files without a version change: scanelf 1.3.7-r2 (modified /usr/bin/scanelf) — base OS changed (Alpine Linux v3.19 3.19.9 → Alpine Linux v3.20 3.20.10), so same-version rebuilds are expected
+  ℹ️ 1 version changes where every hashed owned file is byte-identical: alpine-baselayout 3.4.3-r2→3.6.5-r0 (10 files)
+  📜 License shift: permissive -1</pre></div><details style="margin:4px 0 12px"><summary>Full text output (114 lines)</summary><pre class=codebox-pre style=max-height:640px;overflow:auto>
+SBOM Comparison
+======================================================================
+                        Before                          After
+File:                   alpine-3.19.9.syft.json         alpine-3.20.10.syft.json
+File Size:              106 KB                          102 KB
+Format:                 Syft JSON 16.1.12               Syft JSON 16.1.12
+Generator:              syft 1.56.0                     syft 1.56.0
+OS:                     Alpine Linux v3.19 3.19.9       Alpine Linux v3.20 3.20.10
+Source:                 index.docker.io/library/alpine  index.docker.io/library/alpine
+Source Type:            image                           image
+Total Components:       15                              14
+  apk:                  15                              14              -1
+Data Quality:
+  PURL Coverage:        100.0%                          100.0%
+  License Coverage:     100.0%                          100.0%
+  Hash Coverage:        0.0%                            0.0%
+  CPE Coverage:         100.0%                          100.0%
+======================================================================
+
+Scan Context:
+  Schema:                 16.1.12                 16.1.12
+  Scan Scope:             squashed                squashed
+
+Key Findings:
+  🔄 Scanned index.docker.io/library/alpine changed: sha256:b58899f069c47216f6002a6850143dc6fae0d35eb8b0df9300bbe6327b9c2171 → sha256:c64c687cbea9300178b30c95835354e34c4e4febc4badfe27102879de0483b5e
+  📉 Inventory: -1 components (-6.7%), -3 files (-3.8%), -4 relationships (-4.2%)
+  💻 OS changed: Alpine Linux v3.19 3.19.9 → Alpine Linux v3.20 3.20.10
+  🔄 12 version upgrades (1 major, 4 minor, 3 patch, 4 revision) among 14 shared packages
+  📄 25 file entries changed content: 23 in packages that changed version, 1 in same-version packages, 1 not owned by any package: /lib/apk/db/installed
+  ⚠️ 1 packages changed owned files without a version change: scanelf 1.3.7-r2 (modified /usr/bin/scanelf) — base OS changed (Alpine Linux v3.19 3.19.9 → Alpine Linux v3.20 3.20.10), so same-version rebuilds are expected
+  ℹ️ 1 version changes where every hashed owned file is byte-identical: alpine-baselayout 3.4.3-r2→3.6.5-r0 (10 files)
+  📜 License shift: permissive -1
+
+- Removed by type (up to 5 samples each):
+  apk (1 total):
+    - libc-utils 0.7.2-r5
+      /lib/apk/db/installed
+
+📊 Drift Summary:
+  📦 Version drift:   12 components
+  📄 File changes:    25 file entries (not package drift)
+  ⚠️  Owned file drift: 1 packages (1 files changed without a version change)
+
+- Removed (1):
+  - libc-utils 0.7.2-r5
+
+⚠️  Owned file drift (1 packages, same version, files changed):
+  ! scanelf 1.3.7-r2 @ /lib/apk/db/installed
+      modified /usr/bin/scanelf
+
+📄 File changes (25):
+  ~ /bin/busybox (busybox-binsh@1.36.1-r31, busybox@1.36.1-r31)
+  ~ /etc/group (alpine-baselayout-data@3.6.5-r0)
+  ~ /etc/inittab (alpine-baselayout-data@3.6.5-r0)
+  ~ /etc/network/if-up.d/dad (busybox@1.36.1-r31)
+  ~ /etc/passwd (alpine-baselayout-data@3.6.5-r0)
+  ~ /etc/shadow (alpine-baselayout-data@3.6.5-r0)
+  ~ /etc/ssl/certs/ca-certificates.crt (ca-certificates-bundle@20260413-r0)
+  ~ /etc/ssl/openssl.cnf (libcrypto3@3.3.7-r0)
+  ~ /etc/ssl/openssl.cnf.dist (libcrypto3@3.3.7-r0)
+  ~ /lib/apk/db/installed
+  ~ /lib/ld-musl-x86_64.so.1 (musl@1.2.5-r3)
+  ~ /lib/libapk.so.2.14.0 (apk-tools@2.14.4-r1)
+  ~ /lib/libcrypto.so.3 (libcrypto3@3.3.7-r0)
+  ~ /lib/libssl.so.3 (libssl3@3.3.7-r0)
+  ~ /sbin/apk (apk-tools@2.14.4-r1)
+  ~ /usr/bin/getconf (musl-utils@1.2.5-r3)
+  ~ /usr/bin/getent (musl-utils@1.2.5-r3)
+  ~ /usr/bin/iconv (musl-utils@1.2.5-r3)
+  ~ /usr/bin/scanelf (scanelf@1.3.7-r2)
+  ~ /usr/bin/ssl_client (ssl_client@1.36.1-r31)
+  ~ /usr/lib/engines-3/afalg.so (libcrypto3@3.3.7-r0)
+  ~ /usr/lib/engines-3/capi.so (libcrypto3@3.3.7-r0)
+  ~ /usr/lib/engines-3/loader_attic.so (libcrypto3@3.3.7-r0)
+  ~ /usr/lib/engines-3/padlock.so (libcrypto3@3.3.7-r0)
+  ~ /usr/lib/ossl-modules/legacy.so (libcrypto3@3.3.7-r0)
+
+📄 Files added: 1, removed: 4
+
+~ Changed (12):
+  ~ alpine-baselayout @ /lib/apk/db/installed
+      version: 3.4.3-r2 -&gt; 3.6.5-r0
+  ~ alpine-baselayout-data @ /lib/apk/db/installed
+      version: 3.4.3-r2 -&gt; 3.6.5-r0
+  ~ apk-tools @ /lib/apk/db/installed
+      version: 2.14.4-r0 -&gt; 2.14.4-r1
+  ~ busybox @ /lib/apk/db/installed
+      version: 1.36.1-r20 -&gt; 1.36.1-r31
+  ~ busybox-binsh @ /lib/apk/db/installed
+      version: 1.36.1-r20 -&gt; 1.36.1-r31
+  ~ ca-certificates-bundle @ /lib/apk/db/installed
+      version: 20250911-r0 -&gt; 20260413-r0
+  ~ libcrypto3 @ /lib/apk/db/installed
+      version: 3.1.8-r1 -&gt; 3.3.7-r0
+  ~ libssl3 @ /lib/apk/db/installed
+      version: 3.1.8-r1 -&gt; 3.3.7-r0
+  ~ musl @ /lib/apk/db/installed
+      version: 1.2.4_git20230717-r5 -&gt; 1.2.5-r3
+  ~ musl-utils @ /lib/apk/db/installed
+      version: 1.2.4_git20230717-r5 -&gt; 1.2.5-r3
+  ~ ssl_client @ /lib/apk/db/installed
+      version: 1.36.1-r20 -&gt; 1.36.1-r31
+  ~ zlib @ /lib/apk/db/installed
+      version: 1.3.1-r0 -&gt; 1.3.2-r0
+
+&lt;&lt; Removed dependencies:
+  pkg:apk/libc-utils: -[pkg:apk/musl-utils]
+
+🔓 Removed transitive dependencies (2):
+  - pkg:apk/musl (depth 2)
+  - pkg:apk/scanelf (depth 2)
+
+</pre></details><p class=note-sm><a href=/examples/same-version-files-changed/diff.txt>text</a> (6 KB) · <a href=/examples/same-version-files-changed/diff.json>json</a> (55 KB) · <a href=/examples/same-version-files-changed/diff.md>markdown</a> (5 KB) · <a href=/examples/same-version-files-changed/diff.html>html</a> (10 KB) · <a href=/examples/same-version-files-changed/diff.sarif.json>sarif</a> (12 KB) · <a href=/examples/same-version-files-changed/diff.junit.xml>junit</a> (1 KB) · <a href=/examples/same-version-files-changed/diff.patch.json>patch</a> (8 KB)
+· <a href=/examples/same-version-files-changed/diff.html>open the HTML report</a></p><h3 id=policy>With deny_owned_file_drift</h3><div class=term style="margin:14px 0"><div class=term-bar><span class=term-dot></span><span class=term-dot></span><span class=term-dot></span>
+<span class=term-title>$ sbomlyze alpine-3.19.9.syft.json alpine-3.20.10.syft.json --policy policy-files.json · exit 1</span></div><pre class=term-pre style=max-height:560px;overflow:auto;white-space:pre-wrap>Key Findings:
+  🔄 Scanned index.docker.io/library/alpine changed: sha256:b58899f069c47216f6002a6850143dc6fae0d35eb8b0df9300bbe6327b9c2171 → sha256:c64c687cbea9300178b30c95835354e34c4e4febc4badfe27102879de0483b5e
+  📉 Inventory: -1 components (-6.7%), -3 files (-3.8%), -4 relationships (-4.2%)
+  💻 OS changed: Alpine Linux v3.19 3.19.9 → Alpine Linux v3.20 3.20.10
+  🔄 12 version upgrades (1 major, 4 minor, 3 patch, 4 revision) among 14 shared packages
+  📄 25 file entries changed content: 23 in packages that changed version, 1 in same-version packages, 1 not owned by any package: /lib/apk/db/installed
+  ⚠️ 1 packages changed owned files without a version change: scanelf 1.3.7-r2 (modified /usr/bin/scanelf) — base OS changed (Alpine Linux v3.19 3.19.9 → Alpine Linux v3.20 3.20.10), so same-version rebuilds are expected
+  ℹ️ 1 version changes where every hashed owned file is byte-identical: alpine-baselayout 3.4.3-r2→3.6.5-r0 (10 files)
+  📜 License shift: permissive -1
+
+❌ Policy Errors (1):
+  [deny_owned_file_drift] scanelf 1.3.7-r2: 1 owned files changed without a version change (modified /usr/bin/scanelf)</pre></div><details style="margin:4px 0 12px"><summary>Full text output (118 lines)</summary><pre class=codebox-pre style=max-height:640px;overflow:auto>
+SBOM Comparison
+======================================================================
+                        Before                          After
+File:                   alpine-3.19.9.syft.json         alpine-3.20.10.syft.json
+File Size:              106 KB                          102 KB
+Format:                 Syft JSON 16.1.12               Syft JSON 16.1.12
+Generator:              syft 1.56.0                     syft 1.56.0
+OS:                     Alpine Linux v3.19 3.19.9       Alpine Linux v3.20 3.20.10
+Source:                 index.docker.io/library/alpine  index.docker.io/library/alpine
+Source Type:            image                           image
+Total Components:       15                              14
+  apk:                  15                              14              -1
+Data Quality:
+  PURL Coverage:        100.0%                          100.0%
+  License Coverage:     100.0%                          100.0%
+  Hash Coverage:        0.0%                            0.0%
+  CPE Coverage:         100.0%                          100.0%
+======================================================================
+
+Scan Context:
+  Schema:                 16.1.12                 16.1.12
+  Scan Scope:             squashed                squashed
+
+Key Findings:
+  🔄 Scanned index.docker.io/library/alpine changed: sha256:b58899f069c47216f6002a6850143dc6fae0d35eb8b0df9300bbe6327b9c2171 → sha256:c64c687cbea9300178b30c95835354e34c4e4febc4badfe27102879de0483b5e
+  📉 Inventory: -1 components (-6.7%), -3 files (-3.8%), -4 relationships (-4.2%)
+  💻 OS changed: Alpine Linux v3.19 3.19.9 → Alpine Linux v3.20 3.20.10
+  🔄 12 version upgrades (1 major, 4 minor, 3 patch, 4 revision) among 14 shared packages
+  📄 25 file entries changed content: 23 in packages that changed version, 1 in same-version packages, 1 not owned by any package: /lib/apk/db/installed
+  ⚠️ 1 packages changed owned files without a version change: scanelf 1.3.7-r2 (modified /usr/bin/scanelf) — base OS changed (Alpine Linux v3.19 3.19.9 → Alpine Linux v3.20 3.20.10), so same-version rebuilds are expected
+  ℹ️ 1 version changes where every hashed owned file is byte-identical: alpine-baselayout 3.4.3-r2→3.6.5-r0 (10 files)
+  📜 License shift: permissive -1
+
+- Removed by type (up to 5 samples each):
+  apk (1 total):
+    - libc-utils 0.7.2-r5
+      /lib/apk/db/installed
+
+📊 Drift Summary:
+  📦 Version drift:   12 components
+  📄 File changes:    25 file entries (not package drift)
+  ⚠️  Owned file drift: 1 packages (1 files changed without a version change)
+
+- Removed (1):
+  - libc-utils 0.7.2-r5
+
+⚠️  Owned file drift (1 packages, same version, files changed):
+  ! scanelf 1.3.7-r2 @ /lib/apk/db/installed
+      modified /usr/bin/scanelf
+
+📄 File changes (25):
+  ~ /bin/busybox (busybox-binsh@1.36.1-r31, busybox@1.36.1-r31)
+  ~ /etc/group (alpine-baselayout-data@3.6.5-r0)
+  ~ /etc/inittab (alpine-baselayout-data@3.6.5-r0)
+  ~ /etc/network/if-up.d/dad (busybox@1.36.1-r31)
+  ~ /etc/passwd (alpine-baselayout-data@3.6.5-r0)
+  ~ /etc/shadow (alpine-baselayout-data@3.6.5-r0)
+  ~ /etc/ssl/certs/ca-certificates.crt (ca-certificates-bundle@20260413-r0)
+  ~ /etc/ssl/openssl.cnf (libcrypto3@3.3.7-r0)
+  ~ /etc/ssl/openssl.cnf.dist (libcrypto3@3.3.7-r0)
+  ~ /lib/apk/db/installed
+  ~ /lib/ld-musl-x86_64.so.1 (musl@1.2.5-r3)
+  ~ /lib/libapk.so.2.14.0 (apk-tools@2.14.4-r1)
+  ~ /lib/libcrypto.so.3 (libcrypto3@3.3.7-r0)
+  ~ /lib/libssl.so.3 (libssl3@3.3.7-r0)
+  ~ /sbin/apk (apk-tools@2.14.4-r1)
+  ~ /usr/bin/getconf (musl-utils@1.2.5-r3)
+  ~ /usr/bin/getent (musl-utils@1.2.5-r3)
+  ~ /usr/bin/iconv (musl-utils@1.2.5-r3)
+  ~ /usr/bin/scanelf (scanelf@1.3.7-r2)
+  ~ /usr/bin/ssl_client (ssl_client@1.36.1-r31)
+  ~ /usr/lib/engines-3/afalg.so (libcrypto3@3.3.7-r0)
+  ~ /usr/lib/engines-3/capi.so (libcrypto3@3.3.7-r0)
+  ~ /usr/lib/engines-3/loader_attic.so (libcrypto3@3.3.7-r0)
+  ~ /usr/lib/engines-3/padlock.so (libcrypto3@3.3.7-r0)
+  ~ /usr/lib/ossl-modules/legacy.so (libcrypto3@3.3.7-r0)
+
+📄 Files added: 1, removed: 4
+
+~ Changed (12):
+  ~ alpine-baselayout @ /lib/apk/db/installed
+      version: 3.4.3-r2 -&gt; 3.6.5-r0
+  ~ alpine-baselayout-data @ /lib/apk/db/installed
+      version: 3.4.3-r2 -&gt; 3.6.5-r0
+  ~ apk-tools @ /lib/apk/db/installed
+      version: 2.14.4-r0 -&gt; 2.14.4-r1
+  ~ busybox @ /lib/apk/db/installed
+      version: 1.36.1-r20 -&gt; 1.36.1-r31
+  ~ busybox-binsh @ /lib/apk/db/installed
+      version: 1.36.1-r20 -&gt; 1.36.1-r31
+  ~ ca-certificates-bundle @ /lib/apk/db/installed
+      version: 20250911-r0 -&gt; 20260413-r0
+  ~ libcrypto3 @ /lib/apk/db/installed
+      version: 3.1.8-r1 -&gt; 3.3.7-r0
+  ~ libssl3 @ /lib/apk/db/installed
+      version: 3.1.8-r1 -&gt; 3.3.7-r0
+  ~ musl @ /lib/apk/db/installed
+      version: 1.2.4_git20230717-r5 -&gt; 1.2.5-r3
+  ~ musl-utils @ /lib/apk/db/installed
+      version: 1.2.4_git20230717-r5 -&gt; 1.2.5-r3
+  ~ ssl_client @ /lib/apk/db/installed
+      version: 1.36.1-r20 -&gt; 1.36.1-r31
+  ~ zlib @ /lib/apk/db/installed
+      version: 1.3.1-r0 -&gt; 1.3.2-r0
+
+&lt;&lt; Removed dependencies:
+  pkg:apk/libc-utils: -[pkg:apk/musl-utils]
+
+🔓 Removed transitive dependencies (2):
+  - pkg:apk/musl (depth 2)
+  - pkg:apk/scanelf (depth 2)
+
+
+❌ Policy Errors (1):
+  [deny_owned_file_drift] scanelf 1.3.7-r2: 1 owned files changed without a version change (modified /usr/bin/scanelf)
+
+</pre></details><p class=note-sm><a href=/examples/same-version-files-changed/policy.txt>text</a> (6 KB)</p><h2>Checked at every release</h2><p>The site is not updated if any of these stop holding for a new sbomlyze release.</p><table class=table><thead><tr><th>Run</th><th>Check</th></tr></thead><tbody><tr><td class=mono>diff</td><td class=mono>diff.owned_file_drift count = 1</td></tr><tr><td class=mono>diff</td><td class=mono>diff.owned_file_drift[name=scanelf].version = "1.3.7-r2"</td></tr><tr><td class=mono>diff</td><td class=mono>diff.owned_file_drift[name=scanelf].files.path = "/usr/bin/scanelf"</td></tr><tr><td class=mono>diff</td><td class=mono>diff.changed[name=alpine-baselayout].drift.files.all_match = true</td></tr><tr><td class=mono>diff</td><td class=mono>diff.drift_summary.upgrades = 12</td></tr><tr><td class=mono>policy</td><td class=mono>text contains “[deny_owned_file_drift] scanelf”</td></tr></tbody></table><h2>Sources</h2><ul><li><a href=https://alpinelinux.org/releases/>Alpine Linux releases</a></li></ul><div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:40px;padding-top:24px;border-top:1px solid var(--border)"><a class="btn btn-outline" href=/examples/go-module-retagged/>← Go module re-tagged after release</a>
+<a class="btn btn-outline" href=/examples/>All examples</a>
+<a class="btn btn-outline" href=/examples/downgrades-in-a-minor-bump/>Downgrades hiding in a minor bump →</a></div></div></section><script>(function(){var e=document.getElementById("stale");if(!e)return;fetch("https://api.github.com/repos/rezmoss/sbomlyze/releases/latest").then(function(e){return e.ok?e.json():null}).then(function(t){t&&t.tag_name&&t.tag_name!=="v0.8.0"&&(e.textContent="This output is from sbomlyze v0.8.0; the latest release is "+t.tag_name+". The page updates after that release's website job.",e.style.display="block")}).catch(function(){})})()</script><footer class=site-footer><div class=footer-grid><div><div class=footer-brand>sbomlyze</div><div class=footer-desc>Git diff for SBOMs. Compare CycloneDX, SPDX, and Syft documents, detect tampering, and gate CI.</div><div class=footer-meta>Apache-2.0 · v0.8.0</div></div><div><div class=overline>Learn</div><div class=footer-links><a href=/integrity-drift>Integrity drift</a>
+<a href=/compliance>Compliance scoring</a>
+<a href=/cli>CLI reference</a>
+<a href=/json-reference>JSON reference</a>
+<a href=/examples>Examples</a></div></div><div><div class=overline>Use</div><div class=footer-links><a href=/install>Install</a>
+<a href=/action>GitHub Action</a>
+<a href=https://github.com/marketplace/actions/sbomlyze-diff>Marketplace</a></div></div><div><div class=overline>Project</div><div class=footer-links><a href=https://github.com/rezmoss/sbomlyze>Repository</a>
+<a href=/changelog>Changelog</a>
+<a href=https://github.com/rezmoss/sbomlyze/releases>Releases</a>
+<a href=https://github.com/rezmoss/sbomlyze/discussions>Discussions</a></div></div></div></footer><div class=lightbox-overlay id=lightbox role=dialog aria-modal=true aria-label="Image preview"><button class=lightbox-close type=button>esc ✕</button>
+<img alt><div class=lightbox-caption></div></div><script>(function(){var e=document.getElementById("lightbox"),t=e.querySelector("img"),s=e.querySelector(".lightbox-caption");function n(){e.classList.remove("open"),document.body.classList.remove("lightbox-open"),t.src=""}document.addEventListener("click",function(o){var i,a=o.target.closest("a[data-lightbox]");if(a){o.preventDefault(),t.src=a.getAttribute("href"),i=a.querySelector("img"),t.alt=i?i.alt:"",s.textContent=a.getAttribute("data-caption")||(i?i.alt:""),e.classList.add("open"),document.body.classList.add("lightbox-open");return}e.classList.contains("open")&&!o.target.closest(".lightbox-caption")&&n()}),document.addEventListener("keydown",function(e){e.key==="Escape"&&n()})})()</script></body></html>

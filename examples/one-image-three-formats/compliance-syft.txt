@@ -1,0 +1,110 @@
+
+Scan Context:
+  Tool:               syft 1.56.0
+  Schema:             16.1.12
+  Scan Scope:         squashed
+  Source Type:        image
+  Source:             index.docker.io/library/nginx
+
+Key Findings:
+  💻 OS/Distro: Debian GNU/Linux 12 (bookworm)
+  📦 Dominated by deb: 149 of 150 packages (99.3%)
+  📂 3,715 files tracked on filesystem
+  🔗 Relationships: 3,543 containment + 400 dependency
+  📁 Top directories: /var/lib/dpkg (149), /usr/share/java (1)
+  📜 License profile: 22% permissive, 57% copyleft, 20% unknown
+  ⚠️ Low hash coverage: 0.7% (149 of 150 missing)
+  🔍 Top catalogers: dpkg-db-cataloger (149), java-archive-cataloger (1)
+
+📦 SBOM Statistics
+==================
+
+Total Components: 150
+
+By Package Type:
+  deb          149
+  maven        1
+
+Licenses:
+  With license:    149
+  Without license: 1
+
+  Top Licenses:
+    GPL-2.0-only                   67
+    GPL-2.0-or-later               59
+    BSD-3-Clause                   56
+    GPL-3.0-only                   38
+    GPL-3.0-or-later               37
+    public-domain                  30
+    LGPL-2.1-only                  27
+    BSD-2-Clause                   26
+    LGPL-2.0-only                  23
+    LGPL-2.1-or-later              21
+    ... and 161 more
+
+Integrity:
+  With hashes:    1
+  Without hashes: 149
+
+Dependencies:
+  Components with deps: 140
+  Total dep relations:  400
+
+
+🟠 NTIA Compliance
+========================================
+Score: 57/100 (4/7 checks passed)
+
+  ✅ Component Name                 All 150 components
+  ✅ Component Version              All 150 components
+  ❌ Supplier Name                  149/150 components
+     NTIA Minimum Elements (2021) requires the name of the entity that creates and identifies each component
+  ✅ Other Unique Identifiers       All 150 components
+  ❌ Dependency Relationship        148/150 components
+     NTIA Minimum Elements (2021) requires dependency relationships covering at least all top-level dependencies
+  ✅ SBOM Author                    syft
+  ❌ SBOM Timestamp                 missing
+     NTIA Minimum Elements (2021) requires the date and time of SBOM data assembly
+
+🔴 CISA Compliance
+========================================
+Score: 40/100 (4/10 checks passed)
+
+  ✅ Component Name                 All 150 components
+  ✅ Component Version              All 150 components
+  ❌ Software Producer              149/150 components
+     CISA 2025 Minimum Elements requires identifying the producer of each component
+  ✅ Software Identifiers           All 150 components
+  ❌ Dependency Relationship        148/150 components
+     CISA 2025 Minimum Elements requires a dependency graph covering components and their dependencies
+  ❌ License Information            149/150 components
+     CISA 2025 Minimum Elements adds license data per component (an explicit 'unknown' is permitted)
+  ❌ Component Hash                 1/150 components
+     CISA 2025 Minimum Elements adds a cryptographic hash per component where the artifact is available
+  ✅ Tool Name                      syft
+  ❌ SBOM Author                    missing
+     CISA 2025 Minimum Elements requires the person or organization that created the SBOM (distinct from the tool)
+  ❌ SBOM Timestamp                 missing
+     CISA 2025 Minimum Elements requires an ISO 8601 timestamp of SBOM creation
+
+🔴 BSI-TR-03183 Compliance
+========================================
+Score: 33/100 (3/9 checks passed)
+
+  ✅ Component Name                 All 150 components
+  ✅ Component Version              All 150 components
+  ❌ Component Creator              149/150 components
+     BSI TR-03183-2 §5.2.2 requires the creator of each component (email or URL contact)
+  ✅ Unique Identifiers             All 150 components
+  ❌ Distribution Licences          48/150 components
+     BSI TR-03183-2 §5.2.2 requires distribution licences, expressed as SPDX identifiers per §6.1
+  ❌ SHA-512 Hash                   0/150 components
+     BSI TR-03183-2 §5.2.2 requires a SHA-512 checksum of each deployable component
+  ❌ Dependency Relationship        148/150 components
+     BSI TR-03183-2 §5.2.2 requires per-component dependency enumeration with completeness indication
+  ❌ SBOM Creator Contact           missing
+     BSI TR-03183-2 §5.2.1 requires the email address (or URL) of the SBOM creator — a tool name does not qualify
+  ❌ SBOM Timestamp                 missing
+     BSI TR-03183-2 §5.2.1 requires the date/time of SBOM compilation
+
+📊 Overall Compliance Score: 43/100

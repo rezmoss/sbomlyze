@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="sbomlyze" tests="3" failures="0" errors="0" time="0.01">
+  <testsuite name="SBOM Analysis" tests="3" failures="0" errors="0" time="0.01">
+    <testcase name="No Integrity Drift" classname="sbomlyze.security" time="0.001"></testcase>
+    <testcase name="No Deep Transitive Dependencies" classname="sbomlyze.dependencies" time="0.001"></testcase>
+    <testcase name="SBOM Diff Summary" classname="sbomlyze.diff" time="0.001"></testcase>
+  </testsuite>
+</testsuites>

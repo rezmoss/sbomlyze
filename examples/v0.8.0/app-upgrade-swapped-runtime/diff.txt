@@ -1,0 +1,937 @@
+
+SBOM Comparison
+======================================================================
+                        Before                             After
+File:                   zookeeper-3.8.3.syft.json          zookeeper-3.9.2.syft.json
+File Size:              4 MB                               4 MB
+Format:                 Syft JSON 16.1.12                  Syft JSON 16.1.12
+Generator:              syft 1.56.0                        syft 1.56.0
+OS:                     Ubuntu 22.04.4 LTS                 Ubuntu 22.04.5 LTS
+Source:                 index.docker.io/library/zookeeper  index.docker.io/library/zookeeper
+Source Type:            image                              image
+Total Components:       187                                194
+  deb:                  148                                148             
+  maven:                38                                 45              +7
+  generic:              1                                  1               
+Data Quality:
+  PURL Coverage:        100.0%                             100.0%
+  License Coverage:     96.8%                              96.9%
+  Hash Coverage:        19.8%                              22.7%
+  CPE Coverage:         100.0%                             100.0%
+======================================================================
+
+Scan Context:
+  Schema:                 16.1.12                 16.1.12
+  Scan Scope:             squashed                squashed
+
+Key Findings:
+  🔄 Scanned index.docker.io/library/zookeeper changed: sha256:34e7ff9583a84592fc28a0f19e2c2e55c444a6b22d1d6b3a65b0c167a40d464a → sha256:7b775af48b8853b2c9868f438a065db9e1f86b15a4e00ce94898930ff24aad69
+  📈 Inventory: +7 components (3.7%), -4 files (-0.1%), -4 relationships (-0.1%)
+  💻 OS changed: Ubuntu 22.04.4 LTS → Ubuntu 22.04.5 LTS
+  🔄 59 version upgrades (3 major, 3 minor, 23 patch, 30 revision) among 187 shared packages
+  🙈 Integrity drift checked only 0 of 112 same-version packages; the rest carry no comparable digest
+  📄 695 file entries changed content: 652 in packages that changed version, 0 in same-version packages, 43 not owned by any package: /var/lib/dpkg/info/apt.md5sums, /var/lib/dpkg/info/apt.shlibs, /var/lib/dpkg/info/base-files.md5sums, /var/lib/dpkg/info/bash.md5sums, /var/lib/dpkg/info/bash.postinst + 38 more
+  🔄 deb: 148 packages before and after (36 version changes)
+  📜 License shift: permissive +7
+
++ Added by type (up to 5 samples each):
+  maven (7 total):
+    + netty-tcnative-boringssl-static 2.0.61.Final
+      /apache-zookeeper-3.9.2-bin/lib/netty-tcnative-boringssl-static-2.0.61.Final-osx-x86_64.jar
+    + netty-tcnative-boringssl-static 2.0.61.Final
+      /apache-zookeeper-3.9.2-bin/lib/netty-tcnative-boringssl-static-2.0.61.Final-osx-aarch_64.jar
+    + netty-tcnative-boringssl-static 2.0.61.Final
+      /apache-zookeeper-3.9.2-bin/lib/netty-tcnative-boringssl-static-2.0.61.Final.jar
+    + netty-tcnative-boringssl-static 2.0.61.Final
+      /apache-zookeeper-3.9.2-bin/lib/netty-tcnative-boringssl-static-2.0.61.Final-linux-x86_64.jar
+    + netty-tcnative-boringssl-static 2.0.61.Final
+      /apache-zookeeper-3.9.2-bin/lib/netty-tcnative-boringssl-static-2.0.61.Final-windows-x86_64.jar
+    ...and 2 more
+
+📊 Drift Summary:
+  📦 Version drift:   59 components
+  📄 File changes:    695 file entries (not package drift)
+
++ Added (7):
+  + netty-tcnative-boringssl-static 2.0.61.Final
+  + netty-tcnative-boringssl-static 2.0.61.Final
+  + netty-tcnative-boringssl-static 2.0.61.Final
+  + netty-tcnative-boringssl-static 2.0.61.Final
+  + netty-tcnative-boringssl-static 2.0.61.Final
+  + netty-tcnative-boringssl-static 2.0.61.Final
+  + netty-tcnative-classes 2.0.61.Final
+
+> Moved (16):
+  > jackson-annotations 2.15.2: /apache-zookeeper-3.8.3-bin/lib/jackson-annotations-2.15.2.jar -> /apache-zookeeper-3.9.2-bin/lib/jackson-annotations-2.15.2.jar
+  > jackson-core 2.15.2: /apache-zookeeper-3.8.3-bin/lib/jackson-core-2.15.2.jar -> /apache-zookeeper-3.9.2-bin/lib/jackson-core-2.15.2.jar
+  > jackson-databind 2.15.2: /apache-zookeeper-3.8.3-bin/lib/jackson-databind-2.15.2.jar -> /apache-zookeeper-3.9.2-bin/lib/jackson-databind-2.15.2.jar
+  > commons-cli 1.5.0: /apache-zookeeper-3.8.3-bin/lib/commons-cli-1.5.0.jar -> /apache-zookeeper-3.9.2-bin/lib/commons-cli-1.5.0.jar
+  > commons-io 2.11.0: /apache-zookeeper-3.8.3-bin/lib/commons-io-2.11.0.jar -> /apache-zookeeper-3.9.2-bin/lib/commons-io-2.11.0.jar
+  > metrics-core 4.1.12.1: /apache-zookeeper-3.8.3-bin/lib/metrics-core-4.1.12.1.jar -> /apache-zookeeper-3.9.2-bin/lib/metrics-core-4.1.12.1.jar
+  > simpleclient 0.9.0: /apache-zookeeper-3.8.3-bin/lib/simpleclient-0.9.0.jar -> /apache-zookeeper-3.9.2-bin/lib/simpleclient-0.9.0.jar
+  > simpleclient_common 0.9.0: /apache-zookeeper-3.8.3-bin/lib/simpleclient_common-0.9.0.jar -> /apache-zookeeper-3.9.2-bin/lib/simpleclient_common-0.9.0.jar
+  > simpleclient_hotspot 0.9.0: /apache-zookeeper-3.8.3-bin/lib/simpleclient_hotspot-0.9.0.jar -> /apache-zookeeper-3.9.2-bin/lib/simpleclient_hotspot-0.9.0.jar
+  > simpleclient_servlet 0.9.0: /apache-zookeeper-3.8.3-bin/lib/simpleclient_servlet-0.9.0.jar -> /apache-zookeeper-3.9.2-bin/lib/simpleclient_servlet-0.9.0.jar
+  > javax.servlet-api 3.1.0: /apache-zookeeper-3.8.3-bin/lib/javax.servlet-api-3.1.0.jar -> /apache-zookeeper-3.9.2-bin/lib/javax.servlet-api-3.1.0.jar
+  > jline 2.14.6: /apache-zookeeper-3.8.3-bin/lib/jline-2.14.6.jar -> /apache-zookeeper-3.9.2-bin/lib/jline-2.14.6.jar
+  > audience-annotations 0.12.0: /apache-zookeeper-3.8.3-bin/lib/audience-annotations-0.12.0.jar -> /apache-zookeeper-3.9.2-bin/lib/audience-annotations-0.12.0.jar
+  > jctools-core 3.1.0: /apache-zookeeper-3.8.3-bin/lib/netty-common-4.1.94.Final.jar -> /apache-zookeeper-3.9.2-bin/lib/netty-common-4.1.105.Final.jar
+  > slf4j-api 1.7.30: /apache-zookeeper-3.8.3-bin/lib/slf4j-api-1.7.30.jar -> /apache-zookeeper-3.9.2-bin/lib/slf4j-api-1.7.30.jar
+  > snappy-java 1.1.10.5: /apache-zookeeper-3.8.3-bin/lib/snappy-java-1.1.10.5.jar -> /apache-zookeeper-3.9.2-bin/lib/snappy-java-1.1.10.5.jar
+
+📄 File changes (695):
+  ~ /etc/issue (base-files@12ubuntu4.7)
+  ~ /etc/issue.net (base-files@12ubuntu4.7)
+  ~ /etc/lsb-release (base-files@12ubuntu4.7)
+  ~ /opt/java/openjdk/bin/java (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/bin/jfr (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/bin/jrunscript (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/bin/keytool (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/bin/rmiregistry (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/conf/logging.properties (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/conf/management/management.properties (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/conf/net.properties (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/conf/security/java.security (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/legal/java.base/asm.md (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/legal/java.base/cldr.md (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/legal/java.base/icu.md (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/legal/java.base/public_suffix.md (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/legal/java.base/unicode.md (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/legal/java.base/zlib.md (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/legal/java.desktop/giflib.md (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/legal/java.desktop/harfbuzz.md (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/legal/java.desktop/jpeg.md (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/legal/java.desktop/lcms.md (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/legal/java.desktop/libpng.md (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/legal/java.smartcardio/pcsclite.md (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/legal/java.xml.crypto/santuario.md (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/classlist (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/jexec (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/jfr/default.jfc (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/jfr/profile.jfc (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/jrt-fs.jar (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/jspawnhelper (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/libawt.so (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/libawt_headless.so (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/libawt_xawt.so (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/libdt_socket.so (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/libextnet.so (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/libfontmanager.so (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/libinstrument.so (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/libj2gss.so (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/libj2pcsc.so (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/libj2pkcs11.so (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/libjaas.so (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/libjava.so (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/libjavajpeg.so (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/libjawt.so (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/libjdwp.so (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/libjimage.so (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/libjsig.so (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/libjsound.so (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/liblcms.so (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/libmanagement.so (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/libmanagement_agent.so (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/libmanagement_ext.so (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/libmlib_image.so (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/libnet.so (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/libnio.so (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/libprefs.so (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/librmi.so (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/libsctp.so (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/libsplashscreen.so (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/libverify.so (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/libzip.so (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/modules (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/security/cacerts (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/security/default.policy (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/security/public_suffix_list.dat (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/server/classes.jsa (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/server/libjsig.so (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/server/libjvm.so (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/lib/tzdb.dat (openjdk@17.0.13+11)
+  ~ /opt/java/openjdk/release (openjdk@17.0.13+11)
+  ~ /usr/bin/[ (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/addpart (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/apt (apt@2.4.13)
+  ~ /usr/bin/apt-cache (apt@2.4.13)
+  ~ /usr/bin/apt-cdrom (apt@2.4.13)
+  ~ /usr/bin/apt-config (apt@2.4.13)
+  ~ /usr/bin/apt-get (apt@2.4.13)
+  ~ /usr/bin/apt-mark (apt@2.4.13)
+  ~ /usr/bin/arch (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/b2sum (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/base32 (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/base64 (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/basename (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/basenc (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/bash (bash@5.1-6ubuntu1.1)
+  ~ /usr/bin/cat (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/chattr (e2fsprogs@1.46.5-2ubuntu1.2)
+  ~ /usr/bin/chcon (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/chgrp (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/chmod (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/choom (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/chown (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/chrt (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/cksum (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/clear_console (bash@5.1-6ubuntu1.1)
+  ~ /usr/bin/comm (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/cp (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/csplit (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/curl (curl@7.81.0-1ubuntu1.18)
+  ~ /usr/bin/cut (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/date (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/dd (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/delpart (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/df (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/dir (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/dircolors (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/dirname (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/dmesg (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/dpkg (dpkg@1.21.1ubuntu2.3)
+  ~ /usr/bin/dpkg-deb (dpkg@1.21.1ubuntu2.3)
+  ~ /usr/bin/dpkg-divert (dpkg@1.21.1ubuntu2.3)
+  ~ /usr/bin/dpkg-query (dpkg@1.21.1ubuntu2.3)
+  ~ /usr/bin/dpkg-split (dpkg@1.21.1ubuntu2.3)
+  ~ /usr/bin/dpkg-statoverride (dpkg@1.21.1ubuntu2.3)
+  ~ /usr/bin/dpkg-trigger (dpkg@1.21.1ubuntu2.3)
+  ~ /usr/bin/du (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/echo (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/env (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/expand (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/expr (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/factor (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/fallocate (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/false (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/fincore (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/findmnt (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/flock (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/fmt (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/fold (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/getconf (libc-bin@2.35-0ubuntu3.8)
+  ~ /usr/bin/getent (libc-bin@2.35-0ubuntu3.8)
+  ~ /usr/bin/getopt (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/groups (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/hardlink (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/head (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/hostid (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/iconv (libc-bin@2.35-0ubuntu3.8)
+  ~ /usr/bin/id (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/install (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/ionice (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/ipcmk (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/ipcrm (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/ipcs (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/join (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/last (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/ldd (libc-bin@2.35-0ubuntu3.8)
+  ~ /usr/bin/link (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/ln (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/locale (libc-bin@2.35-0ubuntu3.8)
+  ~ /usr/bin/locale-check (base-files@12ubuntu4.7)
+  ~ /usr/bin/localedef (libc-bin@2.35-0ubuntu3.8)
+  ~ /usr/bin/logger (bsdutils@1:2.37.2-4ubuntu3.4)
+  ~ /usr/bin/logname (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/ls (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/lsattr (e2fsprogs@1.46.5-2ubuntu1.2)
+  ~ /usr/bin/lsblk (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/lscpu (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/lsipc (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/lslocks (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/lslogins (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/lsmem (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/lsns (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/mcookie (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/md5sum (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/mesg (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/mkdir (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/mkfifo (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/mknod (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/mktemp (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/more (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/mount (mount@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/mountpoint (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/mv (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/namei (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/nice (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/nl (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/nohup (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/nproc (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/nsenter (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/numfmt (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/od (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/openssl (openssl@3.0.2-0ubuntu1.18)
+  ~ /usr/bin/partx (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/paste (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/pathchk (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/pinky (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/pldd (libc-bin@2.35-0ubuntu3.8)
+  ~ /usr/bin/pr (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/printenv (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/printf (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/prlimit (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/ptx (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/pwd (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/readlink (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/realpath (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/renice (bsdutils@1:2.37.2-4ubuntu3.4)
+  ~ /usr/bin/resizepart (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/rev (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/rm (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/rmdir (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/runcon (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/script (bsdutils@1:2.37.2-4ubuntu3.4)
+  ~ /usr/bin/scriptlive (bsdutils@1:2.37.2-4ubuntu3.4)
+  ~ /usr/bin/scriptreplay (bsdutils@1:2.37.2-4ubuntu3.4)
+  ~ /usr/bin/seq (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/setarch (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/setpriv (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/setsid (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/setterm (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/sha1sum (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/sha224sum (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/sha256sum (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/sha384sum (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/sha512sum (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/shred (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/shuf (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/sleep (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/sort (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/split (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/stat (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/stdbuf (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/stty (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/su (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/sum (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/sync (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/tac (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/tail (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/taskset (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/tee (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/test (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/timeout (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/touch (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/tr (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/true (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/truncate (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/tsort (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/tty (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/tzselect (libc-bin@2.35-0ubuntu3.8)
+  ~ /usr/bin/uclampset (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/umount (mount@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/uname (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/unexpand (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/uniq (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/unlink (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/unshare (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/update-alternatives (dpkg@1.21.1ubuntu2.3)
+  ~ /usr/bin/users (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/utmpdump (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/vdir (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/wall (bsdutils@1:2.37.2-4ubuntu3.4)
+  ~ /usr/bin/wc (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/wdctl (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/wget (wget@1.21.2-2ubuntu1.1)
+  ~ /usr/bin/whereis (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/bin/who (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/whoami (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/yes (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/bin/zdump (libc-bin@2.35-0ubuntu3.8)
+  ~ /usr/lib/apt/apt-helper (apt@2.4.13)
+  ~ /usr/lib/apt/methods/cdrom (apt@2.4.13)
+  ~ /usr/lib/apt/methods/copy (apt@2.4.13)
+  ~ /usr/lib/apt/methods/file (apt@2.4.13)
+  ~ /usr/lib/apt/methods/ftp (apt@2.4.13)
+  ~ /usr/lib/apt/methods/gpgv (apt@2.4.13)
+  ~ /usr/lib/apt/methods/http (apt@2.4.13)
+  ~ /usr/lib/apt/methods/mirror (apt@2.4.13)
+  ~ /usr/lib/apt/methods/rred (apt@2.4.13)
+  ~ /usr/lib/apt/methods/rsh (apt@2.4.13)
+  ~ /usr/lib/apt/methods/store (apt@2.4.13)
+  ~ /usr/lib/apt/solvers/dump (apt@2.4.13)
+  ~ /usr/lib/os-release (base-files@12ubuntu4.7)
+  ~ /usr/lib/x86_64-linux-gnu/audit/sotruss-lib.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/engines-3/afalg.so (libssl3@3.0.2-0ubuntu1.18)
+  ~ /usr/lib/x86_64-linux-gnu/engines-3/loader_attic.so (libssl3@3.0.2-0ubuntu1.18)
+  ~ /usr/lib/x86_64-linux-gnu/engines-3/padlock.so (libssl3@3.0.2-0ubuntu1.18)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/ANSI_X3.110.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/ARMSCII-8.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/ASMO_449.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/BIG5.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/BIG5HKSCS.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/BRF.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/CP10007.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/CP1125.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/CP1250.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/CP1251.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/CP1252.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/CP1253.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/CP1254.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/CP1255.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/CP1256.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/CP1257.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/CP1258.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/CP737.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/CP770.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/CP771.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/CP772.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/CP773.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/CP774.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/CP775.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/CP932.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/CSN_369103.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/CWI.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/DEC-MCS.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/EBCDIC-AT-DE-A.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/EBCDIC-AT-DE.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/EBCDIC-CA-FR.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/EBCDIC-DK-NO-A.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/EBCDIC-DK-NO.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/EBCDIC-ES-A.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/EBCDIC-ES-S.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/EBCDIC-ES.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/EBCDIC-FI-SE-A.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/EBCDIC-FI-SE.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/EBCDIC-FR.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/EBCDIC-IS-FRISS.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/EBCDIC-IT.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/EBCDIC-PT.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/EBCDIC-UK.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/EBCDIC-US.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/ECMA-CYRILLIC.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/EUC-CN.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/EUC-JISX0213.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/EUC-JP-MS.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/EUC-JP.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/EUC-KR.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/EUC-TW.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/GB18030.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/GBBIG5.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/GBGBK.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/GBK.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/GEORGIAN-ACADEMY.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/GEORGIAN-PS.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/GOST_19768-74.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/GREEK-CCITT.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/GREEK7-OLD.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/GREEK7.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/HP-GREEK8.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/HP-ROMAN8.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/HP-ROMAN9.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/HP-THAI8.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/HP-TURKISH8.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM037.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM038.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1004.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1008.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1008_420.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1025.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1026.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1046.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1047.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1097.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1112.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1122.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1123.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1124.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1129.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1130.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1132.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1133.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1137.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1140.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1141.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1142.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1143.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1144.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1145.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1146.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1147.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1148.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1149.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1153.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1154.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1155.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1156.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1157.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1158.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1160.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1161.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1162.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1163.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1164.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1166.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1167.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM12712.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1364.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1371.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1388.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1390.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM1399.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM16804.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM256.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM273.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM274.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM275.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM277.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM278.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM280.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM281.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM284.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM285.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM290.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM297.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM420.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM423.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM424.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM437.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM4517.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM4899.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM4909.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM4971.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM500.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM5347.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM803.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM850.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM851.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM852.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM855.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM856.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM857.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM858.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM860.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM861.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM862.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM863.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM864.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM865.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM866.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM866NAV.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM868.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM869.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM870.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM871.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM874.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM875.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM880.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM891.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM901.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM902.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM903.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM9030.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM904.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM905.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM9066.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM918.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM921.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM922.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM930.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM932.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM933.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM935.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM937.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM939.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM943.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IBM9448.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/IEC_P27-1.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/INIS-8.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/INIS-CYRILLIC.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/INIS.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/ISIRI-3342.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/ISO-2022-CN-EXT.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/ISO-2022-CN.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/ISO-2022-JP-3.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/ISO-2022-JP.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/ISO-2022-KR.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/ISO-IR-197.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/ISO-IR-209.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/ISO646.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/ISO8859-1.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/ISO8859-10.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/ISO8859-11.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/ISO8859-13.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/ISO8859-14.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/ISO8859-15.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/ISO8859-16.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/ISO8859-2.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/ISO8859-3.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/ISO8859-4.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/ISO8859-5.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/ISO8859-6.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/ISO8859-7.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/ISO8859-8.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/ISO8859-9.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/ISO8859-9E.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/ISO_10367-BOX.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/ISO_11548-1.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/ISO_2033.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/ISO_5427-EXT.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/ISO_5427.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/ISO_5428.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/ISO_6937-2.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/ISO_6937.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/JOHAB.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/KOI-8.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/KOI8-R.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/KOI8-RU.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/KOI8-T.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/KOI8-U.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/LATIN-GREEK-1.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/LATIN-GREEK.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/MAC-CENTRALEUROPE.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/MAC-IS.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/MAC-SAMI.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/MAC-UK.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/MACINTOSH.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/MIK.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/NATS-DANO.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/NATS-SEFI.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/PT154.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/RK1048.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/SAMI-WS2.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/SHIFT_JISX0213.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/SJIS.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/T.61.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/TCVN5712-1.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/TIS-620.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/TSCII.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/UHC.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/UNICODE.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/UTF-16.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/UTF-32.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/UTF-7.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/VISCII.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/libCNS.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/libGB.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/libISOIR165.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/libJIS.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/libJISX0213.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/gconv/libKSC.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/krb5/plugins/preauth/spake.so (libkrb5-3@1.19.2-2ubuntu0.4)
+  ~ /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2 (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/libBrokenLocale.so.1 (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/libanl.so.1 (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/libapt-pkg.so.6.0.0 (libapt-pkg6.0@2.4.13)
+  ~ /usr/lib/x86_64-linux-gnu/libapt-private.so.0.0.0 (apt@2.4.13)
+  ~ /usr/lib/x86_64-linux-gnu/libblkid.so.1.1.0 (libblkid1@2.37.2-4ubuntu3.4)
+  ~ /usr/lib/x86_64-linux-gnu/libc.so.6 (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/libc_malloc_debug.so.0 (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/libcom_err.so.2.1 (libcom-err2@1.46.5-2ubuntu1.2)
+  ~ /usr/lib/x86_64-linux-gnu/libcrypto.so.3 (libssl3@3.0.2-0ubuntu1.18)
+  ~ /usr/lib/x86_64-linux-gnu/libcurl.so.4.7.0 (libcurl4@7.81.0-1ubuntu1.18)
+  ~ /usr/lib/x86_64-linux-gnu/libdl.so.2 (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/libe2p.so.2.3 (libext2fs2@1.46.5-2ubuntu1.2)
+  ~ /usr/lib/x86_64-linux-gnu/libexpat.so.1.8.7 (libexpat1@2.4.7-1ubuntu0.4)
+  ~ /usr/lib/x86_64-linux-gnu/libexpatw.so.1.8.7 (libexpat1@2.4.7-1ubuntu0.4)
+  ~ /usr/lib/x86_64-linux-gnu/libext2fs.so.2.4 (libext2fs2@1.46.5-2ubuntu1.2)
+  ~ /usr/lib/x86_64-linux-gnu/libgnutls.so.30.31.0 (libgnutls30@3.7.3-4ubuntu1.5)
+  ~ /usr/lib/x86_64-linux-gnu/libgssapi_krb5.so.2.2 (libgssapi-krb5-2@1.19.2-2ubuntu0.4)
+  ~ /usr/lib/x86_64-linux-gnu/libk5crypto.so.3.1 (libk5crypto3@1.19.2-2ubuntu0.4)
+  ~ /usr/lib/x86_64-linux-gnu/libkrb5.so.3.3 (libkrb5-3@1.19.2-2ubuntu0.4)
+  ~ /usr/lib/x86_64-linux-gnu/libkrb5support.so.0.1 (libkrb5support0@1.19.2-2ubuntu0.4)
+  ~ /usr/lib/x86_64-linux-gnu/libm.so.6 (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/libmemusage.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/libmount.so.1.1.0 (libmount1@2.37.2-4ubuntu3.4)
+  ~ /usr/lib/x86_64-linux-gnu/libmvec.so.1 (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/libnghttp2.so.14.20.1 (libnghttp2-14@1.43.0-1ubuntu0.2)
+  ~ /usr/lib/x86_64-linux-gnu/libnsl.so.1 (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/libnss_compat.so.2 (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/libnss_dns.so.2 (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/libnss_files.so.2 (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/libnss_hesiod.so.2 (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/libpcprofile.so (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/libresolv.so.2 (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/librt.so.1 (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/libsmartcols.so.1.1.0 (libsmartcols1@2.37.2-4ubuntu3.4)
+  ~ /usr/lib/x86_64-linux-gnu/libss.so.2.0 (libss2@1.46.5-2ubuntu1.2)
+  ~ /usr/lib/x86_64-linux-gnu/libssl.so.3 (libssl3@3.0.2-0ubuntu1.18)
+  ~ /usr/lib/x86_64-linux-gnu/libthread_db.so.1 (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/libutil.so.1 (libc6@2.35-0ubuntu3.8)
+  ~ /usr/lib/x86_64-linux-gnu/libuuid.so.1.3.0 (libuuid1@2.37.2-4ubuntu3.4)
+  ~ /usr/lib/x86_64-linux-gnu/ossl-modules/legacy.so (libssl3@3.0.2-0ubuntu1.18)
+  ~ /usr/libexec/coreutils/libstdbuf.so (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/sbin/agetty (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/sbin/badblocks (e2fsprogs@1.46.5-2ubuntu1.2)
+  ~ /usr/sbin/blkdiscard (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/sbin/blkid (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/sbin/blkzone (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/sbin/blockdev (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/sbin/chcpu (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/sbin/chmem (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/sbin/chroot (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/sbin/ctrlaltdel (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/sbin/debugfs (e2fsprogs@1.46.5-2ubuntu1.2)
+  ~ /usr/sbin/dumpe2fs (e2fsprogs@1.46.5-2ubuntu1.2)
+  ~ /usr/sbin/e2freefrag (e2fsprogs@1.46.5-2ubuntu1.2)
+  ~ /usr/sbin/e2fsck (e2fsprogs@1.46.5-2ubuntu1.2)
+  ~ /usr/sbin/e2image (e2fsprogs@1.46.5-2ubuntu1.2)
+  ~ /usr/sbin/e2undo (e2fsprogs@1.46.5-2ubuntu1.2)
+  ~ /usr/sbin/e4crypt (e2fsprogs@1.46.5-2ubuntu1.2)
+  ~ /usr/sbin/e4defrag (e2fsprogs@1.46.5-2ubuntu1.2)
+  ~ /usr/sbin/filefrag (e2fsprogs@1.46.5-2ubuntu1.2)
+  ~ /usr/sbin/findfs (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/sbin/fsck (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/sbin/fsck.cramfs (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/sbin/fsck.minix (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/sbin/fsfreeze (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/sbin/fstrim (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/sbin/hwclock (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/sbin/iconvconfig (libc-bin@2.35-0ubuntu3.8)
+  ~ /usr/sbin/isosize (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/sbin/ldattach (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/sbin/ldconfig.real (libc-bin@2.35-0ubuntu3.8)
+  ~ /usr/sbin/logsave (logsave@1.46.5-2ubuntu1.2)
+  ~ /usr/sbin/losetup (mount@2.37.2-4ubuntu3.4)
+  ~ /usr/sbin/mke2fs (e2fsprogs@1.46.5-2ubuntu1.2)
+  ~ /usr/sbin/mkfs (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/sbin/mkfs.bfs (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/sbin/mkfs.cramfs (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/sbin/mkfs.minix (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/sbin/mklost+found (e2fsprogs@1.46.5-2ubuntu1.2)
+  ~ /usr/sbin/mkswap (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/sbin/pivot_root (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/sbin/readprofile (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/sbin/resize2fs (e2fsprogs@1.46.5-2ubuntu1.2)
+  ~ /usr/sbin/rtcwake (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/sbin/runuser (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/sbin/start-stop-daemon (dpkg@1.21.1ubuntu2.3)
+  ~ /usr/sbin/sulogin (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/sbin/swaplabel (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/sbin/swapoff (mount@2.37.2-4ubuntu3.4)
+  ~ /usr/sbin/swapon (mount@2.37.2-4ubuntu3.4)
+  ~ /usr/sbin/switch_root (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/sbin/tune2fs (e2fsprogs@1.46.5-2ubuntu1.2)
+  ~ /usr/sbin/wipefs (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/sbin/zic (libc-bin@2.35-0ubuntu3.8)
+  ~ /usr/sbin/zramctl (util-linux@2.37.2-4ubuntu3.4)
+  ~ /usr/share/ca-certificates/mozilla/Autoridad_de_Certificacion_Firmaprofesional_CIF_A62634068.crt (ca-certificates@20240203~22.04.1)
+  ~ /usr/share/doc/base-files/changelog.gz (base-files@12ubuntu4.7)
+  ~ /usr/share/doc/bash/changelog.Debian.gz (bash@5.1-6ubuntu1.1)
+  ~ /usr/share/doc/bsdutils/changelog.Debian.gz (bsdutils@1:2.37.2-4ubuntu3.4)
+  ~ /usr/share/doc/ca-certificates/changelog.gz (ca-certificates@20240203~22.04.1)
+  ~ /usr/share/doc/coreutils/changelog.Debian.gz (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/share/doc/dpkg/changelog.Debian.gz (dpkg@1.21.1ubuntu2.3)
+  ~ /usr/share/doc/libapt-pkg6.0/changelog.gz (libapt-pkg6.0@2.4.13)
+  ~ /usr/share/doc/libblkid1/changelog.Debian.gz (libblkid1@2.37.2-4ubuntu3.4)
+  ~ /usr/share/doc/libc6/changelog.Debian.gz (libc6@2.35-0ubuntu3.8)
+  ~ /usr/share/doc/libcom-err2/changelog.Debian.gz (libcom-err2@1.46.5-2ubuntu1.2)
+  ~ /usr/share/doc/libcurl4/changelog.Debian.gz (libcurl4@7.81.0-1ubuntu1.18)
+  ~ /usr/share/doc/libexpat1/changelog.Debian.gz (libexpat1@2.4.7-1ubuntu0.4)
+  ~ /usr/share/doc/libext2fs2/changelog.Debian.gz (libext2fs2@1.46.5-2ubuntu1.2)
+  ~ /usr/share/doc/libgnutls30/changelog.Debian.gz (libgnutls30@3.7.3-4ubuntu1.5)
+  ~ /usr/share/doc/libkrb5support0/changelog.Debian.gz (libkrb5support0@1.19.2-2ubuntu0.4)
+  ~ /usr/share/doc/libldap-2.5-0/changelog.Debian.gz (libldap-2.5-0@2.5.18+dfsg-0ubuntu0.22.04.2)
+  ~ /usr/share/doc/libnghttp2-14/changelog.Debian.gz (libnghttp2-14@1.43.0-1ubuntu0.2)
+  ~ /usr/share/doc/libsmartcols1/changelog.Debian.gz (libsmartcols1@2.37.2-4ubuntu3.4)
+  ~ /usr/share/doc/libssl3/changelog.Debian.gz (libssl3@3.0.2-0ubuntu1.18)
+  ~ /usr/share/doc/libuuid1/changelog.Debian.gz (libuuid1@2.37.2-4ubuntu3.4)
+  ~ /usr/share/doc/locales/changelog.Debian.gz (locales@2.35-0ubuntu3.8)
+  ~ /usr/share/doc/logsave/changelog.Debian.gz (logsave@1.46.5-2ubuntu1.2)
+  ~ /usr/share/doc/tzdata/changelog.Debian.gz (tzdata@2024a-0ubuntu0.22.04.1)
+  ~ /usr/share/doc/wget/changelog.Debian.gz (wget@1.21.2-2ubuntu1.1)
+  ~ /usr/share/info/coreutils.info.gz (coreutils@8.32-4.1ubuntu1.2)
+  ~ /usr/share/zoneinfo/tzdata.zi (tzdata@2024a-0ubuntu0.22.04.1)
+  ~ /var/lib/dpkg/info/apt.md5sums
+  ~ /var/lib/dpkg/info/apt.shlibs
+  ~ /var/lib/dpkg/info/base-files.md5sums
+  ~ /var/lib/dpkg/info/bash.md5sums
+  ~ /var/lib/dpkg/info/bash.postinst
+  ~ /var/lib/dpkg/info/bash.postrm
+  ~ /var/lib/dpkg/info/bsdutils.md5sums
+  ~ /var/lib/dpkg/info/ca-certificates.config
+  ~ /var/lib/dpkg/info/ca-certificates.list
+  ~ /var/lib/dpkg/info/ca-certificates.md5sums
+  ~ /var/lib/dpkg/info/coreutils.md5sums
+  ~ /var/lib/dpkg/info/curl.md5sums
+  ~ /var/lib/dpkg/info/dpkg.md5sums
+  ~ /var/lib/dpkg/info/e2fsprogs.md5sums
+  ~ /var/lib/dpkg/info/libapt-pkg6.0:amd64.md5sums
+  ~ /var/lib/dpkg/info/libblkid1:amd64.md5sums
+  ~ /var/lib/dpkg/info/libc-bin.md5sums
+  ~ /var/lib/dpkg/info/libc6:amd64.md5sums
+  ~ /var/lib/dpkg/info/libcom-err2:amd64.md5sums
+  ~ /var/lib/dpkg/info/libcurl4:amd64.md5sums
+  ~ /var/lib/dpkg/info/libexpat1:amd64.md5sums
+  ~ /var/lib/dpkg/info/libext2fs2:amd64.md5sums
+  ~ /var/lib/dpkg/info/libgnutls30:amd64.md5sums
+  ~ /var/lib/dpkg/info/libgssapi-krb5-2:amd64.md5sums
+  ~ /var/lib/dpkg/info/libk5crypto3:amd64.md5sums
+  ~ /var/lib/dpkg/info/libkrb5-3:amd64.md5sums
+  ~ /var/lib/dpkg/info/libkrb5support0:amd64.md5sums
+  ~ /var/lib/dpkg/info/libldap-2.5-0:amd64.md5sums
+  ~ /var/lib/dpkg/info/libmount1:amd64.md5sums
+  ~ /var/lib/dpkg/info/libnghttp2-14:amd64.md5sums
+  ~ /var/lib/dpkg/info/libsmartcols1:amd64.md5sums
+  ~ /var/lib/dpkg/info/libss2:amd64.md5sums
+  ~ /var/lib/dpkg/info/libssl3:amd64.md5sums
+  ~ /var/lib/dpkg/info/libuuid1:amd64.md5sums
+  ~ /var/lib/dpkg/info/locales.md5sums
+  ~ /var/lib/dpkg/info/logsave.md5sums
+  ~ /var/lib/dpkg/info/mount.md5sums
+  ~ /var/lib/dpkg/info/openssl.md5sums
+  ~ /var/lib/dpkg/info/tzdata.config
+  ~ /var/lib/dpkg/info/tzdata.md5sums
+  ~ /var/lib/dpkg/info/util-linux.md5sums
+  ~ /var/lib/dpkg/info/wget.md5sums
+  ~ /var/lib/dpkg/status
+
+📄 Files added: 66, removed: 70
+
+~ Changed (59):
+  ~ apt @ /var/lib/dpkg/status
+      version: 2.4.11 -> 2.4.13
+  ~ base-files @ /var/lib/dpkg/status
+      version: 12ubuntu4.6 -> 12ubuntu4.7
+  ~ bash @ /var/lib/dpkg/status
+      version: 5.1-6ubuntu1 -> 5.1-6ubuntu1.1
+  ~ bsdutils @ /var/lib/dpkg/status
+      version: 1:2.37.2-4ubuntu3 -> 1:2.37.2-4ubuntu3.4
+  ~ ca-certificates @ /var/lib/dpkg/status
+      version: 20230311ubuntu0.22.04.1 -> 20240203~22.04.1
+  ~ coreutils @ /var/lib/dpkg/status
+      version: 8.32-4.1ubuntu1.1 -> 8.32-4.1ubuntu1.2
+  ~ curl @ /var/lib/dpkg/status
+      version: 7.81.0-1ubuntu1.15 -> 7.81.0-1ubuntu1.18
+  ~ dpkg @ /var/lib/dpkg/status
+      version: 1.21.1ubuntu2.2 -> 1.21.1ubuntu2.3
+  ~ e2fsprogs @ /var/lib/dpkg/status
+      version: 1.46.5-2ubuntu1.1 -> 1.46.5-2ubuntu1.2
+  ~ libapt-pkg6.0 @ /var/lib/dpkg/status
+      version: 2.4.11 -> 2.4.13
+  ~ libblkid1 @ /var/lib/dpkg/status
+      version: 2.37.2-4ubuntu3 -> 2.37.2-4ubuntu3.4
+  ~ libc-bin @ /var/lib/dpkg/status
+      version: 2.35-0ubuntu3.6 -> 2.35-0ubuntu3.8
+  ~ libc6 @ /var/lib/dpkg/status
+      version: 2.35-0ubuntu3.6 -> 2.35-0ubuntu3.8
+  ~ libcom-err2 @ /var/lib/dpkg/status
+      version: 1.46.5-2ubuntu1.1 -> 1.46.5-2ubuntu1.2
+  ~ libcurl4 @ /var/lib/dpkg/status
+      version: 7.81.0-1ubuntu1.15 -> 7.81.0-1ubuntu1.18
+  ~ libexpat1 @ /var/lib/dpkg/status
+      version: 2.4.7-1ubuntu0.2 -> 2.4.7-1ubuntu0.4
+  ~ libext2fs2 @ /var/lib/dpkg/status
+      version: 1.46.5-2ubuntu1.1 -> 1.46.5-2ubuntu1.2
+  ~ libgnutls30 @ /var/lib/dpkg/status
+      version: 3.7.3-4ubuntu1.4 -> 3.7.3-4ubuntu1.5
+  ~ libgssapi-krb5-2 @ /var/lib/dpkg/status
+      version: 1.19.2-2ubuntu0.3 -> 1.19.2-2ubuntu0.4
+  ~ libk5crypto3 @ /var/lib/dpkg/status
+      version: 1.19.2-2ubuntu0.3 -> 1.19.2-2ubuntu0.4
+  ~ libkrb5-3 @ /var/lib/dpkg/status
+      version: 1.19.2-2ubuntu0.3 -> 1.19.2-2ubuntu0.4
+  ~ libkrb5support0 @ /var/lib/dpkg/status
+      version: 1.19.2-2ubuntu0.3 -> 1.19.2-2ubuntu0.4
+  ~ libldap-2.5-0 @ /var/lib/dpkg/status
+      version: 2.5.16+dfsg-0ubuntu0.22.04.2 -> 2.5.18+dfsg-0ubuntu0.22.04.2
+  ~ libmount1 @ /var/lib/dpkg/status
+      version: 2.37.2-4ubuntu3 -> 2.37.2-4ubuntu3.4
+  ~ libnghttp2-14 @ /var/lib/dpkg/status
+      version: 1.43.0-1ubuntu0.1 -> 1.43.0-1ubuntu0.2
+  ~ libsmartcols1 @ /var/lib/dpkg/status
+      version: 2.37.2-4ubuntu3 -> 2.37.2-4ubuntu3.4
+  ~ libss2 @ /var/lib/dpkg/status
+      version: 1.46.5-2ubuntu1.1 -> 1.46.5-2ubuntu1.2
+  ~ libssl3 @ /var/lib/dpkg/status
+      version: 3.0.2-0ubuntu1.15 -> 3.0.2-0ubuntu1.18
+  ~ libuuid1 @ /var/lib/dpkg/status
+      version: 2.37.2-4ubuntu3 -> 2.37.2-4ubuntu3.4
+  ~ locales @ /var/lib/dpkg/status
+      version: 2.35-0ubuntu3.6 -> 2.35-0ubuntu3.8
+  ~ logsave @ /var/lib/dpkg/status
+      version: 1.46.5-2ubuntu1.1 -> 1.46.5-2ubuntu1.2
+  ~ mount @ /var/lib/dpkg/status
+      version: 2.37.2-4ubuntu3 -> 2.37.2-4ubuntu3.4
+  ~ openssl @ /var/lib/dpkg/status
+      version: 3.0.2-0ubuntu1.15 -> 3.0.2-0ubuntu1.18
+  ~ tzdata @ /var/lib/dpkg/status
+      version: 2024a-0ubuntu0.22.04 -> 2024a-0ubuntu0.22.04.1
+  ~ util-linux @ /var/lib/dpkg/status
+      version: 2.37.2-4ubuntu3 -> 2.37.2-4ubuntu3.4
+  ~ wget @ /var/lib/dpkg/status
+      version: 1.21.2-2ubuntu1 -> 1.21.2-2ubuntu1.1
+  ~ openjdk @ /opt/java/openjdk/release
+      version: 11.0.22+7 -> 17.0.13+11
+  ~ logback-classic @ /apache-zookeeper-3.9.2-bin/lib/logback-classic-1.2.13.jar
+      version: 1.2.10 -> 1.2.13
+      hash[SHA1]: f69d97ef3335c6ab82fc21dfb77ac613f90c1221 -> e9f3458e7354fe4917081237c01fa4999f4e1b86
+  ~ logback-core @ /apache-zookeeper-3.9.2-bin/lib/logback-core-1.2.13.jar
+      version: 1.2.10 -> 1.2.13
+      hash[SHA1]: 5328406bfcae7bcdcc86810fcb2920d2c297170d -> 8ae4a32ed4937b5ebff6891a93c5e957f4e81655
+  ~ netty-buffer @ /apache-zookeeper-3.9.2-bin/lib/netty-buffer-4.1.105.Final.jar
+      version: 4.1.94.Final -> 4.1.105.Final
+      hash[SHA1]: eec248b26f16e888688e5bb37b7eeda76b78d2f7 -> c1c1b4d2c89d2f74c80a2701c124ecfde1ecf067
+  ~ netty-codec @ /apache-zookeeper-3.9.2-bin/lib/netty-codec-4.1.105.Final.jar
+      version: 4.1.94.Final -> 4.1.105.Final
+      hash[SHA1]: c70ef20ca338558147887df60f46341bc47f6900 -> 4733830b4b2b9111e9bf8136691d07b20027cd51
+  ~ netty-common @ /apache-zookeeper-3.9.2-bin/lib/netty-common-4.1.105.Final.jar
+      version: 4.1.94.Final -> 4.1.105.Final
+      hash[SHA1]: ad4ecf779ebc794cd351f57792f56ea01387b868 -> 8438fc1de4c10301bb53ceb49ed8db74bd40cc2c
+  ~ netty-handler @ /apache-zookeeper-3.9.2-bin/lib/netty-handler-4.1.105.Final.jar
+      version: 4.1.94.Final -> 4.1.105.Final
+      hash[SHA1]: cd9121ce24d6d3f2898946d04b0ef3ec548b00b4 -> 7e997e63d0a445c4b352bcd38474d50f06f2eaf1
+  ~ netty-resolver @ /apache-zookeeper-3.9.2-bin/lib/netty-resolver-4.1.105.Final.jar
+      version: 4.1.94.Final -> 4.1.105.Final
+      hash[SHA1]: e96f649e8e9dcb29a1f8e95328b99c9eb6cf76c2 -> e69687e013ded60f3f9054164e121c2702200711
+  ~ netty-transport @ /apache-zookeeper-3.9.2-bin/lib/netty-transport-4.1.105.Final.jar
+      version: 4.1.94.Final -> 4.1.105.Final
+      hash[SHA1]: ec783a737f96991a87b1d5794e2f9eb2024d708a -> 5184e1308ed7d853d7061b4e21e47e8de43a28df
+  ~ netty-transport-classes-epoll @ /apache-zookeeper-3.9.2-bin/lib/netty-transport-classes-epoll-4.1.105.Final.jar
+      version: 4.1.94.Final -> 4.1.105.Final
+      hash[SHA1]: 240e36cd5c2ffaf655913f8857f2d58b26394679 -> e006d3b0cfd5b8133c9fcebfa05d9ae80a721e80
+  ~ netty-transport-native-epoll @ /apache-zookeeper-3.9.2-bin/lib/netty-transport-native-epoll-4.1.105.Final-linux-x86_64.jar
+      version: 4.1.94.Final -> 4.1.105.Final
+      hash[SHA1]: 1f77c54f1877d9ed51f207eb64a5634bdcc7efa1 -> 8d20e17cff9ec1aaa3bb133ae7cb339c991bc105
+  ~ netty-transport-native-unix-common @ /apache-zookeeper-3.9.2-bin/lib/netty-transport-native-unix-common-4.1.105.Final.jar
+      version: 4.1.94.Final -> 4.1.105.Final
+      hash[SHA1]: 3fa5f9d04b6b782d869d6e0657d896eeadca5866 -> 8bb8ab3a8f1e730c6e7d1d1cf8fc24221eacc6cd
+  ~ jrt-fs @ /opt/java/openjdk/lib/jrt-fs.jar
+      version: 11.0.22 -> 17.0.13
+      hash[SHA1]: 6d8212cb279b47a3a4fe478b6fa4382d2535c60f -> 86531c8086e44162a0343ab8166aa84efb229f66
+  ~ zookeeper @ /apache-zookeeper-3.9.2-bin/lib/zookeeper-3.9.2.jar
+      version: 3.8.3 -> 3.9.2
+      hash[SHA1]: 97bb82af5b529ec14e9c2d44b96884544f0db743 -> b6a8d8e3a4cf932cad92e5894c93724c73076333
+  ~ zookeeper-jute @ /apache-zookeeper-3.9.2-bin/lib/zookeeper-jute-3.9.2.jar
+      version: 3.8.3 -> 3.9.2
+      hash[SHA1]: 35507db15c52a787127b0db4d915717774d3daf3 -> d1a2a1a2457edb8a8fc309b86653e38bf45ae5ea
+  ~ zookeeper-prometheus-metrics @ /apache-zookeeper-3.9.2-bin/lib/zookeeper-prometheus-metrics-3.9.2.jar
+      version: 3.8.3 -> 3.9.2
+      hash[SHA1]: a0480a0c7ceaba49615dd1a55eb02cd7bcf46e66 -> 319903248a4b982d97bb19b4e4731602290c5378
+  ~ jetty-http @ /apache-zookeeper-3.9.2-bin/lib/jetty-http-9.4.53.v20231009.jar
+      version: 9.4.52.v20230823 -> 9.4.53.v20231009
+      hash[SHA1]: c8ac92875a0c9c1fd8799bee9c628837628c9e04 -> 87faf21eb322753f0527bcb88c43e67044786369
+  ~ jetty-io @ /apache-zookeeper-3.9.2-bin/lib/jetty-io-9.4.53.v20231009.jar
+      version: 9.4.52.v20230823 -> 9.4.53.v20231009
+      hash[SHA1]: 65733aeb8b6139561d9ba19cd8a8a5a5c3611233 -> 70cf7649b27c964ad29bfddf58f3bfe0d30346cf
+  ~ jetty-security @ /apache-zookeeper-3.9.2-bin/lib/jetty-security-9.4.53.v20231009.jar
+      version: 9.4.52.v20230823 -> 9.4.53.v20231009
+      hash[SHA1]: 36923429834f04168ab619a8c44cff035e2e7970 -> 6fbc8ebe9046954dc2f51d4ba69c8f8344b05f7f
+  ~ jetty-server @ /apache-zookeeper-3.9.2-bin/lib/jetty-server-9.4.53.v20231009.jar
+      version: 9.4.52.v20230823 -> 9.4.53.v20231009
+      hash[SHA1]: 0eb611698eb120a56d378229be37f64f9ef43628 -> 8b0e761a0b359db59dae77c00b4213b0586cb994
+  ~ jetty-servlet @ /apache-zookeeper-3.9.2-bin/lib/jetty-servlet-9.4.53.v20231009.jar
+      version: 9.4.52.v20230823 -> 9.4.53.v20231009
+      hash[SHA1]: 0dd2f8e15e5272824eca0be176b35f68aa0f540e -> 6670d6a54cdcaedd8090e8cf420fd5dd7d08e859
+  ~ jetty-util @ /apache-zookeeper-3.9.2-bin/lib/jetty-util-9.4.53.v20231009.jar
+      version: 9.4.52.v20230823 -> 9.4.53.v20231009
+      hash[SHA1]: 86419a224c0a8ffaf04f3e4e4fd0fe889a40c29c -> f72bb4f687b4454052c6f06528ba9910714df947
+  ~ jetty-util-ajax @ /apache-zookeeper-3.9.2-bin/lib/jetty-util-ajax-9.4.53.v20231009.jar
+      version: 9.4.52.v20230823 -> 9.4.53.v20231009
+      hash[SHA1]: 03b5b2977bb885a64cc307c89e09f7f12844b933 -> 4d20f6206eb7747293697c5f64c2dc5bf4bd54a4
+
+! Duplicates in second SBOM (1):
+  ! netty-tcnative-boringssl-static: [2.0.61.Final]
+
+++ New duplicate groups (1):
+  ++ netty-tcnative-boringssl-static: [2.0.61.Final]
+
+⚠️  Identity Collisions (1):
+  [hash_mismatch] pkg:maven/io.netty/netty-tcnative-boringssl-static
+    - netty-tcnative-boringssl-static 2.0.61.Final
+    - netty-tcnative-boringssl-static 2.0.61.Final
+    - netty-tcnative-boringssl-static 2.0.61.Final
+    - netty-tcnative-boringssl-static 2.0.61.Final
+    - netty-tcnative-boringssl-static 2.0.61.Final
+    - netty-tcnative-boringssl-static 2.0.61.Final
+

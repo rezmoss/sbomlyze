@@ -1,0 +1,9 @@
+[
+  {
+    "op": "replace",
+    "path": "/components/pkg:golang/github.com/google/go-containerregistry@/go.mod/digests",
+    "value": {
+      "go-h1": "h1:wQ614GjDrt6MiV9fwIVBdJqmDuup3Fho6QfltIrnNSw="
+    }
+  }
+]

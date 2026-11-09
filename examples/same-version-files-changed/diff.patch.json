@@ -1,0 +1,266 @@
+[
+  {
+    "op": "remove",
+    "path": "/components/pkg:apk/libc-utils"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:apk/alpine-baselayout@/lib/apk/db/installed/version",
+    "value": "3.6.5-r0"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:apk/alpine-baselayout-data@/lib/apk/db/installed/version",
+    "value": "3.6.5-r0"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:apk/apk-tools@/lib/apk/db/installed/version",
+    "value": "2.14.4-r1"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:apk/busybox@/lib/apk/db/installed/version",
+    "value": "1.36.1-r31"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:apk/busybox-binsh@/lib/apk/db/installed/version",
+    "value": "1.36.1-r31"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:apk/ca-certificates-bundle@/lib/apk/db/installed/version",
+    "value": "20260413-r0"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:apk/libcrypto3@/lib/apk/db/installed/version",
+    "value": "3.3.7-r0"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:apk/libssl3@/lib/apk/db/installed/version",
+    "value": "3.3.7-r0"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:apk/musl@/lib/apk/db/installed/version",
+    "value": "1.2.5-r3"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:apk/musl-utils@/lib/apk/db/installed/version",
+    "value": "1.2.5-r3"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:apk/ssl_client@/lib/apk/db/installed/version",
+    "value": "1.36.1-r31"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:apk/zlib@/lib/apk/db/installed/version",
+    "value": "1.3.2-r0"
+  },
+  {
+    "op": "replace",
+    "path": "/files//bin/busybox/hashes",
+    "value": {
+      "sha1": "2934fd3324a3e2195200402a528ebeab94c68dca",
+      "sha256": "b7de36c48f4c8b08a256200f3d6ccf20b9aade3219e356563a5ec3f12db78d7b"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//etc/group/hashes",
+    "value": {
+      "sha1": "d8eb64e0cdfd7cfd998e4a1bbb49c2f45be5448d",
+      "sha256": "6fb6ab5a5526e6f4896b70c7e3c350fd475158a1f0d7b5fc0f3f9bd57f1c3be8"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//etc/inittab/hashes",
+    "value": {
+      "sha1": "ce9586d2acf1d9462765259a21ccc4f96a402151",
+      "sha256": "7326d8ad56bf5fea63b1ca516a747ff6e6723e25ae84a93c31620b03de6c001d"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//etc/network/if-up.d/dad/hashes",
+    "value": {
+      "sha1": "ddd99bc197c36e8a9aab9463aaeebda44a7a8029",
+      "sha256": "2fd20d1bc67d9ee711990002b24f156635a73f56b8935b2f76592938817fa4e7"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//etc/passwd/hashes",
+    "value": {
+      "sha1": "afe6cba27664032062c7f1cb812783b1ecf6d99b",
+      "sha256": "31a94f06f17bc3b9085fccab1d0fa6ee9e79c4a1e4d91f617fa5de95863be015"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//etc/shadow/hashes",
+    "value": {
+      "sha1": "fdcce813d9a3aa27fffcf07126d2deabf17cb057",
+      "sha256": "d5992a27f05f380fc5faeb82a3359e2f230fd1d6ea6517b45892b771a2194ddb"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//etc/ssl/certs/ca-certificates.crt/hashes",
+    "value": {
+      "sha1": "5de2ede81d091b3d9ef558ac41de70e58c6dc573",
+      "sha256": "61efbd6d3f829f71039c57b29dd37d15ac7f33c4ece861aaef8c7d7a519cd1d9"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//etc/ssl/openssl.cnf/hashes",
+    "value": {
+      "sha1": "c6aaa437fab0d4186ff361da58952c45447f0181",
+      "sha256": "3a0c65ff954aff207420846926d31d1b6056be525a0f3d38dff21f5b89f90688"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//etc/ssl/openssl.cnf.dist/hashes",
+    "value": {
+      "sha1": "c6aaa437fab0d4186ff361da58952c45447f0181",
+      "sha256": "3a0c65ff954aff207420846926d31d1b6056be525a0f3d38dff21f5b89f90688"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//lib/apk/db/installed/hashes",
+    "value": {
+      "sha1": "305c07b4c8504cb9b9fd9ff775af7786f88a2f5c",
+      "sha256": "67bc4d6b3ce175c4ef730883af87d7d8c075da45ec07cc19c2b7f8f049efa8f1"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//lib/ld-musl-x86_64.so.1/hashes",
+    "value": {
+      "sha1": "50bebdb7dfccd10f5297234ace92a51268a80cae",
+      "sha256": "19738ba9b967e61ea87c6530f428f811eb16af0b111e83bfc348e26886324b66"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//lib/libapk.so.2.14.0/hashes",
+    "value": {
+      "sha1": "8876d1f5cdae96ff56e540bb2014ded20936a6ad",
+      "sha256": "d44e8dd23f66a2dc103b7c71d74a9f4f7c254d1c7b403d159705d53adca6f5e8"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//lib/libcrypto.so.3/hashes",
+    "value": {
+      "sha1": "9c7aff4601c798ec9b16cbd3d3d8e74bc7b3d7da",
+      "sha256": "7ad7668e7b5693cf1399e46f2430542c5ee92dbbc9aa9f616a08d11d4fa6d238"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//lib/libssl.so.3/hashes",
+    "value": {
+      "sha1": "5fba4bf1f23fca1654bbff15b0016ef9f39e5d9b",
+      "sha256": "d5c07be1a046d4318643d52b259ba1f13042b037d9f00d02f6a0e73d0466fac1"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//sbin/apk/hashes",
+    "value": {
+      "sha1": "ca169259691fbcaef8e2968c59ca6576982530b8",
+      "sha256": "1a8141f2306ecb74358fbe87f28ccacec4455af1d85b248082e139031e32d6d7"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/bin/getconf/hashes",
+    "value": {
+      "sha1": "7eb1aed4c8ce5ac767e76baff3798b9621f99cce",
+      "sha256": "abeca5d2f2f378507502a1c3f92fe1288e7bba35544bec7fe54fef718b5b2e32"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/bin/getent/hashes",
+    "value": {
+      "sha1": "44686a012bf0bc40f4f3a812534bc484d865c7af",
+      "sha256": "206888f4a45cae0b793e839fabc0979a8a1a7180f47bcd5c00988c9cf7d27a13"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/bin/iconv/hashes",
+    "value": {
+      "sha1": "134e64d7942839718c037c911c08e15823ebc72e",
+      "sha256": "d88701fa0d19ab3e8e8fa96a3d20c9af96ead2212d214f4bc0fb1f58a9e4cc4d"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/bin/scanelf/hashes",
+    "value": {
+      "sha1": "23fea552ef4aa7235a26ce61ade7df9bdc677cf1",
+      "sha256": "4d0a125e450889fbcf70e867c6ef1575ad0d6911925bf6c2edf2af5de3a9dc78"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/bin/ssl_client/hashes",
+    "value": {
+      "sha1": "ede6b607ff67bf8bb9aab945cc0895ea9386f550",
+      "sha256": "0c977fe6f05c192fec8d669b04e5694b2b5a2fb1b2ef24be07a685cce469aafd"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/lib/engines-3/afalg.so/hashes",
+    "value": {
+      "sha1": "626f9691e605e35c5b86c5828d632d1fb5ac7c00",
+      "sha256": "210bb35b0c64bbea0d409454141e784947a0599421aedbc906d0b0c623ec07d5"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/lib/engines-3/capi.so/hashes",
+    "value": {
+      "sha1": "c8bfd6bd383d3f72b60a1819e5bc8c248f6cab7a",
+      "sha256": "6f45fad33320a48f79db64c613143cc1ac5850f451ef11a7c4cc5addc64cfd3a"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/lib/engines-3/loader_attic.so/hashes",
+    "value": {
+      "sha1": "c44f5d76160c2c1391d09e735b87c5c40f982479",
+      "sha256": "c7170f88a5ad86ef6b1d68edae025c2a0ae1aefc173f3b89956e5d9a3c331ad3"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/lib/engines-3/padlock.so/hashes",
+    "value": {
+      "sha1": "09c909811cab8a0fd7080fd8abfca6deabc6b7da",
+      "sha256": "b10a4e141d235ab7cf87aa1936d9b0fb5b3e2f487c79cc609c5bd9bd08bd2e2a"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/files//usr/lib/ossl-modules/legacy.so/hashes",
+    "value": {
+      "sha1": "e64c25dc3ea338537a3cfeb18cd3e58bc7aa26ac",
+      "sha256": "c1519b5debe127c121ddd4f07b5d410e65ea71950b1fb5fc6113dd3e0c90887f"
+    }
+  }
+]

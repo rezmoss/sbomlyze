@@ -1,0 +1,27 @@
+
+SBOM Comparison
+======================================================================
+                        Before                                After
+File:                   nginx-1.28.0-dec.cdx.json             nginx-1.28.0-dec.spdx.json
+File Size:              1 MB                                  3 MB
+Format:                 CycloneDX 1.7                         SPDX 2.3
+Generator:              syft 1.56.0                           syft 1.56.0
+OS:                     Debian GNU/Linux 12 (bookworm) 12.12  (none)
+Source:                 index.docker.io/library/nginx         index.docker.io/library/nginx
+Source Type:            container                             image
+Total Components:       150                                   150
+  deb:                  149                                   149             
+  maven:                1                                     1               
+Data Quality:
+  PURL Coverage:        100.0%                                100.0%
+  License Coverage:     99.3%                                 99.3%
+  Hash Coverage:        0.0%                                  0.7%
+  CPE Coverage:         100.0%                                100.0%
+======================================================================
+
+Key Findings:
+  💻 OS not recorded in the after SBOM (before: Debian GNU/Linux 12 (bookworm) 12.12)
+  🔄 0 version changes among 150 shared packages — no actual upgrades
+  🙈 Integrity drift checked only 0 of 150 same-version packages; the rest carry no comparable digest
+  ✅ Core system packages stable: deb (149) unchanged
+No differences found

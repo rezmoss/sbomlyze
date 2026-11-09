@@ -1,0 +1,117 @@
+
+SBOM Comparison
+======================================================================
+                        Before                          After
+File:                   alpine-3.19.9.syft.json         alpine-3.20.10.syft.json
+File Size:              106 KB                          102 KB
+Format:                 Syft JSON 16.1.12               Syft JSON 16.1.12
+Generator:              syft 1.56.0                     syft 1.56.0
+OS:                     Alpine Linux v3.19 3.19.9       Alpine Linux v3.20 3.20.10
+Source:                 index.docker.io/library/alpine  index.docker.io/library/alpine
+Source Type:            image                           image
+Total Components:       15                              14
+  apk:                  15                              14              -1
+Data Quality:
+  PURL Coverage:        100.0%                          100.0%
+  License Coverage:     100.0%                          100.0%
+  Hash Coverage:        0.0%                            0.0%
+  CPE Coverage:         100.0%                          100.0%
+======================================================================
+
+Scan Context:
+  Schema:                 16.1.12                 16.1.12
+  Scan Scope:             squashed                squashed
+
+Key Findings:
+  🔄 Scanned index.docker.io/library/alpine changed: sha256:b58899f069c47216f6002a6850143dc6fae0d35eb8b0df9300bbe6327b9c2171 → sha256:c64c687cbea9300178b30c95835354e34c4e4febc4badfe27102879de0483b5e
+  📉 Inventory: -1 components (-6.7%), -3 files (-3.8%), -4 relationships (-4.2%)
+  💻 OS changed: Alpine Linux v3.19 3.19.9 → Alpine Linux v3.20 3.20.10
+  🔄 12 version upgrades (1 major, 4 minor, 3 patch, 4 revision) among 14 shared packages
+  📄 25 file entries changed content: 23 in packages that changed version, 1 in same-version packages, 1 not owned by any package: /lib/apk/db/installed
+  ⚠️ 1 packages changed owned files without a version change: scanelf 1.3.7-r2 (modified /usr/bin/scanelf) — base OS changed (Alpine Linux v3.19 3.19.9 → Alpine Linux v3.20 3.20.10), so same-version rebuilds are expected
+  ℹ️ 1 version changes where every hashed owned file is byte-identical: alpine-baselayout 3.4.3-r2→3.6.5-r0 (10 files)
+  📜 License shift: permissive -1
+
+- Removed by type (up to 5 samples each):
+  apk (1 total):
+    - libc-utils 0.7.2-r5
+      /lib/apk/db/installed
+
+📊 Drift Summary:
+  📦 Version drift:   12 components
+  📄 File changes:    25 file entries (not package drift)
+  ⚠️  Owned file drift: 1 packages (1 files changed without a version change)
+
+- Removed (1):
+  - libc-utils 0.7.2-r5
+
+⚠️  Owned file drift (1 packages, same version, files changed):
+  ! scanelf 1.3.7-r2 @ /lib/apk/db/installed
+      modified /usr/bin/scanelf
+
+📄 File changes (25):
+  ~ /bin/busybox (busybox-binsh@1.36.1-r31, busybox@1.36.1-r31)
+  ~ /etc/group (alpine-baselayout-data@3.6.5-r0)
+  ~ /etc/inittab (alpine-baselayout-data@3.6.5-r0)
+  ~ /etc/network/if-up.d/dad (busybox@1.36.1-r31)
+  ~ /etc/passwd (alpine-baselayout-data@3.6.5-r0)
+  ~ /etc/shadow (alpine-baselayout-data@3.6.5-r0)
+  ~ /etc/ssl/certs/ca-certificates.crt (ca-certificates-bundle@20260413-r0)
+  ~ /etc/ssl/openssl.cnf (libcrypto3@3.3.7-r0)
+  ~ /etc/ssl/openssl.cnf.dist (libcrypto3@3.3.7-r0)
+  ~ /lib/apk/db/installed
+  ~ /lib/ld-musl-x86_64.so.1 (musl@1.2.5-r3)
+  ~ /lib/libapk.so.2.14.0 (apk-tools@2.14.4-r1)
+  ~ /lib/libcrypto.so.3 (libcrypto3@3.3.7-r0)
+  ~ /lib/libssl.so.3 (libssl3@3.3.7-r0)
+  ~ /sbin/apk (apk-tools@2.14.4-r1)
+  ~ /usr/bin/getconf (musl-utils@1.2.5-r3)
+  ~ /usr/bin/getent (musl-utils@1.2.5-r3)
+  ~ /usr/bin/iconv (musl-utils@1.2.5-r3)
+  ~ /usr/bin/scanelf (scanelf@1.3.7-r2)
+  ~ /usr/bin/ssl_client (ssl_client@1.36.1-r31)
+  ~ /usr/lib/engines-3/afalg.so (libcrypto3@3.3.7-r0)
+  ~ /usr/lib/engines-3/capi.so (libcrypto3@3.3.7-r0)
+  ~ /usr/lib/engines-3/loader_attic.so (libcrypto3@3.3.7-r0)
+  ~ /usr/lib/engines-3/padlock.so (libcrypto3@3.3.7-r0)
+  ~ /usr/lib/ossl-modules/legacy.so (libcrypto3@3.3.7-r0)
+
+📄 Files added: 1, removed: 4
+
+~ Changed (12):
+  ~ alpine-baselayout @ /lib/apk/db/installed
+      version: 3.4.3-r2 -> 3.6.5-r0
+  ~ alpine-baselayout-data @ /lib/apk/db/installed
+      version: 3.4.3-r2 -> 3.6.5-r0
+  ~ apk-tools @ /lib/apk/db/installed
+      version: 2.14.4-r0 -> 2.14.4-r1
+  ~ busybox @ /lib/apk/db/installed
+      version: 1.36.1-r20 -> 1.36.1-r31
+  ~ busybox-binsh @ /lib/apk/db/installed
+      version: 1.36.1-r20 -> 1.36.1-r31
+  ~ ca-certificates-bundle @ /lib/apk/db/installed
+      version: 20250911-r0 -> 20260413-r0
+  ~ libcrypto3 @ /lib/apk/db/installed
+      version: 3.1.8-r1 -> 3.3.7-r0
+  ~ libssl3 @ /lib/apk/db/installed
+      version: 3.1.8-r1 -> 3.3.7-r0
+  ~ musl @ /lib/apk/db/installed
+      version: 1.2.4_git20230717-r5 -> 1.2.5-r3
+  ~ musl-utils @ /lib/apk/db/installed
+      version: 1.2.4_git20230717-r5 -> 1.2.5-r3
+  ~ ssl_client @ /lib/apk/db/installed
+      version: 1.36.1-r20 -> 1.36.1-r31
+  ~ zlib @ /lib/apk/db/installed
+      version: 1.3.1-r0 -> 1.3.2-r0
+
+<< Removed dependencies:
+  pkg:apk/libc-utils: -[pkg:apk/musl-utils]
+
+🔓 Removed transitive dependencies (2):
+  - pkg:apk/musl (depth 2)
+  - pkg:apk/scanelf (depth 2)
+
+
+❌ Policy Errors (1):
+  [deny_owned_file_drift] scanelf 1.3.7-r2: 1 owned files changed without a version change (modified /usr/bin/scanelf)
+

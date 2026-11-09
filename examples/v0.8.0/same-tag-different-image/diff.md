@@ -1,0 +1,1071 @@
+## 📦 SBOM Diff Report
+
+### SBOM Comparison
+
+| | Before | After |
+|---|---|---|
+| **File** | nginx-1.28.0-apr.syft.json | nginx-1.28.0-dec.syft.json |
+| **File Size** | 4 MB | 4 MB |
+| **Format** | Syft JSON 16.1.12 | Syft JSON 16.1.12 |
+| **Generator** | syft 1.56.0 | syft 1.56.0 |
+| **OS** | Debian GNU/Linux 12 (bookworm) 12.10 | Debian GNU/Linux 12 (bookworm) 12.12 |
+| **Source** | index.docker.io/library/nginx | index.docker.io/library/nginx |
+| **Total Components** | 150 | 150 |
+| **PURL Coverage** | 100.0% | 100.0% |
+| **License Coverage** | 99.3% | 99.3% |
+| **Hash Coverage** | 0.7% | 0.7% |
+| **CPE Coverage** | 100.0% | 100.0% |
+
+### Scan Context
+
+| | Before | After |
+|---|---|---|
+| **Schema** | 16.1.12 | 16.1.12 |
+| **Scan Scope** | squashed | squashed |
+
+### Key Findings
+
+- 🔄 Scanned index.docker.io/library/nginx changed: sha256:7c46bce526d9abd904d656b4afe3742be3fffd9bc2d361dc4ba68bcbc22ca301 → sha256:3b03dfd827515a07ccf4946000f0bbdd2a4fb6aca7499249fcb6b1f9726823d6
+- 📈 Inventory: +3 files (0.1%), +2 relationships (0.1%)
+- 💻 OS changed: Debian GNU/Linux 12 (bookworm) 12.10 → Debian GNU/Linux 12 (bookworm) 12.12
+- 🔄 40 version upgrades (2 minor, 2 patch, 36 revision) among 150 shared packages
+- 🙈 Integrity drift checked only 1 of 110 same-version packages; the rest carry no comparable digest
+- 📄 960 file entries changed content: 906 in packages that changed version, 0 in same-version packages, 54 not owned by any package: /var/lib/dpkg/info/base-files.md5sums, /var/lib/dpkg/info/bash.md5sums, /var/lib/dpkg/info/ca-certificates.config, /var/lib/dpkg/info/ca-certificates.list, /var/lib/dpkg/info/ca-certificates.md5sums + 49 more
+- ℹ️ 1 version changes where every hashed owned file is byte-identical: gcc-12-base 12.2.0-14→12.2.0-14+deb12u1 (1 file)
+- 🔄 deb: 149 packages before and after (40 version changes)
+
+### Summary
+
+| Metric | Count |
+|--------|-------|
+| Added | 0 |
+| Removed | 0 |
+| Changed | 40 |
+| File changes | 960 |
+
+### Drift Summary
+
+| Type | Count | Status |
+|------|-------|--------|
+| Version | 40 | ✅ |
+| Integrity | 0 | ✅ |
+| Metadata | 0 | ✅ |
+| File entries (not package drift) | 960 | ℹ️ |
+
+<details>
+<summary>📄 File Changes (960, not package drift)</summary>
+
+- `/etc/debian_version`
+- `/usr/bin/bash`
+- `/usr/bin/c_rehash`
+- `/usr/bin/chage`
+- `/usr/bin/chattr`
+- `/usr/bin/chfn`
+- `/usr/bin/chsh`
+- `/usr/bin/clear_console`
+- `/usr/bin/curl`
+- `/usr/bin/expiry`
+- `/usr/bin/faillog`
+- `/usr/bin/getconf`
+- `/usr/bin/getent`
+- `/usr/bin/gpasswd`
+- `/usr/bin/gpgv`
+- `/usr/bin/iconv`
+- `/usr/bin/lastlog`
+- `/usr/bin/ldd`
+- `/usr/bin/locale`
+- `/usr/bin/localedef`
+- `/usr/bin/login`
+- `/usr/bin/lsattr`
+- `/usr/bin/newgrp`
+- `/usr/bin/openssl`
+- `/usr/bin/passwd`
+- `/usr/bin/perl`
+- `/usr/bin/perl5.36.0`
+- `/usr/bin/pldd`
+- `/usr/bin/tzselect`
+- `/usr/bin/zdump`
+- `/usr/lib/ssl/misc/CA.pl`
+- `/usr/lib/ssl/misc/tsget.pl`
+- `/usr/lib/x86_64-linux-gnu/engines-3/afalg.so`
+- `/usr/lib/x86_64-linux-gnu/engines-3/loader_attic.so`
+- `/usr/lib/x86_64-linux-gnu/engines-3/padlock.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/ANSI_X3.110.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/ARMSCII-8.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/ASMO_449.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/BIG5.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/BIG5HKSCS.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/BRF.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/CP10007.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/CP1125.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/CP1250.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/CP1251.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/CP1252.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/CP1253.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/CP1254.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/CP1255.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/CP1256.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/CP1257.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/CP1258.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/CP737.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/CP770.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/CP771.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/CP772.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/CP773.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/CP774.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/CP775.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/CP932.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/CSN_369103.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/CWI.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/DEC-MCS.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/EBCDIC-AT-DE-A.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/EBCDIC-AT-DE.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/EBCDIC-CA-FR.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/EBCDIC-DK-NO-A.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/EBCDIC-DK-NO.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/EBCDIC-ES-A.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/EBCDIC-ES-S.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/EBCDIC-ES.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/EBCDIC-FI-SE-A.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/EBCDIC-FI-SE.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/EBCDIC-FR.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/EBCDIC-IS-FRISS.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/EBCDIC-IT.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/EBCDIC-PT.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/EBCDIC-UK.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/EBCDIC-US.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/ECMA-CYRILLIC.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/EUC-CN.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/EUC-JISX0213.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/EUC-JP-MS.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/EUC-JP.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/EUC-KR.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/EUC-TW.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/GB18030.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/GBBIG5.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/GBGBK.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/GBK.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/GEORGIAN-ACADEMY.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/GEORGIAN-PS.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/GOST_19768-74.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/GREEK-CCITT.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/GREEK7-OLD.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/GREEK7.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/HP-GREEK8.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/HP-ROMAN8.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/HP-ROMAN9.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/HP-THAI8.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/HP-TURKISH8.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM037.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM038.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1004.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1008.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1008_420.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1025.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1026.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1046.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1047.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1097.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1112.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1122.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1123.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1124.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1129.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1130.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1132.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1133.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1137.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1140.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1141.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1142.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1143.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1144.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1145.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1146.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1147.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1148.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1149.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1153.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1154.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1155.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1156.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1157.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1158.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1160.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1161.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1162.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1163.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1164.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1166.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1167.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM12712.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1364.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1371.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1388.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1390.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM1399.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM16804.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM256.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM273.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM274.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM275.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM277.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM278.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM280.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM281.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM284.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM285.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM290.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM297.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM420.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM423.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM424.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM437.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM4517.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM4899.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM4909.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM4971.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM500.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM5347.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM803.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM850.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM851.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM852.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM855.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM856.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM857.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM858.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM860.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM861.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM862.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM863.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM864.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM865.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM866.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM866NAV.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM868.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM869.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM870.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM871.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM874.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM875.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM880.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM891.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM901.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM902.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM903.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM9030.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM904.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM905.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM9066.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM918.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM921.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM922.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM930.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM932.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM933.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM935.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM937.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM939.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM943.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IBM9448.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/IEC_P27-1.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/INIS-8.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/INIS-CYRILLIC.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/INIS.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/ISIRI-3342.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/ISO-2022-CN-EXT.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/ISO-2022-CN.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/ISO-2022-JP-3.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/ISO-2022-JP.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/ISO-2022-KR.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/ISO-IR-197.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/ISO-IR-209.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/ISO646.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/ISO8859-1.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/ISO8859-10.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/ISO8859-11.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/ISO8859-13.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/ISO8859-14.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/ISO8859-15.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/ISO8859-16.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/ISO8859-2.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/ISO8859-3.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/ISO8859-4.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/ISO8859-5.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/ISO8859-6.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/ISO8859-7.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/ISO8859-8.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/ISO8859-9.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/ISO8859-9E.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/ISO_10367-BOX.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/ISO_11548-1.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/ISO_2033.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/ISO_5427-EXT.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/ISO_5427.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/ISO_5428.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/ISO_6937-2.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/ISO_6937.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/JOHAB.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/KOI-8.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/KOI8-R.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/KOI8-RU.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/KOI8-T.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/KOI8-U.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/LATIN-GREEK-1.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/LATIN-GREEK.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/MAC-CENTRALEUROPE.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/MAC-IS.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/MAC-SAMI.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/MAC-UK.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/MACINTOSH.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/MIK.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/NATS-DANO.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/NATS-SEFI.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/PT154.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/RK1048.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/SAMI-WS2.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/SHIFT_JISX0213.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/SJIS.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/T.61.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/TCVN5712-1.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/TIS-620.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/TSCII.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/UHC.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/UNICODE.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/UTF-16.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/UTF-32.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/UTF-7.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/VISCII.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/libCNS.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/libGB.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/libISOIR165.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/libJIS.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/libJISX0213.so`
+- `/usr/lib/x86_64-linux-gnu/gconv/libKSC.so`
+- `/usr/lib/x86_64-linux-gnu/krb5/plugins/preauth/spake.so`
+- `/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2`
+- `/usr/lib/x86_64-linux-gnu/libBrokenLocale.so.1`
+- `/usr/lib/x86_64-linux-gnu/libabsl_bad_any_cast_impl.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_bad_optional_access.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_bad_variant_access.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_base.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_city.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_civil_time.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_cord.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_cord_internal.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_cordz_functions.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_cordz_handle.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_cordz_info.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_cordz_sample_token.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_debugging_internal.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_demangle_internal.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_examine_stack.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_exponential_biased.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_failure_signal_handler.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_flags_commandlineflag.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_flags_commandlineflag_internal.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_flags_config.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_flags_internal.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_flags_marshalling.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_flags_parse.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_flags_private_handle_accessor.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_flags_program_name.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_flags_reflection.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_flags_usage.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_flags_usage_internal.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_graphcycles_internal.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_hash.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_hashtablez_sampler.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_int128.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_leak_check.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_log_severity.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_low_level_hash.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_malloc_internal.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_periodic_sampler.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_random_distributions.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_random_internal_distribution_test_util.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_random_internal_platform.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_random_internal_pool_urbg.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_random_internal_randen.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_random_internal_randen_hwaes.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_random_internal_randen_hwaes_impl.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_random_internal_randen_slow.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_random_internal_seed_material.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_random_seed_gen_exception.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_random_seed_sequences.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_raw_hash_set.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_raw_logging_internal.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_scoped_set_env.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_spinlock_wait.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_stacktrace.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_status.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_statusor.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_str_format_internal.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_strerror.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_strings.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_strings_internal.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_symbolize.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_synchronization.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_throw_delegate.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_time.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libabsl_time_zone.so.20220623.0.0`
+- `/usr/lib/x86_64-linux-gnu/libanl.so.1`
+- `/usr/lib/x86_64-linux-gnu/libaom.so.3.6.0`
+- `/usr/lib/x86_64-linux-gnu/libavif.so.15.0.1`
+- `/usr/lib/x86_64-linux-gnu/libc.so.6`
+- `/usr/lib/x86_64-linux-gnu/libc_malloc_debug.so.0`
+- `/usr/lib/x86_64-linux-gnu/libcap.so.2.66`
+- `/usr/lib/x86_64-linux-gnu/libcom_err.so.2.1`
+- `/usr/lib/x86_64-linux-gnu/libcrypto.so.3`
+- `/usr/lib/x86_64-linux-gnu/libcurl.so.4.8.0`
+- `/usr/lib/x86_64-linux-gnu/libdl.so.2`
+- `/usr/lib/x86_64-linux-gnu/libe2p.so.2.3`
+- `/usr/lib/x86_64-linux-gnu/libexpat.so.1.8.10`
+- `/usr/lib/x86_64-linux-gnu/libexpatw.so.1.8.10`
+- `/usr/lib/x86_64-linux-gnu/libexslt.so.0.8.20`
+- `/usr/lib/x86_64-linux-gnu/libext2fs.so.2.4`
+- `/usr/lib/x86_64-linux-gnu/libgcc_s.so.1`
+- `/usr/lib/x86_64-linux-gnu/libgnutls.so.30.34.3`
+- `/usr/lib/x86_64-linux-gnu/libgssapi_krb5.so.2.2`
+- `/usr/lib/x86_64-linux-gnu/libicudata.so.72.1`
+- `/usr/lib/x86_64-linux-gnu/libicui18n.so.72.1`
+- `/usr/lib/x86_64-linux-gnu/libicuio.so.72.1`
+- `/usr/lib/x86_64-linux-gnu/libicutest.so.72.1`
+- `/usr/lib/x86_64-linux-gnu/libicutu.so.72.1`
+- `/usr/lib/x86_64-linux-gnu/libicuuc.so.72.1`
+- `/usr/lib/x86_64-linux-gnu/libk5crypto.so.3.1`
+- `/usr/lib/x86_64-linux-gnu/libkrb5.so.3.3`
+- `/usr/lib/x86_64-linux-gnu/libkrb5support.so.0.1`
+- `/usr/lib/x86_64-linux-gnu/libm.so.6`
+- `/usr/lib/x86_64-linux-gnu/libmemusage.so`
+- `/usr/lib/x86_64-linux-gnu/libmvec.so.1`
+- `/usr/lib/x86_64-linux-gnu/libnsl.so.1`
+- `/usr/lib/x86_64-linux-gnu/libnss_compat.so.2`
+- `/usr/lib/x86_64-linux-gnu/libnss_dns.so.2`
+- `/usr/lib/x86_64-linux-gnu/libnss_files.so.2`
+- `/usr/lib/x86_64-linux-gnu/libnss_hesiod.so.2`
+- `/usr/lib/x86_64-linux-gnu/libpcprofile.so`
+- `/usr/lib/x86_64-linux-gnu/libpsx.so.2.66`
+- `/usr/lib/x86_64-linux-gnu/libpthread.so.0`
+- `/usr/lib/x86_64-linux-gnu/libresolv.so.2`
+- `/usr/lib/x86_64-linux-gnu/librt.so.1`
+- `/usr/lib/x86_64-linux-gnu/libss.so.2.0`
+- `/usr/lib/x86_64-linux-gnu/libssl.so.3`
+- `/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30`
+- `/usr/lib/x86_64-linux-gnu/libsystemd.so.0.35.0`
+- `/usr/lib/x86_64-linux-gnu/libthread_db.so.1`
+- `/usr/lib/x86_64-linux-gnu/libtiff.so.6.0.0`
+- `/usr/lib/x86_64-linux-gnu/libudev.so.1.7.5`
+- `/usr/lib/x86_64-linux-gnu/libutil.so.1`
+- `/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.14`
+- `/usr/lib/x86_64-linux-gnu/libxslt.so.1.1.35`
+- `/usr/lib/x86_64-linux-gnu/ossl-modules/legacy.so`
+- `/usr/lib/x86_64-linux-gnu/perl-base/Config_heavy.pl`
+- `/usr/lib/x86_64-linux-gnu/perl-base/auto/Cwd/Cwd.so`
+- `/usr/lib/x86_64-linux-gnu/perl-base/auto/Fcntl/Fcntl.so`
+- `/usr/lib/x86_64-linux-gnu/perl-base/auto/File/Glob/Glob.so`
+- `/usr/lib/x86_64-linux-gnu/perl-base/auto/Hash/Util/Util.so`
+- `/usr/lib/x86_64-linux-gnu/perl-base/auto/IO/IO.so`
+- `/usr/lib/x86_64-linux-gnu/perl-base/auto/List/Util/Util.so`
+- `/usr/lib/x86_64-linux-gnu/perl-base/auto/POSIX/POSIX.so`
+- `/usr/lib/x86_64-linux-gnu/perl-base/auto/Socket/Socket.so`
+- `/usr/lib/x86_64-linux-gnu/perl-base/auto/attributes/attributes.so`
+- `/usr/lib/x86_64-linux-gnu/perl-base/auto/re/re.so`
+- `/usr/sbin/badblocks`
+- `/usr/sbin/chgpasswd`
+- `/usr/sbin/chpasswd`
+- `/usr/sbin/cppw`
+- `/usr/sbin/debugfs`
+- `/usr/sbin/dumpe2fs`
+- `/usr/sbin/e2freefrag`
+- `/usr/sbin/e2fsck`
+- `/usr/sbin/e2image`
+- `/usr/sbin/e2undo`
+- `/usr/sbin/e4crypt`
+- `/usr/sbin/e4defrag`
+- `/usr/sbin/filefrag`
+- `/usr/sbin/groupadd`
+- `/usr/sbin/groupdel`
+- `/usr/sbin/groupmems`
+- `/usr/sbin/groupmod`
+- `/usr/sbin/grpck`
+- `/usr/sbin/grpconv`
+- `/usr/sbin/grpunconv`
+- `/usr/sbin/iconvconfig`
+- `/usr/sbin/ldconfig`
+- `/usr/sbin/logsave`
+- `/usr/sbin/mke2fs`
+- `/usr/sbin/mklost+found`
+- `/usr/sbin/newusers`
+- `/usr/sbin/nologin`
+- `/usr/sbin/pwck`
+- `/usr/sbin/pwconv`
+- `/usr/sbin/pwunconv`
+- `/usr/sbin/resize2fs`
+- `/usr/sbin/service`
+- `/usr/sbin/tune2fs`
+- `/usr/sbin/useradd`
+- `/usr/sbin/userdel`
+- `/usr/sbin/usermod`
+- `/usr/sbin/vipw`
+- `/usr/sbin/zic`
+- `/usr/share/keyrings/debian-archive-keyring.gpg`
+- `/usr/share/keyrings/debian-archive-removed-keys.gpg`
+- `/usr/share/zoneinfo/leap-seconds.list`
+- `/usr/share/zoneinfo/leapseconds`
+- `/usr/share/zoneinfo/right/Africa/Abidjan`
+- `/usr/share/zoneinfo/right/Africa/Accra`
+- `/usr/share/zoneinfo/right/Africa/Addis_Ababa`
+- `/usr/share/zoneinfo/right/Africa/Algiers`
+- `/usr/share/zoneinfo/right/Africa/Asmara`
+- `/usr/share/zoneinfo/right/Africa/Bamako`
+- `/usr/share/zoneinfo/right/Africa/Bangui`
+- `/usr/share/zoneinfo/right/Africa/Banjul`
+- `/usr/share/zoneinfo/right/Africa/Bissau`
+- `/usr/share/zoneinfo/right/Africa/Blantyre`
+- `/usr/share/zoneinfo/right/Africa/Brazzaville`
+- `/usr/share/zoneinfo/right/Africa/Bujumbura`
+- `/usr/share/zoneinfo/right/Africa/Cairo`
+- `/usr/share/zoneinfo/right/Africa/Casablanca`
+- `/usr/share/zoneinfo/right/Africa/Ceuta`
+- `/usr/share/zoneinfo/right/Africa/Conakry`
+- `/usr/share/zoneinfo/right/Africa/Dakar`
+- `/usr/share/zoneinfo/right/Africa/Dar_es_Salaam`
+- `/usr/share/zoneinfo/right/Africa/Djibouti`
+- `/usr/share/zoneinfo/right/Africa/Douala`
+- `/usr/share/zoneinfo/right/Africa/El_Aaiun`
+- `/usr/share/zoneinfo/right/Africa/Freetown`
+- `/usr/share/zoneinfo/right/Africa/Gaborone`
+- `/usr/share/zoneinfo/right/Africa/Harare`
+- `/usr/share/zoneinfo/right/Africa/Johannesburg`
+- `/usr/share/zoneinfo/right/Africa/Juba`
+- `/usr/share/zoneinfo/right/Africa/Kampala`
+- `/usr/share/zoneinfo/right/Africa/Khartoum`
+- `/usr/share/zoneinfo/right/Africa/Kigali`
+- `/usr/share/zoneinfo/right/Africa/Kinshasa`
+- `/usr/share/zoneinfo/right/Africa/Lagos`
+- `/usr/share/zoneinfo/right/Africa/Libreville`
+- `/usr/share/zoneinfo/right/Africa/Lome`
+- `/usr/share/zoneinfo/right/Africa/Luanda`
+- `/usr/share/zoneinfo/right/Africa/Lubumbashi`
+- `/usr/share/zoneinfo/right/Africa/Lusaka`
+- `/usr/share/zoneinfo/right/Africa/Malabo`
+- `/usr/share/zoneinfo/right/Africa/Maputo`
+- `/usr/share/zoneinfo/right/Africa/Maseru`
+- `/usr/share/zoneinfo/right/Africa/Mbabane`
+- `/usr/share/zoneinfo/right/Africa/Mogadishu`
+- `/usr/share/zoneinfo/right/Africa/Monrovia`
+- `/usr/share/zoneinfo/right/Africa/Nairobi`
+- `/usr/share/zoneinfo/right/Africa/Ndjamena`
+- `/usr/share/zoneinfo/right/Africa/Niamey`
+- `/usr/share/zoneinfo/right/Africa/Nouakchott`
+- `/usr/share/zoneinfo/right/Africa/Ouagadougou`
+- `/usr/share/zoneinfo/right/Africa/Porto-Novo`
+- `/usr/share/zoneinfo/right/Africa/Sao_Tome`
+- `/usr/share/zoneinfo/right/Africa/Tripoli`
+- `/usr/share/zoneinfo/right/Africa/Tunis`
+- `/usr/share/zoneinfo/right/Africa/Windhoek`
+- `/usr/share/zoneinfo/right/America/Adak`
+- `/usr/share/zoneinfo/right/America/Anchorage`
+- `/usr/share/zoneinfo/right/America/Anguilla`
+- `/usr/share/zoneinfo/right/America/Antigua`
+- `/usr/share/zoneinfo/right/America/Araguaina`
+- `/usr/share/zoneinfo/right/America/Argentina/Buenos_Aires`
+- `/usr/share/zoneinfo/right/America/Argentina/Catamarca`
+- `/usr/share/zoneinfo/right/America/Argentina/Cordoba`
+- `/usr/share/zoneinfo/right/America/Argentina/Jujuy`
+- `/usr/share/zoneinfo/right/America/Argentina/La_Rioja`
+- `/usr/share/zoneinfo/right/America/Argentina/Mendoza`
+- `/usr/share/zoneinfo/right/America/Argentina/Rio_Gallegos`
+- `/usr/share/zoneinfo/right/America/Argentina/Salta`
+- `/usr/share/zoneinfo/right/America/Argentina/San_Juan`
+- `/usr/share/zoneinfo/right/America/Argentina/San_Luis`
+- `/usr/share/zoneinfo/right/America/Argentina/Tucuman`
+- `/usr/share/zoneinfo/right/America/Argentina/Ushuaia`
+- `/usr/share/zoneinfo/right/America/Aruba`
+- `/usr/share/zoneinfo/right/America/Asuncion`
+- `/usr/share/zoneinfo/right/America/Atikokan`
+- `/usr/share/zoneinfo/right/America/Bahia`
+- `/usr/share/zoneinfo/right/America/Bahia_Banderas`
+- `/usr/share/zoneinfo/right/America/Barbados`
+- `/usr/share/zoneinfo/right/America/Belem`
+- `/usr/share/zoneinfo/right/America/Belize`
+- `/usr/share/zoneinfo/right/America/Blanc-Sablon`
+- `/usr/share/zoneinfo/right/America/Boa_Vista`
+- `/usr/share/zoneinfo/right/America/Bogota`
+- `/usr/share/zoneinfo/right/America/Boise`
+- `/usr/share/zoneinfo/right/America/Cambridge_Bay`
+- `/usr/share/zoneinfo/right/America/Campo_Grande`
+- `/usr/share/zoneinfo/right/America/Cancun`
+- `/usr/share/zoneinfo/right/America/Caracas`
+- `/usr/share/zoneinfo/right/America/Cayenne`
+- `/usr/share/zoneinfo/right/America/Cayman`
+- `/usr/share/zoneinfo/right/America/Chicago`
+- `/usr/share/zoneinfo/right/America/Chihuahua`
+- `/usr/share/zoneinfo/right/America/Ciudad_Juarez`
+- `/usr/share/zoneinfo/right/America/Costa_Rica`
+- `/usr/share/zoneinfo/right/America/Coyhaique`
+- `/usr/share/zoneinfo/right/America/Creston`
+- `/usr/share/zoneinfo/right/America/Cuiaba`
+- `/usr/share/zoneinfo/right/America/Curacao`
+- `/usr/share/zoneinfo/right/America/Danmarkshavn`
+- `/usr/share/zoneinfo/right/America/Dawson`
+- `/usr/share/zoneinfo/right/America/Dawson_Creek`
+- `/usr/share/zoneinfo/right/America/Denver`
+- `/usr/share/zoneinfo/right/America/Detroit`
+- `/usr/share/zoneinfo/right/America/Dominica`
+- `/usr/share/zoneinfo/right/America/Edmonton`
+- `/usr/share/zoneinfo/right/America/Eirunepe`
+- `/usr/share/zoneinfo/right/America/El_Salvador`
+- `/usr/share/zoneinfo/right/America/Fort_Nelson`
+- `/usr/share/zoneinfo/right/America/Fortaleza`
+- `/usr/share/zoneinfo/right/America/Glace_Bay`
+- `/usr/share/zoneinfo/right/America/Goose_Bay`
+- `/usr/share/zoneinfo/right/America/Grand_Turk`
+- `/usr/share/zoneinfo/right/America/Grenada`
+- `/usr/share/zoneinfo/right/America/Guadeloupe`
+- `/usr/share/zoneinfo/right/America/Guatemala`
+- `/usr/share/zoneinfo/right/America/Guayaquil`
+- `/usr/share/zoneinfo/right/America/Guyana`
+- `/usr/share/zoneinfo/right/America/Halifax`
+- `/usr/share/zoneinfo/right/America/Havana`
+- `/usr/share/zoneinfo/right/America/Hermosillo`
+- `/usr/share/zoneinfo/right/America/Indiana/Indianapolis`
+- `/usr/share/zoneinfo/right/America/Indiana/Knox`
+- `/usr/share/zoneinfo/right/America/Indiana/Marengo`
+- `/usr/share/zoneinfo/right/America/Indiana/Petersburg`
+- `/usr/share/zoneinfo/right/America/Indiana/Tell_City`
+- `/usr/share/zoneinfo/right/America/Indiana/Vevay`
+- `/usr/share/zoneinfo/right/America/Indiana/Vincennes`
+- `/usr/share/zoneinfo/right/America/Indiana/Winamac`
+- `/usr/share/zoneinfo/right/America/Inuvik`
+- `/usr/share/zoneinfo/right/America/Iqaluit`
+- `/usr/share/zoneinfo/right/America/Jamaica`
+- `/usr/share/zoneinfo/right/America/Juneau`
+- `/usr/share/zoneinfo/right/America/Kentucky/Louisville`
+- `/usr/share/zoneinfo/right/America/Kentucky/Monticello`
+- `/usr/share/zoneinfo/right/America/La_Paz`
+- `/usr/share/zoneinfo/right/America/Lima`
+- `/usr/share/zoneinfo/right/America/Los_Angeles`
+- `/usr/share/zoneinfo/right/America/Maceio`
+- `/usr/share/zoneinfo/right/America/Managua`
+- `/usr/share/zoneinfo/right/America/Manaus`
+- `/usr/share/zoneinfo/right/America/Martinique`
+- `/usr/share/zoneinfo/right/America/Matamoros`
+- `/usr/share/zoneinfo/right/America/Mazatlan`
+- `/usr/share/zoneinfo/right/America/Menominee`
+- `/usr/share/zoneinfo/right/America/Merida`
+- `/usr/share/zoneinfo/right/America/Metlakatla`
+- `/usr/share/zoneinfo/right/America/Mexico_City`
+- `/usr/share/zoneinfo/right/America/Miquelon`
+- `/usr/share/zoneinfo/right/America/Moncton`
+- `/usr/share/zoneinfo/right/America/Monterrey`
+- `/usr/share/zoneinfo/right/America/Montevideo`
+- `/usr/share/zoneinfo/right/America/Montserrat`
+- `/usr/share/zoneinfo/right/America/Nassau`
+- `/usr/share/zoneinfo/right/America/New_York`
+- `/usr/share/zoneinfo/right/America/Nome`
+- `/usr/share/zoneinfo/right/America/Noronha`
+- `/usr/share/zoneinfo/right/America/North_Dakota/Beulah`
+- `/usr/share/zoneinfo/right/America/North_Dakota/Center`
+- `/usr/share/zoneinfo/right/America/North_Dakota/New_Salem`
+- `/usr/share/zoneinfo/right/America/Nuuk`
+- `/usr/share/zoneinfo/right/America/Ojinaga`
+- `/usr/share/zoneinfo/right/America/Panama`
+- `/usr/share/zoneinfo/right/America/Paramaribo`
+- `/usr/share/zoneinfo/right/America/Phoenix`
+- `/usr/share/zoneinfo/right/America/Port-au-Prince`
+- `/usr/share/zoneinfo/right/America/Port_of_Spain`
+- `/usr/share/zoneinfo/right/America/Porto_Velho`
+- `/usr/share/zoneinfo/right/America/Puerto_Rico`
+- `/usr/share/zoneinfo/right/America/Punta_Arenas`
+- `/usr/share/zoneinfo/right/America/Rankin_Inlet`
+- `/usr/share/zoneinfo/right/America/Recife`
+- `/usr/share/zoneinfo/right/America/Regina`
+- `/usr/share/zoneinfo/right/America/Resolute`
+- `/usr/share/zoneinfo/right/America/Rio_Branco`
+- `/usr/share/zoneinfo/right/America/Santarem`
+- `/usr/share/zoneinfo/right/America/Santiago`
+- `/usr/share/zoneinfo/right/America/Santo_Domingo`
+- `/usr/share/zoneinfo/right/America/Sao_Paulo`
+- `/usr/share/zoneinfo/right/America/Scoresbysund`
+- `/usr/share/zoneinfo/right/America/Sitka`
+- `/usr/share/zoneinfo/right/America/St_Johns`
+- `/usr/share/zoneinfo/right/America/St_Kitts`
+- `/usr/share/zoneinfo/right/America/St_Lucia`
+- `/usr/share/zoneinfo/right/America/St_Thomas`
+- `/usr/share/zoneinfo/right/America/St_Vincent`
+- `/usr/share/zoneinfo/right/America/Swift_Current`
+- `/usr/share/zoneinfo/right/America/Tegucigalpa`
+- `/usr/share/zoneinfo/right/America/Thule`
+- `/usr/share/zoneinfo/right/America/Tijuana`
+- `/usr/share/zoneinfo/right/America/Toronto`
+- `/usr/share/zoneinfo/right/America/Tortola`
+- `/usr/share/zoneinfo/right/America/Vancouver`
+- `/usr/share/zoneinfo/right/America/Whitehorse`
+- `/usr/share/zoneinfo/right/America/Winnipeg`
+- `/usr/share/zoneinfo/right/America/Yakutat`
+- `/usr/share/zoneinfo/right/Antarctica/Casey`
+- `/usr/share/zoneinfo/right/Antarctica/Davis`
+- `/usr/share/zoneinfo/right/Antarctica/DumontDUrville`
+- `/usr/share/zoneinfo/right/Antarctica/Macquarie`
+- `/usr/share/zoneinfo/right/Antarctica/Mawson`
+- `/usr/share/zoneinfo/right/Antarctica/McMurdo`
+- `/usr/share/zoneinfo/right/Antarctica/Palmer`
+- `/usr/share/zoneinfo/right/Antarctica/Rothera`
+- `/usr/share/zoneinfo/right/Antarctica/Syowa`
+- `/usr/share/zoneinfo/right/Antarctica/Troll`
+- `/usr/share/zoneinfo/right/Antarctica/Vostok`
+- `/usr/share/zoneinfo/right/Asia/Aden`
+- `/usr/share/zoneinfo/right/Asia/Almaty`
+- `/usr/share/zoneinfo/right/Asia/Amman`
+- `/usr/share/zoneinfo/right/Asia/Anadyr`
+- `/usr/share/zoneinfo/right/Asia/Aqtau`
+- `/usr/share/zoneinfo/right/Asia/Aqtobe`
+- `/usr/share/zoneinfo/right/Asia/Ashgabat`
+- `/usr/share/zoneinfo/right/Asia/Atyrau`
+- `/usr/share/zoneinfo/right/Asia/Baghdad`
+- `/usr/share/zoneinfo/right/Asia/Bahrain`
+- `/usr/share/zoneinfo/right/Asia/Baku`
+- `/usr/share/zoneinfo/right/Asia/Bangkok`
+- `/usr/share/zoneinfo/right/Asia/Barnaul`
+- `/usr/share/zoneinfo/right/Asia/Beirut`
+- `/usr/share/zoneinfo/right/Asia/Bishkek`
+- `/usr/share/zoneinfo/right/Asia/Brunei`
+- `/usr/share/zoneinfo/right/Asia/Chita`
+- `/usr/share/zoneinfo/right/Asia/Colombo`
+- `/usr/share/zoneinfo/right/Asia/Damascus`
+- `/usr/share/zoneinfo/right/Asia/Dhaka`
+- `/usr/share/zoneinfo/right/Asia/Dili`
+- `/usr/share/zoneinfo/right/Asia/Dubai`
+- `/usr/share/zoneinfo/right/Asia/Dushanbe`
+- `/usr/share/zoneinfo/right/Asia/Famagusta`
+- `/usr/share/zoneinfo/right/Asia/Gaza`
+- `/usr/share/zoneinfo/right/Asia/Hebron`
+- `/usr/share/zoneinfo/right/Asia/Ho_Chi_Minh`
+- `/usr/share/zoneinfo/right/Asia/Hong_Kong`
+- `/usr/share/zoneinfo/right/Asia/Hovd`
+- `/usr/share/zoneinfo/right/Asia/Irkutsk`
+- `/usr/share/zoneinfo/right/Asia/Jakarta`
+- `/usr/share/zoneinfo/right/Asia/Jayapura`
+- `/usr/share/zoneinfo/right/Asia/Jerusalem`
+- `/usr/share/zoneinfo/right/Asia/Kabul`
+- `/usr/share/zoneinfo/right/Asia/Kamchatka`
+- `/usr/share/zoneinfo/right/Asia/Karachi`
+- `/usr/share/zoneinfo/right/Asia/Kathmandu`
+- `/usr/share/zoneinfo/right/Asia/Khandyga`
+- `/usr/share/zoneinfo/right/Asia/Kolkata`
+- `/usr/share/zoneinfo/right/Asia/Krasnoyarsk`
+- `/usr/share/zoneinfo/right/Asia/Kuala_Lumpur`
+- `/usr/share/zoneinfo/right/Asia/Kuching`
+- `/usr/share/zoneinfo/right/Asia/Kuwait`
+- `/usr/share/zoneinfo/right/Asia/Macau`
+- `/usr/share/zoneinfo/right/Asia/Magadan`
+- `/usr/share/zoneinfo/right/Asia/Makassar`
+- `/usr/share/zoneinfo/right/Asia/Manila`
+- `/usr/share/zoneinfo/right/Asia/Muscat`
+- `/usr/share/zoneinfo/right/Asia/Nicosia`
+- `/usr/share/zoneinfo/right/Asia/Novokuznetsk`
+- `/usr/share/zoneinfo/right/Asia/Novosibirsk`
+- `/usr/share/zoneinfo/right/Asia/Omsk`
+- `/usr/share/zoneinfo/right/Asia/Oral`
+- `/usr/share/zoneinfo/right/Asia/Phnom_Penh`
+- `/usr/share/zoneinfo/right/Asia/Pontianak`
+- `/usr/share/zoneinfo/right/Asia/Pyongyang`
+- `/usr/share/zoneinfo/right/Asia/Qatar`
+- `/usr/share/zoneinfo/right/Asia/Qostanay`
+- `/usr/share/zoneinfo/right/Asia/Qyzylorda`
+- `/usr/share/zoneinfo/right/Asia/Riyadh`
+- `/usr/share/zoneinfo/right/Asia/Sakhalin`
+- `/usr/share/zoneinfo/right/Asia/Samarkand`
+- `/usr/share/zoneinfo/right/Asia/Seoul`
+- `/usr/share/zoneinfo/right/Asia/Shanghai`
+- `/usr/share/zoneinfo/right/Asia/Singapore`
+- `/usr/share/zoneinfo/right/Asia/Srednekolymsk`
+- `/usr/share/zoneinfo/right/Asia/Taipei`
+- `/usr/share/zoneinfo/right/Asia/Tashkent`
+- `/usr/share/zoneinfo/right/Asia/Tbilisi`
+- `/usr/share/zoneinfo/right/Asia/Tehran`
+- `/usr/share/zoneinfo/right/Asia/Thimphu`
+- `/usr/share/zoneinfo/right/Asia/Tokyo`
+- `/usr/share/zoneinfo/right/Asia/Tomsk`
+- `/usr/share/zoneinfo/right/Asia/Ulaanbaatar`
+- `/usr/share/zoneinfo/right/Asia/Urumqi`
+- `/usr/share/zoneinfo/right/Asia/Ust-Nera`
+- `/usr/share/zoneinfo/right/Asia/Vientiane`
+- `/usr/share/zoneinfo/right/Asia/Vladivostok`
+- `/usr/share/zoneinfo/right/Asia/Yakutsk`
+- `/usr/share/zoneinfo/right/Asia/Yangon`
+- `/usr/share/zoneinfo/right/Asia/Yekaterinburg`
+- `/usr/share/zoneinfo/right/Asia/Yerevan`
+- `/usr/share/zoneinfo/right/Atlantic/Azores`
+- `/usr/share/zoneinfo/right/Atlantic/Bermuda`
+- `/usr/share/zoneinfo/right/Atlantic/Canary`
+- `/usr/share/zoneinfo/right/Atlantic/Cape_Verde`
+- `/usr/share/zoneinfo/right/Atlantic/Faroe`
+- `/usr/share/zoneinfo/right/Atlantic/Madeira`
+- `/usr/share/zoneinfo/right/Atlantic/Reykjavik`
+- `/usr/share/zoneinfo/right/Atlantic/South_Georgia`
+- `/usr/share/zoneinfo/right/Atlantic/St_Helena`
+- `/usr/share/zoneinfo/right/Atlantic/Stanley`
+- `/usr/share/zoneinfo/right/Australia/Adelaide`
+- `/usr/share/zoneinfo/right/Australia/Brisbane`
+- `/usr/share/zoneinfo/right/Australia/Broken_Hill`
+- `/usr/share/zoneinfo/right/Australia/Darwin`
+- `/usr/share/zoneinfo/right/Australia/Eucla`
+- `/usr/share/zoneinfo/right/Australia/Hobart`
+- `/usr/share/zoneinfo/right/Australia/Lindeman`
+- `/usr/share/zoneinfo/right/Australia/Lord_Howe`
+- `/usr/share/zoneinfo/right/Australia/Melbourne`
+- `/usr/share/zoneinfo/right/Australia/Perth`
+- `/usr/share/zoneinfo/right/Australia/Sydney`
+- `/usr/share/zoneinfo/right/CET`
+- `/usr/share/zoneinfo/right/CST6CDT`
+- `/usr/share/zoneinfo/right/EET`
+- `/usr/share/zoneinfo/right/EST`
+- `/usr/share/zoneinfo/right/EST5EDT`
+- `/usr/share/zoneinfo/right/Etc/GMT`
+- `/usr/share/zoneinfo/right/Etc/GMT+1`
+- `/usr/share/zoneinfo/right/Etc/GMT+10`
+- `/usr/share/zoneinfo/right/Etc/GMT+11`
+- `/usr/share/zoneinfo/right/Etc/GMT+12`
+- `/usr/share/zoneinfo/right/Etc/GMT+2`
+- `/usr/share/zoneinfo/right/Etc/GMT+3`
+- `/usr/share/zoneinfo/right/Etc/GMT+4`
+- `/usr/share/zoneinfo/right/Etc/GMT+5`
+- `/usr/share/zoneinfo/right/Etc/GMT+6`
+- `/usr/share/zoneinfo/right/Etc/GMT+7`
+- `/usr/share/zoneinfo/right/Etc/GMT+8`
+- `/usr/share/zoneinfo/right/Etc/GMT+9`
+- `/usr/share/zoneinfo/right/Etc/GMT-1`
+- `/usr/share/zoneinfo/right/Etc/GMT-10`
+- `/usr/share/zoneinfo/right/Etc/GMT-11`
+- `/usr/share/zoneinfo/right/Etc/GMT-12`
+- `/usr/share/zoneinfo/right/Etc/GMT-13`
+- `/usr/share/zoneinfo/right/Etc/GMT-14`
+- `/usr/share/zoneinfo/right/Etc/GMT-2`
+- `/usr/share/zoneinfo/right/Etc/GMT-3`
+- `/usr/share/zoneinfo/right/Etc/GMT-4`
+- `/usr/share/zoneinfo/right/Etc/GMT-5`
+- `/usr/share/zoneinfo/right/Etc/GMT-6`
+- `/usr/share/zoneinfo/right/Etc/GMT-7`
+- `/usr/share/zoneinfo/right/Etc/GMT-8`
+- `/usr/share/zoneinfo/right/Etc/GMT-9`
+- `/usr/share/zoneinfo/right/Etc/UTC`
+- `/usr/share/zoneinfo/right/Europe/Amsterdam`
+- `/usr/share/zoneinfo/right/Europe/Andorra`
+- `/usr/share/zoneinfo/right/Europe/Astrakhan`
+- `/usr/share/zoneinfo/right/Europe/Athens`
+- `/usr/share/zoneinfo/right/Europe/Belgrade`
+- `/usr/share/zoneinfo/right/Europe/Berlin`
+- `/usr/share/zoneinfo/right/Europe/Brussels`
+- `/usr/share/zoneinfo/right/Europe/Bucharest`
+- `/usr/share/zoneinfo/right/Europe/Budapest`
+- `/usr/share/zoneinfo/right/Europe/Chisinau`
+- `/usr/share/zoneinfo/right/Europe/Copenhagen`
+- `/usr/share/zoneinfo/right/Europe/Dublin`
+- `/usr/share/zoneinfo/right/Europe/Gibraltar`
+- `/usr/share/zoneinfo/right/Europe/Guernsey`
+- `/usr/share/zoneinfo/right/Europe/Helsinki`
+- `/usr/share/zoneinfo/right/Europe/Isle_of_Man`
+- `/usr/share/zoneinfo/right/Europe/Istanbul`
+- `/usr/share/zoneinfo/right/Europe/Jersey`
+- `/usr/share/zoneinfo/right/Europe/Kaliningrad`
+- `/usr/share/zoneinfo/right/Europe/Kirov`
+- `/usr/share/zoneinfo/right/Europe/Kyiv`
+- `/usr/share/zoneinfo/right/Europe/Lisbon`
+- `/usr/share/zoneinfo/right/Europe/Ljubljana`
+- `/usr/share/zoneinfo/right/Europe/London`
+- `/usr/share/zoneinfo/right/Europe/Luxembourg`
+- `/usr/share/zoneinfo/right/Europe/Madrid`
+- `/usr/share/zoneinfo/right/Europe/Malta`
+- `/usr/share/zoneinfo/right/Europe/Minsk`
+- `/usr/share/zoneinfo/right/Europe/Monaco`
+- `/usr/share/zoneinfo/right/Europe/Moscow`
+- `/usr/share/zoneinfo/right/Europe/Oslo`
+- `/usr/share/zoneinfo/right/Europe/Paris`
+- `/usr/share/zoneinfo/right/Europe/Prague`
+- `/usr/share/zoneinfo/right/Europe/Riga`
+- `/usr/share/zoneinfo/right/Europe/Rome`
+- `/usr/share/zoneinfo/right/Europe/Samara`
+- `/usr/share/zoneinfo/right/Europe/Sarajevo`
+- `/usr/share/zoneinfo/right/Europe/Saratov`
+- `/usr/share/zoneinfo/right/Europe/Simferopol`
+- `/usr/share/zoneinfo/right/Europe/Skopje`
+- `/usr/share/zoneinfo/right/Europe/Sofia`
+- `/usr/share/zoneinfo/right/Europe/Stockholm`
+- `/usr/share/zoneinfo/right/Europe/Tallinn`
+- `/usr/share/zoneinfo/right/Europe/Tirane`
+- `/usr/share/zoneinfo/right/Europe/Ulyanovsk`
+- `/usr/share/zoneinfo/right/Europe/Vaduz`
+- `/usr/share/zoneinfo/right/Europe/Vienna`
+- `/usr/share/zoneinfo/right/Europe/Vilnius`
+- `/usr/share/zoneinfo/right/Europe/Volgograd`
+- `/usr/share/zoneinfo/right/Europe/Warsaw`
+- `/usr/share/zoneinfo/right/Europe/Zagreb`
+- `/usr/share/zoneinfo/right/Europe/Zurich`
+- `/usr/share/zoneinfo/right/Factory`
+- `/usr/share/zoneinfo/right/HST`
+- `/usr/share/zoneinfo/right/Indian/Antananarivo`
+- `/usr/share/zoneinfo/right/Indian/Chagos`
+- `/usr/share/zoneinfo/right/Indian/Christmas`
+- `/usr/share/zoneinfo/right/Indian/Cocos`
+- `/usr/share/zoneinfo/right/Indian/Comoro`
+- `/usr/share/zoneinfo/right/Indian/Kerguelen`
+- `/usr/share/zoneinfo/right/Indian/Mahe`
+- `/usr/share/zoneinfo/right/Indian/Maldives`
+- `/usr/share/zoneinfo/right/Indian/Mauritius`
+- `/usr/share/zoneinfo/right/Indian/Mayotte`
+- `/usr/share/zoneinfo/right/Indian/Reunion`
+- `/usr/share/zoneinfo/right/MET`
+- `/usr/share/zoneinfo/right/MST`
+- `/usr/share/zoneinfo/right/MST7MDT`
+- `/usr/share/zoneinfo/right/PST8PDT`
+- `/usr/share/zoneinfo/right/Pacific/Apia`
+- `/usr/share/zoneinfo/right/Pacific/Auckland`
+- `/usr/share/zoneinfo/right/Pacific/Bougainville`
+- `/usr/share/zoneinfo/right/Pacific/Chatham`
+- `/usr/share/zoneinfo/right/Pacific/Chuuk`
+- `/usr/share/zoneinfo/right/Pacific/Easter`
+- `/usr/share/zoneinfo/right/Pacific/Efate`
+- `/usr/share/zoneinfo/right/Pacific/Fakaofo`
+- `/usr/share/zoneinfo/right/Pacific/Fiji`
+- `/usr/share/zoneinfo/right/Pacific/Funafuti`
+- `/usr/share/zoneinfo/right/Pacific/Galapagos`
+- `/usr/share/zoneinfo/right/Pacific/Gambier`
+- `/usr/share/zoneinfo/right/Pacific/Guadalcanal`
+- `/usr/share/zoneinfo/right/Pacific/Guam`
+- `/usr/share/zoneinfo/right/Pacific/Honolulu`
+- `/usr/share/zoneinfo/right/Pacific/Kanton`
+- `/usr/share/zoneinfo/right/Pacific/Kiritimati`
+- `/usr/share/zoneinfo/right/Pacific/Kosrae`
+- `/usr/share/zoneinfo/right/Pacific/Kwajalein`
+- `/usr/share/zoneinfo/right/Pacific/Majuro`
+- `/usr/share/zoneinfo/right/Pacific/Marquesas`
+- `/usr/share/zoneinfo/right/Pacific/Midway`
+- `/usr/share/zoneinfo/right/Pacific/Nauru`
+- `/usr/share/zoneinfo/right/Pacific/Niue`
+- `/usr/share/zoneinfo/right/Pacific/Norfolk`
+- `/usr/share/zoneinfo/right/Pacific/Noumea`
+- `/usr/share/zoneinfo/right/Pacific/Pago_Pago`
+- `/usr/share/zoneinfo/right/Pacific/Palau`
+- `/usr/share/zoneinfo/right/Pacific/Pitcairn`
+- `/usr/share/zoneinfo/right/Pacific/Pohnpei`
+- `/usr/share/zoneinfo/right/Pacific/Port_Moresby`
+- `/usr/share/zoneinfo/right/Pacific/Rarotonga`
+- `/usr/share/zoneinfo/right/Pacific/Saipan`
+- `/usr/share/zoneinfo/right/Pacific/Tahiti`
+- `/usr/share/zoneinfo/right/Pacific/Tarawa`
+- `/usr/share/zoneinfo/right/Pacific/Tongatapu`
+- `/usr/share/zoneinfo/right/Pacific/Wake`
+- `/usr/share/zoneinfo/right/Pacific/Wallis`
+- `/usr/share/zoneinfo/right/WET`
+- `/var/lib/dpkg/info/base-files.md5sums`
+- `/var/lib/dpkg/info/bash.md5sums`
+- `/var/lib/dpkg/info/ca-certificates.config`
+- `/var/lib/dpkg/info/ca-certificates.list`
+- `/var/lib/dpkg/info/ca-certificates.md5sums`
+- `/var/lib/dpkg/info/curl.md5sums`
+- `/var/lib/dpkg/info/debian-archive-keyring.conffiles`
+- `/var/lib/dpkg/info/debian-archive-keyring.list`
+- `/var/lib/dpkg/info/debian-archive-keyring.md5sums`
+- `/var/lib/dpkg/info/debian-archive-keyring.postinst`
+- `/var/lib/dpkg/info/debian-archive-keyring.postrm`
+- `/var/lib/dpkg/info/debian-archive-keyring.preinst`
+- `/var/lib/dpkg/info/debian-archive-keyring.prerm`
+- `/var/lib/dpkg/info/e2fsprogs.list`
+- `/var/lib/dpkg/info/e2fsprogs.md5sums`
+- `/var/lib/dpkg/info/gcc-12-base:amd64.md5sums`
+- `/var/lib/dpkg/info/gpgv.md5sums`
+- `/var/lib/dpkg/info/init-system-helpers.list`
+- `/var/lib/dpkg/info/init-system-helpers.md5sums`
+- `/var/lib/dpkg/info/libabsl20220623:amd64.md5sums`
+- `/var/lib/dpkg/info/libaom3:amd64.md5sums`
+- `/var/lib/dpkg/info/libavif15:amd64.md5sums`
+- `/var/lib/dpkg/info/libc-bin.md5sums`
+- `/var/lib/dpkg/info/libc6:amd64.md5sums`
+- `/var/lib/dpkg/info/libcap2:amd64.md5sums`
+- `/var/lib/dpkg/info/libcom-err2:amd64.md5sums`
+- `/var/lib/dpkg/info/libcurl4:amd64.md5sums`
+- `/var/lib/dpkg/info/libexpat1:amd64.md5sums`
+- `/var/lib/dpkg/info/libext2fs2:amd64.md5sums`
+- `/var/lib/dpkg/info/libgcc-s1:amd64.md5sums`
+- `/var/lib/dpkg/info/libgnutls30:amd64.md5sums`
+- `/var/lib/dpkg/info/libgssapi-krb5-2:amd64.md5sums`
+- `/var/lib/dpkg/info/libicu72:amd64.md5sums`
+- `/var/lib/dpkg/info/libk5crypto3:amd64.md5sums`
+- `/var/lib/dpkg/info/libkrb5-3:amd64.md5sums`
+- `/var/lib/dpkg/info/libkrb5support0:amd64.md5sums`
+- `/var/lib/dpkg/info/libss2:amd64.md5sums`
+- `/var/lib/dpkg/info/libssl3:amd64.md5sums`
+- `/var/lib/dpkg/info/libstdc++6:amd64.md5sums`
+- `/var/lib/dpkg/info/libsystemd0:amd64.md5sums`
+- `/var/lib/dpkg/info/libtiff6:amd64.md5sums`
+- `/var/lib/dpkg/info/libudev1:amd64.md5sums`
+- `/var/lib/dpkg/info/libxml2:amd64.md5sums`
+- `/var/lib/dpkg/info/libxslt1.1:amd64.md5sums`
+- `/var/lib/dpkg/info/login.list`
+- `/var/lib/dpkg/info/login.md5sums`
+- `/var/lib/dpkg/info/logsave.list`
+- `/var/lib/dpkg/info/logsave.md5sums`
+- `/var/lib/dpkg/info/openssl.md5sums`
+- `/var/lib/dpkg/info/passwd.list`
+- `/var/lib/dpkg/info/passwd.md5sums`
+- `/var/lib/dpkg/info/perl-base.md5sums`
+- `/var/lib/dpkg/info/tzdata.md5sums`
+- `/var/lib/dpkg/status`
+
+</details>
+
+<details>
+<summary>🔄 Changed Components (40)</summary>
+
+| Name | Before | After | Drift |
+|------|--------|-------|-------|
+| base-files @ /var/lib/dpkg/status | 12.4+deb12u10 | 12.4+deb12u12 | 📦 Version |
+| bash @ /var/lib/dpkg/status | 5.2.15-2+b7 | 5.2.15-2+b9 | 📦 Version |
+| ca-certificates @ /var/lib/dpkg/status | 20230311 | 20230311+deb12u1 | 📦 Version |
+| curl @ /var/lib/dpkg/status | 7.88.1-10+deb12u12 | 7.88.1-10+deb12u14 | 📦 Version |
+| debian-archive-keyring @ /var/lib/dpkg/status | 2023.3+deb12u1 | 2023.3+deb12u2 | 📦 Version |
+| e2fsprogs @ /var/lib/dpkg/status | 1.47.0-2 | 1.47.0-2+b2 | 📦 Version |
+| gcc-12-base @ /var/lib/dpkg/status | 12.2.0-14 | 12.2.0-14+deb12u1 | 📦 Version |
+| gpgv @ /var/lib/dpkg/status | 2.2.40-1.1 | 2.2.40-1.1+deb12u1 | 📦 Version |
+| init-system-helpers @ /var/lib/dpkg/status | 1.65.2 | 1.65.2+deb12u1 | 📦 Version |
+| libabsl20220623 @ /var/lib/dpkg/status | 20220623.1-1 | 20220623.1-1+deb12u2 | 📦 Version |
+| libaom3 @ /var/lib/dpkg/status | 3.6.0-1+deb12u1 | 3.6.0-1+deb12u2 | 📦 Version |
+| libavif15 @ /var/lib/dpkg/status | 0.11.1-1 | 0.11.1-1+deb12u1 | 📦 Version |
+| libc-bin @ /var/lib/dpkg/status | 2.36-9+deb12u10 | 2.36-9+deb12u13 | 📦 Version |
+| libc6 @ /var/lib/dpkg/status | 2.36-9+deb12u10 | 2.36-9+deb12u13 | 📦 Version |
+| libcap2 @ /var/lib/dpkg/status | 1:2.66-4 | 1:2.66-4+deb12u2 | 📦 Version |
+| libcom-err2 @ /var/lib/dpkg/status | 1.47.0-2 | 1.47.0-2+b2 | 📦 Version |
+| libcurl4 @ /var/lib/dpkg/status | 7.88.1-10+deb12u12 | 7.88.1-10+deb12u14 | 📦 Version |
+| libexpat1 @ /var/lib/dpkg/status | 2.5.0-1+deb12u1 | 2.5.0-1+deb12u2 | 📦 Version |
+| libext2fs2 @ /var/lib/dpkg/status | 1.47.0-2 | 1.47.0-2+b2 | 📦 Version |
+| libgcc-s1 @ /var/lib/dpkg/status | 12.2.0-14 | 12.2.0-14+deb12u1 | 📦 Version |
+| libgnutls30 @ /var/lib/dpkg/status | 3.7.9-2+deb12u4 | 3.7.9-2+deb12u5 | 📦 Version |
+| libgssapi-krb5-2 @ /var/lib/dpkg/status | 1.20.1-2+deb12u2 | 1.20.1-2+deb12u4 | 📦 Version |
+| libicu72 @ /var/lib/dpkg/status | 72.1-3 | 72.1-3+deb12u1 | 📦 Version |
+| libk5crypto3 @ /var/lib/dpkg/status | 1.20.1-2+deb12u2 | 1.20.1-2+deb12u4 | 📦 Version |
+| libkrb5-3 @ /var/lib/dpkg/status | 1.20.1-2+deb12u2 | 1.20.1-2+deb12u4 | 📦 Version |
+| libkrb5support0 @ /var/lib/dpkg/status | 1.20.1-2+deb12u2 | 1.20.1-2+deb12u4 | 📦 Version |
+| libss2 @ /var/lib/dpkg/status | 1.47.0-2 | 1.47.0-2+b2 | 📦 Version |
+| libssl3 @ /var/lib/dpkg/status | 3.0.15-1~deb12u1 | 3.0.17-1~deb12u3 | 📦 Version |
+| libstdc++6 @ /var/lib/dpkg/status | 12.2.0-14 | 12.2.0-14+deb12u1 | 📦 Version |
+| libsystemd0 @ /var/lib/dpkg/status | 252.36-1~deb12u1 | 252.39-1~deb12u1 | 📦 Version |
+| libtiff6 @ /var/lib/dpkg/status | 4.5.0-6+deb12u2 | 4.5.0-6+deb12u3 | 📦 Version |
+| libudev1 @ /var/lib/dpkg/status | 252.36-1~deb12u1 | 252.39-1~deb12u1 | 📦 Version |
+| libxml2 @ /var/lib/dpkg/status | 2.9.14+dfsg-1.3~deb12u1 | 2.9.14+dfsg-1.3~deb12u4 | 📦 Version |
+| libxslt1.1 @ /var/lib/dpkg/status | 1.1.35-1+deb12u1 | 1.1.35-1+deb12u3 | 📦 Version |
+| login @ /var/lib/dpkg/status | 1:4.13+dfsg1-1+b1 | 1:4.13+dfsg1-1+deb12u1 | 📦 Version |
+| logsave @ /var/lib/dpkg/status | 1.47.0-2 | 1.47.0-2+b2 | 📦 Version |
+| openssl @ /var/lib/dpkg/status | 3.0.15-1~deb12u1 | 3.0.17-1~deb12u3 | 📦 Version |
+| passwd @ /var/lib/dpkg/status | 1:4.13+dfsg1-1+b1 | 1:4.13+dfsg1-1+deb12u1 | 📦 Version |
+| perl-base @ /var/lib/dpkg/status | 5.36.0-7+deb12u1 | 5.36.0-7+deb12u3 | 📦 Version |
+| tzdata @ /var/lib/dpkg/status | 2025b-0+deb12u1 | 2025b-0+deb12u2 | 📦 Version |
+
+</details>
+
+---
+*Generated by [sbomlyze](https://github.com/rezmoss/sbomlyze) at 2026-11-09T02:06:24Z*
+

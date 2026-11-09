@@ -1,0 +1,1496 @@
+{
+  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "sbomlyze",
+          "version": "dev",
+          "informationUri": "https://github.com/rezmoss/sbomlyze",
+          "rules": [
+            {
+              "id": "integrity-drift",
+              "name": "Integrity Drift Detected",
+              "shortDescription": {
+                "text": "Package digest changed without a version change"
+              },
+              "fullDescription": {
+                "text": ""
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "supply-chain"
+                ]
+              }
+            },
+            {
+              "id": "owned-file-drift",
+              "name": "Owned File Drift Detected",
+              "shortDescription": {
+                "text": "Files owned by a package changed without a version change"
+              },
+              "fullDescription": {
+                "text": ""
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "supply-chain"
+                ]
+              }
+            },
+            {
+              "id": "new-component",
+              "name": "New Component Added",
+              "shortDescription": {
+                "text": "A new component was added to the SBOM"
+              },
+              "fullDescription": {
+                "text": ""
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              }
+            },
+            {
+              "id": "removed-component",
+              "name": "Component Removed",
+              "shortDescription": {
+                "text": "A component was removed from the SBOM"
+              },
+              "fullDescription": {
+                "text": ""
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              }
+            },
+            {
+              "id": "version-change",
+              "name": "Version Changed",
+              "shortDescription": {
+                "text": "Component version was updated"
+              },
+              "fullDescription": {
+                "text": ""
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              }
+            },
+            {
+              "id": "deep-dependency",
+              "name": "Deep Transitive Dependency",
+              "shortDescription": {
+                "text": "New dependency introduced at depth 3 or greater"
+              },
+              "fullDescription": {
+                "text": ""
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "supply-chain"
+                ]
+              }
+            },
+            {
+              "id": "policy-violation",
+              "name": "Policy Violation",
+              "shortDescription": {
+                "text": "SBOM policy rule was violated"
+              },
+              "fullDescription": {
+                "text": ""
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "deep-dependency",
+          "level": "warning",
+          "message": {
+            "text": "New transitive dependency pkg:cargo/shlex at depth 4"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "ee133dfbcdc56a8d9ed7dda3c82d8891:1"
+          }
+        },
+        {
+          "ruleId": "deep-dependency",
+          "level": "warning",
+          "message": {
+            "text": "New transitive dependency pkg:cargo/windows-sys at depth 3"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "09aca6dd116b48ef154763c5f11d069d:1"
+          }
+        },
+        {
+          "ruleId": "deep-dependency",
+          "level": "warning",
+          "message": {
+            "text": "New transitive dependency pkg:cargo/windows-targets at depth 4"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "a91e570781a066995547e51ad467fa8a:1"
+          }
+        },
+        {
+          "ruleId": "deep-dependency",
+          "level": "warning",
+          "message": {
+            "text": "New transitive dependency pkg:cargo/windows_aarch64_gnullvm at depth 5"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "3e931beff8fd2e7f14f11086a55d5315:1"
+          }
+        },
+        {
+          "ruleId": "deep-dependency",
+          "level": "warning",
+          "message": {
+            "text": "New transitive dependency pkg:cargo/windows_aarch64_msvc at depth 5"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "5abad9679ae342ec37d62a9c4f3633ca:1"
+          }
+        },
+        {
+          "ruleId": "deep-dependency",
+          "level": "warning",
+          "message": {
+            "text": "New transitive dependency pkg:cargo/windows_i686_gnu at depth 5"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b95f4eac029496776a3171fedbfe6035:1"
+          }
+        },
+        {
+          "ruleId": "deep-dependency",
+          "level": "warning",
+          "message": {
+            "text": "New transitive dependency pkg:cargo/windows_i686_gnullvm at depth 5"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "c486b3c87af5c66af0dfc5c611d8bc83:1"
+          }
+        },
+        {
+          "ruleId": "deep-dependency",
+          "level": "warning",
+          "message": {
+            "text": "New transitive dependency pkg:cargo/windows_i686_msvc at depth 5"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "de36ee61eee941667fce2c1459a82f73:1"
+          }
+        },
+        {
+          "ruleId": "deep-dependency",
+          "level": "warning",
+          "message": {
+            "text": "New transitive dependency pkg:cargo/windows_x86_64_gnu at depth 5"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "3ace1f5949a6168bd102fb796004788e:1"
+          }
+        },
+        {
+          "ruleId": "deep-dependency",
+          "level": "warning",
+          "message": {
+            "text": "New transitive dependency pkg:cargo/windows_x86_64_gnullvm at depth 5"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "81f2a885180b7059b5f8b2b0f5058c56:1"
+          }
+        },
+        {
+          "ruleId": "deep-dependency",
+          "level": "warning",
+          "message": {
+            "text": "New transitive dependency pkg:cargo/windows_x86_64_msvc at depth 5"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "86c84d75b5be0d75a61d981847b6106b:1"
+          }
+        },
+        {
+          "ruleId": "new-component",
+          "level": "note",
+          "message": {
+            "text": "New component added: shlex 1.3.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "7d9ca127371d599de8a9b30c36513fba:1"
+          }
+        },
+        {
+          "ruleId": "new-component",
+          "level": "note",
+          "message": {
+            "text": "New component added: windows-sys 0.59.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "67227ab71aaae48b59a7aa6811ace891:1"
+          }
+        },
+        {
+          "ruleId": "new-component",
+          "level": "note",
+          "message": {
+            "text": "New component added: windows-targets 0.52.6"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "70bf9d4241028d5dfe80485b272d2407:1"
+          }
+        },
+        {
+          "ruleId": "new-component",
+          "level": "note",
+          "message": {
+            "text": "New component added: windows_aarch64_gnullvm 0.52.6"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "471e76b8619ca495f236cac6f369be75:1"
+          }
+        },
+        {
+          "ruleId": "new-component",
+          "level": "note",
+          "message": {
+            "text": "New component added: windows_aarch64_msvc 0.52.6"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "df53b62cfb692efd1ccfb171cf7be51c:1"
+          }
+        },
+        {
+          "ruleId": "new-component",
+          "level": "note",
+          "message": {
+            "text": "New component added: windows_i686_gnu 0.52.6"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "fc94bd21caa812bb79d49dde45e3559e:1"
+          }
+        },
+        {
+          "ruleId": "new-component",
+          "level": "note",
+          "message": {
+            "text": "New component added: windows_i686_gnullvm 0.52.6"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "e3f48009f24c25d8fbc62b852f591cd8:1"
+          }
+        },
+        {
+          "ruleId": "new-component",
+          "level": "note",
+          "message": {
+            "text": "New component added: windows_i686_msvc 0.52.6"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "3bbca6889c956642a1852c389a631ac5:1"
+          }
+        },
+        {
+          "ruleId": "new-component",
+          "level": "note",
+          "message": {
+            "text": "New component added: windows_x86_64_gnu 0.52.6"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "98b0da437dfa4f6f8d5b0dc8a8e22ca2:1"
+          }
+        },
+        {
+          "ruleId": "new-component",
+          "level": "note",
+          "message": {
+            "text": "New component added: windows_x86_64_gnullvm 0.52.6"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "29e27fe111795033fa6f5fdd03ec7d3c:1"
+          }
+        },
+        {
+          "ruleId": "new-component",
+          "level": "note",
+          "message": {
+            "text": "New component added: windows_x86_64_msvc 0.52.6"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "c57747b6adf73d36ff4f66104296c83b:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: autocfg 1.1.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "ca7add065a33e4512730501106164792:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: libm 0.2.8"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "8492cb26f92a06ac629b0a7488013e66:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: memoffset 0.9.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "5880deb614a2829929d77a5d733b2043:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: num-traits 0.2.17"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "8a5c1b92c8cab5831b2ec4ab308179fe:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: packed_simd 0.3.9"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "8b72643a78da668f524d86e7b6ddc0ba:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: scopeguard 1.2.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "be0f8a08293e142e82b439ca6f3fcb57:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: winapi 0.3.9"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "d36290bf9693c4b12d28f053d5d38bf4:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: winapi-i686-pc-windows-gnu 0.4.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "36166e39900c370357691cbce04e4158:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: winapi-x86_64-pc-windows-gnu 0.4.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "bc2b8c50722cb5e6510ea69937f3bf7a:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component globset @ /Cargo.lock version changed: 0.4.14 -\u003e 0.4.15"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "6c67f0871ea6d1938adcd04706beed92:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component grep-cli @ /Cargo.lock version changed: 0.1.10 -\u003e 0.1.11"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "cc36c15a640b0234335087431098f61d:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component grep-pcre2 @ /Cargo.lock version changed: 0.1.7 -\u003e 0.1.8"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "76a16966e996f62a2913f85fcb393937:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component grep-printer @ /Cargo.lock version changed: 0.2.1 -\u003e 0.2.2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "c8fe9fb71d4d4c7534e82263a2bbf449:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component grep-regex @ /Cargo.lock version changed: 0.1.12 -\u003e 0.1.13"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "25a561c213b04e5652f24b5f11d0f808:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component grep-searcher @ /Cargo.lock version changed: 0.1.13 -\u003e 0.1.14"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "a7e784eb6a0cdec6ea323656d1781745:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component grep @ /Cargo.lock version changed: 0.3.1 -\u003e 0.3.2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "d9d3ebfca964eb139063de9b572dba9c:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component ignore @ /Cargo.lock version changed: 0.4.21 -\u003e 0.4.23"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "e2923a612a445dff39bde279feccc937:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component ripgrep @ /Cargo.lock version changed: 14.0.3 -\u003e 14.1.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "8db7827a054a32da4db4035c7d2019b9:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component aho-corasick @ /Cargo.lock version changed: 1.1.2 -\u003e 1.1.3"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "034f111ff19c343546510136a4c1a7c4:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component anyhow @ /Cargo.lock version changed: 1.0.75 -\u003e 1.0.87"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "605a2a7c1b0457b46842d7b542294d0b:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component bstr @ /Cargo.lock version changed: 1.8.0 -\u003e 1.10.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "76b59c9c5d0c794ef14bafc610847f82:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component cc @ /Cargo.lock version changed: 1.0.83 -\u003e 1.1.18"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "d377ce2bd65e5f4bacb2ae285f26720f:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component crossbeam-channel @ /Cargo.lock version changed: 0.5.8 -\u003e 0.5.13"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "65890fd56ab692417e8328fa86f46977:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component crossbeam-deque @ /Cargo.lock version changed: 0.8.3 -\u003e 0.8.5"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "522df7144c74ed4f37f45c3ecc8138d4:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component crossbeam-epoch @ /Cargo.lock version changed: 0.9.15 -\u003e 0.9.18"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "0cf0f478a03fdd3d3cb99f5d8ba7eb27:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component crossbeam-utils @ /Cargo.lock version changed: 0.8.16 -\u003e 0.8.20"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "2cfdf97f4739da82b656da485ffc62fa:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component encoding_rs @ /Cargo.lock version changed: 0.8.33 -\u003e 0.8.34"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "ebd5d6e7d644f4f9c1e87cf302d5f629:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component itoa @ /Cargo.lock version changed: 1.0.9 -\u003e 1.0.11"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "0bd33642917990e7370ff07809749c76:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component jobserver @ /Cargo.lock version changed: 0.1.27 -\u003e 0.1.32"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "244d47bc0d42f17be6d4d30ff58dc822:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libc @ /Cargo.lock version changed: 0.2.150 -\u003e 0.2.158"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "c12057d01376ff1ae0e6a24ae1946d2f:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component log @ /Cargo.lock version changed: 0.4.20 -\u003e 0.4.22"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "9892a0f13c0e39034cb110ddc9442e70:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component memchr @ /Cargo.lock version changed: 2.6.4 -\u003e 2.7.4"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "e34eab5768e18906f1a639edc38e6cd5:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component memmap2 @ /Cargo.lock version changed: 0.9.0 -\u003e 0.9.4"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "9793294abc0e1d5a461ec4a4f5ebcbd1:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component pcre2 @ /Cargo.lock version changed: 0.2.6 -\u003e 0.2.9"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "06ad63d512579e9b0c33bb20b60fdae8:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component pcre2-sys @ /Cargo.lock version changed: 0.2.7 -\u003e 0.2.9"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "d03d0e172c63735dc94efb578d3e24c9:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component pkg-config @ /Cargo.lock version changed: 0.3.27 -\u003e 0.3.30"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "804e5422cbbce6da5412870962d558cb:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component proc-macro2 @ /Cargo.lock version changed: 1.0.70 -\u003e 1.0.86"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "dc1f30d914b7aec9972d4eb622eabf27:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component quote @ /Cargo.lock version changed: 1.0.33 -\u003e 1.0.37"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "6fe09ddf213167e17bd9b55bc1e24a4c:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component regex @ /Cargo.lock version changed: 1.10.2 -\u003e 1.10.6"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "6a3797699e22c1488e45f2c499f36755:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component regex-automata @ /Cargo.lock version changed: 0.4.3 -\u003e 0.4.7"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "4706b6f17b8df79ead5a4f7a0fae601b:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component regex-syntax @ /Cargo.lock version changed: 0.8.2 -\u003e 0.8.4"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "28674423945b8d705aa5e177a41ae6ec:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component ryu @ /Cargo.lock version changed: 1.0.15 -\u003e 1.0.18"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "cf194ee0bbba389158c5c8119cca93c1:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component serde @ /Cargo.lock version changed: 1.0.193 -\u003e 1.0.210"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "6e6e9f015f44675159805cb1aa820625:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component serde_derive @ /Cargo.lock version changed: 1.0.193 -\u003e 1.0.210"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "eff870a4e61f06659d9d5f4b2e55f553:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component serde_json @ /Cargo.lock version changed: 1.0.108 -\u003e 1.0.128"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "1361d3c1023c5a88f0ddfd00b9d0024b:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component syn @ /Cargo.lock version changed: 2.0.39 -\u003e 2.0.77"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "f4f832f902e02f4c5f0c23432b0fb118:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component termcolor @ /Cargo.lock version changed: 1.4.0 -\u003e 1.4.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "52546a6658d0a2b9f1acbec317cdb48a:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component textwrap @ /Cargo.lock version changed: 0.16.0 -\u003e 0.16.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "6ff2f77390dfbfab76a575b6a2cbb5da:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component walkdir @ /Cargo.lock version changed: 2.4.0 -\u003e 2.5.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "a3842d082447ac0bedb7e57e5e429210:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component winapi-util @ /Cargo.lock version changed: 0.1.6 -\u003e 0.1.9"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ripgrep-14.1.1.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "924ed25f178517b4df4b171696568759:1"
+          }
+        }
+      ]
+    }
+  ]
+}

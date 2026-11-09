@@ -1,0 +1,3320 @@
+{
+  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "sbomlyze",
+          "version": "dev",
+          "informationUri": "https://github.com/rezmoss/sbomlyze",
+          "rules": [
+            {
+              "id": "integrity-drift",
+              "name": "Integrity Drift Detected",
+              "shortDescription": {
+                "text": "Package digest changed without a version change"
+              },
+              "fullDescription": {
+                "text": ""
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "supply-chain"
+                ]
+              }
+            },
+            {
+              "id": "owned-file-drift",
+              "name": "Owned File Drift Detected",
+              "shortDescription": {
+                "text": "Files owned by a package changed without a version change"
+              },
+              "fullDescription": {
+                "text": ""
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "supply-chain"
+                ]
+              }
+            },
+            {
+              "id": "new-component",
+              "name": "New Component Added",
+              "shortDescription": {
+                "text": "A new component was added to the SBOM"
+              },
+              "fullDescription": {
+                "text": ""
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              }
+            },
+            {
+              "id": "removed-component",
+              "name": "Component Removed",
+              "shortDescription": {
+                "text": "A component was removed from the SBOM"
+              },
+              "fullDescription": {
+                "text": ""
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              }
+            },
+            {
+              "id": "version-change",
+              "name": "Version Changed",
+              "shortDescription": {
+                "text": "Component version was updated"
+              },
+              "fullDescription": {
+                "text": ""
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              }
+            },
+            {
+              "id": "deep-dependency",
+              "name": "Deep Transitive Dependency",
+              "shortDescription": {
+                "text": "New dependency introduced at depth 3 or greater"
+              },
+              "fullDescription": {
+                "text": ""
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "supply-chain"
+                ]
+              }
+            },
+            {
+              "id": "policy-violation",
+              "name": "Policy Violation",
+              "shortDescription": {
+                "text": "SBOM policy rule was violated"
+              },
+              "fullDescription": {
+                "text": ""
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "owned-file-drift",
+          "level": "error",
+          "message": {
+            "text": "Package scanelf 1.3.7-r2 changed owned files without a version change: modified /usr/bin/scanelf"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "ef34197b145f1991b56b932549f4a5a9:1"
+          }
+        },
+        {
+          "ruleId": "new-component",
+          "level": "note",
+          "message": {
+            "text": "New component added: @npmcli/redact 2.0.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "1d928e43808ce6c7dfa820cade350a16:1"
+          }
+        },
+        {
+          "ruleId": "new-component",
+          "level": "note",
+          "message": {
+            "text": "New component added: @sigstore/core 1.1.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "92cd5794547c3226b5009cf37611b966:1"
+          }
+        },
+        {
+          "ruleId": "new-component",
+          "level": "note",
+          "message": {
+            "text": "New component added: @sigstore/verify 1.2.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "2b781413f4e0628ae75ee8d9d8d11656:1"
+          }
+        },
+        {
+          "ruleId": "new-component",
+          "level": "note",
+          "message": {
+            "text": "New component added: ansi-regex 6.0.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "35883eedc27f0b6b2049fc673c0f492f:1"
+          }
+        },
+        {
+          "ruleId": "new-component",
+          "level": "note",
+          "message": {
+            "text": "New component added: ansi-regex 6.0.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "6de15ebff9cfdfe0617473d400ddf739:1"
+          }
+        },
+        {
+          "ruleId": "new-component",
+          "level": "note",
+          "message": {
+            "text": "New component added: ip-address 9.0.5"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "1250e3f5034f772cb6c59b6d280e8568:1"
+          }
+        },
+        {
+          "ruleId": "new-component",
+          "level": "note",
+          "message": {
+            "text": "New component added: jsbn 1.1.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "bfa00888722676db478485f1ce6d72ef:1"
+          }
+        },
+        {
+          "ruleId": "new-component",
+          "level": "note",
+          "message": {
+            "text": "New component added: package-json-from-dist 1.0.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "50e9b5ab58ec89ccff08c334e4a08f4e:1"
+          }
+        },
+        {
+          "ruleId": "new-component",
+          "level": "note",
+          "message": {
+            "text": "New component added: proc-log 3.0.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "8d2e7859e0d0b28e621ef018da0c676b:1"
+          }
+        },
+        {
+          "ruleId": "new-component",
+          "level": "note",
+          "message": {
+            "text": "New component added: proggy 2.0.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "11c00471d9b666c6e6b4e5ad9c7df5de:1"
+          }
+        },
+        {
+          "ruleId": "new-component",
+          "level": "note",
+          "message": {
+            "text": "New component added: spdx-expression-parse 3.0.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "f5cb7688ac2a2b4b82ec04bddb20a90d:1"
+          }
+        },
+        {
+          "ruleId": "new-component",
+          "level": "note",
+          "message": {
+            "text": "New component added: spdx-expression-parse 3.0.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "3744a02654595459ba5b2b3489acdcb2:1"
+          }
+        },
+        {
+          "ruleId": "new-component",
+          "level": "note",
+          "message": {
+            "text": "New component added: sprintf-js 1.1.3"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "244ad2a50b65488f686a1e43cde29315:1"
+          }
+        },
+        {
+          "ruleId": "new-component",
+          "level": "note",
+          "message": {
+            "text": "New component added: strip-ansi 7.1.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "72d478ebd2ad743f9b3a0ac5958c39f4:1"
+          }
+        },
+        {
+          "ruleId": "new-component",
+          "level": "note",
+          "message": {
+            "text": "New component added: strip-ansi 7.1.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "a486f0aef45f132b088dabc916d14998:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: libc-utils 0.7.2-r5"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "73ece4f043b458b10e108f9762bcb0cf:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: @colors/colors 1.5.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "dfc28eb89acf1b83813990f3c4ea22a1:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: @npmcli/disparity-colors 3.0.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "3c436681b4843bd2c40d34a67b2573dd:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: abort-controller 3.0.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "fdab95f68a24eed9652a93d69a2479b4:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: ansi-regex 5.0.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "2feb26b9ccad4919602df2fa91f833de:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: ansi-regex 5.0.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "1576fb5117e12661ddbebe5040a3e857:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: ansi-regex 5.0.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "7e40580d23e30a299a2dd35a415ec966:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: ansi-regex 5.0.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "0443d888094db190a534b4a9473b0444:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: ansi-regex 5.0.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "236c1dba3cdac33872a689700ab25353:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: ansi-regex 5.0.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "ff5fc8f38dcbc7fd1507fd9bd098302f:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: ansi-regex 5.0.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "3c100371fb880f4d6559cafc2cc259db:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: ansi-styles 4.3.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "bfdffdcfd6ea876fcd5c50fc6284d765:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: are-we-there-yet 4.0.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "10cb79dc466b88785b8d3e9f80b7bdd3:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: base64-js 1.5.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "cc99afb6debb6644818ede0dd44f2a7f:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: buffer 6.0.3"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "7b48ea0367fe2f7d7098d8a0d55eef0f:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: builtins 5.0.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "8455806d71e6d05f1caf3549305c88fc:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: cli-table3 0.6.3"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "e016db194cff3077f072b35d6e847569:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: clone 1.0.4"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "ee26d97c4ad626379af79554ee62eeea:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: color-support 1.1.3"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "5c245fa4a076d47aefea7f3efb0ff7b5:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: columnify 1.6.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "16097260da6866a3d8ce25982a4a44f1:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: console-control-strings 1.1.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "9d17dc76ca1f9d7be6ce83a5071a641d:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: defaults 1.0.4"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "ee25c13c0dc9dc546fe8bfdb209f56dd:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: delegates 1.0.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "d9c03be65fc7377ff139a4067acb5d84:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: event-target-shim 5.0.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "60fb352a797adc3715d6fc3c4deb9b7c:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: events 3.3.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "24d7372c8e9252f46a9cf834a3366d8e:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: function-bind 1.1.2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "2d0a46345d8c70ce8a15b845fd42a650:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: gauge 5.0.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "36a50061816bf535bd28f408f0c1d5c4:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: has-unicode 2.0.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "74ccfc394bae12d02d8f402e8e9d73e3:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: hasown 2.0.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "8a94958fc41ccaa67c7ff7a53167760e:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: ieee754 1.2.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "bca4b1246361fe9dd56422df2a410dc4:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: ip 2.0.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "97e5181b29fcf4bec18510edca7d2e09:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: is-core-module 2.13.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "60598167696a68d8dfcb85df73dd3cfe:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: lru-cache 6.0.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "c93783ab0bd28b7f7746eab3bb169bb8:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: minipass 3.3.6"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "48eecb43811c92add6a2adf722b85dfb:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: minipass 3.3.6"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "a3482f644cd1dd6d43dad56d6b144c5d:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: minipass-json-stream 1.0.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "e670025403f17a6b6339d158907eb841:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: npmlog 7.0.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "3560f01d5b7c3edd0a7553e082050d53:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: process 0.11.10"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b2edaa5435b0720ff8213f301a3d0f72:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: read-package-json 7.0.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b332bc80f02f0853fa37aa0ea004138b:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: readable-stream 4.4.2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "ec85952abc79e55319abc23480c5b5f4:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: safe-buffer 5.2.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "7ba820f211e4aa434836ebcc53666a3f:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: set-blocking 2.0.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "3f557f46cea6b471c61487f64b490ef2:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: string_decoder 1.3.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "a3fb0d9c402dc3321419a641725c2c3d:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: strip-ansi 6.0.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "9b77bf24d5472a6769301c43c224821a:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: strip-ansi 6.0.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "6d18ec41733efd69fe36d68dda4f238f:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: strip-ansi 6.0.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "20a6c88061c0c7c8285ed39f00dfb22e:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: strip-ansi 6.0.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "47e378f4b24864ccc46205d37b80a7a9:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: strip-ansi 6.0.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "00181e2d7d49933ccaa9a1c42d777769:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: strip-ansi 6.0.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "ef9705ed3ac5ebad9a03ec35e6d1fb7e:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: wcwidth 1.0.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "395cf4d0f3631013fd0f6ac2ad71eaf0:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: wide-align 1.1.5"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "993917f2af7a172ebf8d76e0bffd3eb1:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component alpine-baselayout @ /lib/apk/db/installed version changed: 3.4.3-r2 -\u003e 3.6.5-r0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "2d811b86745040d7bffbd657b84b4b34:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component alpine-baselayout-data @ /lib/apk/db/installed version changed: 3.4.3-r2 -\u003e 3.6.5-r0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "ff114a58ed68c060e569c332d4dcdee4:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component apk-tools @ /lib/apk/db/installed version changed: 2.14.0-r5 -\u003e 2.14.4-r0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "5acdca648b1f27c3ad38e77106cf0db0:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component busybox @ /lib/apk/db/installed version changed: 1.36.1-r15 -\u003e 1.36.1-r29"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "89b48dd81ea06cebf6cf04b33984dd03:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component busybox-binsh @ /lib/apk/db/installed version changed: 1.36.1-r15 -\u003e 1.36.1-r29"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "057629b91558a14ebec8bcb581084431:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component ca-certificates-bundle @ /lib/apk/db/installed version changed: 20230506-r0 -\u003e 20240705-r0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "4f6878c2388cb1e71125eadc2503a7a7:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libcrypto3 @ /lib/apk/db/installed version changed: 3.1.4-r5 -\u003e 3.3.2-r0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "e449085a28ab3b5c284469f1af0d83fb:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libgcc @ /lib/apk/db/installed version changed: 13.2.1_git20231014-r0 -\u003e 13.2.1_git20240309-r0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b139b685176abbc03fc56870ba98177f:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libssl3 @ /lib/apk/db/installed version changed: 3.1.4-r5 -\u003e 3.3.2-r0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b45b2b5bd71a2398e9e5a44000470298:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libstdc++ @ /lib/apk/db/installed version changed: 13.2.1_git20231014-r0 -\u003e 13.2.1_git20240309-r0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "8164348ecdd78c91e161c3d431292950:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component musl @ /lib/apk/db/installed version changed: 1.2.4_git20230717-r4 -\u003e 1.2.5-r0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "c8db092243a8b7da32501a87c9b75a69:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component musl-utils @ /lib/apk/db/installed version changed: 1.2.4_git20230717-r4 -\u003e 1.2.5-r0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "a6cc3f14963db16373e9d8505b485beb:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component ssl_client @ /lib/apk/db/installed version changed: 1.36.1-r15 -\u003e 1.36.1-r29"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "12b9f287c41a651d4fb4f3ce31987876:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component zlib @ /lib/apk/db/installed version changed: 1.3.1-r0 -\u003e 1.3.1-r1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "0ce8e53858aee0f9463a882de7c008ec:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component node @ /usr/local/bin/node version changed: 20.11.1 -\u003e 20.18.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "6c926f754687558cb589986f22092808:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component @npmcli/agent @ /usr/local/lib/node_modules/npm/node_modules/@npmcli/agent/package.json version changed: 2.2.0 -\u003e 2.2.2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "f0fa60335c5f8793a6381d768b8dbc61:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component @npmcli/arborist @ /usr/local/lib/node_modules/npm/node_modules/@npmcli/arborist/package.json version changed: 7.2.1 -\u003e 7.5.4"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "60b7b1bcc1362667e70c119816ab5e3b:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component @npmcli/config @ /usr/local/lib/node_modules/npm/node_modules/@npmcli/config/package.json version changed: 8.0.2 -\u003e 8.3.4"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "5e76e2d9d3dab52ed734afcbb4c4e495:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component @npmcli/fs @ /usr/local/lib/node_modules/npm/node_modules/@npmcli/fs/package.json version changed: 3.1.0 -\u003e 3.1.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "be533b8b3edcab5c055c1b4cf5c13b07:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component @npmcli/git @ /usr/local/lib/node_modules/npm/node_modules/@npmcli/git/package.json version changed: 5.0.3 -\u003e 5.0.8"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "132488e72986e3730daed0c2c6030f98:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component @npmcli/installed-package-contents @ /usr/local/lib/node_modules/npm/node_modules/@npmcli/installed-package-contents/package.json version changed: 2.0.2 -\u003e 2.1.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b82c48827d4da1ef5ae0e29f6af6344a:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component @npmcli/map-workspaces @ /usr/local/lib/node_modules/npm/node_modules/@npmcli/map-workspaces/package.json version changed: 3.0.4 -\u003e 3.0.6"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "1cd09493d028ee0306598432be19c734:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component @npmcli/metavuln-calculator @ /usr/local/lib/node_modules/npm/node_modules/@npmcli/metavuln-calculator/package.json version changed: 7.0.0 -\u003e 7.1.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "7390c419c3def90c73b9981085dd679b:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component @npmcli/package-json @ /usr/local/lib/node_modules/npm/node_modules/@npmcli/package-json/package.json version changed: 5.0.0 -\u003e 5.2.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "95255ca5598efb17ed6eb7ded565746d:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component @npmcli/promise-spawn @ /usr/local/lib/node_modules/npm/node_modules/@npmcli/promise-spawn/package.json version changed: 7.0.0 -\u003e 7.0.2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "3f683f0bc1cb19af512ab4bc9074fb53:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component @npmcli/query @ /usr/local/lib/node_modules/npm/node_modules/@npmcli/query/package.json version changed: 3.0.1 -\u003e 3.1.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "e5b78058b184565c873092129bf8430b:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component @npmcli/run-script @ /usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/package.json version changed: 7.0.2 -\u003e 8.1.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "95730ddeee6a052097a9aa456fe81e88:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component @sigstore/bundle @ /usr/local/lib/node_modules/npm/node_modules/@sigstore/bundle/package.json version changed: 2.1.0 -\u003e 2.3.2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "f9342ecafa004d7e7af342034082a20b:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component @sigstore/protobuf-specs @ /usr/local/lib/node_modules/npm/node_modules/@sigstore/protobuf-specs/package.json version changed: 0.2.1 -\u003e 0.3.2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "6d9b9f328008aef86cd2fdee9922cbd4:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component @sigstore/sign @ /usr/local/lib/node_modules/npm/node_modules/@sigstore/sign/package.json version changed: 2.2.0 -\u003e 2.3.2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "61eecae0ff01d5b87580ff8e7231e2c7:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component @sigstore/tuf @ /usr/local/lib/node_modules/npm/node_modules/@sigstore/tuf/package.json version changed: 2.2.0 -\u003e 2.3.4"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "58d8db99815627807ec59cadaa309ab7:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component @tufjs/models @ /usr/local/lib/node_modules/npm/node_modules/@tufjs/models/package.json version changed: 2.0.0 -\u003e 2.0.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "70ede8650bd4cfc9785e93a35219135c:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component agent-base @ /usr/local/lib/node_modules/npm/node_modules/agent-base/package.json version changed: 7.1.0 -\u003e 7.1.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "931d2d042c62efd1fff6dacd650ddf37:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component ansi-regex @ /usr/local/lib/node_modules/npm/node_modules/ansi-regex/package.json version changed: 6.0.1 -\u003e 5.0.1 (downgrade)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "516aa8279fad3ba74be1139e7fb69a9b:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component bin-links @ /usr/local/lib/node_modules/npm/node_modules/bin-links/package.json version changed: 4.0.3 -\u003e 4.0.4"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "8173b4acbe03cc8e518095d90ffb0ccf:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component binary-extensions @ /usr/local/lib/node_modules/npm/node_modules/binary-extensions/package.json version changed: 2.2.0 -\u003e 2.3.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "2047d6b5eec2021220e416948661ef6a:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component cacache @ /usr/local/lib/node_modules/npm/node_modules/cacache/package.json version changed: 18.0.0 -\u003e 18.0.3"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "6cc44d52c68f1cc5f34e6bea004a4a8c:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component cidr-regex @ /usr/local/lib/node_modules/npm/node_modules/cidr-regex/package.json version changed: 4.0.3 -\u003e 4.1.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "ebf0b9857f5756c31de4bcd63257f088:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component cmd-shim @ /usr/local/lib/node_modules/npm/node_modules/cmd-shim/package.json version changed: 6.0.2 -\u003e 6.0.3"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "a0de8adbb80fe1f217a99caa9220087a:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component corepack @ /usr/local/lib/node_modules/corepack/package.json version changed: 0.23.0 -\u003e 0.29.3"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "370f8de18b3e641ef35c110394abea3b:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component debug @ /usr/local/lib/node_modules/npm/node_modules/debug/package.json version changed: 4.3.4 -\u003e 4.3.5"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "7f6d6ad64e8ed5bf0c3f7321fde57625:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component diff @ /usr/local/lib/node_modules/npm/node_modules/diff/package.json version changed: 5.1.0 -\u003e 5.2.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "c3192cff7723351e08bcd41811536e9b:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component foreground-child @ /usr/local/lib/node_modules/npm/node_modules/foreground-child/package.json version changed: 3.1.1 -\u003e 3.2.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "333434d74671e921b47de8379c52ce98:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component glob @ /usr/local/lib/node_modules/npm/node_modules/glob/package.json version changed: 10.3.10 -\u003e 10.4.2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "adf4945879ec95d9fc2c5fb4e2c0ae9c:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component hosted-git-info @ /usr/local/lib/node_modules/npm/node_modules/hosted-git-info/package.json version changed: 7.0.1 -\u003e 7.0.2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "293f99311d78e8ecd1a72425aff9f268:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component http-proxy-agent @ /usr/local/lib/node_modules/npm/node_modules/http-proxy-agent/package.json version changed: 7.0.0 -\u003e 7.0.2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "34ea5002699880fe502b13703e6543fb:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component https-proxy-agent @ /usr/local/lib/node_modules/npm/node_modules/https-proxy-agent/package.json version changed: 7.0.2 -\u003e 7.0.5"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "110a1ca624ad1f983b11aa8bbc0dbf3d:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component ignore-walk @ /usr/local/lib/node_modules/npm/node_modules/ignore-walk/package.json version changed: 6.0.3 -\u003e 6.0.5"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "ceeb204a7026c96701e8d17b9b17eac4:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component ini @ /usr/local/lib/node_modules/npm/node_modules/ini/package.json version changed: 4.1.1 -\u003e 4.1.3"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "01ebcf6e88dd15221330ae58e82144f1:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component init-package-json @ /usr/local/lib/node_modules/npm/node_modules/init-package-json/package.json version changed: 6.0.0 -\u003e 6.0.3"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "ddc83142ca53b6f086411667caefd361:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component is-cidr @ /usr/local/lib/node_modules/npm/node_modules/is-cidr/package.json version changed: 5.0.3 -\u003e 5.1.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b25c83e831036026326a406d7bcfa591:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component jackspeak @ /usr/local/lib/node_modules/npm/node_modules/jackspeak/package.json version changed: 2.3.6 -\u003e 3.4.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "d754510382bdc86680ec10fa84022f40:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component json-parse-even-better-errors @ /usr/local/lib/node_modules/npm/node_modules/json-parse-even-better-errors/package.json version changed: 3.0.0 -\u003e 3.0.2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "a81ad4f21aa627ebfd18e4f125cc7ce6:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libnpmaccess @ /usr/local/lib/node_modules/npm/node_modules/libnpmaccess/package.json version changed: 8.0.1 -\u003e 8.0.6"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "4dc15b7f385f475c6f3df8d42eab5021:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libnpmdiff @ /usr/local/lib/node_modules/npm/node_modules/libnpmdiff/package.json version changed: 6.0.3 -\u003e 6.1.4"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "7aa5b0599029d7f8dbe3ca0fb7b2a476:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libnpmexec @ /usr/local/lib/node_modules/npm/node_modules/libnpmexec/package.json version changed: 7.0.4 -\u003e 8.1.3"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "0d1b86e87453849bc34be796fb4bbc91:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libnpmfund @ /usr/local/lib/node_modules/npm/node_modules/libnpmfund/package.json version changed: 5.0.1 -\u003e 5.0.12"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "3f6e1cde6079014bf53df8a219f0b841:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libnpmhook @ /usr/local/lib/node_modules/npm/node_modules/libnpmhook/package.json version changed: 10.0.0 -\u003e 10.0.5"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "05d595b6aa4df64d7b58a169cbffb6d3:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libnpmorg @ /usr/local/lib/node_modules/npm/node_modules/libnpmorg/package.json version changed: 6.0.1 -\u003e 6.0.6"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "c7c5f6a0ed85abdc0cc1c7158a4b06d7:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libnpmpack @ /usr/local/lib/node_modules/npm/node_modules/libnpmpack/package.json version changed: 6.0.3 -\u003e 7.0.4"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "3ccff97b4499dbee7c7f9d035430b80d:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libnpmpublish @ /usr/local/lib/node_modules/npm/node_modules/libnpmpublish/package.json version changed: 9.0.2 -\u003e 9.0.9"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "aaf5dbe9cb45f3dc80920427fed696c8:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libnpmsearch @ /usr/local/lib/node_modules/npm/node_modules/libnpmsearch/package.json version changed: 7.0.0 -\u003e 7.0.6"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b4c9de2abd841924c795f3714818d467:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libnpmteam @ /usr/local/lib/node_modules/npm/node_modules/libnpmteam/package.json version changed: 6.0.0 -\u003e 6.0.5"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "81caa0e996e0cf72e6b6c011fa839750:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libnpmversion @ /usr/local/lib/node_modules/npm/node_modules/libnpmversion/package.json version changed: 5.0.1 -\u003e 6.0.3"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "1e8f1b086b8ad9a090f952cdd1e048ee:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component lru-cache @ /usr/local/lib/node_modules/npm/node_modules/lru-cache/package.json version changed: 10.0.2 -\u003e 10.2.2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "e8b976d04c2c5ad4c978a306529c3efe:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component make-fetch-happen @ /usr/local/lib/node_modules/npm/node_modules/make-fetch-happen/package.json version changed: 13.0.0 -\u003e 13.0.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "9068467d9ea424c8a5cfe9fe388334c4:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component minimatch @ /usr/local/lib/node_modules/npm/node_modules/minimatch/package.json version changed: 9.0.3 -\u003e 9.0.5"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "a8160496c747c67d022bb5210204ac71:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component minipass @ /usr/local/lib/node_modules/npm/node_modules/minipass/package.json version changed: 7.0.4 -\u003e 7.1.2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "c5aa456b4dc5a4ee3560869bb929a35b:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component minipass-collect @ /usr/local/lib/node_modules/npm/node_modules/minipass-collect/package.json version changed: 1.0.2 -\u003e 2.0.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "81f65f15ef025207c49345fe55bad04f:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component minipass-fetch @ /usr/local/lib/node_modules/npm/node_modules/minipass-fetch/package.json version changed: 3.0.4 -\u003e 3.0.5"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "aa6622d979e031541a743f227c5f1a62:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component node-gyp @ /usr/local/lib/node_modules/npm/node_modules/node-gyp/package.json version changed: 10.0.1 -\u003e 10.1.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "c70bb52faba047228699541d13a03297:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component nopt @ /usr/local/lib/node_modules/npm/node_modules/nopt/package.json version changed: 7.2.0 -\u003e 7.2.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "cc70ffaa711d1ca28972f823cda47cd1:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component normalize-package-data @ /usr/local/lib/node_modules/npm/node_modules/normalize-package-data/package.json version changed: 6.0.0 -\u003e 6.0.2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "d480440c6317f2398af9f38853fba01b:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component npm @ /usr/local/lib/node_modules/npm/package.json version changed: 10.2.4 -\u003e 10.8.2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "8c505841dc1af534e0dcbdd717256f5c:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component npm-bundled @ /usr/local/lib/node_modules/npm/node_modules/npm-bundled/package.json version changed: 3.0.0 -\u003e 3.0.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b839ab4acb4764809480cfcf20556f6d:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component npm-package-arg @ /usr/local/lib/node_modules/npm/node_modules/npm-package-arg/package.json version changed: 11.0.1 -\u003e 11.0.2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "91226ccdc191cc055f8a3ff35eae0735:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component npm-packlist @ /usr/local/lib/node_modules/npm/node_modules/npm-packlist/package.json version changed: 8.0.0 -\u003e 8.0.2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b9ecbed12c3aeac968429c411d80c025:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component npm-pick-manifest @ /usr/local/lib/node_modules/npm/node_modules/npm-pick-manifest/package.json version changed: 9.0.0 -\u003e 9.1.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "71f76043cae4586492bac9be3475b3c4:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component npm-profile @ /usr/local/lib/node_modules/npm/node_modules/npm-profile/package.json version changed: 9.0.0 -\u003e 10.0.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "cf05eb7c8e177785b611887f2f7417a1:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component npm-registry-fetch @ /usr/local/lib/node_modules/npm/node_modules/npm-registry-fetch/package.json version changed: 16.1.0 -\u003e 17.1.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "703f22a7fd2957d036f67a26c14f6035:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component npm-user-validate @ /usr/local/lib/node_modules/npm/node_modules/npm-user-validate/package.json version changed: 2.0.0 -\u003e 2.0.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "56ebb56a54843b8075fca291c0935cc0:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component pacote @ /usr/local/lib/node_modules/npm/node_modules/pacote/package.json version changed: 17.0.4 -\u003e 18.0.6"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "75bae92daac74f272ae174ca1313727f:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component path-scurry @ /usr/local/lib/node_modules/npm/node_modules/path-scurry/package.json version changed: 1.10.1 -\u003e 1.11.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "a85764f575a167be60875e8d33803198:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component postcss-selector-parser @ /usr/local/lib/node_modules/npm/node_modules/postcss-selector-parser/package.json version changed: 6.0.13 -\u003e 6.1.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "3d0a6849b12e523ccf936f4431e03887:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component proc-log @ /usr/local/lib/node_modules/npm/node_modules/proc-log/package.json version changed: 3.0.0 -\u003e 4.2.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "75607c218c1592326cd1098da10e27d8:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component promise-call-limit @ /usr/local/lib/node_modules/npm/node_modules/promise-call-limit/package.json version changed: 1.0.2 -\u003e 3.0.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "9396dbb6301de62b4b3fc23803ba1c36:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component promzard @ /usr/local/lib/node_modules/npm/node_modules/promzard/package.json version changed: 1.0.0 -\u003e 1.0.2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "4415da4ca2874a8b9a495e5b1b359eaa:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component read @ /usr/local/lib/node_modules/npm/node_modules/read/package.json version changed: 2.1.0 -\u003e 3.0.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "7c8722eefdc3c1949a5e23c43ba56bc4:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component semver @ /usr/local/lib/node_modules/npm/node_modules/semver/package.json version changed: 7.5.4 -\u003e 7.6.2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "085918e736b3c4064b5a9b94706aafca:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component sigstore @ /usr/local/lib/node_modules/npm/node_modules/sigstore/package.json version changed: 2.1.0 -\u003e 2.3.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "6eaf52c6010d081858b52d6b99bae194:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component socks @ /usr/local/lib/node_modules/npm/node_modules/socks/package.json version changed: 2.7.1 -\u003e 2.8.3"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "f44e032f1b98081aadb29072ac4bd087:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component socks-proxy-agent @ /usr/local/lib/node_modules/npm/node_modules/socks-proxy-agent/package.json version changed: 8.0.2 -\u003e 8.0.4"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "5cbf1d90617bd59f2be7c81356cdf46d:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component spdx-exceptions @ /usr/local/lib/node_modules/npm/node_modules/spdx-exceptions/package.json version changed: 2.3.0 -\u003e 2.5.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "32f4e96f09b7bd1a126bf59a1258c6da:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component spdx-expression-parse @ /usr/local/lib/node_modules/npm/node_modules/spdx-expression-parse/package.json version changed: 3.0.1 -\u003e 4.0.0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "cbb783a9e98ec17f8692568f85296966:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component spdx-license-ids @ /usr/local/lib/node_modules/npm/node_modules/spdx-license-ids/package.json version changed: 3.0.16 -\u003e 3.0.18"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b3f1adf34f735a909933a235380c2d42:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component ssri @ /usr/local/lib/node_modules/npm/node_modules/ssri/package.json version changed: 10.0.5 -\u003e 10.0.6"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "99433803fadf9386d1538e182c595d58:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component strip-ansi @ /usr/local/lib/node_modules/npm/node_modules/strip-ansi/package.json version changed: 7.1.0 -\u003e 6.0.1 (downgrade)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "91fcbf541a0fe4ab07c79d1acad04b6a:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component tar @ /usr/local/lib/node_modules/npm/node_modules/tar/package.json version changed: 6.2.0 -\u003e 6.2.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "06881605c4ad3f8d9caab76dd7c58025:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component tuf-js @ /usr/local/lib/node_modules/npm/node_modules/tuf-js/package.json version changed: 2.1.0 -\u003e 2.2.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "89192ca1e524eb457abc81ec89ba44d9:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component validate-npm-package-name @ /usr/local/lib/node_modules/npm/node_modules/validate-npm-package-name/package.json version changed: 5.0.0 -\u003e 5.0.1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "be34f5c40ff91a81338854c4a0562ed4:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component yarn @ /opt/yarn-v1.22.22/package.json version changed: 1.22.19 -\u003e 1.22.22"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node-20.18.0-alpine.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "db35d4148bf9d4fae51960261ab9ca2a:1"
+          }
+        }
+      ]
+    }
+  ]
+}

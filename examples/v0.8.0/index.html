@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>sbomlyze v0.8.0 examples</title>
+<style>body{font:15px/1.6 system-ui,sans-serif;max-width:860px;margin:40px auto;padding:0 20px}code{font-family:ui-monospace,monospace}</style></head><body>
+<p><a href="/examples/">Latest examples</a></p>
+<h1>sbomlyze v0.8.0: example output</h1>
+<p>Output of sbomlyze v0.8.0 on the SBOMs in <a href="https://github.com/rezmoss/sbomlyze/tree/v0.8.0/testdata/showcase">testdata/showcase</a>.</p>
+<h2>Same tag, different image</h2>
+<p>nginx:1.28.0 built in April and in December 2025 both run nginx 1.28.0, but 40 Debian packages differ, including the OpenSSL fix for CVE-2025-9230.</p>
+<ul>
+<li>Diff (Syft JSON): <code>sbomlyze nginx-1.28.0-apr.syft.json nginx-1.28.0-dec.syft.json</code> (exit 1): <a href="same-tag-different-image/diff.txt">text</a> <a href="same-tag-different-image/diff.json">json</a> <a href="same-tag-different-image/diff.md">markdown</a> <a href="same-tag-different-image/diff.html">html</a> <a href="same-tag-different-image/diff.sarif.json">sarif</a> <a href="same-tag-different-image/diff.junit.xml">junit</a> <a href="same-tag-different-image/diff.patch.json">patch</a></li>
+<li>Same diff from CycloneDX: <code>sbomlyze nginx-1.28.0-apr.cdx.json nginx-1.28.0-dec.cdx.json</code> (exit 1): <a href="same-tag-different-image/diff-cyclonedx.txt">text</a></li>
+<li>Same diff from SPDX: <code>sbomlyze nginx-1.28.0-apr.spdx.json nginx-1.28.0-dec.spdx.json</code> (exit 1): <a href="same-tag-different-image/diff-spdx.txt">text</a></li>
+</ul>
+<h2>Go module re-tagged after release</h2>
+<p>The same go-containerregistry v0.20.4, two different checksums: the maintainer moved the tag after Go&#39;s checksum database had recorded it.</p>
+<ul>
+<li>Diff of the two builds: <code>sbomlyze ggcr-checksum-db.syft.json ggcr-goprivate.syft.json</code> (exit 1): <a href="go-module-retagged/diff.txt">text</a> <a href="go-module-retagged/diff.json">json</a> <a href="go-module-retagged/diff.md">markdown</a> <a href="go-module-retagged/diff.html">html</a> <a href="go-module-retagged/diff.sarif.json">sarif</a> <a href="go-module-retagged/diff.junit.xml">junit</a> <a href="go-module-retagged/diff.patch.json">patch</a></li>
+<li>With deny_integrity_drift: <code>sbomlyze ggcr-checksum-db.syft.json ggcr-goprivate.syft.json --policy policy-integrity.json</code> (exit 1): <a href="go-module-retagged/policy.txt">text</a></li>
+<li>Control: syft 1.55.0 → 1.57.0: <code>sbomlyze syft-1.55.0.syft.json syft-1.57.0.syft.json</code> (exit 1): <a href="go-module-retagged/control.txt">text</a></li>
+</ul>
+<h2>Same version, files changed inside</h2>
+<p>scanelf 1.3.7-r2 has the same version in Alpine 3.19.9 and 3.20.10, but its binary /usr/bin/scanelf changed.</p>
+<ul>
+<li>Diff: <code>sbomlyze alpine-3.19.9.syft.json alpine-3.20.10.syft.json</code> (exit 1): <a href="same-version-files-changed/diff.txt">text</a> <a href="same-version-files-changed/diff.json">json</a> <a href="same-version-files-changed/diff.md">markdown</a> <a href="same-version-files-changed/diff.html">html</a> <a href="same-version-files-changed/diff.sarif.json">sarif</a> <a href="same-version-files-changed/diff.junit.xml">junit</a> <a href="same-version-files-changed/diff.patch.json">patch</a></li>
+<li>With deny_owned_file_drift: <code>sbomlyze alpine-3.19.9.syft.json alpine-3.20.10.syft.json --policy policy-files.json</code> (exit 1): <a href="same-version-files-changed/policy.txt">text</a></li>
+</ul>
+<h2>Downgrades hiding in a minor bump</h2>
+<p>Upgrading node:20.11.1-alpine to 20.18.0-alpine put older major versions of ansi-regex and strip-ansi at the same paths inside npm.</p>
+<ul>
+<li>Diff: <code>sbomlyze node-20.11.1-alpine.syft.json node-20.18.0-alpine.syft.json</code> (exit 1): <a href="downgrades-in-a-minor-bump/diff.txt">text</a> <a href="downgrades-in-a-minor-bump/diff.json">json</a> <a href="downgrades-in-a-minor-bump/diff.md">markdown</a> <a href="downgrades-in-a-minor-bump/diff.html">html</a> <a href="downgrades-in-a-minor-bump/diff.sarif.json">sarif</a> <a href="downgrades-in-a-minor-bump/diff.junit.xml">junit</a> <a href="downgrades-in-a-minor-bump/diff.patch.json">patch</a></li>
+<li>With deny_downgrades: <code>sbomlyze node-20.11.1-alpine.syft.json node-20.18.0-alpine.syft.json --policy policy-downgrades.json</code> (exit 1): <a href="downgrades-in-a-minor-bump/policy.txt">text</a></li>
+</ul>
+<h2>An app upgrade that swapped the runtime</h2>
+<p>ZooKeeper 3.8.3 → 3.9.2 also moved the Java runtime from 11 to 17 and added bundled native BoringSSL builds for Linux, macOS and Windows.</p>
+<ul>
+<li>Diff: <code>sbomlyze zookeeper-3.8.3.syft.json zookeeper-3.9.2.syft.json</code> (exit 1): <a href="app-upgrade-swapped-runtime/diff.txt">text</a> <a href="app-upgrade-swapped-runtime/diff.json">json</a> <a href="app-upgrade-swapped-runtime/diff.md">markdown</a> <a href="app-upgrade-swapped-runtime/diff.html">html</a> <a href="app-upgrade-swapped-runtime/diff.sarif.json">sarif</a> <a href="app-upgrade-swapped-runtime/diff.junit.xml">junit</a> <a href="app-upgrade-swapped-runtime/diff.patch.json">patch</a></li>
+</ul>
+<h2>Transitive churn in a point release</h2>
+<p>ripgrep 14.0.3 → 14.1.1 swapped winapi for the windows-sys crate family: 11 crates added, 9 removed, new dependencies up to five levels deep.</p>
+<ul>
+<li>Diff: <code>sbomlyze ripgrep-14.0.3.syft.json ripgrep-14.1.1.syft.json</code> (exit 1): <a href="transitive-churn/diff.txt">text</a> <a href="transitive-churn/diff.json">json</a> <a href="transitive-churn/diff.md">markdown</a> <a href="transitive-churn/diff.html">html</a> <a href="transitive-churn/diff.sarif.json">sarif</a> <a href="transitive-churn/diff.junit.xml">junit</a> <a href="transitive-churn/diff.patch.json">patch</a></li>
+<li>With max_depth 5: <code>sbomlyze ripgrep-14.0.3.syft.json ripgrep-14.1.1.syft.json --policy policy-depth.json</code> (exit 1): <a href="transitive-churn/policy.txt">text</a></li>
+</ul>
+<h2>One image, three formats</h2>
+<p>The same nginx image as Syft JSON, CycloneDX and SPDX diffs to nothing in every pairing, while their compliance scores differ: NTIA 57, 71 and 71.</p>
+<ul>
+<li>Syft JSON vs CycloneDX: <code>sbomlyze nginx-1.28.0-dec.syft.json nginx-1.28.0-dec.cdx.json</code> (exit 0): <a href="one-image-three-formats/syft-vs-cdx.txt">text</a></li>
+<li>Syft JSON vs SPDX: <code>sbomlyze nginx-1.28.0-dec.syft.json nginx-1.28.0-dec.spdx.json</code> (exit 0): <a href="one-image-three-formats/syft-vs-spdx.txt">text</a></li>
+<li>CycloneDX vs SPDX: <code>sbomlyze nginx-1.28.0-dec.cdx.json nginx-1.28.0-dec.spdx.json</code> (exit 0): <a href="one-image-three-formats/cdx-vs-spdx.txt">text</a></li>
+<li>Compliance of the Syft JSON: <code>sbomlyze nginx-1.28.0-dec.syft.json --compliance</code> (exit 0): <a href="one-image-three-formats/compliance-syft.txt">text</a> <a href="one-image-three-formats/compliance-syft.json">json</a></li>
+<li>Compliance of the CycloneDX: <code>sbomlyze nginx-1.28.0-dec.cdx.json --compliance</code> (exit 0): <a href="one-image-three-formats/compliance-cdx.txt">text</a> <a href="one-image-three-formats/compliance-cdx.json">json</a></li>
+<li>Compliance of the SPDX: <code>sbomlyze nginx-1.28.0-dec.spdx.json --compliance</code> (exit 0): <a href="one-image-three-formats/compliance-spdx.txt">text</a> <a href="one-image-three-formats/compliance-spdx.json">json</a></li>
+</ul>
+<h2>A license change in a minor release</h2>
+<p>Akka 2.6.20 → 2.7.0 changed its license from Apache-2.0 to the Business Source License 1.1, and deny_licenses catches it on the upgrade.</p>
+<ul>
+<li>Diff: <code>sbomlyze akka-actor-2.6.20.syft.json akka-actor-2.7.0.syft.json</code> (exit 1): <a href="license-change-in-a-minor-release/diff.txt">text</a> <a href="license-change-in-a-minor-release/diff.json">json</a> <a href="license-change-in-a-minor-release/diff.md">markdown</a> <a href="license-change-in-a-minor-release/diff.html">html</a> <a href="license-change-in-a-minor-release/diff.sarif.json">sarif</a> <a href="license-change-in-a-minor-release/diff.junit.xml">junit</a> <a href="license-change-in-a-minor-release/diff.patch.json">patch</a></li>
+<li>With deny_licenses (Syft JSON): <code>sbomlyze akka-actor-2.6.20.syft.json akka-actor-2.7.0.syft.json --policy policy-licenses.json</code> (exit 1): <a href="license-change-in-a-minor-release/policy.txt">text</a></li>
+<li>With deny_licenses (SPDX): <code>sbomlyze akka-actor-2.6.20.spdx.json akka-actor-2.7.0.spdx.json --policy policy-licenses.json</code> (exit 1): <a href="license-change-in-a-minor-release/policy-spdx.txt">text</a></li>
+</ul>
+</body></html>

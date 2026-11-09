@@ -1,0 +1,370 @@
+{
+  "overview": {
+    "before": {
+      "file_name": "akka-actor-2.6.20.syft.json",
+      "file_size": 19884,
+      "info": {
+        "source_type": "directory",
+        "source_name": "akka-actor",
+        "source_id": "01ef9b8052f7d0f674458550cb2b222d95e318b94928d9a764dcb78bfa882d5a",
+        "source_version": "2.6.20",
+        "relationship_counts": {
+          "contains": 1,
+          "evident-by": 1
+        },
+        "tool_name": "syft",
+        "tool_version": "1.56.0",
+        "schema_version": "16.1.12",
+        "format": "Syft JSON",
+        "spec_version": "16.1.12",
+        "search_scope": "squashed",
+        "files_count": 1
+      },
+      "stats": {
+        "total_components": 1,
+        "by_type": {
+          "maven": 1
+        },
+        "by_license": {
+          "https://www.apache.org/licenses/LICENSE-2.0.html;description=Apache-2.0": 1
+        },
+        "without_license": 0,
+        "with_hashes": 1,
+        "without_hashes": 0,
+        "total_dependencies": 0,
+        "with_dependencies": 0,
+        "duplicate_count": 0,
+        "by_language": {
+          "java": 1
+        },
+        "by_found_by": {
+          "java-archive-cataloger": 1
+        },
+        "license_categories": {
+          "copyleft": 0,
+          "permissive": 1,
+          "public_domain": 0,
+          "unknown": 0
+        },
+        "with_cpes": 1,
+        "without_cpes": 0,
+        "with_purl": 1,
+        "without_purl": 0
+      }
+    },
+    "after": {
+      "file_name": "akka-actor-2.7.0.syft.json",
+      "file_size": 19796,
+      "info": {
+        "source_type": "directory",
+        "source_name": "akka-actor",
+        "source_id": "e79b1388001e76bc33d2f47aa402b8b1c63a732450c05fe751c96c509822e907",
+        "source_version": "2.7.0",
+        "relationship_counts": {
+          "contains": 1,
+          "evident-by": 1
+        },
+        "tool_name": "syft",
+        "tool_version": "1.56.0",
+        "schema_version": "16.1.12",
+        "format": "Syft JSON",
+        "spec_version": "16.1.12",
+        "search_scope": "squashed",
+        "files_count": 1
+      },
+      "stats": {
+        "total_components": 1,
+        "by_type": {
+          "maven": 1
+        },
+        "by_license": {
+          "https://raw.githubusercontent.com/akka/akka/main/LICENSE;description=BUSL-1.1": 1
+        },
+        "without_license": 0,
+        "with_hashes": 1,
+        "without_hashes": 0,
+        "total_dependencies": 0,
+        "with_dependencies": 0,
+        "duplicate_count": 0,
+        "by_language": {
+          "java": 1
+        },
+        "by_found_by": {
+          "java-archive-cataloger": 1
+        },
+        "license_categories": {
+          "copyleft": 0,
+          "permissive": 0,
+          "public_domain": 0,
+          "unknown": 1
+        },
+        "with_cpes": 1,
+        "without_cpes": 0,
+        "with_purl": 1,
+        "without_purl": 0
+      }
+    }
+  },
+  "findings": {
+    "findings": [
+      {
+        "icon": "🔄",
+        "message": "Scanned akka-actor changed: 2.6.20 → 2.7.0"
+      },
+      {
+        "icon": "🔄",
+        "message": "1 version upgrades (1 minor) among 1 shared packages"
+      },
+      {
+        "icon": "📜",
+        "message": "License shift: permissive -1"
+      }
+    ]
+  },
+  "diff": {
+    "changed": [
+      {
+        "id": "pkg:maven/com.typesafe.akka/akka-actor_2.13",
+        "name": "akka-actor_2.13",
+        "location": "/akka-actor_2.13-2.7.0.jar",
+        "before": {
+          "id": "pkg:maven/com.typesafe.akka/akka-actor_2.13",
+          "name": "akka-actor_2.13",
+          "version": "2.6.20",
+          "purl": "pkg:maven/com.typesafe.akka/akka-actor_2.13@2.6.20",
+          "licenses": [
+            "https://www.apache.org/licenses/LICENSE-2.0.html;description=Apache-2.0"
+          ],
+          "cpes": [
+            "cpe:2.3:a:com.typesafe.akka.actor:akka-actor-2.13:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:com.typesafe.akka.actor:akka-actor_2.13:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:com.typesafe.akka.actor:akka_actor_2.13:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:com.typesafe.akka:akka-actor-2.13:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:com.typesafe.akka:akka-actor_2.13:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:com.typesafe.akka:akka_actor_2.13:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka-actor-2.13:akka-actor-2.13:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka-actor-2.13:akka-actor_2.13:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka-actor-2.13:akka_actor_2.13:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka-actor_2.13:akka-actor-2.13:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka-actor_2.13:akka-actor_2.13:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka-actor_2.13:akka_actor_2.13:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka_actor_2.13:akka-actor-2.13:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka_actor_2.13:akka-actor_2.13:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka_actor_2.13:akka_actor_2.13:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:lightbend-inc-:akka-actor-2.13:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:lightbend-inc-:akka-actor_2.13:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:lightbend-inc-:akka_actor_2.13:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:lightbend_inc_:akka-actor-2.13:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:lightbend_inc_:akka-actor_2.13:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:lightbend_inc_:akka_actor_2.13:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:com.typesafe.akka.actor:actor:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:com.typesafe.akka.actor:akka:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka-actor:akka-actor-2.13:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka-actor:akka-actor_2.13:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka-actor:akka_actor_2.13:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka_actor:akka-actor-2.13:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka_actor:akka-actor_2.13:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka_actor:akka_actor_2.13:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:typesafe:akka-actor-2.13:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:typesafe:akka-actor_2.13:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:typesafe:akka_actor_2.13:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:com.typesafe.akka:actor:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:com.typesafe.akka:akka:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:actor:akka-actor-2.13:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:actor:akka-actor_2.13:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:actor:akka_actor_2.13:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka-actor-2.13:actor:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka-actor_2.13:actor:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka_actor_2.13:actor:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka-actor-2.13:akka:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka-actor_2.13:akka:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka:akka-actor-2.13:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka:akka-actor_2.13:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka:akka_actor_2.13:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka_actor_2.13:akka:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:lightbend-inc-:actor:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:lightbend_inc_:actor:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:lightbend-inc-:akka:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:lightbend_inc_:akka:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka-actor:actor:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka_actor:actor:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka-actor:akka:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka_actor:akka:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:typesafe:actor:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:typesafe:akka:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:actor:actor:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:actor:akka:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka:actor:2.6.20:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka:akka:2.6.20:*:*:*:*:*:*:*"
+          ],
+          "hashes": {
+            "SHA1": "8dc5a2cef5a428c7b159f44486bed14cc964a227"
+          },
+          "language": "java",
+          "foundBy": "java-archive-cataloger",
+          "type": "java-archive",
+          "locations": [
+            "/akka-actor_2.13-2.6.20.jar"
+          ]
+        },
+        "after": {
+          "id": "pkg:maven/com.typesafe.akka/akka-actor_2.13",
+          "name": "akka-actor_2.13",
+          "version": "2.7.0",
+          "purl": "pkg:maven/com.typesafe.akka/akka-actor_2.13@2.7.0",
+          "licenses": [
+            "https://raw.githubusercontent.com/akka/akka/main/LICENSE;description=BUSL-1.1"
+          ],
+          "cpes": [
+            "cpe:2.3:a:com.typesafe.akka.actor:akka-actor-2.13:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:com.typesafe.akka.actor:akka-actor_2.13:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:com.typesafe.akka.actor:akka_actor_2.13:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:com.typesafe.akka:akka-actor-2.13:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:com.typesafe.akka:akka-actor_2.13:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:com.typesafe.akka:akka_actor_2.13:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka-actor-2.13:akka-actor-2.13:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka-actor-2.13:akka-actor_2.13:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka-actor-2.13:akka_actor_2.13:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka-actor_2.13:akka-actor-2.13:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka-actor_2.13:akka-actor_2.13:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka-actor_2.13:akka_actor_2.13:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka_actor_2.13:akka-actor-2.13:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka_actor_2.13:akka-actor_2.13:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka_actor_2.13:akka_actor_2.13:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:lightbend-inc-:akka-actor-2.13:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:lightbend-inc-:akka-actor_2.13:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:lightbend-inc-:akka_actor_2.13:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:lightbend_inc_:akka-actor-2.13:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:lightbend_inc_:akka-actor_2.13:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:lightbend_inc_:akka_actor_2.13:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:com.typesafe.akka.actor:actor:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:com.typesafe.akka.actor:akka:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka-actor:akka-actor-2.13:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka-actor:akka-actor_2.13:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka-actor:akka_actor_2.13:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka_actor:akka-actor-2.13:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka_actor:akka-actor_2.13:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka_actor:akka_actor_2.13:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:typesafe:akka-actor-2.13:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:typesafe:akka-actor_2.13:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:typesafe:akka_actor_2.13:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:com.typesafe.akka:actor:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:com.typesafe.akka:akka:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:actor:akka-actor-2.13:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:actor:akka-actor_2.13:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:actor:akka_actor_2.13:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka-actor-2.13:actor:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka-actor_2.13:actor:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka_actor_2.13:actor:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka-actor-2.13:akka:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka-actor_2.13:akka:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka:akka-actor-2.13:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka:akka-actor_2.13:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka:akka_actor_2.13:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka_actor_2.13:akka:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:lightbend-inc-:actor:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:lightbend_inc_:actor:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:lightbend-inc-:akka:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:lightbend_inc_:akka:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka-actor:actor:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka_actor:actor:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka-actor:akka:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka_actor:akka:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:typesafe:actor:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:typesafe:akka:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:actor:actor:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:actor:akka:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka:actor:2.7.0:*:*:*:*:*:*:*",
+            "cpe:2.3:a:akka:akka:2.7.0:*:*:*:*:*:*:*"
+          ],
+          "hashes": {
+            "SHA1": "a62a62a0011bc7651a84addb23b23ef1c7b32a6a"
+          },
+          "language": "java",
+          "foundBy": "java-archive-cataloger",
+          "type": "java-archive",
+          "locations": [
+            "/akka-actor_2.13-2.7.0.jar"
+          ]
+        },
+        "changes": [
+          "version: 2.6.20 -\u003e 2.7.0",
+          "licenses: [https://www.apache.org/licenses/LICENSE-2.0.html;description=Apache-2.0] -\u003e [https://raw.githubusercontent.com/akka/akka/main/LICENSE;description=BUSL-1.1]",
+          "hash[SHA1]: 8dc5a2cef5a428c7b159f44486bed14cc964a227 -\u003e a62a62a0011bc7651a84addb23b23ef1c7b32a6a"
+        ],
+        "drift": {
+          "type": "version",
+          "hash_changes": {
+            "changed": {
+              "SHA1": {
+                "before": "8dc5a2cef5a428c7b159f44486bed14cc964a227",
+                "after": "a62a62a0011bc7651a84addb23b23ef1c7b32a6a"
+              }
+            }
+          },
+          "version_from": "2.6.20",
+          "version_to": "2.7.0",
+          "direction": "upgrade",
+          "level": "minor",
+          "licenses_diff": [
+            "+BUSL-1.1",
+            "-Apache-2.0"
+          ]
+        }
+      }
+    ],
+    "files_added": [
+      {
+        "path": "/akka-actor_2.13-2.7.0.jar",
+        "hashes": {
+          "sha1": "a62a62a0011bc7651a84addb23b23ef1c7b32a6a",
+          "sha256": "3b1699eda395de0ecc4f4afc69a79a08e96240e412503b476d0fb726a30350c6"
+        }
+      }
+    ],
+    "files_removed": [
+      {
+        "path": "/akka-actor_2.13-2.6.20.jar",
+        "hashes": {
+          "sha1": "8dc5a2cef5a428c7b159f44486bed14cc964a227",
+          "sha256": "9a8273601fbeb2fd822bcd1df06e0ddb9d76e6e884b0f96a00567f6a2e5d5c0f"
+        }
+      }
+    ],
+    "source_change": {
+      "name": "akka-actor",
+      "from": "2.6.20",
+      "to": "2.7.0"
+    },
+    "drift_summary": {
+      "version_drift": 1,
+      "integrity_drift": 0,
+      "metadata_drift": 0,
+      "upgrades": 1,
+      "downgrades": 0,
+      "unknown_direction": 0,
+      "distinct_version_changes": 1,
+      "file_changes": 0,
+      "license_changes": 1,
+      "owned_file_drift": 0,
+      "owned_files_changed": 0
+    },
+    "digest_coverage": {
+      "same_version_pairs": 0,
+      "comparable": 0,
+      "before_only": 0,
+      "after_only": 0,
+      "disjoint_kinds": 0,
+      "by_kind": {},
+      "packages_total": 1
+    },
+    "file_coverage": {
+      "files_compared": 0,
+      "files_unverified": 0,
+      "ambiguous_paths": 0,
+      "owned_files_after": 0,
+      "unowned_files_after": 1,
+      "config_unknown": 0
+    }
+  }
+}

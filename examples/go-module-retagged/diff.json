@@ -1,0 +1,207 @@
+{
+  "overview": {
+    "before": {
+      "file_name": "ggcr-checksum-db.syft.json",
+      "file_size": 7526,
+      "info": {
+        "source_type": "directory",
+        "source_name": "example.com/app",
+        "source_id": "26c5629e2cbd92deb5650c90bf9ccbeb8308351b1a78e64743990e9c9ac5861c",
+        "source_version": "v1.0.0",
+        "relationship_counts": {
+          "contains": 2,
+          "evident-by": 2
+        },
+        "tool_name": "syft",
+        "tool_version": "1.56.0",
+        "schema_version": "16.1.12",
+        "format": "Syft JSON",
+        "spec_version": "16.1.12",
+        "search_scope": "squashed",
+        "files_count": 1
+      },
+      "stats": {
+        "total_components": 2,
+        "by_type": {
+          "golang": 2
+        },
+        "without_license": 2,
+        "with_hashes": 0,
+        "without_hashes": 2,
+        "total_dependencies": 0,
+        "with_dependencies": 0,
+        "duplicate_count": 0,
+        "by_language": {
+          "go": 2
+        },
+        "by_found_by": {
+          "go-module-file-cataloger": 2
+        },
+        "license_categories": {
+          "copyleft": 0,
+          "permissive": 0,
+          "public_domain": 0,
+          "unknown": 2
+        },
+        "with_cpes": 2,
+        "without_cpes": 0,
+        "with_purl": 2,
+        "without_purl": 0
+      }
+    },
+    "after": {
+      "file_name": "ggcr-goprivate.syft.json",
+      "file_size": 7526,
+      "info": {
+        "source_type": "directory",
+        "source_name": "example.com/app",
+        "source_id": "26c5629e2cbd92deb5650c90bf9ccbeb8308351b1a78e64743990e9c9ac5861c",
+        "source_version": "v1.0.0",
+        "relationship_counts": {
+          "contains": 2,
+          "evident-by": 2
+        },
+        "tool_name": "syft",
+        "tool_version": "1.56.0",
+        "schema_version": "16.1.12",
+        "format": "Syft JSON",
+        "spec_version": "16.1.12",
+        "search_scope": "squashed",
+        "files_count": 1
+      },
+      "stats": {
+        "total_components": 2,
+        "by_type": {
+          "golang": 2
+        },
+        "without_license": 2,
+        "with_hashes": 0,
+        "without_hashes": 2,
+        "total_dependencies": 0,
+        "with_dependencies": 0,
+        "duplicate_count": 0,
+        "by_language": {
+          "go": 2
+        },
+        "by_found_by": {
+          "go-module-file-cataloger": 2
+        },
+        "license_categories": {
+          "copyleft": 0,
+          "permissive": 0,
+          "public_domain": 0,
+          "unknown": 2
+        },
+        "with_cpes": 2,
+        "without_cpes": 0,
+        "with_purl": 2,
+        "without_purl": 0
+      }
+    }
+  },
+  "findings": {
+    "findings": [
+      {
+        "icon": "🔄",
+        "message": "0 version changes among 2 shared packages — no actual upgrades"
+      },
+      {
+        "icon": "⚠️",
+        "message": "Integrity drift (1 total): 1 golang (review recommended)"
+      }
+    ]
+  },
+  "diff": {
+    "changed": [
+      {
+        "id": "pkg:golang/github.com/google/go-containerregistry",
+        "name": "github.com/google/go-containerregistry",
+        "location": "/go.mod",
+        "before": {
+          "id": "pkg:golang/github.com/google/go-containerregistry",
+          "name": "github.com/google/go-containerregistry",
+          "version": "v0.20.4",
+          "purl": "pkg:golang/github.com/google/go-containerregistry@v0.20.4",
+          "cpes": [
+            "cpe:2.3:a:google:go-containerregistry:v0.20.4:*:*:*:*:*:*:*",
+            "cpe:2.3:a:google:go_containerregistry:v0.20.4:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:w/Fdj3ef046SdV/GJU69cCnreaLpqbTo1X9XPyHbkd4="
+          },
+          "language": "go",
+          "foundBy": "go-module-file-cataloger",
+          "type": "go-module",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "after": {
+          "id": "pkg:golang/github.com/google/go-containerregistry",
+          "name": "github.com/google/go-containerregistry",
+          "version": "v0.20.4",
+          "purl": "pkg:golang/github.com/google/go-containerregistry@v0.20.4",
+          "cpes": [
+            "cpe:2.3:a:google:go-containerregistry:v0.20.4:*:*:*:*:*:*:*",
+            "cpe:2.3:a:google:go_containerregistry:v0.20.4:*:*:*:*:*:*:*"
+          ],
+          "digests": {
+            "go-h1": "h1:wQ614GjDrt6MiV9fwIVBdJqmDuup3Fho6QfltIrnNSw="
+          },
+          "language": "go",
+          "foundBy": "go-module-file-cataloger",
+          "type": "go-module",
+          "locations": [
+            "/go.mod"
+          ]
+        },
+        "changes": [
+          "hash[go-h1]: h1:w/Fdj3ef046SdV/GJU69cCnreaLpqbTo1X9XPyHbkd4= -\u003e h1:wQ614GjDrt6MiV9fwIVBdJqmDuup3Fho6QfltIrnNSw="
+        ],
+        "drift": {
+          "type": "integrity",
+          "hash_changes": {
+            "changed": {
+              "go-h1": {
+                "before": "h1:w/Fdj3ef046SdV/GJU69cCnreaLpqbTo1X9XPyHbkd4=",
+                "after": "h1:wQ614GjDrt6MiV9fwIVBdJqmDuup3Fho6QfltIrnNSw="
+              }
+            }
+          }
+        }
+      }
+    ],
+    "drift_summary": {
+      "version_drift": 0,
+      "integrity_drift": 1,
+      "metadata_drift": 0,
+      "upgrades": 0,
+      "downgrades": 0,
+      "unknown_direction": 0,
+      "distinct_version_changes": 0,
+      "file_changes": 0,
+      "license_changes": 0,
+      "owned_file_drift": 0,
+      "owned_files_changed": 0
+    },
+    "digest_coverage": {
+      "same_version_pairs": 2,
+      "comparable": 2,
+      "before_only": 0,
+      "after_only": 0,
+      "disjoint_kinds": 0,
+      "by_kind": {
+        "go-h1": 2
+      },
+      "packages_total": 2
+    },
+    "file_coverage": {
+      "files_compared": 1,
+      "files_unverified": 0,
+      "ambiguous_paths": 0,
+      "owned_files_after": 0,
+      "unowned_files_after": 1,
+      "config_unknown": 0
+    }
+  }
+}

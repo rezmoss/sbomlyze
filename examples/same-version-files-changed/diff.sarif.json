@@ -1,0 +1,394 @@
+{
+  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "sbomlyze",
+          "version": "dev",
+          "informationUri": "https://github.com/rezmoss/sbomlyze",
+          "rules": [
+            {
+              "id": "integrity-drift",
+              "name": "Integrity Drift Detected",
+              "shortDescription": {
+                "text": "Package digest changed without a version change"
+              },
+              "fullDescription": {
+                "text": ""
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "supply-chain"
+                ]
+              }
+            },
+            {
+              "id": "owned-file-drift",
+              "name": "Owned File Drift Detected",
+              "shortDescription": {
+                "text": "Files owned by a package changed without a version change"
+              },
+              "fullDescription": {
+                "text": ""
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "supply-chain"
+                ]
+              }
+            },
+            {
+              "id": "new-component",
+              "name": "New Component Added",
+              "shortDescription": {
+                "text": "A new component was added to the SBOM"
+              },
+              "fullDescription": {
+                "text": ""
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              }
+            },
+            {
+              "id": "removed-component",
+              "name": "Component Removed",
+              "shortDescription": {
+                "text": "A component was removed from the SBOM"
+              },
+              "fullDescription": {
+                "text": ""
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              }
+            },
+            {
+              "id": "version-change",
+              "name": "Version Changed",
+              "shortDescription": {
+                "text": "Component version was updated"
+              },
+              "fullDescription": {
+                "text": ""
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              }
+            },
+            {
+              "id": "deep-dependency",
+              "name": "Deep Transitive Dependency",
+              "shortDescription": {
+                "text": "New dependency introduced at depth 3 or greater"
+              },
+              "fullDescription": {
+                "text": ""
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "supply-chain"
+                ]
+              }
+            },
+            {
+              "id": "policy-violation",
+              "name": "Policy Violation",
+              "shortDescription": {
+                "text": "SBOM policy rule was violated"
+              },
+              "fullDescription": {
+                "text": ""
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "owned-file-drift",
+          "level": "error",
+          "message": {
+            "text": "Package scanelf 1.3.7-r2 changed owned files without a version change: modified /usr/bin/scanelf"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "alpine-3.20.10.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "ef34197b145f1991b56b932549f4a5a9:1"
+          }
+        },
+        {
+          "ruleId": "removed-component",
+          "level": "note",
+          "message": {
+            "text": "Component removed: libc-utils 0.7.2-r5"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "alpine-3.20.10.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "73ece4f043b458b10e108f9762bcb0cf:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component alpine-baselayout @ /lib/apk/db/installed version changed: 3.4.3-r2 -\u003e 3.6.5-r0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "alpine-3.20.10.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "2d811b86745040d7bffbd657b84b4b34:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component alpine-baselayout-data @ /lib/apk/db/installed version changed: 3.4.3-r2 -\u003e 3.6.5-r0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "alpine-3.20.10.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "ff114a58ed68c060e569c332d4dcdee4:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component apk-tools @ /lib/apk/db/installed version changed: 2.14.4-r0 -\u003e 2.14.4-r1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "alpine-3.20.10.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "5acdca648b1f27c3ad38e77106cf0db0:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component busybox @ /lib/apk/db/installed version changed: 1.36.1-r20 -\u003e 1.36.1-r31"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "alpine-3.20.10.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "89b48dd81ea06cebf6cf04b33984dd03:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component busybox-binsh @ /lib/apk/db/installed version changed: 1.36.1-r20 -\u003e 1.36.1-r31"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "alpine-3.20.10.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "057629b91558a14ebec8bcb581084431:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component ca-certificates-bundle @ /lib/apk/db/installed version changed: 20250911-r0 -\u003e 20260413-r0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "alpine-3.20.10.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "4f6878c2388cb1e71125eadc2503a7a7:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libcrypto3 @ /lib/apk/db/installed version changed: 3.1.8-r1 -\u003e 3.3.7-r0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "alpine-3.20.10.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "e449085a28ab3b5c284469f1af0d83fb:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libssl3 @ /lib/apk/db/installed version changed: 3.1.8-r1 -\u003e 3.3.7-r0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "alpine-3.20.10.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b45b2b5bd71a2398e9e5a44000470298:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component musl @ /lib/apk/db/installed version changed: 1.2.4_git20230717-r5 -\u003e 1.2.5-r3"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "alpine-3.20.10.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "c8db092243a8b7da32501a87c9b75a69:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component musl-utils @ /lib/apk/db/installed version changed: 1.2.4_git20230717-r5 -\u003e 1.2.5-r3"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "alpine-3.20.10.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "a6cc3f14963db16373e9d8505b485beb:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component ssl_client @ /lib/apk/db/installed version changed: 1.36.1-r20 -\u003e 1.36.1-r31"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "alpine-3.20.10.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "12b9f287c41a651d4fb4f3ce31987876:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component zlib @ /lib/apk/db/installed version changed: 1.3.1-r0 -\u003e 1.3.2-r0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "alpine-3.20.10.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "0ce8e53858aee0f9463a882de7c008ec:1"
+          }
+        }
+      ]
+    }
+  ]
+}

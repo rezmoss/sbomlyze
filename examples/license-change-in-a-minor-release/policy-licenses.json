@@ -1,0 +1,6 @@
+{
+  "deny_licenses": [
+    "BUSL-1.1",
+    "SSPL-1.0"
+  ]
+}

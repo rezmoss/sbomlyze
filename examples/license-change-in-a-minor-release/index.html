@@ -1,0 +1,198 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>A license change in a minor release — sbomlyze</title>
+<meta name=description content="Akka 2.6.20 → 2.7.0 changed its license from Apache-2.0 to the Business Source License 1.1, and deny_licenses catches it on the upgrade."><link rel=canonical href=https://sbomlyze.com/examples/license-change-in-a-minor-release/><meta name=sbomlyze-version content="v0.8.0"><meta property="og:title" content="A license change in a minor release — sbomlyze"><meta property="og:description" content="Akka 2.6.20 → 2.7.0 changed its license from Apache-2.0 to the Business Source License 1.1, and deny_licenses catches it on the upgrade."><meta property="og:url" content="https://sbomlyze.com/examples/license-change-in-a-minor-release/"><meta property="og:type" content="website"><link rel=icon href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='12' fill='%234ade80'/%3E%3C/svg%3E"><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel=stylesheet><link rel=stylesheet href=/css/main.min.529c37046575bbd2c42eba5e324f8625737caa20f21aef7616660f878a6a1c3a.css></head><body><header class=site-header><div class=header-inner><a class=brand href=/><span class=brand-name>sbomlyze</span>
+<span class=brand-dot></span></a><nav class=nav><a class=nav-link href=/examples/>Examples</a>
+<a class=nav-link href=/integrity-drift/>Integrity drift</a>
+<a class=nav-link href=/action/>GitHub Action</a>
+<a class=nav-link href=/cli/>CLI reference</a>
+<a class=nav-link href=/compliance/>Compliance</a>
+<a class=nav-link href=/install/>Install</a>
+<a class=nav-link href=/changelog/>Changelog</a></nav><div class=header-meta><span class=header-version>v0.8.0</span>
+<a class=btn-gh href=https://github.com/rezmoss/sbomlyze>GitHub ★ 26</a></div></div></header><section class="section-hero bb"><div class=container-md><div class=eyebrow>Example 8 of 8 · real output · sbomlyze v0.8.0</div><h1 class=h-page style=max-width:26ch>A license change in a minor release</h1><p class=lead-md style="max-width:68ch;margin:22px 0 0">Akka 2.6.20 → 2.7.0 changed its license from Apache-2.0 to the Business Source License 1.1, and deny_licenses catches it on the upgrade.</p><div style=display:flex;gap:8px;flex-wrap:wrap;margin-top:24px><span class=pill>java</span><span class=pill>maven</span>
+<span class=tag>License change</span><span class=tag>deny_licenses policy</span><span class=tag>Cross-format license matching</span></div><div id=stale class="callout callout-amber" style=display:none;margin-top:24px></div></div></section><section class=section-md><div class="container-md doc-body"><h2>What happened</h2><p>In September 2022 Lightbend
+<a href=https://akka.io/blog/why-we-are-changing-the-license-for-akka>moved Akka to the Business Source License 1.1</a>.
+The published POMs on Maven Central say Apache-2.0 for 2.6.20 and BUSL-1.1 for 2.7.0, and Apache Pekko
+was <a href=https://pekko.apache.org/>forked from Akka 2.6.x</a> because of it. For a project that only bumps a
+minor version, the license change arrives as an ordinary upgrade.</p><p>Syft reads the license from the jar&rsquo;s manifest (<code>Bundle-License</code>, an OSGi field) as
+<code>&lt;url>;description=BUSL-1.1</code>, and SPDX folds that into a <code>LicenseRef-</code> id. sbomlyze maps all of these to
+<code>BUSL-1.1</code>, so <code>deny_licenses: ["BUSL-1.1"]</code> fails the upgrade in any of the three formats. The rule
+checks licenses that newly appear on changed packages, not only on new ones.</p><div class=callout style="margin:24px 0"><strong>What this does not prove.</strong> A minimal reproduction: the two published akka-actor jars scanned on their own. A real service would show the same change among its other dependencies.</div><h2>Inputs</h2><p>Generated once with Syft 1.56.0, linux/amd64, and kept unchanged in <a href=https://github.com/rezmoss/sbomlyze/tree/v0.8.0/testdata/showcase><code>testdata/showcase</code></a> in the repository. Every sbomlyze release re-runs the commands below on these exact files.</p><div class=codebox style="margin:18px 0"><div class=codebox-head>akka-actor_2.13-2.6.20.jar</div><pre class=codebox-pre style=white-space:pre-wrap;word-break:break-all># https://repo1.maven.org/maven2/com/typesafe/akka/akka-actor_2.13/2.6.20/akka-actor_2.13-2.6.20.jar
+syft scan dir:akka-2.6.20 -o syft-json=akka-actor-2.6.20.syft.json
+syft scan dir:akka-2.6.20 -o cyclonedx-json=akka-actor-2.6.20.cdx.json
+syft scan dir:akka-2.6.20 -o spdx-json=akka-actor-2.6.20.spdx.json
+</pre><div style="padding:0 24px 18px;font:13px/1.8 var(--mono)"><a href=https://github.com/rezmoss/sbomlyze/raw/v0.8.0/testdata/showcase/akka-actor-2.6.20.syft.json>akka-actor-2.6.20.syft.json</a> <span class=c-gray title="sha256 39c451fe1d385fb7ed529daa1cfda9b571140abc95e859d709c64afb2a8caf3f">39c451fe1d38…</span>&nbsp;&nbsp; <a href=https://github.com/rezmoss/sbomlyze/raw/v0.8.0/testdata/showcase/akka-actor-2.6.20.cdx.json>akka-actor-2.6.20.cdx.json</a> <span class=c-gray title="sha256 a4b287ba4299bdd2d0d8ad27172f33500f2787049c4eb01b71c6da9669e241ef">a4b287ba4299…</span>&nbsp;&nbsp; <a href=https://github.com/rezmoss/sbomlyze/raw/v0.8.0/testdata/showcase/akka-actor-2.6.20.spdx.json>akka-actor-2.6.20.spdx.json</a> <span class=c-gray title="sha256 5175c5cefd5c9614a5d7a5d38b6e4c82555f9c57200f92a3f758df64a38a17d4">5175c5cefd5c…</span>&nbsp;&nbsp;</div></div><div class=codebox style="margin:18px 0"><div class=codebox-head>akka-actor_2.13-2.7.0.jar</div><pre class=codebox-pre style=white-space:pre-wrap;word-break:break-all># https://repo1.maven.org/maven2/com/typesafe/akka/akka-actor_2.13/2.7.0/akka-actor_2.13-2.7.0.jar
+syft scan dir:akka-2.7.0 -o syft-json=akka-actor-2.7.0.syft.json
+syft scan dir:akka-2.7.0 -o cyclonedx-json=akka-actor-2.7.0.cdx.json
+syft scan dir:akka-2.7.0 -o spdx-json=akka-actor-2.7.0.spdx.json
+</pre><div style="padding:0 24px 18px;font:13px/1.8 var(--mono)"><a href=https://github.com/rezmoss/sbomlyze/raw/v0.8.0/testdata/showcase/akka-actor-2.7.0.syft.json>akka-actor-2.7.0.syft.json</a> <span class=c-gray title="sha256 360f95808d74407ffded059ce476e0a715751f004f386daeac01726f9db9f7bc">360f95808d74…</span>&nbsp;&nbsp; <a href=https://github.com/rezmoss/sbomlyze/raw/v0.8.0/testdata/showcase/akka-actor-2.7.0.cdx.json>akka-actor-2.7.0.cdx.json</a> <span class=c-gray title="sha256 4e2f23b015206c187647cc37f77ee1a142f1763727e40d1e42f77efca125aaac">4e2f23b01520…</span>&nbsp;&nbsp; <a href=https://github.com/rezmoss/sbomlyze/raw/v0.8.0/testdata/showcase/akka-actor-2.7.0.spdx.json>akka-actor-2.7.0.spdx.json</a> <span class=c-gray title="sha256 f1436a43f5081740f16030100ab75c799deab7f0ee58180fb23bf9dd45da4dd0">f1436a43f508…</span>&nbsp;&nbsp;</div></div><p>Policy files: <a href=/examples/license-change-in-a-minor-release/policy-licenses.json><code>policy-licenses.json</code></a></p><h2>Output</h2><h3 id=diff>Diff</h3><div class=term style="margin:14px 0"><div class=term-bar><span class=term-dot></span><span class=term-dot></span><span class=term-dot></span>
+<span class=term-title>$ sbomlyze akka-actor-2.6.20.syft.json akka-actor-2.7.0.syft.json · exit 1</span></div><pre class=term-pre style=max-height:560px;overflow:auto;white-space:pre-wrap>Key Findings:
+  🔄 Scanned akka-actor changed: 2.6.20 → 2.7.0
+  🔄 1 version upgrades (1 minor) among 1 shared packages
+  📜 License shift: permissive -1
+
+~ Changed (1):
+  ~ akka-actor_2.13 @ /akka-actor_2.13-2.7.0.jar
+      version: 2.6.20 -&gt; 2.7.0
+      licenses: [https://www.apache.org/licenses/LICENSE-2.0.html;description=Apache-2.0] -&gt; [https://raw.githubusercontent.com/akka/akka/main/LICENSE;description=BUSL-1.1]
+      hash[SHA1]: 8dc5a2cef5a428c7b159f44486bed14cc964a227 -&gt; a62a62a0011bc7651a84addb23b23ef1c7b32a6a</pre></div><details style="margin:4px 0 12px"><summary>Full text output (41 lines)</summary><pre class=codebox-pre style=max-height:640px;overflow:auto>
+SBOM Comparison
+======================================================================
+                        Before                       After
+File:                   akka-actor-2.6.20.syft.json  akka-actor-2.7.0.syft.json
+File Size:              19 KB                        19 KB
+Format:                 Syft JSON 16.1.12            Syft JSON 16.1.12
+Generator:              syft 1.56.0                  syft 1.56.0
+OS:                     (none)                       (none)
+Source:                 akka-actor                   akka-actor
+Source Type:            directory                    directory
+Total Components:       1                            1
+  maven:                1                            1               
+Data Quality:
+  PURL Coverage:        100.0%                       100.0%
+  License Coverage:     100.0%                       100.0%
+  Hash Coverage:        100.0%                       100.0%
+  CPE Coverage:         100.0%                       100.0%
+======================================================================
+
+Scan Context:
+  Schema:                 16.1.12                 16.1.12
+  Scan Scope:             squashed                squashed
+
+Key Findings:
+  🔄 Scanned akka-actor changed: 2.6.20 → 2.7.0
+  🔄 1 version upgrades (1 minor) among 1 shared packages
+  📜 License shift: permissive -1
+
+📊 Drift Summary:
+  📦 Version drift:   1 components
+
+📄 Files added: 1, removed: 1
+
+~ Changed (1):
+  ~ akka-actor_2.13 @ /akka-actor_2.13-2.7.0.jar
+      version: 2.6.20 -&gt; 2.7.0
+      licenses: [https://www.apache.org/licenses/LICENSE-2.0.html;description=Apache-2.0] -&gt; [https://raw.githubusercontent.com/akka/akka/main/LICENSE;description=BUSL-1.1]
+      hash[SHA1]: 8dc5a2cef5a428c7b159f44486bed14cc964a227 -&gt; a62a62a0011bc7651a84addb23b23ef1c7b32a6a
+
+</pre></details><p class=note-sm><a href=/examples/license-change-in-a-minor-release/diff.txt>text</a> (2 KB) · <a href=/examples/license-change-in-a-minor-release/diff.json>json</a> (16 KB) · <a href=/examples/license-change-in-a-minor-release/diff.md>markdown</a> (2 KB) · <a href=/examples/license-change-in-a-minor-release/diff.html>html</a> (5 KB) · <a href=/examples/license-change-in-a-minor-release/diff.sarif.json>sarif</a> (5 KB) · <a href=/examples/license-change-in-a-minor-release/diff.junit.xml>junit</a> (1 KB) · <a href=/examples/license-change-in-a-minor-release/diff.patch.json>patch</a> (1 KB)
+· <a href=/examples/license-change-in-a-minor-release/diff.html>open the HTML report</a></p><h3 id=policy>With deny_licenses (Syft JSON)</h3><div class=term style="margin:14px 0"><div class=term-bar><span class=term-dot></span><span class=term-dot></span><span class=term-dot></span>
+<span class=term-title>$ sbomlyze akka-actor-2.6.20.syft.json akka-actor-2.7.0.syft.json --policy policy-licenses.json · exit 1</span></div><pre class=term-pre style=max-height:560px;overflow:auto;white-space:pre-wrap>Key Findings:
+  🔄 Scanned akka-actor changed: 2.6.20 → 2.7.0
+  🔄 1 version upgrades (1 minor) among 1 shared packages
+  📜 License shift: permissive -1
+
+~ Changed (1):
+  ~ akka-actor_2.13 @ /akka-actor_2.13-2.7.0.jar
+      version: 2.6.20 -&gt; 2.7.0
+      licenses: [https://www.apache.org/licenses/LICENSE-2.0.html;description=Apache-2.0] -&gt; [https://raw.githubusercontent.com/akka/akka/main/LICENSE;description=BUSL-1.1]
+      hash[SHA1]: 8dc5a2cef5a428c7b159f44486bed14cc964a227 -&gt; a62a62a0011bc7651a84addb23b23ef1c7b32a6a
+
+❌ Policy Errors (1):
+  [deny_licenses] akka-actor_2.13 @ /akka-actor_2.13-2.7.0.jar: now has denied license BUSL-1.1</pre></div><details style="margin:4px 0 12px"><summary>Full text output (45 lines)</summary><pre class=codebox-pre style=max-height:640px;overflow:auto>
+SBOM Comparison
+======================================================================
+                        Before                       After
+File:                   akka-actor-2.6.20.syft.json  akka-actor-2.7.0.syft.json
+File Size:              19 KB                        19 KB
+Format:                 Syft JSON 16.1.12            Syft JSON 16.1.12
+Generator:              syft 1.56.0                  syft 1.56.0
+OS:                     (none)                       (none)
+Source:                 akka-actor                   akka-actor
+Source Type:            directory                    directory
+Total Components:       1                            1
+  maven:                1                            1               
+Data Quality:
+  PURL Coverage:        100.0%                       100.0%
+  License Coverage:     100.0%                       100.0%
+  Hash Coverage:        100.0%                       100.0%
+  CPE Coverage:         100.0%                       100.0%
+======================================================================
+
+Scan Context:
+  Schema:                 16.1.12                 16.1.12
+  Scan Scope:             squashed                squashed
+
+Key Findings:
+  🔄 Scanned akka-actor changed: 2.6.20 → 2.7.0
+  🔄 1 version upgrades (1 minor) among 1 shared packages
+  📜 License shift: permissive -1
+
+📊 Drift Summary:
+  📦 Version drift:   1 components
+
+📄 Files added: 1, removed: 1
+
+~ Changed (1):
+  ~ akka-actor_2.13 @ /akka-actor_2.13-2.7.0.jar
+      version: 2.6.20 -&gt; 2.7.0
+      licenses: [https://www.apache.org/licenses/LICENSE-2.0.html;description=Apache-2.0] -&gt; [https://raw.githubusercontent.com/akka/akka/main/LICENSE;description=BUSL-1.1]
+      hash[SHA1]: 8dc5a2cef5a428c7b159f44486bed14cc964a227 -&gt; a62a62a0011bc7651a84addb23b23ef1c7b32a6a
+
+
+❌ Policy Errors (1):
+  [deny_licenses] akka-actor_2.13 @ /akka-actor_2.13-2.7.0.jar: now has denied license BUSL-1.1
+
+</pre></details><p class=note-sm><a href=/examples/license-change-in-a-minor-release/policy.txt>text</a> (2 KB)</p><h3 id=policy-spdx>With deny_licenses (SPDX)</h3><div class=term style="margin:14px 0"><div class=term-bar><span class=term-dot></span><span class=term-dot></span><span class=term-dot></span>
+<span class=term-title>$ sbomlyze akka-actor-2.6.20.spdx.json akka-actor-2.7.0.spdx.json --policy policy-licenses.json · exit 1</span></div><pre class=term-pre style=max-height:560px;overflow:auto;white-space:pre-wrap>Key Findings:
+  🔄 Scanned akka-actor changed: 2.6.20 → 2.7.0
+  🔄 1 version upgrades (1 minor) among 1 shared packages
+  📜 License shift: permissive -1
+
+~ Changed (1):
+  ~ akka-actor_2.13 @ /akka-actor_2.13-2.7.0.jar
+      version: 2.6.20 -&gt; 2.7.0
+      licenses: [LicenseRef-https---www.apache.org-licenses-LICENSE-2.0.html-description-Apache-2.0] -&gt; [LicenseRef-https---raw.githubusercontent.com-akka-akka-main-LICENSE-description-BUSL-1.1]
+      hash[SHA1]: 8dc5a2cef5a428c7b159f44486bed14cc964a227 -&gt; a62a62a0011bc7651a84addb23b23ef1c7b32a6a
+
+❌ Policy Errors (1):
+  [deny_licenses] akka-actor_2.13 @ /akka-actor_2.13-2.7.0.jar: now has denied license BUSL-1.1</pre></div><details style="margin:4px 0 12px"><summary>Full text output (41 lines)</summary><pre class=codebox-pre style=max-height:640px;overflow:auto>
+SBOM Comparison
+======================================================================
+                        Before                       After
+File:                   akka-actor-2.6.20.spdx.json  akka-actor-2.7.0.spdx.json
+File Size:              11 KB                        11 KB
+Format:                 SPDX 2.3                     SPDX 2.3
+Generator:              syft 1.56.0                  syft 1.56.0
+OS:                     (none)                       (none)
+Source:                 akka-actor                   akka-actor
+Source Type:            directory                    directory
+Total Components:       1                            1
+  maven:                1                            1               
+Data Quality:
+  PURL Coverage:        100.0%                       100.0%
+  License Coverage:     100.0%                       100.0%
+  Hash Coverage:        100.0%                       100.0%
+  CPE Coverage:         100.0%                       100.0%
+======================================================================
+
+Key Findings:
+  🔄 Scanned akka-actor changed: 2.6.20 → 2.7.0
+  🔄 1 version upgrades (1 minor) among 1 shared packages
+  📜 License shift: permissive -1
+
+📊 Drift Summary:
+  📦 Version drift:   1 components
+
+📄 Files added: 1, removed: 1
+
+~ Changed (1):
+  ~ akka-actor_2.13 @ /akka-actor_2.13-2.7.0.jar
+      version: 2.6.20 -&gt; 2.7.0
+      licenses: [LicenseRef-https---www.apache.org-licenses-LICENSE-2.0.html-description-Apache-2.0] -&gt; [LicenseRef-https---raw.githubusercontent.com-akka-akka-main-LICENSE-description-BUSL-1.1]
+      hash[SHA1]: 8dc5a2cef5a428c7b159f44486bed14cc964a227 -&gt; a62a62a0011bc7651a84addb23b23ef1c7b32a6a
+
+
+❌ Policy Errors (1):
+  [deny_licenses] akka-actor_2.13 @ /akka-actor_2.13-2.7.0.jar: now has denied license BUSL-1.1
+
+</pre></details><p class=note-sm><a href=/examples/license-change-in-a-minor-release/policy-spdx.txt>text</a> (2 KB)</p><h2>Checked at every release</h2><p>The site is not updated if any of these stop holding for a new sbomlyze release.</p><table class=table><thead><tr><th>Run</th><th>Check</th></tr></thead><tbody><tr><td class=mono>diff</td><td class=mono>diff.changed[name=akka-actor_2.13].drift.licenses_diff = ["+BUSL-1.1","-Apache-2.0"]</td></tr><tr><td class=mono>policy</td><td class=mono>text contains “now has denied license BUSL-1.1”</td></tr><tr><td class=mono>policy-spdx</td><td class=mono>text contains “now has denied license BUSL-1.1”</td></tr></tbody></table><h2>Sources</h2><ul><li><a href=https://akka.io/blog/why-we-are-changing-the-license-for-akka>Akka: Why we are changing the license (7 Sep 2022)</a></li><li><a href=https://repo1.maven.org/maven2/com/typesafe/akka/akka-actor_2.13/2.6.20/akka-actor_2.13-2.6.20.pom>akka-actor_2.13 2.6.20 POM</a></li><li><a href=https://repo1.maven.org/maven2/com/typesafe/akka/akka-actor_2.13/2.7.0/akka-actor_2.13-2.7.0.pom>akka-actor_2.13 2.7.0 POM</a></li></ul><div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:40px;padding-top:24px;border-top:1px solid var(--border)"><a class="btn btn-outline" href=/examples/one-image-three-formats/>← One image, three formats</a>
+<a class="btn btn-outline" href=/examples/>All examples</a></div></div></section><script>(function(){var e=document.getElementById("stale");if(!e)return;fetch("https://api.github.com/repos/rezmoss/sbomlyze/releases/latest").then(function(e){return e.ok?e.json():null}).then(function(t){t&&t.tag_name&&t.tag_name!=="v0.8.0"&&(e.textContent="This output is from sbomlyze v0.8.0; the latest release is "+t.tag_name+". The page updates after that release's website job.",e.style.display="block")}).catch(function(){})})()</script><footer class=site-footer><div class=footer-grid><div><div class=footer-brand>sbomlyze</div><div class=footer-desc>Git diff for SBOMs. Compare CycloneDX, SPDX, and Syft documents, detect tampering, and gate CI.</div><div class=footer-meta>Apache-2.0 · v0.8.0</div></div><div><div class=overline>Learn</div><div class=footer-links><a href=/integrity-drift>Integrity drift</a>
+<a href=/compliance>Compliance scoring</a>
+<a href=/cli>CLI reference</a>
+<a href=/json-reference>JSON reference</a>
+<a href=/examples>Examples</a></div></div><div><div class=overline>Use</div><div class=footer-links><a href=/install>Install</a>
+<a href=/action>GitHub Action</a>
+<a href=https://github.com/marketplace/actions/sbomlyze-diff>Marketplace</a></div></div><div><div class=overline>Project</div><div class=footer-links><a href=https://github.com/rezmoss/sbomlyze>Repository</a>
+<a href=/changelog>Changelog</a>
+<a href=https://github.com/rezmoss/sbomlyze/releases>Releases</a>
+<a href=https://github.com/rezmoss/sbomlyze/discussions>Discussions</a></div></div></div></footer><div class=lightbox-overlay id=lightbox role=dialog aria-modal=true aria-label="Image preview"><button class=lightbox-close type=button>esc ✕</button>
+<img alt><div class=lightbox-caption></div></div><script>(function(){var e=document.getElementById("lightbox"),t=e.querySelector("img"),s=e.querySelector(".lightbox-caption");function n(){e.classList.remove("open"),document.body.classList.remove("lightbox-open"),t.src=""}document.addEventListener("click",function(o){var i,a=o.target.closest("a[data-lightbox]");if(a){o.preventDefault(),t.src=a.getAttribute("href"),i=a.querySelector("img"),t.alt=i?i.alt:"",s.textContent=a.getAttribute("data-caption")||(i?i.alt:""),e.classList.add("open"),document.body.classList.add("lightbox-open");return}e.classList.contains("open")&&!o.target.closest(".lightbox-caption")&&n()}),document.addEventListener("keydown",function(e){e.key==="Escape"&&n()})})()</script></body></html>

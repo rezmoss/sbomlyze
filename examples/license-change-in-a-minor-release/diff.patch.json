@@ -1,0 +1,21 @@
+[
+  {
+    "op": "replace",
+    "path": "/components/pkg:maven/com.typesafe.akka/akka-actor_2.13@/akka-actor_2.13-2.7.0.jar/version",
+    "value": "2.7.0"
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:maven/com.typesafe.akka/akka-actor_2.13@/akka-actor_2.13-2.7.0.jar/licenses",
+    "value": [
+      "https://raw.githubusercontent.com/akka/akka/main/LICENSE;description=BUSL-1.1"
+    ]
+  },
+  {
+    "op": "replace",
+    "path": "/components/pkg:maven/com.typesafe.akka/akka-actor_2.13@/akka-actor_2.13-2.7.0.jar/hashes",
+    "value": {
+      "SHA1": "a62a62a0011bc7651a84addb23b23ef1c7b32a6a"
+    }
+  }
+]

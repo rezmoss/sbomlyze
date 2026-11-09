@@ -1,0 +1,888 @@
+{
+  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "sbomlyze",
+          "version": "dev",
+          "informationUri": "https://github.com/rezmoss/sbomlyze",
+          "rules": [
+            {
+              "id": "integrity-drift",
+              "name": "Integrity Drift Detected",
+              "shortDescription": {
+                "text": "Package digest changed without a version change"
+              },
+              "fullDescription": {
+                "text": ""
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "supply-chain"
+                ]
+              }
+            },
+            {
+              "id": "owned-file-drift",
+              "name": "Owned File Drift Detected",
+              "shortDescription": {
+                "text": "Files owned by a package changed without a version change"
+              },
+              "fullDescription": {
+                "text": ""
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "supply-chain"
+                ]
+              }
+            },
+            {
+              "id": "new-component",
+              "name": "New Component Added",
+              "shortDescription": {
+                "text": "A new component was added to the SBOM"
+              },
+              "fullDescription": {
+                "text": ""
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              }
+            },
+            {
+              "id": "removed-component",
+              "name": "Component Removed",
+              "shortDescription": {
+                "text": "A component was removed from the SBOM"
+              },
+              "fullDescription": {
+                "text": ""
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              }
+            },
+            {
+              "id": "version-change",
+              "name": "Version Changed",
+              "shortDescription": {
+                "text": "Component version was updated"
+              },
+              "fullDescription": {
+                "text": ""
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              }
+            },
+            {
+              "id": "deep-dependency",
+              "name": "Deep Transitive Dependency",
+              "shortDescription": {
+                "text": "New dependency introduced at depth 3 or greater"
+              },
+              "fullDescription": {
+                "text": ""
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "supply-chain"
+                ]
+              }
+            },
+            {
+              "id": "policy-violation",
+              "name": "Policy Violation",
+              "shortDescription": {
+                "text": "SBOM policy rule was violated"
+              },
+              "fullDescription": {
+                "text": ""
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component base-files @ /var/lib/dpkg/status version changed: 12.4+deb12u10 -\u003e 12.4+deb12u12"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "7e7d05785d7cc81d62f57c7ab0c151cf:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component bash @ /var/lib/dpkg/status version changed: 5.2.15-2+b7 -\u003e 5.2.15-2+b9"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "5d4e19dfd7176852d04fe1b4ef9cbf63:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component ca-certificates @ /var/lib/dpkg/status version changed: 20230311 -\u003e 20230311+deb12u1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "299dc83af9645175d5967a4833e48ec3:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component curl @ /var/lib/dpkg/status version changed: 7.88.1-10+deb12u12 -\u003e 7.88.1-10+deb12u14"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "105d9241f2fceb23c8a19fe8a6108e5c:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component debian-archive-keyring @ /var/lib/dpkg/status version changed: 2023.3+deb12u1 -\u003e 2023.3+deb12u2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "af330dfc34a2fb32d77cee1a1b236946:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component e2fsprogs @ /var/lib/dpkg/status version changed: 1.47.0-2 -\u003e 1.47.0-2+b2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "e59e0f1bd812443c15b8d3b3f128ffe0:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component gcc-12-base @ /var/lib/dpkg/status version changed: 12.2.0-14 -\u003e 12.2.0-14+deb12u1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b735738bd9f0c01d247b23769c95f459:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component gpgv @ /var/lib/dpkg/status version changed: 2.2.40-1.1 -\u003e 2.2.40-1.1+deb12u1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "ef85d9c6b9bab09a6748886f50563687:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component init-system-helpers @ /var/lib/dpkg/status version changed: 1.65.2 -\u003e 1.65.2+deb12u1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "37f22f532f5c8368ef5b1f66d3b5d376:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libabsl20220623 @ /var/lib/dpkg/status version changed: 20220623.1-1 -\u003e 20220623.1-1+deb12u2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "0fba480b690fe24885c46da7e8907dcd:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libaom3 @ /var/lib/dpkg/status version changed: 3.6.0-1+deb12u1 -\u003e 3.6.0-1+deb12u2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "cda1323e745e112e00fbf64ad13a7433:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libavif15 @ /var/lib/dpkg/status version changed: 0.11.1-1 -\u003e 0.11.1-1+deb12u1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "686783e39b350f346e56f3eabd8c0f91:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libc-bin @ /var/lib/dpkg/status version changed: 2.36-9+deb12u10 -\u003e 2.36-9+deb12u13"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "91988c2055349b49df4b5d2b194a9922:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libc6 @ /var/lib/dpkg/status version changed: 2.36-9+deb12u10 -\u003e 2.36-9+deb12u13"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "ad290da1ecacbf24260c2bc042debbe1:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libcap2 @ /var/lib/dpkg/status version changed: 1:2.66-4 -\u003e 1:2.66-4+deb12u2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "03bbdbacb655e7c3d48b8ba8f4d9352d:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libcom-err2 @ /var/lib/dpkg/status version changed: 1.47.0-2 -\u003e 1.47.0-2+b2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "8c67b07df8043c342b800dc6fda63097:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libcurl4 @ /var/lib/dpkg/status version changed: 7.88.1-10+deb12u12 -\u003e 7.88.1-10+deb12u14"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "dafe3e312d9bdd0e2fd4d40f3af7a4de:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libexpat1 @ /var/lib/dpkg/status version changed: 2.5.0-1+deb12u1 -\u003e 2.5.0-1+deb12u2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "3a3e9adb935178754ba3aa06b551d4c7:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libext2fs2 @ /var/lib/dpkg/status version changed: 1.47.0-2 -\u003e 1.47.0-2+b2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "28df124320b6e78a20f14972de2d892d:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libgcc-s1 @ /var/lib/dpkg/status version changed: 12.2.0-14 -\u003e 12.2.0-14+deb12u1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "666a5f1f1dca62f889bc089c6a0a5407:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libgnutls30 @ /var/lib/dpkg/status version changed: 3.7.9-2+deb12u4 -\u003e 3.7.9-2+deb12u5"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "05998c7c89df51d5ea01abb3b1e566fe:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libgssapi-krb5-2 @ /var/lib/dpkg/status version changed: 1.20.1-2+deb12u2 -\u003e 1.20.1-2+deb12u4"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "aba20b3febdc0a94c3552723e8de79e4:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libicu72 @ /var/lib/dpkg/status version changed: 72.1-3 -\u003e 72.1-3+deb12u1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "d8ccd1f76ae32dd617d4ddcdd7c03809:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libk5crypto3 @ /var/lib/dpkg/status version changed: 1.20.1-2+deb12u2 -\u003e 1.20.1-2+deb12u4"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b570e1612e18f405e38a60633d958a56:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libkrb5-3 @ /var/lib/dpkg/status version changed: 1.20.1-2+deb12u2 -\u003e 1.20.1-2+deb12u4"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "7a954a58850d09c485efd67eef419f63:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libkrb5support0 @ /var/lib/dpkg/status version changed: 1.20.1-2+deb12u2 -\u003e 1.20.1-2+deb12u4"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "1a0ccc561f42a150be4b3e62c36ae428:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libss2 @ /var/lib/dpkg/status version changed: 1.47.0-2 -\u003e 1.47.0-2+b2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "3764654545c981d8caa4f32dca2a8b9a:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libssl3 @ /var/lib/dpkg/status version changed: 3.0.15-1~deb12u1 -\u003e 3.0.17-1~deb12u3"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "f0aa9f5660b7d4ba183926f58e913684:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libstdc++6 @ /var/lib/dpkg/status version changed: 12.2.0-14 -\u003e 12.2.0-14+deb12u1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "c6703be5e0b206fe8f935242e9999d51:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libsystemd0 @ /var/lib/dpkg/status version changed: 252.36-1~deb12u1 -\u003e 252.39-1~deb12u1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "9a840060d26b588d9a33c511e545c4bc:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libtiff6 @ /var/lib/dpkg/status version changed: 4.5.0-6+deb12u2 -\u003e 4.5.0-6+deb12u3"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "856228b1108ad687b3421c04639a5f54:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libudev1 @ /var/lib/dpkg/status version changed: 252.36-1~deb12u1 -\u003e 252.39-1~deb12u1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "ef41ba847bfd2905ce672cc1ef8e498b:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libxml2 @ /var/lib/dpkg/status version changed: 2.9.14+dfsg-1.3~deb12u1 -\u003e 2.9.14+dfsg-1.3~deb12u4"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "dc663e8cf7aef1303af7eb6e04c95a24:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component libxslt1.1 @ /var/lib/dpkg/status version changed: 1.1.35-1+deb12u1 -\u003e 1.1.35-1+deb12u3"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "00b30ad7f85955d36ae22866067bd3f5:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component login @ /var/lib/dpkg/status version changed: 1:4.13+dfsg1-1+b1 -\u003e 1:4.13+dfsg1-1+deb12u1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "f764da7f159622c1bd53f2c2fb4cac3d:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component logsave @ /var/lib/dpkg/status version changed: 1.47.0-2 -\u003e 1.47.0-2+b2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "fd9d1a72b979cd82bc20e80f7ec2bbac:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component openssl @ /var/lib/dpkg/status version changed: 3.0.15-1~deb12u1 -\u003e 3.0.17-1~deb12u3"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "55bb7565b52f8541526a3fa7dedb6499:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component passwd @ /var/lib/dpkg/status version changed: 1:4.13+dfsg1-1+b1 -\u003e 1:4.13+dfsg1-1+deb12u1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "4291029ca03c451a7079b4aa45ff6733:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component perl-base @ /var/lib/dpkg/status version changed: 5.36.0-7+deb12u1 -\u003e 5.36.0-7+deb12u3"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "a9b5ffcf827af9de3e38ecd4a3726ed1:1"
+          }
+        },
+        {
+          "ruleId": "version-change",
+          "level": "note",
+          "message": {
+            "text": "Component tzdata @ /var/lib/dpkg/status version changed: 2025b-0+deb12u1 -\u003e 2025b-0+deb12u2"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx-1.28.0-dec.syft.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "6d5de2377cc0ac78f499ac2f06d24479:1"
+          }
+        }
+      ]
+    }
+  ]
+}

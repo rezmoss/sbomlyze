@@ -1,0 +1,39 @@
+
+SBOM Comparison
+======================================================================
+                        Before                      After
+File:                   ggcr-checksum-db.syft.json  ggcr-goprivate.syft.json
+File Size:              7 KB                        7 KB
+Format:                 Syft JSON 16.1.12           Syft JSON 16.1.12
+Generator:              syft 1.56.0                 syft 1.56.0
+OS:                     (none)                      (none)
+Source:                 example.com/app             example.com/app
+Source Type:            directory                   directory
+Total Components:       2                           2
+  golang:               2                           2               
+Data Quality:
+  PURL Coverage:        100.0%                      100.0%
+  License Coverage:     0.0%                        0.0%
+  Hash Coverage:        0.0%                        0.0%
+  CPE Coverage:         100.0%                      100.0%
+======================================================================
+
+Scan Context:
+  Schema:                 16.1.12                 16.1.12
+  Scan Scope:             squashed                squashed
+
+Key Findings:
+  🔄 0 version changes among 2 shared packages — no actual upgrades
+  ⚠️ Integrity drift (1 total): 1 golang (review recommended)
+
+📊 Drift Summary:
+  ⚠️  Integrity drift: 1 components (hash changed without version change!)
+
+~ Changed (1):
+  ~ github.com/google/go-containerregistry @ /go.mod ⚠️  [INTEGRITY]
+      hash[go-h1]: h1:w/Fdj3ef046SdV/GJU69cCnreaLpqbTo1X9XPyHbkd4= -> h1:wQ614GjDrt6MiV9fwIVBdJqmDuup3Fho6QfltIrnNSw=
+
+
+❌ Policy Errors (1):
+  [deny_integrity_drift] github.com/google/go-containerregistry @ /go.mod: hash changed without version change
+

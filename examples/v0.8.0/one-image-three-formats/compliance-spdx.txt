@@ -1,0 +1,100 @@
+
+Scan Context:
+  Tool:               syft 1.56.0
+  Source Type:        image
+  Source:             index.docker.io/library/nginx
+
+Key Findings:
+  📦 Dominated by deb: 149 of 150 packages (99.3%)
+  📁 Top directories: /var/lib/dpkg (149), /usr/share/java (1)
+  📜 License profile: 22% permissive, 57% copyleft, 20% unknown
+  ⚠️ Low hash coverage: 0.7% (149 of 150 missing)
+
+📦 SBOM Statistics
+==================
+
+Total Components: 150
+
+By Package Type:
+  deb          149
+  maven        1
+
+Licenses:
+  With license:    149
+  Without license: 1
+
+  Top Licenses:
+    BSD-3-Clause AND BSD-4-Clause AND LicenseRef-BSLA AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND LicenseRef-LGPL AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND MIT AND LicenseRef-public-domain 8
+    BSD-2-Clause                   6
+    Apache-2.0 AND Apache-2.0 AND BSD-3-Clause AND LicenseRef-GPL AND GPL-2.0-only AND GPL-2.0-or-later AND ISC AND Kazlib AND LGPL-2.0-only AND Latex2e 5
+    BSD-3-Clause AND LicenseRef-BSD-tcp-wrappers AND Beerware AND LicenseRef-GPL AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND LGPL-2.0-only AND LGPL-2.0-or-later AND LicenseRef-public-domain 4
+    LicenseRef-936728f4181718f42951b881c1e8f1386bf6b2723c4fbc533c374d6f42c71816 4
+    BSD-3-Clause AND LicenseRef-MIT-X11 AND X11 3
+    GPL-2.0-only AND GPL-2.0-or-later 3
+    LicenseRef-da8191658b3452ce9caf31638ba61dab31a38c619fa39df119812e050f592fd3 3
+    MIT                            3
+    Apache-2.0                     2
+    ... and 92 more
+
+Integrity:
+  With hashes:    1
+  Without hashes: 149
+
+Dependencies:
+  Components with deps: 140
+  Total dep relations:  400
+
+
+🟡 NTIA Compliance
+========================================
+Score: 71/100 (5/7 checks passed)
+
+  ✅ Component Name                 All 150 components
+  ✅ Component Version              All 150 components
+  ❌ Supplier Name                  74/150 components
+     NTIA Minimum Elements (2021) requires the name of the entity that creates and identifies each component
+  ✅ Other Unique Identifiers       All 150 components
+  ❌ Dependency Relationship        148/150 components
+     NTIA Minimum Elements (2021) requires dependency relationships covering at least all top-level dependencies
+  ✅ SBOM Author                    Anchore, Inc
+  ✅ SBOM Timestamp                 2026-11-09T01:24:49Z
+
+🟠 CISA Compliance
+========================================
+Score: 60/100 (6/10 checks passed)
+
+  ✅ Component Name                 All 150 components
+  ✅ Component Version              All 150 components
+  ❌ Software Producer              74/150 components
+     CISA 2025 Minimum Elements requires identifying the producer of each component
+  ✅ Software Identifiers           All 150 components
+  ❌ Dependency Relationship        148/150 components
+     CISA 2025 Minimum Elements requires a dependency graph covering components and their dependencies
+  ❌ License Information            149/150 components
+     CISA 2025 Minimum Elements adds license data per component (an explicit 'unknown' is permitted)
+  ❌ Component Hash                 1/150 components
+     CISA 2025 Minimum Elements adds a cryptographic hash per component where the artifact is available
+  ✅ Tool Name                      syft
+  ✅ SBOM Author                    Anchore, Inc
+  ✅ SBOM Timestamp                 2026-11-09T01:24:49Z
+
+🔴 BSI-TR-03183 Compliance
+========================================
+Score: 44/100 (4/9 checks passed)
+
+  ✅ Component Name                 All 150 components
+  ✅ Component Version              All 150 components
+  ❌ Component Creator              74/150 components
+     BSI TR-03183-2 §5.2.2 requires the creator of each component (email or URL contact)
+  ✅ Unique Identifiers             All 150 components
+  ❌ Distribution Licences          149/150 components
+     BSI TR-03183-2 §5.2.2 requires distribution licences, expressed as SPDX identifiers per §6.1
+  ❌ SHA-512 Hash                   0/150 components
+     BSI TR-03183-2 §5.2.2 requires a SHA-512 checksum of each deployable component
+  ❌ Dependency Relationship        148/150 components
+     BSI TR-03183-2 §5.2.2 requires per-component dependency enumeration with completeness indication
+  ❌ SBOM Creator Contact           missing
+     BSI TR-03183-2 §5.2.1 requires the email address (or URL) of the SBOM creator — a tool name does not qualify
+  ✅ SBOM Timestamp                 2026-11-09T01:24:49Z
+
+📊 Overall Compliance Score: 58/100
