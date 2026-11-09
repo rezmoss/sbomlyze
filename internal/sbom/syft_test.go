@@ -2,6 +2,8 @@ package sbom
 
 import (
 	"os"
+	"slices"
+	"strings"
 	"testing"
 )
 
@@ -415,5 +417,27 @@ func TestParseSyft_MaintainerAsSupplier(t *testing.T) {
 		if got := c.Supplier; got != want[c.Name] {
 			t.Errorf("%s: supplier=%q, want %q", c.Name, got, want[c.Name])
 		}
+	}
+}
+
+func TestSyftDependencyDirection(t *testing.T) {
+	data, err := os.ReadFile(testdataPath("real-syft-alpine.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	comps, _, err := ParseSyftWithInfo(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	deps := map[string][]string{}
+	for _, c := range comps {
+		deps[c.Name] = c.Dependencies
+	}
+	// real syft: {parent: musl, child: libssl3, dependency-of}
+	if !slices.ContainsFunc(deps["libssl3"], func(id string) bool { return strings.Contains(id, "/musl") }) {
+		t.Errorf("libssl3 must depend on musl: %v", deps["libssl3"])
+	}
+	if slices.ContainsFunc(deps["musl"], func(id string) bool { return strings.Contains(id, "/libssl3") }) {
+		t.Errorf("musl must not depend on libssl3: %v", deps["musl"])
 	}
 }

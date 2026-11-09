@@ -100,7 +100,8 @@ jobs:
           hugo-version: '0.123.8'
           extended: true
 
-      # same build as the release deploy, from this commit
+      # same build as the release deploy, from this commit; the examples'
+      # fact checks run on this commit's binary (no rescans, no publish)
       - name: Build site
         run: |
           TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo v0.0.0)

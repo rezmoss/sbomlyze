@@ -45,6 +45,7 @@ var versionOrderings = []VersionOrdering{
 	{[]string{"alpm"}, "pacman vercmp (pkgrel only when both have one)", "alpm", compareAlpm},
 	{[]string{"apk"}, "apk-tools (_alpha.._p suffixes, -rN)", "apk", compareAPK},
 	{[]string{"maven"}, "Maven ComparableVersion", "maven", compareMaven},
+	{[]string{"generic"}, "Dotted numbers only (20.11.1, 11.0.22+7); anything else unknown", "", compareNumeric},
 }
 
 var orderingByEcosystem = func() map[string]VersionOrdering {
@@ -324,4 +325,48 @@ func comparePEP440(from, to string) (string, string) {
 		return directionOf(cmp), LevelPatch
 	}
 	return directionOf(cmp), LevelPrerelease
+}
+
+var numericVersionRe = regexp.MustCompile(`^\d+(\.\d+)*(\+\d+)?$`)
+
+// cmpDigits: compare digit strings of any length
+func cmpDigits(a, b string) int {
+	a, b = strings.TrimLeft(a, "0"), strings.TrimLeft(b, "0")
+	if len(a) != len(b) {
+		return len(a) - len(b)
+	}
+	return strings.Compare(a, b)
+}
+
+// compareNumeric: dotted numbers + optional +build; else unknown
+func compareNumeric(from, to string) (string, string) {
+	if !numericVersionRe.MatchString(from) || !numericVersionRe.MatchString(to) {
+		return DirectionUnknown, LevelUnknown
+	}
+	fc, fb, _ := strings.Cut(from, "+")
+	tc, tb, _ := strings.Cut(to, "+")
+	f, t := strings.Split(fc, "."), strings.Split(tc, ".")
+	for i := 0; i < max(len(f), len(t)); i++ {
+		fi, ti := "0", "0"
+		if i < len(f) {
+			fi = f[i]
+		}
+		if i < len(t) {
+			ti = t[i]
+		}
+		if c := cmpDigits(fi, ti); c != 0 {
+			level := LevelPatch
+			switch i {
+			case 0:
+				level = LevelMajor
+			case 1:
+				level = LevelMinor
+			}
+			return directionOf(c), level
+		}
+	}
+	if c := cmpDigits(fb, tb); c != 0 {
+		return directionOf(c), LevelRevision
+	}
+	return DirectionNone, LevelNone
 }

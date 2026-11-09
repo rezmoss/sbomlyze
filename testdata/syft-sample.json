@@ -76,13 +76,13 @@
   ],
   "artifactRelationships": [
     {
-      "parent": "abc123",
-      "child": "def456",
+      "parent": "def456",
+      "child": "abc123",
       "type": "dependency-of"
     },
     {
-      "parent": "abc123",
-      "child": "ghi789",
+      "parent": "ghi789",
+      "child": "abc123",
       "type": "dependency-of"
     }
   ],

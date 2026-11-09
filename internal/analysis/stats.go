@@ -77,8 +77,7 @@ func ComputeStats(comps []sbom.Component) Stats {
 			for _, lic := range c.Licenses {
 				stats.ByLicense[lic]++
 			}
-			category := CategorizeLicense(c.Licenses[0])
-			switch category {
+			switch licenseCategory(c.Licenses) {
 			case "copyleft":
 				licenseCategories.Copyleft++
 			case "permissive":
@@ -135,6 +134,18 @@ func ComputeStats(comps []sbom.Component) Stats {
 }
 
 // CategorizeLicense returns copyleft/permissive/public_domain/unknown.
+// licenseCategory: most restrictive of all terms, order-free
+func licenseCategory(lics []string) string {
+	rank := map[string]int{"copyleft": 3, "permissive": 2, "public_domain": 1}
+	best := "unknown"
+	for _, name := range sbom.LicenseTermNames(lics) {
+		if c := CategorizeLicense(name); rank[c] > rank[best] {
+			best = c
+		}
+	}
+	return best
+}
+
 func CategorizeLicense(license string) string {
 	lic := strings.ToUpper(license)
 
@@ -271,18 +282,42 @@ func ComputeDiffOverview(file1, file2 string, comps1, comps2 []sbom.Component, i
 		size2 = fi.Size()
 	}
 
+	pkgs1, files1 := packagesOnly(comps1)
+	pkgs2, files2 := packagesOnly(comps2)
+	// CycloneDX lists files as components: count them as files
+	if info1.FilesCount == 0 {
+		info1.FilesCount = files1
+	}
+	if info2.FilesCount == 0 {
+		info2.FilesCount = files2
+	}
 	return DiffOverview{
 		Before: SBOMSide{
 			FileName: file1,
 			FileSize: size1,
 			Info:     info1,
-			Stats:    ComputeStats(comps1),
+			Stats:    ComputeStats(pkgs1),
 		},
 		After: SBOMSide{
 			FileName: file2,
 			FileSize: size2,
 			Info:     info2,
-			Stats:    ComputeStats(comps2),
+			Stats:    ComputeStats(pkgs2),
 		},
 	}
+}
+
+// packagesOnly: drop file/OS evidence; count file entries
+func packagesOnly(comps []sbom.Component) ([]sbom.Component, int) {
+	out := make([]sbom.Component, 0, len(comps))
+	files := 0
+	for _, c := range comps {
+		switch {
+		case c.Type == "file":
+			files++
+		case !c.IsEvidence():
+			out = append(out, c)
+		}
+	}
+	return out, files
 }

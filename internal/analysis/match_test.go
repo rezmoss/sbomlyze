@@ -569,3 +569,16 @@ func TestRealWorldPURLLessCrates(t *testing.T) {
 		t.Errorf("crates=%d unknown=%d", crates, summary(r).UnknownDirection)
 	}
 }
+
+func TestLicenseFormattingIsNotAChange(t *testing.T) {
+	b := []sbom.Component{{ID: "pkg:deb/apt", Name: "apt", Version: "1", Licenses: []string{"BSD-3-Clause", "Expat"}}}
+	a := []sbom.Component{{ID: "pkg:deb/apt", Name: "apt", Version: "1", Licenses: []string{"BSD-3-Clause AND LicenseRef-Expat"}}}
+	if r := DiffComponents(b, a); r.HasChanges() {
+		t.Errorf("got %+v", r.Changed)
+	}
+	a[0].Licenses = []string{"BSD-3-Clause AND GPL-3.0-only"}
+	r := DiffComponents(b, a)
+	if len(r.Changed) != 1 || !slices.Equal(r.Changed[0].Drift.LicensesDiff, []string{"+GPL-3.0-only", "-Expat"}) {
+		t.Errorf("got %+v", r.Changed)
+	}
+}

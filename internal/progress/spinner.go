@@ -100,7 +100,8 @@ func (s *Spinner) Done(msg string) {
 		close(s.stop)
 		<-stoppedCh
 		s.mu.Lock()
-		fmt.Fprintf(os.Stderr, "\r✓ %s\n", msg)
+		// \x1b[K clears the longer spinner text
+		fmt.Fprintf(os.Stderr, "\r✓ %s\x1b[K\n", msg)
 		s.running = false
 		s.mu.Unlock()
 	})

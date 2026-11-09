@@ -98,17 +98,29 @@ func compareHashes(before, after map[string]string) string {
 type fileIndex struct {
 	byPath    map[string]sbom.FileEntry
 	ambiguous map[string]bool     // path listed >1 times
+	count     map[string]int      // entries per path
 	owners    map[string][]string // path -> name@version
 	config    map[string]string   // path -> config status
 	present   bool                // SBOM had an inventory
+	// from CycloneDX file components: hashed files only, no ownership
+	fromComponents bool
+}
+
+// ownership: inventory can say which package owns a file
+func (x *fileIndex) ownership() bool { return x.present && !x.fromComponents }
+
+// formatOnly: unhashed file the other side's format never lists
+func formatOnly(f sbom.FileEntry, own, other *fileIndex) bool {
+	return len(f.Hashes) == 0 && other.fromComponents && !own.fromComponents
 }
 
 func newFileIndex(files []sbom.FileEntry, comps []sbom.Component) *fileIndex {
 	idx := &fileIndex{
-		byPath: make(map[string]sbom.FileEntry, len(files)), ambiguous: map[string]bool{},
+		byPath: make(map[string]sbom.FileEntry, len(files)), ambiguous: map[string]bool{}, count: map[string]int{},
 		owners: map[string][]string{}, config: map[string]string{}, present: len(files) > 0,
 	}
 	for _, f := range files {
+		idx.count[f.Path]++
 		if _, dup := idx.byPath[f.Path]; dup {
 			idx.ambiguous[f.Path] = true
 		}
@@ -209,12 +221,23 @@ func diffInventories(bi, ai *fileIndex, result *DiffResult, cov *FileCoverage) {
 	for _, p := range slices.Sorted(maps.Keys(bi.byPath)) {
 		bf := bi.byPath[p]
 		af, ok := ai.byPath[p]
+		if !ok && formatOnly(bf, bi, ai) {
+			cov.FilesUnverified++
+			continue
+		}
 		if !ok {
 			result.FilesRemoved = append(result.FilesRemoved, FileRef{Path: p, Hashes: bf.Hashes, Owners: bi.owners[p]})
 			continue
 		}
 		if bi.ambiguous[p] || ai.ambiguous[p] {
 			cov.AmbiguousPaths++
+			// content not comparable, but a lost/extra copy is
+			for n := ai.count[p]; n < bi.count[p]; n++ {
+				result.FilesRemoved = append(result.FilesRemoved, FileRef{Path: p, Owners: bi.owners[p]})
+			}
+			for n := bi.count[p]; n < ai.count[p]; n++ {
+				result.FilesAdded = append(result.FilesAdded, FileRef{Path: p, Owners: ai.owners[p]})
+			}
 			continue
 		}
 		switch compareHashes(bf.Hashes, af.Hashes) {
@@ -230,6 +253,10 @@ func diffInventories(bi, ai *fileIndex, result *DiffResult, cov *FileCoverage) {
 	for _, p := range slices.Sorted(maps.Keys(ai.byPath)) {
 		if _, ok := bi.byPath[p]; !ok {
 			af := ai.byPath[p]
+			if formatOnly(af, ai, bi) {
+				cov.FilesUnverified++
+				continue
+			}
 			result.FilesAdded = append(result.FilesAdded, FileRef{Path: p, Hashes: af.Hashes, Owners: ai.owners[p]})
 		}
 	}

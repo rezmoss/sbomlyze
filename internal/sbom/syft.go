@@ -199,11 +199,12 @@ func ParseSyftWithInfo(data []byte) ([]Component, SBOMInfo, error) {
 				}
 			}
 		}
+		// parent dependency-of child: child depends on parent
 		if rel.Type == "dependency-of" {
-			parentIdx, parentOK := syftIDToIdx[rel.Parent]
-			childIdx, childOK := syftIDToIdx[rel.Child]
-			if parentOK && childOK {
-				depMap[parentIdx] = append(depMap[parentIdx], comps[childIdx].ID)
+			depIdx, depOK := syftIDToIdx[rel.Parent]
+			userIdx, userOK := syftIDToIdx[rel.Child]
+			if depOK && userOK {
+				depMap[userIdx] = append(depMap[userIdx], comps[depIdx].ID)
 			}
 		}
 	}

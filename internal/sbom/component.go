@@ -71,9 +71,9 @@ const (
 	DigestCargoChecksum = "cargo-checksum" // Cargo.lock crate checksum
 )
 
-// IsEvidence: file/os entries, not packages
+// IsEvidence: file and identity-less OS entries, not packages
 func (c Component) IsEvidence() bool {
-	return c.Type == "file" || c.Type == "operating-system"
+	return c.Type == "file" || c.Type == "operating-system" && c.PURL == "" && len(c.CPEs) == 0
 }
 
 // DigestSet: Hashes + Digests, keyed by kind

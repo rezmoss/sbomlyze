@@ -43,5 +43,6 @@ site/data/gen/
 site/content/changelog.md
 site/content/json-reference.md
 site/static/examples/
+site/content/examples/
 site/public/
 site/resources/

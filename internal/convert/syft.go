@@ -124,9 +124,10 @@ func WriteSyft(w io.Writer, comps []sbom.Component, info sbom.SBOMInfo) error {
 			if !ok {
 				continue
 			}
+			// syft: dependency is the parent
 			doc.ArtifactRelationships = append(doc.ArtifactRelationships, syftRelationship{
-				Parent: parentID,
-				Child:  childID,
+				Parent: childID,
+				Child:  parentID,
 				Type:   "dependency-of",
 			})
 		}

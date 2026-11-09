@@ -1,0 +1,411 @@
+# sbomlyze.com/examples: real SBOMs, real output.
+# Inputs are frozen in inputs_dir (scripts/showcase-inputs.sh made them);
+# every release re-runs the runs with the new binary and fails on a broken check.
+inputs_dir: testdata/showcase
+repo: rezmoss/sbomlyze
+
+examples:
+  - id: same-tag-different-image
+    title: Same tag, different image
+    finding: >-
+      nginx:1.28.0 built in April and in December 2025 both run nginx 1.28.0, but 40 Debian packages
+      differ, including the OpenSSL fix for CVE-2025-9230.
+    tags: [container, deb]
+    features: [Scanned-image change, OS release change, Debian version ordering, Coverage warning, All output formats]
+    story: |
+      Docker's official `nginx:1.28.0` tag was pushed again many times. Docker's public
+      [repo-info history](https://github.com/docker-library/repo-info/commits/master/repos/nginx/remote/1.28.0.md)
+      for this one tag lists 20 different multi-platform digests and 12 different `linux/amd64` images between
+      April and December 2025 (extracted in the tag-history evidence file below). These are the first and the
+      last `linux/amd64` builds, built on 23 April and 8 December 2025.
+
+      Both print `nginx version: nginx/1.28.0` when run. sbomlyze shows what the tag hides: the Debian base moved
+      from 12.10 to 12.12 and 40 packages changed version, all of them upgrades. 36 keep their upstream version
+      and change only the Debian revision, which is how Debian ships fixes to a stable release. At every release,
+      the package changes are checked against `dpkg-query` output captured inside both images: they must match
+      exactly.
+
+      One of them is OpenSSL `3.0.15-1~deb12u1 → 3.0.17-1~deb12u3`. Debian fixed
+      [CVE-2025-9230](https://security-tracker.debian.org/tracker/CVE-2025-9230) in `3.0.17-1~deb12u3`
+      ([DSA-6015-1](https://security-tracker.debian.org/tracker/DSA-6015-1)). A server still running the April
+      image has nginx 1.28.0 and the unpatched OpenSSL.
+
+      Syft recorded a package digest for only 1 of the 110 packages that kept their version, and sbomlyze says
+      so instead of reporting "no integrity drift". It compared installed files instead: 960 changed, all in
+      upgraded packages or in no package at all; no package that kept its version had a file change.
+    not_proven: >-
+      This does not show that nginx is exploitable. It shows that the image still behind the same tag in April
+      lacks the patched OpenSSL package. Results are for linux/amd64.
+    sources:
+      - {label: "docker-library/repo-info: nginx 1.28.0 tag history", url: "https://github.com/docker-library/repo-info/commits/master/repos/nginx/remote/1.28.0.md"}
+      - {label: "Debian DSA-6015-1 (openssl)", url: "https://security-tracker.debian.org/tracker/DSA-6015-1"}
+      - {label: "OpenSSL security advisory, 30 September 2025", url: "https://openssl-library.org/news/secadv/20250930.txt"}
+    evidence:
+      - {label: "nginx:1.28.0 tag history from repo-info (date, commit, multi-platform digest, amd64 digest)", url: evidence-nginx-1.28.0-tag-history.txt}
+      - {label: "nginx -v, Debian version and dpkg-query inside the April image", url: evidence-nginx-1.28.0-apr.dpkg.txt}
+      - {label: "nginx -v, Debian version and dpkg-query inside the December image", url: evidence-nginx-1.28.0-dec.dpkg.txt}
+    media:
+      - {label: "Web UI with the December SBOM loaded", url: web-ui.png}
+      - {label: "Terminal explorer: searching for openssl in the December SBOM", url: tui-explorer.gif}
+    inputs:
+      - {name: nginx-1.28.0-apr, label: "nginx:1.28.0, built 23 Apr 2025", target: "registry:index.docker.io/library/nginx@sha256:7c46bce526d9abd904d656b4afe3742be3fffd9bc2d361dc4ba68bcbc22ca301"}
+      - {name: nginx-1.28.0-dec, label: "nginx:1.28.0, built 8 Dec 2025", target: "registry:index.docker.io/library/nginx@sha256:3b03dfd827515a07ccf4946000f0bbdd2a4fb6aca7499249fcb6b1f9726823d6"}
+    runs:
+      - id: diff
+        title: Diff (Syft JSON)
+        args: [nginx-1.28.0-apr.syft.json, nginx-1.28.0-dec.syft.json]
+        formats: [text, json, markdown, html, sarif, junit, patch]
+        exit: 1
+      - id: diff-cyclonedx
+        title: Same diff from CycloneDX
+        args: [nginx-1.28.0-apr.cdx.json, nginx-1.28.0-dec.cdx.json]
+        exit: 1
+      - id: diff-spdx
+        title: Same diff from SPDX
+        args: [nginx-1.28.0-apr.spdx.json, nginx-1.28.0-dec.spdx.json]
+        exit: 1
+    checks:
+      - {run: diff, path: diff.drift_summary.upgrades, equals: 40}
+      - {run: diff, path: diff.drift_summary.downgrades, equals: 0}
+      - {run: diff, path: "diff.changed[name=openssl].drift.version_from", equals: "3.0.15-1~deb12u1"}
+      - {run: diff, path: "diff.changed[name=openssl].drift.version_to", equals: "3.0.17-1~deb12u3"}
+      - {run: diff, path: "diff.changed[drift.level=revision]", count: 36}
+      - {run: diff, path: diff.source_change.to, equals: "sha256:3b03dfd827515a07ccf4946000f0bbdd2a4fb6aca7499249fcb6b1f9726823d6"}
+      - {run: diff, path: diff.os_change.to, equals: "Debian GNU/Linux 12 (bookworm) 12.12"}
+      - {run: diff, path: diff.digest_coverage.comparable, equals: 1}
+      - {run: diff, path: diff.digest_coverage.same_version_pairs, equals: 110}
+      - {run: diff, path: diff.file_changes, count: 960}
+      - {run: diff, path: diff.drift_summary.owned_file_drift, equals: 0}
+      - {run: diff, dpkg_pairs: [evidence-nginx-1.28.0-apr.dpkg.txt, evidence-nginx-1.28.0-dec.dpkg.txt]}
+      - {run: diff-cyclonedx, path: diff.drift_summary.upgrades, equals: 40}
+      - {run: diff-spdx, path: diff.drift_summary.upgrades, equals: 40}
+
+  - id: go-module-retagged
+    title: Go module re-tagged after release
+    finding: >-
+      The same go-containerregistry v0.20.4, two different checksums: the maintainer moved the tag after Go's
+      checksum database had recorded it.
+    tags: [go, source]
+    features: [Integrity drift, deny_integrity_drift policy, Digest coverage, SARIF]
+    story: |
+      In May 2025 the `v0.20.4` tag of `github.com/google/go-containerregistry` was deleted and created again
+      on a different commit ([upstream issue #2107](https://github.com/google/go-containerregistry/issues/2107)).
+      `proxy.golang.org` and `sum.golang.org` had already recorded the first one.
+
+      By default Go downloads through `proxy.golang.org`, which still serves the first v0.20.4, so nothing looks
+      wrong. Fetching the moved tag directly from GitHub with checksum checking on fails with
+      `SECURITY ERROR ... checksum mismatch`. With `GOPRIVATE` covering the module path, a common setting in
+      companies with private repositories, Go fetches directly, skips the checksum database, and takes the moved
+      tag without a warning.
+
+      This example resolves the dependencies of the same one-line program both ways (`go mod tidy`). The two
+      `go.sum` files record different hashes for the same version, and sbomlyze reports it as integrity drift.
+      With `deny_integrity_drift` the build fails.
+
+      What actually changed between the two v0.20.4 contents is one file, `.github/workflows/release.yml` (see
+      the content diff below). Harmless here; the point is that nothing else in the build would have said so. Two more re-tags of this
+      kind, also reported upstream: MSAL for Go v1.10.0
+      ([#681](https://github.com/AzureAD/microsoft-authentication-library-for-go/issues/681)) and go-swagger
+      v0.31.0 ([#3118](https://github.com/go-swagger/go-swagger/issues/3118)).
+
+      The second diff is the control: syft 1.55.0 → 1.57.0, where all 262 Go modules that kept their version
+      could be checksum-compared and none drifted.
+    not_proven: >-
+      The SBOMs record go.sum checksums, not compiled code. Syft's SPDX output does not carry Go h1 checksums,
+      so this check needs Syft JSON or CycloneDX.
+    sources:
+      - {label: "google/go-containerregistry#2107", url: "https://github.com/google/go-containerregistry/issues/2107"}
+      - {label: "Go modules reference: checksum database and GOPRIVATE", url: "https://go.dev/ref/mod#private-module-privacy"}
+    evidence:
+      - {label: "diff -r of the two v0.20.4 module contents", url: evidence-ggcr-v0.20.4-content.diff}
+    media:
+      - {label: "deny_integrity_drift failing the re-tagged build", url: retag-policy.gif}
+    inputs:
+      - {name: ggcr-checksum-db, label: "app dependencies resolved with proxy.golang.org + sum.golang.org", target: "dir:ggcr-checksum-db", note: "go.mod requires github.com/google/go-containerregistry v0.20.4; GOPROXY=https://proxy.golang.org GOSUMDB=sum.golang.org go mod tidy"}
+      - {name: ggcr-goprivate, label: "same app, dependencies resolved with GOPRIVATE=github.com/google/*", target: "dir:ggcr-goprivate", note: "GOPRIVATE='github.com/google/*' go mod tidy"}
+      - {name: syft-1.55.0, label: "anchore/syft v1.55.0 image", target: "registry:index.docker.io/anchore/syft@sha256:b83763ae05df444f7f768655ce2ea6d7c2f8280d58f9bee221a69d2971d98883"}
+      - {name: syft-1.57.0, label: "anchore/syft v1.57.0 image", target: "registry:index.docker.io/anchore/syft@sha256:1fe67f9ac8c4c86cbc0075bda33b97a2a804500ee03d450a88721411e133068a"}
+    policies:
+      integrity: {deny_integrity_drift: true}
+    runs:
+      - id: diff
+        title: Diff of the two builds
+        args: [ggcr-checksum-db.syft.json, ggcr-goprivate.syft.json]
+        formats: [text, json, markdown, html, sarif, junit, patch]
+        exit: 1
+      - id: policy
+        title: With deny_integrity_drift
+        args: [ggcr-checksum-db.syft.json, ggcr-goprivate.syft.json, --policy, policy-integrity.json]
+        exit: 1
+      - id: control
+        title: "Control: syft 1.55.0 → 1.57.0"
+        args: [syft-1.55.0.syft.json, syft-1.57.0.syft.json]
+        exit: 1
+    checks:
+      - {run: diff, path: diff.drift_summary.integrity_drift, equals: 1}
+      - {run: diff, path: "diff.changed[name=github.com/google/go-containerregistry].drift.hash_changes.changed.go-h1.before", equals: "h1:w/Fdj3ef046SdV/GJU69cCnreaLpqbTo1X9XPyHbkd4="}
+      - {run: diff, path: "diff.changed[name=github.com/google/go-containerregistry].drift.hash_changes.changed.go-h1.after", equals: "h1:wQ614GjDrt6MiV9fwIVBdJqmDuup3Fho6QfltIrnNSw="}
+      - {run: policy, contains: "[deny_integrity_drift] github.com/google/go-containerregistry"}
+      - {run: control, path: diff.digest_coverage.comparable, equals: 262}
+      - {run: control, path: diff.digest_coverage.same_version_pairs, equals: 262}
+      - {run: control, path: diff.drift_summary.integrity_drift, equals: 0}
+
+  - id: same-version-files-changed
+    title: Same version, files changed inside
+    finding: >-
+      scanelf 1.3.7-r2 has the same version in Alpine 3.19.9 and 3.20.10, but its binary /usr/bin/scanelf
+      changed.
+    tags: [container, apk]
+    features: [Owned-file drift, deny_owned_file_drift policy, apk version ordering, File changes by owner]
+    story: |
+      A version diff says `scanelf` did not change: `1.3.7-r2` before and after. Syft also records the hash of
+      every installed file and which package owns it, and sbomlyze compares those: the package's
+      `/usr/bin/scanelf` is a different file.
+
+      Here the explanation is benign. Each Alpine release branch has its own build of every package, so the
+      same version can hold different bytes, and sbomlyze notes that the base OS changed and a rebuild is
+      expected. The reverse case is also visible: alpine-baselayout changed version (3.4.3-r2 → 3.6.5-r0) while
+      all 10 of its hashed files stayed byte-identical.
+
+      With `deny_owned_file_drift`, the same finding fails a pipeline, which is what you want where the base
+      image is pinned and nothing should touch package files after install.
+    not_proven: >-
+      A same-version rebuild is expected across Alpine releases. Only the CycloneDX output lacks file ownership,
+      so this check needs Syft JSON or SPDX.
+    sources:
+      - {label: "Alpine Linux releases", url: "https://alpinelinux.org/releases/"}
+    inputs:
+      - {name: alpine-3.19.9, label: "alpine 3.19.9", target: "registry:index.docker.io/library/alpine@sha256:b58899f069c47216f6002a6850143dc6fae0d35eb8b0df9300bbe6327b9c2171"}
+      - {name: alpine-3.20.10, label: "alpine 3.20.10", target: "registry:index.docker.io/library/alpine@sha256:c64c687cbea9300178b30c95835354e34c4e4febc4badfe27102879de0483b5e"}
+    policies:
+      files: {deny_owned_file_drift: true}
+    runs:
+      - id: diff
+        title: Diff
+        args: [alpine-3.19.9.syft.json, alpine-3.20.10.syft.json]
+        formats: [text, json, markdown, html, sarif, junit, patch]
+        exit: 1
+      - id: policy
+        title: With deny_owned_file_drift
+        args: [alpine-3.19.9.syft.json, alpine-3.20.10.syft.json, --policy, policy-files.json]
+        exit: 1
+    checks:
+      - {run: diff, path: diff.owned_file_drift, count: 1}
+      - {run: diff, path: "diff.owned_file_drift[name=scanelf].version", equals: "1.3.7-r2"}
+      - {run: diff, path: "diff.owned_file_drift[name=scanelf].files.path", equals: "/usr/bin/scanelf"}
+      - {run: diff, path: "diff.changed[name=alpine-baselayout].drift.files.all_match", equals: true}
+      - {run: diff, path: diff.drift_summary.upgrades, equals: 12}
+      - {run: policy, contains: "[deny_owned_file_drift] scanelf"}
+
+  - id: downgrades-in-a-minor-bump
+    title: Downgrades hiding in a minor bump
+    finding: >-
+      Upgrading node:20.11.1-alpine to 20.18.0-alpine put older major versions of ansi-regex and strip-ansi at
+      the same paths inside npm.
+    tags: [container, npm, apk]
+    features: [Location-aware matching, deny_downgrades policy, npm version ordering]
+    story: |
+      npm ships with its own dependencies, many of them in several copies at different paths. sbomlyze tracks
+      each copy by its path, so a package is only compared with the copy that sat at the same place before.
+
+      At `/usr/local/lib/node_modules/npm/node_modules/ansi-regex` the copy went from 6.0.1 to 5.0.1, and
+      `strip-ansi` next to it from 7.1.0 to 6.0.1. npm rearranged its bundled tree between npm 10.2 and 10.8;
+      it still works. Anything that resolves those two packages from that path now gets the older major
+      version, and `deny_downgrades` catches it. The other 99 version changes are upgrades, including node
+      itself, 20.11.1 → 20.18.0.
+    not_proven: >-
+      npm rearranging its own bundled tree does not prove any application loads the older copy. It shows that
+      the copy at that path is older.
+    sources:
+      - {label: "Node.js 20 changelog", url: "https://github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V20.md"}
+    inputs:
+      - {name: node-20.11.1-alpine, label: "node:20.11.1-alpine", target: "registry:index.docker.io/library/node@sha256:121edf6661770d20483818426b32042da33323b6fd30fc1ad4cd6890a817e240"}
+      - {name: node-20.18.0-alpine, label: "node:20.18.0-alpine", target: "registry:index.docker.io/library/node@sha256:a1d39fe127e43881c6770abf2f0843c955607fb56eb9b45bf6f103c992c5442a"}
+    policies:
+      downgrades: {deny_downgrades: true}
+    runs:
+      - id: diff
+        title: Diff
+        args: [node-20.11.1-alpine.syft.json, node-20.18.0-alpine.syft.json]
+        formats: [text, json, markdown, html, sarif, junit, patch]
+        exit: 1
+      - id: policy
+        title: With deny_downgrades
+        args: [node-20.11.1-alpine.syft.json, node-20.18.0-alpine.syft.json, --policy, policy-downgrades.json]
+        exit: 1
+    checks:
+      - {run: diff, path: diff.drift_summary.downgrades, equals: 2}
+      - {run: diff, path: "diff.changed[drift.direction=downgrade].name", equals: [ansi-regex, strip-ansi]}
+      - {run: diff, path: "diff.changed[name=node].drift.direction", equals: upgrade}
+      - {run: diff, path: diff.drift_summary.upgrades, equals: 99}
+      - {run: policy, contains: "ansi-regex @ /usr/local/lib/node_modules/npm/node_modules/ansi-regex/package.json: downgraded 6.0.1 -> 5.0.1"}
+      - {run: policy, contains: "strip-ansi @ /usr/local/lib/node_modules/npm/node_modules/strip-ansi/package.json: downgraded 7.1.0 -> 6.0.1"}
+
+  - id: app-upgrade-swapped-runtime
+    title: An app upgrade that swapped the runtime
+    finding: >-
+      ZooKeeper 3.8.3 → 3.9.2 also moved the Java runtime from 11 to 17 and added bundled native BoringSSL
+      builds for Linux, macOS and Windows.
+    tags: [container, maven, deb]
+    features: [Maven ordering, Move detection, OS release change, Mixed ecosystems]
+    story: |
+      The image tag says ZooKeeper went up a minor version. The SBOMs show more: OpenJDK 11.0.22+7 →
+      17.0.13+11, a major Java upgrade, and a new `netty-tcnative-boringssl-static` 2.0.61.Final with
+      six jars, five of them platform builds (Linux x86_64 and aarch64, macOS x86_64 and aarch64, Windows
+      x86_64), plus `netty-tcnative-classes`. The Ubuntu base moved from 22.04.4 to 22.04.5.
+
+      ZooKeeper's install directory is named after its version, so every jar's path changed from
+      `apache-zookeeper-3.8.3-bin/lib` to `apache-zookeeper-3.9.2-bin/lib`. sbomlyze reports the 16 jars that
+      kept their version as moved, not as 16 removals plus 16 additions.
+    not_proven: >-
+      A bundled native library is not a vulnerability. It is new native code in the image, which is what a
+      reviewer of a minor upgrade would want to know.
+    sources:
+      - {label: "ZooKeeper releases", url: "https://zookeeper.apache.org/releases.html"}
+    inputs:
+      - {name: zookeeper-3.8.3, label: "zookeeper:3.8.3", target: "registry:index.docker.io/library/zookeeper@sha256:34e7ff9583a84592fc28a0f19e2c2e55c444a6b22d1d6b3a65b0c167a40d464a"}
+      - {name: zookeeper-3.9.2, label: "zookeeper:3.9.2", target: "registry:index.docker.io/library/zookeeper@sha256:7b775af48b8853b2c9868f438a065db9e1f86b15a4e00ce94898930ff24aad69"}
+    runs:
+      - id: diff
+        title: Diff
+        args: [zookeeper-3.8.3.syft.json, zookeeper-3.9.2.syft.json]
+        formats: [text, json, markdown, html, sarif, junit, patch]
+        exit: 1
+    checks:
+      - {run: diff, path: "diff.changed[name=openjdk].drift.version_to", equals: "17.0.13+11"}
+      - {run: diff, path: "diff.changed[name=openjdk].drift.level", equals: major}
+      - {run: diff, path: "diff.added[name=netty-tcnative-boringssl-static]", count: 6}
+      - {run: diff, path: diff.moved, count: 16}
+      - {run: diff, path: diff.os_change.to, equals: "Ubuntu 22.04.5 LTS"}
+
+  - id: transitive-churn
+    title: Transitive churn in a point release
+    finding: >-
+      ripgrep 14.0.3 → 14.1.1 swapped winapi for the windows-sys crate family: 11 crates added, 9 removed,
+      new dependencies up to five levels deep.
+    tags: [rust, source]
+    features: [Dependency graph diff, Transitive depth, max_depth policy, Cargo ordering]
+    story: |
+      sbomlyze reads the dependency graph from Cargo.lock (through Syft) and reports which dependency edges
+      changed and how deep each new transitive dependency sits. Between ripgrep 14.0.3 and 14.1.1, `winapi`
+      and its two target crates left, and `windows-sys` came in with `windows-targets` and eight per-target
+      crates. `packed_simd` and `num-traits` dropped out; `cc` gained `shlex`.
+
+      At every release the changed edges are checked against both Cargo.lock files: 12 added and 16 removed must
+      match exactly. `max_depth` turns depth into a gate; here the eight new dependencies at depth 5 fail it.
+    not_proven: >-
+      Cargo.lock lists every target's dependencies; the windows-* crates are only built for Windows.
+    sources:
+      - {label: "ripgrep releases", url: "https://github.com/BurntSushi/ripgrep/releases"}
+    inputs:
+      - {name: ripgrep-14.0.3, label: "ripgrep 14.0.3 source", target: "dir:ripgrep-14.0.3", note: "https://github.com/BurntSushi/ripgrep/archive/refs/tags/14.0.3.tar.gz"}
+      - {name: ripgrep-14.1.1, label: "ripgrep 14.1.1 source", target: "dir:ripgrep-14.1.1", note: "https://github.com/BurntSushi/ripgrep/archive/refs/tags/14.1.1.tar.gz"}
+    evidence:
+      - {label: "ripgrep 14.0.3 Cargo.lock", url: evidence-ripgrep-14.0.3.Cargo.lock}
+      - {label: "ripgrep 14.1.1 Cargo.lock", url: evidence-ripgrep-14.1.1.Cargo.lock}
+    policies:
+      depth: {max_depth: 5}
+    runs:
+      - id: diff
+        title: Diff
+        args: [ripgrep-14.0.3.syft.json, ripgrep-14.1.1.syft.json]
+        formats: [text, json, markdown, html, sarif, junit, patch]
+        exit: 1
+      - id: policy
+        title: With max_depth 5
+        args: [ripgrep-14.0.3.syft.json, ripgrep-14.1.1.syft.json, --policy, policy-depth.json]
+        exit: 1
+    checks:
+      - {run: diff, path: diff.added, count: 11}
+      - {run: diff, path: diff.removed, count: 9}
+      - {run: diff, path: "diff.dependencies.added_deps.pkg:cargo/cc", equals: ["pkg:cargo/shlex"]}
+      - {run: diff, path: diff.dependencies.transitive_new, count: 11}
+      - {run: diff, path: "diff.dependencies.transitive_new[depth=5]", count: 8}
+      - {run: diff, cargo_edges: [evidence-ripgrep-14.0.3.Cargo.lock, evidence-ripgrep-14.1.1.Cargo.lock]}
+      - {run: policy, contains: "[max_depth] transitive deps at depth >= 5"}
+
+  - id: one-image-three-formats
+    title: One image, three formats
+    finding: >-
+      The same nginx image as Syft JSON, CycloneDX and SPDX diffs to nothing in every pairing, while their
+      compliance scores differ: NTIA 57, 71 and 71.
+    tags: [container, deb]
+    features: [Cross-format diff, Compliance scoring, Format conversion]
+    story: |
+      Teams end up with SBOMs in more than one format. Diffed naively, the same image looks different in each:
+      CycloneDX lists files as components, SPDX folds license names into `LicenseRef-` ids, and only some
+      formats record file ownership or the OS. sbomlyze reads each one into the same model, so the three
+      versions of one scan compare as identical.
+
+      They are not equally complete, though. The same scan scores differently against the NTIA, CISA and BSI
+      minimum elements depending on the output format: Syft JSON has no document timestamp, which costs it the
+      NTIA timestamp check. Other checks differ too: the SPDX carries a supplier for 74 of the 150 packages,
+      the Syft JSON and CycloneDX for 149. The per-check results are in the full output.
+    not_proven: >-
+      A score measures which minimum elements the document carries, not whether the data in them is right.
+    sources:
+      - {label: "NTIA minimum elements for an SBOM", url: "https://www.ntia.gov/report/2021/minimum-elements-software-bill-materials-sbom"}
+    inputs:
+      - {name: nginx-1.28.0-dec, label: "nginx:1.28.0, built 8 Dec 2025", target: "registry:index.docker.io/library/nginx@sha256:3b03dfd827515a07ccf4946000f0bbdd2a4fb6aca7499249fcb6b1f9726823d6"}
+    runs:
+      - {id: syft-vs-cdx, title: Syft JSON vs CycloneDX, args: [nginx-1.28.0-dec.syft.json, nginx-1.28.0-dec.cdx.json], exit: 0}
+      - {id: syft-vs-spdx, title: Syft JSON vs SPDX, args: [nginx-1.28.0-dec.syft.json, nginx-1.28.0-dec.spdx.json], exit: 0}
+      - {id: cdx-vs-spdx, title: CycloneDX vs SPDX, args: [nginx-1.28.0-dec.cdx.json, nginx-1.28.0-dec.spdx.json], exit: 0}
+      - {id: compliance-syft, title: Compliance of the Syft JSON, args: [nginx-1.28.0-dec.syft.json, --compliance], formats: [text, json], exit: 0}
+      - {id: compliance-cdx, title: Compliance of the CycloneDX, args: [nginx-1.28.0-dec.cdx.json, --compliance], formats: [text, json], exit: 0}
+      - {id: compliance-spdx, title: Compliance of the SPDX, args: [nginx-1.28.0-dec.spdx.json, --compliance], formats: [text, json], exit: 0}
+    checks:
+      - {run: syft-vs-cdx, contains: "No differences found"}
+      - {run: syft-vs-spdx, contains: "No differences found"}
+      - {run: cdx-vs-spdx, contains: "No differences found"}
+      - {run: compliance-syft, path: compliance.ntia.score, equals: 57}
+      - {run: compliance-cdx, path: compliance.ntia.score, equals: 71}
+      - {run: compliance-spdx, path: compliance.ntia.score, equals: 71}
+      - {run: compliance-syft, path: "compliance.ntia.checks[id=ntia-timestamp].passed", equals: false}
+      - {run: compliance-cdx, path: "compliance.ntia.checks[id=ntia-timestamp].passed", equals: true}
+      - {run: compliance-syft, path: "compliance.ntia.checks[id=ntia-supplier].details", equals: "149/150 components"}
+      - {run: compliance-cdx, path: "compliance.ntia.checks[id=ntia-supplier].details", equals: "149/150 components"}
+      - {run: compliance-spdx, path: "compliance.ntia.checks[id=ntia-supplier].details", equals: "74/150 components"}
+
+  - id: license-change-in-a-minor-release
+    title: A license change in a minor release
+    finding: >-
+      Akka 2.6.20 → 2.7.0 changed its license from Apache-2.0 to the Business Source License 1.1, and
+      deny_licenses catches it on the upgrade.
+    tags: [java, maven]
+    features: [License change, deny_licenses policy, Cross-format license matching]
+    story: |
+      In September 2022 Lightbend
+      [moved Akka to the Business Source License 1.1](https://akka.io/blog/why-we-are-changing-the-license-for-akka).
+      The published POMs on Maven Central say Apache-2.0 for 2.6.20 and BUSL-1.1 for 2.7.0, and Apache Pekko
+      was [forked from Akka 2.6.x](https://pekko.apache.org/) because of it. For a project that only bumps a
+      minor version, the license change arrives as an ordinary upgrade.
+
+      Syft reads the license from the jar's manifest (`Bundle-License`, an OSGi field) as
+      `<url>;description=BUSL-1.1`, and SPDX folds that into a `LicenseRef-` id. sbomlyze maps all of these to
+      `BUSL-1.1`, so `deny_licenses: ["BUSL-1.1"]` fails the upgrade in any of the three formats. The rule
+      checks licenses that newly appear on changed packages, not only on new ones.
+    not_proven: >-
+      A minimal reproduction: the two published akka-actor jars scanned on their own. A real service would show
+      the same change among its other dependencies.
+    sources:
+      - {label: "Akka: Why we are changing the license (7 Sep 2022)", url: "https://akka.io/blog/why-we-are-changing-the-license-for-akka"}
+      - {label: "akka-actor_2.13 2.6.20 POM", url: "https://repo1.maven.org/maven2/com/typesafe/akka/akka-actor_2.13/2.6.20/akka-actor_2.13-2.6.20.pom"}
+      - {label: "akka-actor_2.13 2.7.0 POM", url: "https://repo1.maven.org/maven2/com/typesafe/akka/akka-actor_2.13/2.7.0/akka-actor_2.13-2.7.0.pom"}
+    inputs:
+      - {name: akka-actor-2.6.20, label: "akka-actor_2.13-2.6.20.jar", target: "dir:akka-2.6.20", note: "https://repo1.maven.org/maven2/com/typesafe/akka/akka-actor_2.13/2.6.20/akka-actor_2.13-2.6.20.jar"}
+      - {name: akka-actor-2.7.0, label: "akka-actor_2.13-2.7.0.jar", target: "dir:akka-2.7.0", note: "https://repo1.maven.org/maven2/com/typesafe/akka/akka-actor_2.13/2.7.0/akka-actor_2.13-2.7.0.jar"}
+    policies:
+      licenses: {deny_licenses: [BUSL-1.1, SSPL-1.0]}
+    runs:
+      - id: diff
+        title: Diff
+        args: [akka-actor-2.6.20.syft.json, akka-actor-2.7.0.syft.json]
+        formats: [text, json, markdown, html, sarif, junit, patch]
+        exit: 1
+      - {id: policy, title: With deny_licenses (Syft JSON), args: [akka-actor-2.6.20.syft.json, akka-actor-2.7.0.syft.json, --policy, policy-licenses.json], exit: 1}
+      - {id: policy-spdx, title: With deny_licenses (SPDX), args: [akka-actor-2.6.20.spdx.json, akka-actor-2.7.0.spdx.json, --policy, policy-licenses.json], exit: 1}
+    checks:
+      - {run: diff, path: "diff.changed[name=akka-actor_2.13].drift.licenses_diff", equals: ["+BUSL-1.1", "-Apache-2.0"]}
+      - {run: policy, contains: "now has denied license BUSL-1.1"}
+      - {run: policy-spdx, contains: "now has denied license BUSL-1.1"}

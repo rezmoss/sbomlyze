@@ -10,7 +10,7 @@
       </div>
       <h1 class="h-hero"><span style="font-family:var(--mono);font-weight:500;color:var(--green)">git diff</span> for your SBOM.</h1>
       <p class="lead" style="max-width:56ch;margin:26px 0 0">Compare two Software Bills of Materials and see what changed between builds, versions, and releases.</p>
-      <p style="font:400 17px/1.65 var(--sans);color:oklch(0.66 0.008 80);max-width:56ch;margin:16px 0 0">sbomlyze compares package digests and the files inside each package, not only version strings. When a package is swapped or its files are edited without a version bump, sbomlyze flags it. Generators and vulnerability scanners miss this.</p>
+      <p style="font:400 17px/1.65 var(--sans);color:oklch(0.66 0.008 80);max-width:56ch;margin:16px 0 0">sbomlyze compares package digests and installed-file hashes, not only version strings, wherever the SBOM records them. When a package is swapped or its files change without a version bump, sbomlyze flags it; a version-only diff sees nothing.</p>
       <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:34px">
         <a class="btn btn-primary" href="{{ "install" | relURL }}">Install sbomlyze</a>
         <a class="btn btn-outline" href="{{ "action" | relURL }}">Gate a pull request</a>
@@ -18,32 +18,19 @@
       <div class="mono-line" style="margin-top:22px">$ brew install rezmoss/sbomlyze/sbomlyze</div>
     </div>
 
-    <div class="term term-shadow">
-      <div class="term-bar">
-        <span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span>
-        <span class="term-title">sbomlyze baseline.json build.json</span>
+    {{ with site.Data.gen.showcase }}{{ $ex := index .examples 0 }}{{ $r := index $ex.runs 0 }}
+    <div>
+      <div class="term term-shadow">
+        <div class="term-bar">
+          <span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span>
+          <span class="term-title">$ {{ $r.command }}</span>
+        </div>
+        <pre class="term-pre" style="max-height:440px;overflow:auto;white-space:pre-wrap">{{ $r.summary }}
+<span class="c-gray">exit status {{ $r.exit }}</span></pre>
       </div>
-      <pre class="term-pre">Drift Summary:
-  Version drift:    58 components
-  Integrity drift:  <span class="c-red">1 components</span>
-  Owned file drift: <span class="c-red">1 packages (1 files)</span>
-
-Key Findings:
-  <span class="c-amber">1 version downgrades detected: nginx 1.29.4-r1→1.27.3-r1</span>
-  56 version upgrades (2 major, 12 minor, 41 patch, ...)
-  6 file entries changed content (not package drift)
-
-~ Changed (58):
-  ~ nginx @ /lib/apk/db/installed [downgrade]
-      version: 1.29.4-r1 -> 1.27.3-r1
-  <span class="c-red">~ suspicious-pkg @ /package-lock.json [INTEGRITY]
-      hash[SHA-256]: abc123 -> def456</span>
-
-<span class="c-red">!! Policy Violations (2):
-  [deny_integrity_drift] suspicious-pkg: hash changed
-  [deny_owned_file_drift] coreutils 9.1-1: /usr/bin/ls</span>
-<span class="c-gray">exit status 1</span></pre>
+      <p class="note-sm" style="margin-top:12px">Real output: {{ $ex.finding }} <a href="{{ printf "examples/%s/" $ex.id | relURL }}">See the example →</a></p>
     </div>
+    {{ end }}
   </div>
 </section>
 
@@ -72,7 +59,7 @@ Key Findings:
       </div>
       {{ end }}
     </div>
-    <p class="note" style="margin-top:18px"><a href="{{ "changelog" | relURL }}">Full changelog →</a> · <a href="{{ "examples" | relURL }}">See a real report from this release →</a></p>
+    <p class="note" style="margin-top:18px"><a href="{{ "changelog" | relURL }}">Full changelog →</a> · <a href="{{ "examples" | relURL }}">See real examples from this release →</a></p>
   </div>
 </section>
 {{ end }}
@@ -120,7 +107,7 @@ verdict:   <span class="c-red">integrity drift</span></pre>
     <h2 class="h-section" style="max-width:24ch">Review in the terminal, the browser, or the pull request.</h2>
     <div class="grid-2" style="margin-top:44px">
       <div class="card card-dark" style="overflow:hidden">
-        <div class="surface-media"><a href="{{ "images/tamper-drift-demo.gif" | relURL }}" data-lightbox data-caption="SBOMlyze turning silent integrity drift into a blocked pull request"><img src="{{ "images/tamper-drift-demo.gif" | relURL }}" alt="sbomlyze detecting tamper drift in a pull request" loading="lazy"></a></div>
+        <div class="surface-media"><a href="{{ "images/tamper-drift-demo.gif" | relURL }}" data-lightbox data-caption="Demonstration in a test repository: a same-version hash change blocked in a pull request"><img src="{{ "images/tamper-drift-demo.gif" | relURL }}" alt="Demonstration: sbomlyze blocking a same-version hash change in a test pull request" loading="lazy"></a></div>
         <div class="surface-body">
           <div class="surface-title">GitHub Action</div>
           <div class="surface-desc">Compares the head SBOM against a git, release, artifact, URL, or file baseline. Writes a Job Summary, enforces policy, uploads SARIF, maintains one PR comment.</div>
@@ -128,7 +115,7 @@ verdict:   <span class="c-red">integrity drift</span></pre>
         </div>
       </div>
       <div class="card card-dark" style="overflow:hidden">
-        <div class="surface-media"><a href="{{ "images/web-ui-explorer.png" | relURL }}" data-lightbox data-caption="Web UI explorer: components, per-component detail, and the statistics dashboard"><img src="{{ "images/web-ui-explorer.png" | relURL }}" alt="sbomlyze web UI showing components, details, and statistics panes" loading="lazy"></a></div>
+        <div class="surface-media"><a href="{{ cond (fileExists "static/examples/media/web-ui.png") "examples/media/web-ui.png" "images/web-ui-explorer.png" | relURL }}" data-lightbox data-caption="{{ cond (fileExists "static/examples/media/web-ui.png") "Web UI explorer with the real nginx:1.28.0 SBOM: components, detail, statistics" "Web UI explorer: components, per-component detail, and the statistics dashboard" }}"><img src="{{ cond (fileExists "static/examples/media/web-ui.png") "examples/media/web-ui.png" "images/web-ui-explorer.png" | relURL }}" alt="sbomlyze web UI showing components, details, and statistics panes" loading="lazy"></a></div>
         <div class="surface-body">
           <div class="surface-title">Web UI explorer</div>
           <div class="surface-desc">Drag-and-drop up to 500 MB. Dependency tree, deep search across raw JSON, statistics dashboard, and a full filesystem browser with layer filtering.</div>
@@ -136,7 +123,7 @@ verdict:   <span class="c-red">integrity drift</span></pre>
         </div>
       </div>
       <div class="card card-dark" style="overflow:hidden">
-        <div class="surface-media"><a href="{{ "images/interactive-sbom.gif" | relURL }}" data-lightbox data-caption="Terminal explorer: deep search with /, component detail, raw JSON, and type filters"><img src="{{ "images/interactive-sbom.gif" | relURL }}" alt="sbomlyze interactive terminal explorer searching and inspecting components" loading="lazy"></a></div>
+        <div class="surface-media"><a href="{{ cond (fileExists "static/examples/media/tui-explorer.gif") "examples/media/tui-explorer.gif" "images/interactive-sbom.gif" | relURL }}" data-lightbox data-caption="{{ cond (fileExists "static/examples/media/tui-explorer.gif") "Terminal explorer: searching the real nginx:1.28.0 SBOM for openssl" "Terminal explorer: deep search with /, component detail, raw JSON, and type filters" }}"><img src="{{ cond (fileExists "static/examples/media/tui-explorer.gif") "examples/media/tui-explorer.gif" "images/interactive-sbom.gif" | relURL }}" alt="sbomlyze interactive terminal explorer searching and inspecting components" loading="lazy"></a></div>
         <div class="surface-body">
           <div class="surface-title">Terminal explorer (TUI)</div>
           <div class="surface-desc">Keyboard navigation, deep search with <code>/</code>, package-type filters, component detail, and raw JSON with syntax highlighting.</div>

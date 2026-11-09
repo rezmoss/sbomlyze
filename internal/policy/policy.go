@@ -1,12 +1,17 @@
 package policy
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
+	"maps"
+	"slices"
 	"strings"
 
 	"github.com/rezmoss/sbomlyze/internal/analysis"
 	"github.com/rezmoss/sbomlyze/internal/compliance"
+	"github.com/rezmoss/sbomlyze/internal/sbom"
 )
 
 // Policy defines SBOM diff rules. doc tags feed the website.
@@ -15,11 +20,12 @@ type Policy struct {
 	MaxRemoved int `json:"max_removed,omitempty" doc:"Maximum removed components allowed"`
 	MaxChanged int `json:"max_changed,omitempty" doc:"Maximum changed packages allowed"`
 
-	DenyLicenses    []string `json:"deny_licenses,omitempty" doc:"Forbidden license identifiers"`
+	DenyLicenses    []string `json:"deny_licenses,omitempty" doc:"Forbidden license identifiers, in added packages or newly on changed ones (also inside AND/OR expressions)"`
 	RequireLicenses bool     `json:"require_licenses,omitempty" doc:"Require all added components to have licenses"`
 
 	DenyDuplicates bool `json:"deny_duplicates,omitempty" doc:"Fail if duplicate packages exist in the result"`
 
+	DenyDowngrades     bool `json:"deny_downgrades,omitempty" doc:"Fail if a package version went down (per-ecosystem ordering)"`
 	DenyIntegrityDrift bool `json:"deny_integrity_drift,omitempty" doc:"Fail if a package digest changed without a version change"`
 	MaxDepth           int  `json:"max_depth,omitempty" doc:"Fail if new transitive dependencies reach depth >= N"`
 	// fail on same-ver owned-file changes; config skipped
@@ -53,8 +59,14 @@ type Violation struct {
 // Load parses a policy from JSON.
 func Load(data []byte) (Policy, error) {
 	var policy Policy
-	if err := json.Unmarshal(data, &policy); err != nil {
+	// unknown key = typo; a silent no-op gate is worse
+	dec := json.NewDecoder(bytes.NewReader(data))
+	dec.DisallowUnknownFields()
+	if err := dec.Decode(&policy); err != nil {
 		return Policy{}, err
+	}
+	if _, err := dec.Token(); err != io.EOF {
+		return Policy{}, fmt.Errorf("policy: trailing data after JSON object")
 	}
 	return policy, nil
 }
@@ -88,20 +100,39 @@ func Evaluate(policy Policy, result analysis.DiffResult) []Violation {
 	}
 
 	if len(policy.DenyLicenses) > 0 {
-		denySet := make(map[string]bool)
+		deny := make(map[string]bool)
 		for _, lic := range policy.DenyLicenses {
-			denySet[lic] = true
+			deny[sbom.LicenseKey(lic)] = true
 		}
-
-		for _, comp := range result.Added {
-			for _, lic := range comp.Licenses {
-				if denySet[lic] {
+		check := func(name, loc string, lics, before []string, verb string) {
+			had := sbom.LicenseIDs(before)
+			ids := sbom.LicenseIDs(lics)
+			for _, k := range slices.Sorted(maps.Keys(ids)) {
+				if _, old := had[k]; deny[k] && !old {
 					violations = append(violations, Violation{
 						Rule:     "deny_licenses",
-						Message:  fmt.Sprintf("%s: denied license %s", comp.Name, lic),
+						Message:  fmt.Sprintf("%s%s: %s denied license %s", name, atLocation(loc), verb, ids[k]),
 						Severity: SeverityError,
 					})
 				}
+			}
+		}
+		for _, comp := range result.Added {
+			check(comp.Name, "", comp.Licenses, nil, "added with")
+		}
+		for _, c := range result.Changed {
+			check(c.Name, c.Location, c.After.Licenses, c.Before.Licenses, "now has")
+		}
+	}
+
+	if policy.DenyDowngrades {
+		for _, c := range result.Changed {
+			if d := c.Drift; d != nil && d.Direction == analysis.DirectionDowngrade && !c.Before.IsEvidence() {
+				violations = append(violations, Violation{
+					Rule:     "deny_downgrades",
+					Message:  fmt.Sprintf("%s%s: downgraded %s -> %s", c.Name, atLocation(c.Location), d.VersionFrom, d.VersionTo),
+					Severity: SeverityError,
+				})
 			}
 		}
 	}

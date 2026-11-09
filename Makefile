@@ -1,4 +1,4 @@
-.PHONY: all test test-go test-action lint vulncheck build build-quick clean snapshot-test update-snapshot snapshot-diff snapshot-review site site-serve help
+.PHONY: all test test-go test-action lint vulncheck build build-quick clean snapshot-test update-snapshot snapshot-diff snapshot-review site site-serve showcase-check showcase-inputs help
 
 # The project does not vendor dependencies. Force module mode so an ignored,
 # stale local vendor/ directory cannot change build or test behavior.
@@ -53,6 +53,13 @@ snapshot-review: ## Interactively review and accept snapshot changes
 
 site: ## Build the website into site/public (as CI does)
 	tag=$$(git describe --tags --abbrev=0); scripts/site-build.sh . "$$tag" "$$(git rev-list -n1 $$tag)" 0 "$$PWD/site/public"
+
+showcase-check: ## Run the website examples' fact checks on testdata/showcase
+	go build -o /tmp/sbomlyze-showcase ./cmd/sbomlyze
+	go run ./internal/tools/showcase -inputs testdata/showcase -bin /tmp/sbomlyze-showcase
+
+showcase-inputs: ## Regenerate testdata/showcase (syft 1.56.0, docker, gh); rarely
+	scripts/showcase-inputs.sh testdata/showcase
 
 site-serve: ## Generate site data, then serve the website locally
 	tag=$$(git describe --tags --abbrev=0); go run ./internal/tools/sitegen -tag "$$tag" -sha "$$(git rev-list -n1 $$tag)"

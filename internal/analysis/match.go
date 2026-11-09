@@ -73,9 +73,7 @@ func digestFingerprint(d map[string]string) string {
 }
 
 func licenseFingerprint(lics []string) string {
-	s := slices.Clone(lics)
-	sort.Strings(s)
-	return strings.Join(s, "\x00")
+	return strings.Join(sbom.LicenseTerms(lics), "\x00")
 }
 
 func newOccurrence(c sbom.Component) occurrence {
@@ -129,7 +127,8 @@ func (m *matcher) pair(b, a occurrence) {
 		loc = b.display
 	}
 	var delta *FileDelta
-	if !b.c.IsEvidence() && (len(b.c.OwnedFiles) > 0 || len(a.c.OwnedFiles) > 0) {
+	// only when both SBOMs can record file ownership (not CycloneDX)
+	if !b.c.IsEvidence() && m.bi.ownership() && m.ai.ownership() && (len(b.c.OwnedFiles) > 0 || len(a.c.OwnedFiles) > 0) {
 		files, d := ownedFileDelta(b.c, a.c, m.bi, m.ai)
 		delta = &d
 		if b.c.Version == a.c.Version && b.c.Version != "" && len(files) > 0 {
@@ -436,68 +435,6 @@ func filePath(c sbom.Component) string {
 		return c.Locations[0]
 	}
 	return c.ID
-}
-
-// matchFiles: content changes to FileChanges
-func matchFiles(before, after []sbom.Component, result *DiffResult, cov *FileCoverage) {
-	byPath := func(comps []sbom.Component) map[string][]sbom.Component {
-		out := make(map[string][]sbom.Component)
-		for _, c := range comps {
-			out[filePath(c)] = append(out[filePath(c)], c)
-		}
-		for _, list := range out {
-			sort.SliceStable(list, func(i, j int) bool {
-				return digestFingerprint(list[i].Hashes)+list[i].ID < digestFingerprint(list[j].Hashes)+list[j].ID
-			})
-		}
-		return out
-	}
-	b, a := byPath(before), byPath(after)
-	paths := slices.Sorted(maps.Keys(b))
-	for p := range a {
-		if _, ok := b[p]; !ok {
-			paths = append(paths, p)
-		}
-	}
-	for _, p := range paths {
-		bs, as := b[p], a[p]
-		// identical content first, rest in canonical order
-		usedA := make([]bool, len(as))
-		var restB []sbom.Component
-		for _, bc := range bs {
-			found := false
-			for i, ac := range as {
-				if !usedA[i] && (maps.Equal(bc.Hashes, ac.Hashes) || compareHashes(bc.Hashes, ac.Hashes) == "equal") {
-					cov.FilesCompared++
-					usedA[i], found = true, true
-					break
-				}
-			}
-			if !found {
-				restB = append(restB, bc)
-			}
-		}
-		var restA []sbom.Component
-		for i, ac := range as {
-			if !usedA[i] {
-				restA = append(restA, ac)
-			}
-		}
-		n := min(len(restB), len(restA))
-		for i := 0; i < n; i++ {
-			// compare only kinds both sides have
-			if compareHashes(restB[i].Hashes, restA[i].Hashes) == "" {
-				cov.FilesUnverified++
-				continue
-			}
-			cov.FilesCompared++
-			result.FileChanges = append(result.FileChanges, FileChange{
-				Path: p, HashesBefore: restB[i].Hashes, HashesAfter: restA[i].Hashes,
-			})
-		}
-		result.Removed = append(result.Removed, restB[n:]...)
-		result.Added = append(result.Added, restA[n:]...)
-	}
 }
 
 func componentOrder(x, y sbom.Component) int {
