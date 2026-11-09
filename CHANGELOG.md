@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.0](https://github.com/rezmoss/sbomlyze/compare/v0.7.1...v0.8.0) (2026-11-09)
+
+
+### Features
+
+* **site:** real-world examples showcase; fix cross-format diff, Syft dependency direction, add deny_downgrades ([#81](https://github.com/rezmoss/sbomlyze/issues/81)) ([d997d43](https://github.com/rezmoss/sbomlyze/commit/d997d43c0fc545abc7a439979b240bd28b85e637))
+
 ## [0.7.1](https://github.com/rezmoss/sbomlyze/compare/v0.7.0...v0.7.1) (2026-11-08)
 
 
