@@ -9,6 +9,11 @@ disableKinds = ["taxonomy", "term", "rss", "section"]
   repo = "https://github.com/rezmoss/sbomlyze"
 
 [[menus.main]]
+  name = "Examples"
+  pageRef = "/examples"
+  weight = 5
+
+[[menus.main]]
   name = "Integrity drift"
   pageRef = "/integrity-drift"
   weight = 10

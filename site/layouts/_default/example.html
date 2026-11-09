@@ -1,0 +1,100 @@
+{{ define "main" }}
+{{ $sc := site.Data.gen.showcase }}
+{{ $id := .Params.example }}
+{{ $ex := index (where $sc.examples "id" $id) 0 }}
+{{ $all := $sc.examples }}
+{{ $pos := 0 }}{{ range $i, $e := $all }}{{ if eq $e.id $id }}{{ $pos = $i }}{{ end }}{{ end }}
+<section class="section-hero bb">
+  <div class="container-md">
+    <div class="eyebrow">Example {{ add $pos 1 }} of {{ len $all }} · real output · sbomlyze {{ $sc.tag }}</div>
+    <h1 class="h-page" style="max-width:26ch">{{ $ex.title }}</h1>
+    <p class="lead-md" style="max-width:68ch;margin:22px 0 0">{{ $ex.finding }}</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:24px">
+      {{ range $ex.tags }}<span class="pill">{{ . }}</span>{{ end }}
+      {{ range $ex.features }}<span class="tag">{{ . }}</span>{{ end }}
+    </div>
+    <div id="stale" class="callout callout-amber" style="display:none;margin-top:24px"></div>
+  </div>
+</section>
+
+<section class="section-md">
+  <div class="container-md doc-body">
+    <h2>What happened</h2>
+    {{ $ex.story | markdownify }}
+    <div class="callout" style="margin:24px 0"><strong>What this does not prove.</strong> {{ $ex.not_proven }}</div>
+
+    {{ range $ex.media }}{{ if fileExists (printf "static/examples/media/%s" .url) }}
+    <figure style="margin:24px 0"><img src="{{ printf "examples/media/%s" .url | relURL }}" alt="{{ .label }}" loading="lazy" style="width:100%;border:1px solid var(--border-strong);border-radius:10px"><figcaption class="note-sm" style="margin-top:8px">{{ .label }}</figcaption></figure>
+    {{ end }}{{ end }}
+
+    <h2>Inputs</h2>
+    <p>Generated once with Syft 1.56.0, linux/amd64, and kept unchanged in <a href="{{ $sc.inputs_url }}"><code>{{ $sc.inputs_dir }}</code></a> in the repository. Every sbomlyze release re-runs the commands below on these exact files.</p>
+    {{ range $ex.inputs }}
+    <div class="codebox" style="margin:18px 0">
+      <div class="codebox-head">{{ .label }}</div>
+      <pre class="codebox-pre" style="white-space:pre-wrap;word-break:break-all">{{ with .note }}# {{ . }}
+{{ end }}{{ range .files }}{{ .command }}
+{{ end }}</pre>
+      <div style="padding:0 24px 18px;font:400 13px/1.8 var(--mono)">
+        {{ range .files }}<a href="{{ .url }}">{{ .file }}</a> <span class="c-gray" title="sha256 {{ .sha256 }}">{{ substr .sha256 0 12 }}…</span>&nbsp;&nbsp; {{ end }}
+      </div>
+    </div>
+    {{ end }}
+    {{ with $ex.policies }}
+    <p>Policy files: {{ range $name, $path := . }}<a href="{{ $path | relURL }}"><code>{{ path.Base $path }}</code></a> {{ end }}</p>
+    {{ end }}
+
+    <h2>Output</h2>
+    {{ range $ex.runs }}
+    <h3 id="{{ .id }}">{{ .title }}</h3>
+    <div class="term" style="margin:14px 0">
+      <div class="term-bar">
+        <span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span>
+        <span class="term-title">$ {{ .command }} · exit {{ .exit }}</span>
+      </div>
+      <pre class="term-pre" style="max-height:560px;overflow:auto;white-space:pre-wrap">{{ with .summary }}{{ . }}{{ else }}{{ .text }}{{ end }}</pre>
+    </div>
+    {{ if .summary }}
+    <details style="margin:4px 0 12px"><summary>Full text output ({{ len (split .text "\n") }} lines)</summary>
+      <pre class="codebox-pre" style="max-height:640px;overflow:auto">{{ .text }}</pre>
+    </details>
+    {{ end }}
+    <p class="note-sm">
+      {{ range $i, $o := .outputs }}{{ if $i }} · {{ end }}<a href="{{ $o.path | relURL }}">{{ $o.format }}</a> ({{ math.Ceil (div (float $o.size) 1024) }} KB){{ end }}
+      {{ range .outputs }}{{ if eq .format "html" }} · <a href="{{ .path | relURL }}">open the HTML report</a>{{ end }}{{ end }}
+    </p>
+    {{ with .changed_since }}
+    <details style="margin:10px 0 24px"><summary>Changed since the previous release</summary>
+      <pre class="codebox-pre" style="max-height:420px;overflow:auto">{{ . }}</pre>
+    </details>
+    {{ end }}
+    {{ end }}
+
+    <h2>Checked at every release</h2>
+    <p>The site is not updated if any of these stop holding for a new sbomlyze release.</p>
+    <table class="table">
+      <thead><tr><th>Run</th><th>Check</th></tr></thead>
+      <tbody>
+      {{ range $ex.checks }}
+      <tr><td class="mono">{{ .run }}</td><td class="mono">{{ with .contains }}text contains “{{ . }}”{{ else }}{{ .path }} {{ with .count }}count = {{ . }}{{ else }}= {{ jsonify .equals }}{{ end }}{{ end }}</td></tr>
+      {{ end }}
+      </tbody>
+    </table>
+
+    <h2>Sources</h2>
+    <ul>{{ range $ex.sources }}<li><a href="{{ .url }}">{{ .label }}</a></li>{{ end }}</ul>
+    {{ with $ex.evidence }}
+    <h2>Evidence</h2>
+    <p>Captured when the inputs were made and kept with them; the checks above use these files.</p>
+    <ul>{{ range . }}<li><a href="{{ .url }}">{{ .label }}</a></li>{{ end }}</ul>
+    {{ end }}
+
+    <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:40px;padding-top:24px;border-top:1px solid var(--border)">
+      {{ if gt $pos 0 }}{{ $p := index $all (sub $pos 1) }}<a class="btn btn-outline" href="{{ printf "examples/%s/" $p.id | relURL }}">← {{ $p.title }}</a>{{ else }}<span></span>{{ end }}
+      <a class="btn btn-outline" href="{{ "examples/" | relURL }}">All examples</a>
+      {{ if lt (add $pos 1) (len $all) }}{{ $n := index $all (add $pos 1) }}<a class="btn btn-outline" href="{{ printf "examples/%s/" $n.id | relURL }}">{{ $n.title }} →</a>{{ end }}
+    </div>
+  </div>
+</section>
+{{ partial "showcase-stale.html" $sc }}
+{{ end }}

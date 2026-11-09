@@ -1,0 +1,12 @@
+diff -r mc1/github.com/google/go-containerregistry@v0.20.4/.github/workflows/release.yml mc2/github.com/google/go-containerregistry@v0.20.4/.github/workflows/release.yml
+8a9,10
+>     permissions:
+>       contents: write
+43c45
+<     uses: slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v1.5.0
+---
+>     uses: slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v2.1.0
+54c56
+<         uses: slsa-framework/slsa-verifier/actions/installer@v2.2.0
+---
+>         uses: slsa-framework/slsa-verifier/actions/installer@v2.7.0

@@ -22,8 +22,8 @@
       "type": "contains"
     },
     {
-      "parent": "abc123",
-      "child": "def456",
+      "parent": "def456",
+      "child": "abc123",
       "type": "dependency-of"
     }
   ],

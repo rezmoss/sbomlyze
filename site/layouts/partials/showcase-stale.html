@@ -1,0 +1,16 @@
+<script>
+// banner if a newer release exists than the one that generated this page
+(function () {
+  var el = document.getElementById("stale");
+  if (!el) return;
+  fetch("https://api.github.com/repos/{{ .repo }}/releases/latest")
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (j) {
+      if (j && j.tag_name && j.tag_name !== "{{ .tag }}") {
+        el.textContent = "This output is from sbomlyze {{ .tag }}; the latest release is " + j.tag_name + ". The page updates after that release's website job.";
+        el.style.display = "block";
+      }
+    })
+    .catch(function () {});
+})();
+</script>

@@ -603,3 +603,65 @@ func TestHasComplianceRules(t *testing.T) {
 		}
 	}
 }
+
+func TestLoadRejectsUnknownKey(t *testing.T) {
+	if _, err := Load([]byte(`{"deny_downgrade": true}`)); err == nil || !strings.Contains(err.Error(), "deny_downgrade") {
+		t.Errorf("typo must fail, got %v", err)
+	}
+	if _, err := Load([]byte(`{} {"deny_downgrade": true}`)); err == nil {
+		t.Error("trailing data must fail")
+	}
+	if p, err := Load([]byte(`{"deny_downgrades": true}`)); err != nil || !p.DenyDowngrades {
+		t.Errorf("got %+v %v", p, err)
+	}
+}
+
+func TestDenyDowngrades(t *testing.T) {
+	r := analysis.DiffResult{Changed: []analysis.ChangedComponent{
+		{Name: "ansi-regex", Location: "/npm/ansi-regex/package.json", Drift: &analysis.DriftInfo{Type: analysis.DriftTypeVersion, Direction: analysis.DirectionDowngrade, VersionFrom: "6.0.1", VersionTo: "5.0.1"}},
+		{Name: "ok", Drift: &analysis.DriftInfo{Type: analysis.DriftTypeVersion, Direction: analysis.DirectionUpgrade, VersionFrom: "1", VersionTo: "2"}},
+	}}
+	v := Evaluate(Policy{DenyDowngrades: true}, r)
+	if len(v) != 1 || v[0].Rule != "deny_downgrades" || !strings.Contains(v[0].Message, "ansi-regex @ /npm/ansi-regex/package.json: downgraded 6.0.1 -> 5.0.1") {
+		t.Errorf("got %+v", v)
+	}
+	if v := Evaluate(Policy{}, r); len(v) != 0 {
+		t.Errorf("off by default: %+v", v)
+	}
+}
+
+func TestDenyLicensesOnChangedAndExpressions(t *testing.T) {
+	r := analysis.DiffResult{
+		Added: []sbom.Component{{Name: "new", Licenses: []string{"MIT AND GPL-3.0-only"}}},
+		Changed: []analysis.ChangedComponent{
+			{Name: "terraform", Before: sbom.Component{Licenses: []string{"MPL-2.0"}}, After: sbom.Component{Licenses: []string{"LicenseRef-BUSL-1.1"}}},
+			{Name: "kept", Before: sbom.Component{Licenses: []string{"BUSL-1.1"}}, After: sbom.Component{Licenses: []string{"BUSL-1.1"}}},
+		},
+	}
+	v := Evaluate(Policy{DenyLicenses: []string{"gpl-3.0-only", "BUSL-1.1"}}, r)
+	msgs := []string{}
+	for _, x := range v {
+		msgs = append(msgs, x.Message)
+	}
+	want := []string{"new: added with denied license GPL-3.0-only", "terraform: now has denied license BUSL-1.1"}
+	if strings.Join(msgs, "|") != strings.Join(want, "|") {
+		t.Errorf("got %q", msgs)
+	}
+}
+
+func TestDenyLicensesFullName(t *testing.T) {
+	r := analysis.DiffResult{Added: []sbom.Component{{Name: "x", Licenses: []string{"GNU General Public License v3.0 only"}}}}
+	if v := Evaluate(Policy{DenyLicenses: []string{"GNU General Public License v3.0 only"}}, r); len(v) != 1 {
+		t.Errorf("got %+v", v)
+	}
+}
+
+func TestIdentifiedOSGetsPackagePolicies(t *testing.T) {
+	os := func(v string) sbom.Component {
+		return sbom.Component{ID: "pkg:generic/x", Name: "x", Version: v, Type: "operating-system", PURL: "pkg:generic/x@" + v}
+	}
+	r := analysis.DiffComponents([]sbom.Component{os("12")}, []sbom.Component{os("11")})
+	if v := Evaluate(Policy{DenyDowngrades: true}, r); len(v) != 1 {
+		t.Errorf("got %+v", v)
+	}
+}

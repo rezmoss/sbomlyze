@@ -124,6 +124,9 @@ func parseSPDXData(data []byte) ([]Component, SBOMInfo, error) {
 		if o := pkg.PackageOriginator; comp.Supplier == "" && o != nil && o.Originator != "" && o.Originator != "NOASSERTION" {
 			comp.Supplier = o.Originator
 		}
+		if locs := spdxSourceInfoPaths(pkg.PackageSourceInfo); len(locs) > 0 {
+			comp.Locations, comp.PrimaryLocations = locs, locs[:1:1]
+		}
 		if i < len(rawDoc.Packages) {
 			comp.RawJSON = rawDoc.Packages[i]
 		}
@@ -143,7 +146,8 @@ func parseSPDXData(data []byte) ([]Component, SBOMInfo, error) {
 		}
 		e := FileEntry{Path: path}
 		for _, cs := range f.Checksums {
-			if cs.Value != "" {
+			// syft writes all-zero SHA1 for unhashed files
+			if cs.Value != "" && strings.Trim(cs.Value, "0") != "" {
 				if e.Hashes == nil {
 					e.Hashes = make(map[string]string, len(f.Checksums))
 				}
@@ -233,4 +237,23 @@ func spdxRootType(c Component) string {
 		return "image"
 	}
 	return ""
+}
+
+// spdxSourceInfoPaths: syft "acquired package info from X: /a, /b"
+func spdxSourceInfoPaths(si string) []string {
+	rest, ok := strings.CutPrefix(si, "acquired package info from ")
+	if !ok {
+		return nil
+	}
+	_, paths, ok := strings.Cut(rest, ": ")
+	if !ok {
+		return nil
+	}
+	var out []string
+	for _, p := range strings.Split(paths, ", ") {
+		if p = strings.TrimSpace(p); strings.HasPrefix(p, "/") {
+			out = append(out, p)
+		}
+	}
+	return out
 }

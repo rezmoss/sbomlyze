@@ -416,10 +416,10 @@ func detectOSChange(overview DiffOverview) []Finding {
 
 	msg := fmt.Sprintf("OS changed: %s \u2192 %s", bLabel, aLabel)
 	if aLabel == "unknown" {
-		msg = fmt.Sprintf("OS detection lost: %s \u2192 %s", bLabel, aLabel)
+		msg = fmt.Sprintf("OS not recorded in the after SBOM (before: %s)", bLabel)
 	}
 	if bLabel == "unknown" {
-		msg = fmt.Sprintf("OS detection gained: %s \u2192 %s", bLabel, aLabel)
+		msg = fmt.Sprintf("OS not recorded in the before SBOM (after: %s)", aLabel)
 	}
 
 	return []Finding{{Icon: "\U0001f4bb", Message: msg}}
@@ -966,7 +966,8 @@ func detectLicenseCategoryShift(overview DiffOverview) []Finding {
 func detectCatalogerGaps(overview DiffOverview) []Finding {
 	bFoundBy := overview.Before.Stats.ByFoundBy
 	aFoundBy := overview.After.Stats.ByFoundBy
-	if len(bFoundBy) == 0 {
+	// format without cataloger names (CycloneDX, SPDX) is not a gap
+	if len(bFoundBy) == 0 || len(aFoundBy) == 0 {
 		return nil
 	}
 

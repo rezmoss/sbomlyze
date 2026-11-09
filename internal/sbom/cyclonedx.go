@@ -209,6 +209,10 @@ func extractCycloneDXComponents(bom *cdx.BOM, rawComponents []json.RawMessage) [
 			comp.Supplier = c.Author
 		}
 		comp.Locations = cycloneDXLocations(c)
+		// syft lists the primary evidence location first
+		if hasSyftLocation(c) && len(comp.Locations) > 0 {
+			comp.PrimaryLocations = []string{comp.Locations[0]}
+		}
 		if c.Properties != nil {
 			for _, p := range *c.Properties {
 				switch {
@@ -301,4 +305,16 @@ func resolveCycloneDXDependencies(bom *cdx.BOM, comps []Component) {
 			}
 		}
 	}
+}
+
+func hasSyftLocation(c cdx.Component) bool {
+	if c.Properties == nil {
+		return false
+	}
+	for _, p := range *c.Properties {
+		if syftLocationRe.MatchString(p.Name) {
+			return true
+		}
+	}
+	return false
 }

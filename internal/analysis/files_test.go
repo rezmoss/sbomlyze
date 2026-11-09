@@ -211,3 +211,79 @@ func TestOwnedFileDelta_Counts(t *testing.T) {
 		t.Errorf("unhashed file must block all_match: %+v", d)
 	}
 }
+
+func TestCrossFormatFiles(t *testing.T) {
+	pkg := func(v string, owned ...string) sbom.Component {
+		return sbom.Component{ID: "pkg:deb/a", Name: "a", Version: v, PURL: "pkg:deb/debian/a@" + v, OwnedFiles: owned}
+	}
+	inv := []sbom.FileEntry{{Path: "/usr/bin/a", Hashes: map[string]string{"sha256": "11"}}, {Path: "/usr/lib/x.so"}}
+	cdxFile := sbom.Component{ID: "/usr/bin/a", Name: "/usr/bin/a", Type: "file", Hashes: map[string]string{"SHA-256": "11"}}
+	osComp := sbom.Component{ID: "os:debian", Name: "debian", Version: "12.10", Type: "operating-system"}
+	// Syft JSON (owned, unhashed file listed) vs CycloneDX (no ownership, hashed files only, OS entry)
+	r := DiffSBOMs([]sbom.Component{pkg("1", "/usr/bin/a", "/usr/lib/x.so")}, []sbom.Component{pkg("1"), cdxFile, osComp}, inv, nil)
+	if r.HasChanges() || r.FileCoverage == nil || r.FileCoverage.FilesCompared != 1 {
+		t.Errorf("same image across formats must be clean: %+v", r)
+	}
+	// CycloneDX vs CycloneDX: file entries land in files_added, not added
+	r = DiffSBOMs([]sbom.Component{pkg("1")}, []sbom.Component{pkg("1"), cdxFile}, nil, nil)
+	if len(r.Added) != 0 || len(r.FilesAdded) != 1 || r.FilesAdded[0].Path != "/usr/bin/a" {
+		t.Errorf("added %+v files_added %+v", r.Added, r.FilesAdded)
+	}
+}
+
+func TestUnhashedFileChangesNotHidden(t *testing.T) {
+	x := sbom.Component{ID: "pkg:generic/x", Name: "x", Version: "1"}
+	gone := sbom.Component{ID: "/removed", Name: "/removed", Type: "file"}
+	// same format (CycloneDX both sides), unhashed file removed
+	r := DiffSBOMs([]sbom.Component{x, gone}, []sbom.Component{x}, nil, nil)
+	if len(r.FilesRemoved) != 1 || !r.HasChanges() {
+		t.Errorf("unhashed removal must show: %+v", r.FilesRemoved)
+	}
+	// Syft JSON both sides, unhashed file removed
+	r = DiffSBOMs([]sbom.Component{x}, []sbom.Component{x}, []sbom.FileEntry{{Path: "/a"}, {Path: "/b", Hashes: map[string]string{"sha256": "1"}}}, []sbom.FileEntry{{Path: "/b", Hashes: map[string]string{"sha256": "1"}}})
+	if len(r.FilesRemoved) != 1 {
+		t.Errorf("got %+v", r.FilesRemoved)
+	}
+}
+
+func TestOwnershipLossReported(t *testing.T) {
+	files := []sbom.FileEntry{{Path: "/x", Hashes: map[string]string{"sha256": "1"}}}
+	b := []sbom.Component{{ID: "pkg:deb/a", Name: "a", Version: "1", OwnedFiles: []string{"/x"}}}
+	a := []sbom.Component{{ID: "pkg:deb/a", Name: "a", Version: "1"}}
+	r := DiffSBOMs(b, a, files, files)
+	if len(r.OwnedFileDrift) != 1 || r.OwnedFileDrift[0].Files[0].Change != FileRemoved {
+		t.Errorf("losing the last owned file is drift: %+v", r.OwnedFileDrift)
+	}
+}
+
+func TestIdentifiedOSIsAPackage(t *testing.T) {
+	os := func(v string) sbom.Component {
+		return sbom.Component{ID: "pkg:generic/x", Name: "x", Version: v, Type: "operating-system", PURL: "pkg:generic/x@" + v}
+	}
+	r := DiffComponents([]sbom.Component{os("12")}, []sbom.Component{os("11")})
+	if len(r.Changed) != 1 || r.Changed[0].Drift.Direction != DirectionDowngrade {
+		t.Errorf("OS with a PURL is matched like a package: %+v", r.Changed)
+	}
+	syftOS := func(v string) sbom.Component {
+		return sbom.Component{ID: "os:debian", Name: "debian", Version: v, Type: "operating-system"}
+	}
+	if r := DiffComponents([]sbom.Component{syftOS("12.10")}, []sbom.Component{syftOS("12.12")}); len(r.Changed) != 0 {
+		t.Errorf("identity-less OS goes to os_change: %+v", r.Changed)
+	}
+	c := OSChangeOf(sbom.SBOMInfo{OSPrettyName: "Debian 12", OSVersionID: "12.10"}, sbom.SBOMInfo{OSPrettyName: "Debian 12", OSVersionID: "12.12"})
+	if c == nil || c.From != "Debian 12 12.10" || !(DiffResult{OSChange: c}).HasChanges() {
+		t.Errorf("got %+v", c)
+	}
+	if OSChangeOf(sbom.SBOMInfo{OSPrettyName: "Debian 12"}, sbom.SBOMInfo{}) != nil {
+		t.Error("unknown side is no change")
+	}
+}
+
+func TestDuplicateFileCopyLost(t *testing.T) {
+	x := sbom.Component{ID: "pkg:generic/x", Name: "x", Version: "1"}
+	f := sbom.Component{ID: "/x", Name: "/x", Type: "file", Hashes: map[string]string{"SHA-256": "1"}}
+	r := DiffSBOMs([]sbom.Component{x, f, f}, []sbom.Component{x, f}, nil, nil)
+	if len(r.FilesRemoved) != 1 || !r.HasChanges() {
+		t.Errorf("one of two copies removed: %+v", r.FilesRemoved)
+	}
+}

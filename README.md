@@ -1080,9 +1080,10 @@ Create policies to enforce rules in CI/CD pipelines. sbomlyze exits with code 1 
 | `max_added` | int | Maximum new components allowed (0 = unlimited) |
 | `max_removed` | int | Maximum removed components allowed (0 = unlimited) |
 | `max_changed` | int | Maximum changed components allowed (0 = unlimited) |
-| `deny_licenses` | []string | List of forbidden license identifiers |
+| `deny_licenses` | []string | Forbidden license identifiers. Checked on added packages and on licenses newly appearing on changed packages, including inside `AND`/`OR` expressions; case and `LicenseRef-` prefix are ignored |
 | `require_licenses` | bool | Require all *added* components to have licenses (only checks newly added components in diff mode) |
 | `deny_duplicates` | bool | Fail if duplicate packages exist in result |
+| `deny_downgrades` | bool | Fail if a package version went down, by its ecosystem's own ordering |
 | `deny_integrity_drift` | bool | Fail if a package digest changed without a version change (supply chain risk) |
 | `deny_owned_file_drift` | bool | Fail if a package kept its version while files it owns changed (needs Syft JSON or SPDX with file data); dpkg config files are skipped |
 | `owned_file_drift_include_config` | bool | Also fail `deny_owned_file_drift` on config files (dpkg conffiles) |
@@ -1095,6 +1096,8 @@ Create policies to enforce rules in CI/CD pipelines. sbomlyze exits with code 1 
 | `min_overall_compliance` | int | Fail if overall compliance score is below this (0-100, 0 = disabled) |
 
 > Setting any `min_*_score` threshold automatically triggers compliance evaluation, even without the `--compliance` flag.
+>
+> Unknown keys are an error, so a misspelled rule never passes silently.
 
 ### Example: Strict Policy
 
@@ -1120,7 +1123,7 @@ Create policies to enforce rules in CI/CD pipelines. sbomlyze exits with code 1 
 !! Policy Violations (3):
   [max_added] too many components added: 10 > 5
   [max_removed] too many components removed: 7 > 3
-  [deny_licenses] component foo has denied license: GPL-3.0
+  [deny_licenses] foo: added with denied license GPL-3.0
 ```
 
 ## Supported SBOM Formats

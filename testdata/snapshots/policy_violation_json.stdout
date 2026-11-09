@@ -209,7 +209,7 @@
   "violations": [
     {
       "rule": "deny_licenses",
-      "message": "new-package: denied license Apache-2.0",
+      "message": "new-package: added with denied license Apache-2.0",
       "severity": "error"
     }
   ]

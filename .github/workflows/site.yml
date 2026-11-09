@@ -17,7 +17,12 @@ on:
     branches: [main]
     paths:
       - 'site/**'
+      - 'showcase/**'
+      - 'testdata/showcase/**'
+      - 'internal/tools/showcase/**'
       - 'scripts/site-build.sh'
+      - 'scripts/showcase-media.sh'
+      - 'scripts/webui-shot.mjs'
       - '.github/workflows/site.yml'
   workflow_dispatch:
     inputs:
@@ -90,12 +95,34 @@ jobs:
           hugo-version: '0.123.8'
           extended: true
 
+      # previous release's example outputs and archived tags
+      - name: Checkout published examples
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: gh-pages
+          path: published
+          sparse-checkout: examples
+          persist-credentials: false
+
+      - name: Install recording tools
+        env:
+          VHS_VERSION: 0.10.0
+        run: |
+          sudo apt-get update -q && sudo apt-get install -yq ffmpeg ttyd
+          go install "github.com/charmbracelet/vhs@v$VHS_VERSION"
+          echo "CHROME=$(command -v google-chrome)" >> "$GITHUB_ENV"
+
       - name: Build site
         env:
           TAG: ${{ steps.rel.outputs.tag }}
           SHA: ${{ steps.rel.outputs.sha }}
           STARS: ${{ steps.rel.outputs.stars }}
-        run: scripts/site-build.sh release-src "$TAG" "$SHA" "$STARS" "$GITHUB_WORKSPACE/public"
+          SHOWCASE_MEDIA: '1'
+        run: |
+          SHOWCASE_PREV="$GITHUB_WORKSPACE/published/examples"
+          SHOWCASE_ARCHIVES=$(find "$SHOWCASE_PREV" -mindepth 1 -maxdepth 1 -type d -name 'v*' -printf '%f,' 2>/dev/null || true)
+          export SHOWCASE_PREV SHOWCASE_ARCHIVES
+          scripts/site-build.sh release-src "$TAG" "$SHA" "$STARS" "$GITHUB_WORKSPACE/public"
 
       - name: Upload site
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -131,6 +158,13 @@ jobs:
       - name: Sync site into gh-pages (preserve package repositories)
         run: |
           cd gh-pages
+          # keep examples/vX.Y.Z/ archives of earlier releases
+          keep="$RUNNER_TEMP/archives"
+          mkdir -p "$keep"
+          # a failed move stops the step before anything is deleted
+          for d in examples/v*/; do
+            [ -d "$d" ] && mv "$d" "$keep/"
+          done
           # keep apk/ deb/ rpm/ package repos and the vendor/ mirror
           find . -mindepth 1 -maxdepth 1 \
             ! -name '.git' \
@@ -141,6 +175,13 @@ jobs:
             ! -name 'vendor' \
             -exec rm -rf {} +
           cp -R "$GITHUB_WORKSPACE/public/." .
+          # a published archive is never rewritten
+          mkdir -p examples
+          for d in "$keep"/v*; do
+            [ -d "$d" ] || continue
+            rm -rf "examples/$(basename "$d")"
+            mv "$d" examples/
+          done
           touch .nojekyll
 
       - name: Commit and push

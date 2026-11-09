@@ -1,20 +1,43 @@
 {{ define "main" }}
-{{ $rel := partial "release.html" . }}
+{{ $sc := site.Data.gen.showcase }}
 <section class="section-hero bb">
   <div class="container-md">
-    <div class="eyebrow">Live output · {{ $rel.tag }}</div>
+    <div class="eyebrow">Real output · sbomlyze {{ $sc.tag }}</div>
     <h1 class="h-page" style="max-width:24ch">{{ .Title }}</h1>
-    <p class="lead-md" style="max-width:66ch;margin:22px 0 0">{{ .Params.description }}</p>
-    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:28px">
-      <code class="inline-cmd">sbomlyze syft-before.cdx.json syft-after.cdx.json --format html</code>
+    <p class="lead-md" style="max-width:68ch;margin:22px 0 0">{{ .Params.description }}</p>
+    <div id="stale" class="callout callout-amber" style="display:none;margin-top:24px"></div>
+  </div>
+</section>
+
+<section class="section-md">
+  <div class="container">
+    <div class="grid-2">
+      {{ range $i, $ex := $sc.examples }}
+      <a class="card card-pad card-dark" href="{{ printf "examples/%s/" $ex.id | relURL }}" style="display:block;text-decoration:none;color:inherit">
+        <div class="overline">Example {{ add $i 1 }}</div>
+        <div class="card-title">{{ $ex.title }}</div>
+        <div class="card-body">{{ $ex.finding }}</div>
+        <div class="card-foot" style="display:flex;gap:8px;flex-wrap:wrap">{{ range $ex.tags }}<span class="pill">{{ . }}</span>{{ end }}</div>
+      </a>
+      {{ end }}
     </div>
   </div>
 </section>
-<section class="section-md">
+
+<section class="section-md bt alt">
   <div class="container-md doc-body">
-    <p>Real Syft CycloneDX SBOMs of <a href="https://github.com/anchore/syft">anchore/syft</a> v1.55.0 and v1.57.0 (from <code>testdata/realworld/</code>), diffed by the released {{ $rel.tag }} binary when this site was built. Nothing here is hand-written.</p>
-    <p><a href="{{ "examples/syft/report.html" | relURL }}">Open the HTML report</a> · <a href="{{ "examples/syft/report.json" | relURL }}">JSON</a> · <a href="{{ "examples/syft/report.md" | relURL }}">Markdown</a></p>
-    <iframe src="{{ "examples/syft/report.html" | relURL }}" title="sbomlyze HTML report: syft 1.55.0 to 1.57.0" style="width:100%;height:900px;border:1px solid var(--line, #333);border-radius:10px;background:#fff" loading="lazy"></iframe>
+    <h2>How these are made</h2>
+    <ul>
+      <li><strong>Real targets, pinned.</strong> Each input SBOM came from Syft 1.56.0 on an image pinned by its linux/amd64 digest, a source release, or published jars. The exact command is on every page.</li>
+      <li><strong>Inputs never change.</strong> The SBOMs are kept in <a href="{{ $sc.inputs_url }}"><code>{{ $sc.inputs_dir }}</code></a> in the repository, with SHA-256 sums the build verifies. Only sbomlyze changes from one release to the next.</li>
+      <li><strong>Output is generated, never edited.</strong> After every successful sbomlyze release, the website job runs the released binary on these SBOMs and publishes the output in every format.</li>
+      <li><strong>Facts are checked.</strong> Each page lists the checks behind its claims, such as 40 upgrades matching <code>dpkg</code>. If a release breaks one, the site keeps the previous version.</li>
+    </ul>
+    {{ with $sc.archives }}
+    <h2>Earlier releases</h2>
+    <p>{{ range $i, $t := . }}{{ if $i }} · {{ end }}<a href="{{ printf "examples/%s/" $t | relURL }}">{{ $t }}</a>{{ end }}</p>
+    {{ end }}
   </div>
 </section>
+{{ partial "showcase-stale.html" $sc }}
 {{ end }}

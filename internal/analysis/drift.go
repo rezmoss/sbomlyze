@@ -136,6 +136,7 @@ type DiffResult struct {
 	FilesRemoved      []FileRef              `json:"files_removed,omitempty"`
 	OwnedFileDrift    []OwnedFileDrift       `json:"owned_file_drift,omitempty"`
 	SourceChange      *SourceChange          `json:"source_change,omitempty"`
+	OSChange          *OSChange              `json:"os_change,omitempty"`
 	Duplicates        *DuplicateReport       `json:"duplicates,omitempty"`
 	Dependencies      *DependencyDiff        `json:"dependencies,omitempty"`
 	DriftSummary      *DriftSummary          `json:"drift_summary,omitempty"`
@@ -152,7 +153,22 @@ type DiffResult struct {
 func (r DiffResult) HasChanges() bool {
 	return len(r.Added) > 0 || len(r.Removed) > 0 || len(r.Changed) > 0 ||
 		len(r.Moved) > 0 || len(r.FileChanges) > 0 || len(r.FilesAdded) > 0 ||
-		len(r.FilesRemoved) > 0 || len(r.OwnedFileDrift) > 0 || r.SourceChange != nil
+		len(r.FilesRemoved) > 0 || len(r.OwnedFileDrift) > 0 || r.SourceChange != nil || r.OSChange != nil
+}
+
+// OSChange: base OS release changed (e.g. Debian 12.10 -> 12.12)
+type OSChange struct {
+	From string `json:"from"`
+	To   string `json:"to"`
+}
+
+// OSChangeOf: nil unless both OS labels known and differ
+func OSChangeOf(before, after sbom.SBOMInfo) *OSChange {
+	b, a := OSLabel(before), OSLabel(after)
+	if b == "" || a == "" || b == a {
+		return nil
+	}
+	return &OSChange{From: b, To: a}
 }
 
 // SourceChange: scanned image/source version or digest changed
@@ -216,20 +232,19 @@ func ClassifyDrift(before, after sbom.Component) DriftInfo {
 }
 
 func diffLicenses(before, after []string) []string {
-	if EqualSlices(before, after) {
+	if sbom.SameLicenses(before, after) {
 		return nil
 	}
 	var out []string
-	beforeSet := ToSet(before)
-	afterSet := ToSet(after)
-	for _, lic := range slices.Sorted(maps.Keys(afterSet)) {
-		if !beforeSet[lic] {
-			out = append(out, "+"+lic)
+	b, a := sbom.LicenseTermNames(before), sbom.LicenseTermNames(after)
+	for _, k := range slices.Sorted(maps.Keys(a)) {
+		if _, ok := b[k]; !ok {
+			out = append(out, "+"+a[k])
 		}
 	}
-	for _, lic := range slices.Sorted(maps.Keys(beforeSet)) {
-		if !afterSet[lic] {
-			out = append(out, "-"+lic)
+	for _, k := range slices.Sorted(maps.Keys(b)) {
+		if _, ok := a[k]; !ok {
+			out = append(out, "-"+b[k])
 		}
 	}
 	return out
@@ -341,14 +356,22 @@ func DiffSBOMs(before, after []sbom.Component, beforeFiles, afterFiles []sbom.Fi
 
 	beforePkgs, beforeFileComps := splitFiles(before)
 	afterPkgs, afterFileComps := splitFiles(after)
+	// CycloneDX file entries -> file inventory, like Syft JSON/SPDX
+	bFromComps, aFromComps := len(beforeFiles) == 0 && len(beforeFileComps) > 0, len(afterFiles) == 0 && len(afterFileComps) > 0
+	beforeFiles = append(slices.Clone(beforeFiles), fileEntries(beforeFileComps)...)
+	afterFiles = append(slices.Clone(afterFiles), fileEntries(afterFileComps)...)
+	// identity-less OS entry (Syft) is os_change, not a package
+	isOS := func(c sbom.Component) bool {
+		return c.Type == "operating-system" && c.PURL == "" && len(c.CPEs) == 0
+	}
+	beforePkgs = slices.DeleteFunc(beforePkgs, isOS)
+	afterPkgs = slices.DeleteFunc(afterPkgs, isOS)
 	bi, ai := newFileIndex(beforeFiles, beforePkgs), newFileIndex(afterFiles, afterPkgs)
+	bi.fromComponents, ai.fromComponents = bFromComps, aFromComps
 	var cov FileCoverage
 	matchPackages(beforePkgs, afterPkgs, bi, ai, &result)
-	matchFiles(beforeFileComps, afterFileComps, &result, &cov)
 	if bi.present || ai.present {
 		diffInventories(bi, ai, &result, &cov)
-	}
-	if bi.present || ai.present || len(beforeFileComps)+len(afterFileComps) > 0 {
 		result.FileCoverage = &cov
 	}
 	sortResult(&result)
@@ -462,4 +485,14 @@ func ComputePackageSamples(result *DiffResult) {
 	if len(result.Removed) > 0 {
 		result.RemovedByType = groupSamplesByType(result.Removed, 5)
 	}
+}
+
+func fileEntries(comps []sbom.Component) []sbom.FileEntry {
+	out := make([]sbom.FileEntry, 0, len(comps))
+	for _, c := range comps {
+		if p := sbom.NormalizeFilePath(filePath(c)); p != "" {
+			out = append(out, sbom.FileEntry{Path: p, Hashes: c.Hashes})
+		}
+	}
+	return out
 }
