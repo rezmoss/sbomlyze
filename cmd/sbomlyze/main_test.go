@@ -431,6 +431,33 @@ func TestFormatPatch(t *testing.T) {
 	}
 }
 
+func TestUnknownOutputFormat(t *testing.T) {
+	_, stderr, exitCode := runCLI(
+		testdataPath("cyclonedx-before.json"),
+		testdataPath("cyclonedx-before.json"),
+		"--format", "not-a-format",
+	)
+	if exitCode != 1 {
+		t.Fatalf("expected exit code 1, got %d", exitCode)
+	}
+	if !strings.Contains(stderr, `unknown output format "not-a-format"`) {
+		t.Fatalf("expected unknown-format error, got: %s", stderr)
+	}
+}
+
+func TestDiffOutputFormatRequiresTwoSBOMs(t *testing.T) {
+	_, stderr, exitCode := runCLI(
+		testdataPath("cyclonedx-before.json"),
+		"--format", "sarif",
+	)
+	if exitCode != 1 {
+		t.Fatalf("expected exit code 1, got %d", exitCode)
+	}
+	if !strings.Contains(stderr, `output format "sarif" requires two SBOMs`) {
+		t.Fatalf("expected single-SBOM format error, got: %s", stderr)
+	}
+}
+
 func TestPolicyPass(t *testing.T) {
 	_, _, exitCode := runCLI(
 		testdataPath("cyclonedx-before.json"),

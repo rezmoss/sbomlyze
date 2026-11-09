@@ -107,6 +107,11 @@ func main() {
 		os.Exit(1)
 	}
 
+	if err := validateOutputFormat(opts.Format, len(opts.Files) == 1); err != nil {
+		fmt.Fprintf(os.Stderr, "err: %v\n", err)
+		os.Exit(1)
+	}
+
 	parseOpts := cli.ParseOptions{Strict: opts.Strict}
 
 	if len(opts.Files) == 1 {
@@ -387,4 +392,18 @@ func parseInputWithInfo(path string) ([]sbom.Component, sbom.SBOMInfo, error) {
 		return sbom.ParseReaderWithInfo(os.Stdin)
 	}
 	return sbom.ParseFileWithInfo(path)
+}
+
+func validateOutputFormat(format string, singleSBOM bool) error {
+	switch format {
+	case "text", "json", "html":
+		return nil
+	case "sarif", "junit", "markdown", "md", "patch":
+		if singleSBOM {
+			return fmt.Errorf("output format %q requires two SBOMs", format)
+		}
+		return nil
+	default:
+		return fmt.Errorf("unknown output format %q (supported: text, json, sarif, junit, markdown, html, patch)", format)
+	}
 }

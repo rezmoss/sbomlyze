@@ -27,7 +27,7 @@ See why this signal is different from a manifest or ordinary component diff in
 
 Add [SBOMlyze Diff from GitHub Marketplace][marketplace] to compare a checked-in
 or separately generated SBOM with its git baseline. The immutable SHA below is
-the published `v0.5.1` Action:
+the published `v0.8.0` Action:
 
 ```yaml
 steps:
@@ -35,7 +35,7 @@ steps:
     with:
       fetch-depth: 0
 
-  - uses: rezmoss/sbomlyze@31503690611fda8ebba4ed2bd186eda000442594 # v0.5.1
+  - uses: rezmoss/sbomlyze@17b5478ba5054544277dbc27687e69723d065275 # v0.8.0
     with:
       sbom-path: build/sbom.cdx.json
 ```
@@ -897,7 +897,9 @@ sbomlyze image.json --compliance --json
 
 ### `--format` / `-f`
 
-Select the output format. Seven formats are available:
+Select the output format. Seven formats are available. Text, JSON, and HTML
+support single-SBOM statistics; SARIF, JUnit, Markdown, and Patch require a
+two-SBOM diff. An unsupported format or mode combination returns an error.
 
 | Format | Flag | Description | Best For |
 |--------|------|-------------|----------|
@@ -1131,10 +1133,10 @@ Create policies to enforce rules in CI/CD pipelines. sbomlyze exits with code 1 
 | Format | File Detection | Identifiers Extracted |
 |--------|----------------|----------------------|
 | Syft (native) | JSON key `"artifacts"` + one of `"source"`, `"distro"`, `"descriptor"` | PURL, CPE, name |
-| CycloneDX | JSON key `"bomFormat"` = `"CycloneDX"`, or `"$schema"` containing `cyclonedx` | PURL, CPE, BOM-ref, group (namespace) |
+| CycloneDX | JSON key `"bomFormat"` = `"CycloneDX"`, `"$schema"` containing `cyclonedx`, or CycloneDX XML `<bom>` document | PURL, CPE, BOM-ref, group (namespace) |
 | SPDX | JSON key `"spdxVersion"` starting with `"SPDX-"` | PURL, CPE, SPDXID |
 
-All formats must be JSON. XML support is not currently available.
+Syft and SPDX inputs must be JSON. CycloneDX supports both JSON and XML.
 
 ### Format Conversion
 
@@ -1199,7 +1201,7 @@ jobs:
           fetch-depth: 0
 
       - id: sbomlyze
-        uses: rezmoss/sbomlyze@31503690611fda8ebba4ed2bd186eda000442594 # v0.5.1
+        uses: rezmoss/sbomlyze@17b5478ba5054544277dbc27687e69723d065275 # v0.8.0
         with:
           sbom-path: build/sbom.cdx.json
           policy: .github/sbom-policy.json
