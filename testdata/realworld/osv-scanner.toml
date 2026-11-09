@@ -1,0 +1,7 @@
+# SBOMs and lockfiles here are test fixtures describing third-party
+# software (nginx, node, alpine, ...), not sbomlyze's dependencies.
+# OSV-Scanner (and OpenSSF Scorecard) would report their CVEs as ours.
+# Applies to this directory only; sbomlyze's own go.mod is scanned.
+[[PackageOverrides]]
+ignore = true
+reason = "test fixture, not a dependency of sbomlyze"
