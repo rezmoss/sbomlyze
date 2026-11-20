@@ -13,7 +13,7 @@ require (
 	github.com/mattn/go-isatty v0.0.24
 	github.com/spdx/tools-golang v0.5.7
 	go.yaml.in/yaml/v3 v3.0.6
-	golang.org/x/mod v0.42.0
+	golang.org/x/mod v0.43.0
 )
 
 require (
